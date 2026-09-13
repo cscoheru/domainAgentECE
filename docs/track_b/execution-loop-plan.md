@@ -57,4 +57,5 @@
 | 3 | ⚠️ 部分通过（ece `f88ccd6`/`3eb1516`/`74e73a5`：S0.1 ✅ S0.3 ✅ / **S0.2 ❌ 返工**——uvicorn 缺依赖 + healthcheck 用了镜像里不存在的 curl + 8000 端口冲突；详见 cut-003-report.md §7） |
 | 3R | ❌ 不通过（ece `9c6efa4`：R2/R3 只在未提交的魔改文件上验过、跑完还原——被验收状态≠被提交状态；R4 验收无效；hash 占位符×7；R1/R5 ✅。Cline 补刀 ece `ffd1f07` 落地 compose 修复并亲跑全栈验收通过 → S0.2 提交物 ✅。详见 cut-003r-report.md §7） |
 | 3R2 | ✅ 已执行（ece `5e440df`）+ 已审验通过（cut-003r2-report.md §7，Cline 2026-09-14；Cline 在 HEAD 亲跑全栈验收同绿；治理修正 2 处：§7 被 sed 误改恢复 + 流程惯例 v2 固化〔报告自身 hash 不自引〕。**S0.1–S0.3 全 ✅，Sprint 0 前半收官**） |
-| 4 | 🔵 已签发（S0.4–S0.6：check_api_docs / alembic 初始迁移+schema 比对 / gen_dataset 骨架） |
+| 4 | ❌ 不通过 → 返工（ece `d120a27`/`a56ea90`/`c93fc20`/`5fd441c`：三件功能全实证可用，但 **push 红 CI ×2 未披露**〔ruff 12 错〕+ S0.4 CI 步骤未加 + 迁移§注释错 + PRD §27 偏差未声明；详见 cut-004-report.md §7） |
+| 4R | 🔵 已签发（lint 修复 + CI 加 check-api-docs 步骤 + CI 回绿证据 + §映射/PRD 对齐修正） |
