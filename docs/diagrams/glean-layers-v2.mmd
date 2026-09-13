@@ -1,0 +1,81 @@
+%% Glean Enterprise AI Platform — Architecture Reconstruction v2
+%% Last Verified: 2026-09-13
+%% Source: docs/research_v2/02-enterprise-context.md + docs/research_v2/evidence-matrix-v2.md
+%% Reference: docs/architecture_v2/glean-architecture-reconstruction.md §1-3
+%%
+%% 标注规范:
+%%   [C##] = 证据编号 (C01-C42)
+%%   ?     = UNKNOWN (证据不足)
+%%   OFFICIAL = Glean 官方明确描述的架构
+%%   SEMI     = 半官方 (Dev Docs / Quickstart)
+%%   INFERRED = 公开资料推导 (PRD §9 Phase 3 必须标 INFERRED)
+%%   UNKNOWN  = 禁止猜测 (PRD §4)
+
+flowchart TB
+
+    subgraph OFFICIAL["✅ OFFICIAL — Glean 官方明确描述 (Glean 官方文案)"]
+        direction TB
+        L1["Enterprise Applications<br/>(Partner-built + Glean apps)<br/>[C01]"]
+        L2["Domain Agents<br/>Agent Builder / Agentic Engine 2<br/>Independent Agents (AI coworkers)<br/>[C10 marketing, C37 GA/beta]"]
+        L3["Agent Runtime / Agentic Engine 2<br/>conversational builder (beta)<br/>agent looping (beta)<br/>agent version control (GA)<br/>schedule agents (GA)<br/>[C37]"]
+        L4["Assistant / Generative Engine<br/>Third-generation Assistant<br/>Deep Research / Personalized writing<br/>[C37]"]
+        L5["Agent Identity (beta, 2026 新)<br/>scoped service credentials<br/>audit attribution / admin rotate-revoke<br/>[C36]"]
+    end
+
+    subgraph SEMI["🟦 SEMI-OFFICIAL — Dev Docs / Quickstart"]
+        direction TB
+        L6["Context API<br/>Client API (GA)<br/>Platform API (experimental preview)<br/>OAuth preferred for per-user<br/>Glean-issued token for ActAs/Indexing<br/>[C15, C35 re-verified, C40]"]
+        L7["Actions / MCP (beta)<br/>Remote MCP servers<br/>275+ Connectors<br/>Indexing SDK + OpenAPI spec<br/>[C08, C09, C19, C37]"]
+        L8["Developer Platform<br/>Agent Toolkit (framework-agnostic)<br/>SDK: Python / TypeScript / Java / Go<br/>IDE: Claude Code / Cursor / Codex<br/>[C16, C17, C20, C39]"]
+    end
+
+    subgraph INFERRED["⚠️ INFERRED — 公开资料推导 (非 Glean 官方明确)"]
+        direction TB
+        L9["Enterprise Context<br/>Enterprise Graph + Personal Graph<br/>+ System of Context<br/>[C02 STRONGLY_INFERRED]"]
+        L10["Permission Layer<br/>Source ACL inheritance (real-time)<br/>Verification API<br/>[C06, C07, C16 INFERRED structure]"]
+        L11["Search / Retrieval<br/>100+ sources, ranked, permission-aware<br/>'reason over the knowledge graph'<br/>4-lane retrieval INFERRED<br/>[C04, C18]"]
+    end
+
+    subgraph UNKNOWN["❌ UNKNOWN — 公开资料不足 / 禁止猜测"]
+        direction TB
+        L12["Internal Tech Stack<br/>Kafka / Elasticsearch / Neo4j / others<br/>→ 禁止猜测 (PRD §4)"]
+        L13["Enterprise Graph schema<br/>customizable? API-accessible?<br/>[C03 UNKNOWN — Robin Q9]"]
+        L14["Agent Builder workflow details<br/>branching / HITL / per-step model<br/>[C11 PARTIALLY_ANSWERED — Robin Q10]"]
+        L15["Pricing & minimum contract<br/>[C24 UNKNOWN — Robin Q11]"]
+        L16["Agent Harness / Transform details<br/>[C41: Harness in nav, no detail page<br/>Transform still Coming soon]"]
+    end
+
+    %% OFFICIAL flow
+    L1 --> L2
+    L2 --> L3
+    L2 --> L6
+    L3 --> L6
+    L4 --> L6
+    L5 --> L7
+
+    %% SEMI flow
+    L6 --> L9
+    L6 --> L10
+    L7 --> L9
+
+    %% INFERRED flow
+    L9 --> L11
+    L9 --> L10
+
+    %% UNKNOWN (dashed = 待 Robin 会谈)
+    L11 -.->|"?"| L12
+    L10 -.->|"?"| L12
+    L6 -.->|"?"| L13
+    L3 -.->|"?"| L14
+    L1 -.->|"?"| L15
+    L3 -.->|"?"| L16
+
+    classDef off fill:#cce5ff,stroke:#0066cc,color:#003366,stroke-width:3px
+    classDef semi fill:#d4f0ff,stroke:#0099cc,color:#006699
+    classDef inf fill:#fff4cc,stroke:#cc9900,color:#664400
+    classDef unk fill:#f0f0f0,stroke:#999999,color:#333333,stroke-dasharray:5 5
+
+    class L1,L2,L3,L4,L5 off
+    class L6,L7,L8 semi
+    class L9,L10,L11 inf
+    class L12,L13,L14,L15,L16 unk

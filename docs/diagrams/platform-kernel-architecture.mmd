@@ -1,0 +1,71 @@
+%% Enterprise AI Platform Kernel — ECE v0 Reference
+%% Last Verified: 2026-09-13
+%% Source: docs/research_v2/capability-matrix-v2.md + docs/architecture_v2/glean-architecture-reconstruction.md §4
+%%
+%% 标注规范:
+%%   O = Our Product (我们自建) — 绿色
+%%   G = Glean (借, 标 C 编号) — 蓝色
+%%   O+G = 自建 + Glean 互操作 — 紫色
+%%   ? = Unknown / later — 黄色
+%%   ✗ = v0 不做 — 灰色
+
+flowchart TB
+
+    subgraph DOMAIN["Domain Layer (Our Differentiation — 最高 IP 价值)"]
+        direction TB
+        D1["Domain Ontology<br/>控制-证据映射 / 领域本体<br/>[O-Build, 极高 IP, C23]"]
+        D2["Domain Reasoning<br/>规则优先 + LLM 轻量解释<br/>[O-Build, 极高 IP, C23, ADR-006]"]
+        D3["Domain Evaluation<br/>业务正确性评估<br/>[O-Build, 极高 IP, C22 + C38 收紧]"]
+    end
+
+    subgraph ENGINE["Engine Core (O-Build, ADR-010 领域包隔离)"]
+        direction TB
+        E1["Context Assembly<br/>12 步流水线<br/>[O-Build, 极高 IP, ADR-001]"]
+        E2["Entity Resolution<br/>跨系统实体归一 (exact→normalized→alias→rule→embedding→LLM)<br/>[O-Build, 高 IP, C18 + C23]"]
+        E3["Permission Engine<br/>Permission Before Intelligence<br/>判定顺序: deny > user > role > dept > classification > default deny<br/>[O-Build, 极高 IP, ADR-004, C06 + C07]"]
+        E4["Query Planner<br/>4 路召回融合: Keyword(FTS+bigram) / Vector(pgvector)<br/>Structured(JSONB+SQL) / Relationship(multi-hop SQL)<br/>[O-Build, 中 IP, ADR-009]"]
+    end
+
+    subgraph TOOLS["Tool Layer"]
+        direction TB
+        T1["MCP Tool Layer<br/>原生 MCP 化 (事实标准)<br/>工具: search / get_record / create_task / send_message<br/>[O+G, C19 + C37 + C39]"]
+        T2["Actions 写回<br/>v0 强制关闭 (env kill-switch + 路由硬编码双保险)<br/>[G-Integrate 但 v0 关闭, C08, ADR-004]"]
+    end
+
+    subgraph DATA["Data Layer"]
+        direction TB
+        D4["PostgreSQL 16 + pgvector<br/>FTS (simple + bigram) + bge-small-zh-v1.5 (512d)<br/>[O-Build, ADR-009 缓交 OpenSearch/Redis/Neo4j]"]
+        D5["Connectors<br/>v0 mock: CSV / JSON / 本地文档 (3 个)<br/>Phase 4+ 借 Glean/MCP API 接 275+<br/>[O 框架 + G 借, C05 + C09]"]
+    end
+
+    subgraph EXT["External (Glean / Partner)"]
+        direction TB
+        X1["Glean Enterprise Context<br/>搜索 / Connector / Action / MCP 借<br/>[G-Partner/Integrate, C02 + C18]"]
+        X2["Glean Agent Builder<br/>conversational builder (beta)<br/>我方不做 Builder UI — Partner/Integrate<br/>[G + P 不做, C37]"]
+        X3["Glean Agent Identity (beta)<br/>scoped credentials + audit attribution<br/>Phase 4-5 决策<br/>[G + ? later, C36]"]
+        X4["Glean Agent Harness<br/>入 PRODUCT 导航但无详情页<br/>Phase 5+ 关注<br/>[G + ?, C41]"]
+    end
+
+    %% Layer connections
+    DOMAIN --> ENGINE
+    ENGINE --> TOOLS
+    ENGINE --> DATA
+    TOOLS --> EXT
+
+    %% Cross-layer calls (Context API serves both Agent + UI)
+    X1 -. "Glean借(Connector/Action/MCP)" .-> T1
+    X2 -. "Partner reference" .-> E1
+
+    classDef our fill:#d4edda,stroke:#28a745,color:#155724,stroke-width:3px
+    classDef glean fill:#cce5ff,stroke:#0066cc,color:#003366
+    classDef hybrid fill:#e2d5f0,stroke:#7b3f9d,color:#4a1f5e
+    classDef ext fill:#fff4cc,stroke:#cc9900,color:#664400
+    classDef notyet fill:#e2e3e5,stroke:#6c757d,color:#495057,stroke-dasharray:5 5
+
+    class D1,D2,D3 our
+    class E1,E2,E3,E4 our
+    class D4 our
+    class T2 glean
+    class T1,D5 hybrid
+    class X1,X2 ext
+    class X3,X4 notyet
