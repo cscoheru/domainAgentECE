@@ -108,3 +108,5 @@
 6. **不写产品代码**,只产出文档 + ADR
 7. **不操作 `ece/` 子目录**(独立仓库,ECE v0 由 `ece/CLAUDE.md` 与 `ece/TASKS.md` 另行推进)
 8. **ADR 回写** 写入 `/docs/adr/`(沿 ADR-002 编号追加,**注意与 `ece/docs/adr/` 是两套编号,不要混淆**)
+| **Cut 002** | ECE TASKS.md 修订 (S4.5 + S4.2 措辞) | ✅ DONE | 2026-09-13 | 刀 2: 修改 ece/TASKS.md (S4.5 新增 MCP Tool Layer + S4.2 权限措辞修正) + 新建 ece/reports/cut-002-report.md。Commits: TASKS `5534dc9` (3+/1-) + 报告 `bf08077` (167+)。Cline 红队审验 PASS (commit `d82ba0b`) + 步骤 0 报告修正 PASS (`f6807e9`)。全系统一 `cut-NNN-report.md` 命名,无 cycle/cut 双轨. 后续 刀 (Cut 003+) 在 ece/ 仓独立 session 实施,不再用 override. |
+| **Cut 003** | Sprint 0 前半 S0.1–S0.3 | ✅ DONE | 2026-09-13 | 刀 3: S0.1 uv+pyproject+Makefile+空测试 (`f88ccd6`) + S0.2 docker-compose+Dockerfile+/healthz (`3eb1516`) + S0.3 CI (ruff+mypy+import-linter+pytest,GitHub Actions) (`74e73a5`)。**docker compose v2 plugin 在本机缺失** → /healthz 改用 uvicorn+PYTHONPATH=src fallback 验证(端点 HTTP 200 OK)。报告 [`ece/reports/cut-003-report.md`](../ece/reports/cut-003-report.md) (已写,等 Cline 审验填 §7)。下一步: 第四刀 S0.4-S0.6 (check_api_docs / alembic 迁移 / 合成数据生成器) 待 Cline 签发. |
