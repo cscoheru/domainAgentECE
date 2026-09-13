@@ -266,6 +266,8 @@ src/ece/mcp/
 └── README.md           # 集成指南 + Claude Code 接入命令
 ```
 
+> **依赖注记**: `mcp` SDK 在 **S4.5 动工时** 才引入 pyproject(Sprint 0 不加,S0.1 依赖列表保持最小地基 fastapi/pydantic/sqlalchemy/alembic/psycopg/pgvector/pytest/ruff/mypy)
+
 **关键集成**:
 - `auth.py` 调用 `src/ece/permissions/` 的 `PermissionScope`
 - `server.py` 在 `src/ece/main.py` FastAPI app 启动时注册
@@ -273,9 +275,9 @@ src/ece/mcp/
 
 ### 4.4 集成命令(用户手册)
 
-**Claude Code 接入**:
+**Claude Code 接入**(在 ece 仓库根目录执行;如需全局再加 `-s user`):
 ```bash
-claude mcp add ece-context -- stdio -C /path/to/ece python -m ece.mcp.server
+claude mcp add ece-context -- python -m ece.mcp.server
 ```
 
 **Cursor 接入**(~/.cursor/mcp.json):

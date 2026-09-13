@@ -68,8 +68,8 @@ docs/track_b/
 | **Permission Before Intelligence**(P2) | ADR-003 + Phase 6 §2 EvidenceIQ H2 验证 |
 | **禁止 Demo 绕过核心抽象** | Phase 6 §2 EvidenceIQ 演示依赖完整 4 件套 |
 | **垂直纪律**(不引入横向基础设施) | Phase 4 X1-X6 外购决策 + ADR-009 |
-| **领域包隔离** | ADR-010(根) + ece/ADR-010(独立) |
-| **LLM 不可知** | ADR-006(根)+ ece/ADR-006 + Phase 6 §3 Procurement H1 |
+| **领域包隔离** | ece/ADR-010 |
+| **LLM 不可知** | ece/ADR-006 + 根 ADR-010(仅"规则优先"维度) + Phase 6 §3 Procurement H1 |
 
 ---
 
@@ -105,7 +105,7 @@ docs/track_b/
 |---|---|---|---|
 | Phase 5 §3.1 K7 MCP 缺口被忽略,Sprint 4 不实现 | 中 | MCP 互操作缺失,失去与 Claude Code/Cursor 集成能力 | 本 spec + ADR-004 强制要求 |
 | ECE TASKS.md 与 Phase 5 决策不一致 | 低 | Track A 研究结论未传导 | `track-a-decisions.md` 提供审计链 |
-| Track A 重新迭代(网络恢复后新证据) | 低 | Track B 决策需修订 | Phase 5 §3 路径已设计,Robin Q9 决定 |
+| Track A 重新迭代(网络恢复后新证据) | 低 | Track B 决策需修订 | Phase 5 §3 路径已设计「（Robin 路径已取消 2026-09-13；触发改为 Glean 期权重启或 Phase 5+ POC 客户已有 Glean）」 |
 | solo 产能不足(Sprint 0-6 共 ~30 天) | 高 | 进度拖延 | 严格垂直纪律(砍掉横向诱惑);Phase 4 BBIP 锁定范围 |
 | 国产开源模型实测掉档(E6) | 中 | Domain Reasoning 验证失败 | 架构调整(规则承担更多);不杀方向 |
 

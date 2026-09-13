@@ -94,7 +94,7 @@
 
 ### 3.1 ADR 摘要
 
-**Build + Integrate**。ECE v0 自建简化版图谱(Postgres entities + relationships 表),Phase 5+ 视 Robin Q9(C03)决定是否接 GleanAdapter。
+**Build + Integrate**。ECE v0 自建简化版图谱(Postgres entities + relationships 表),Phase 5+ 视 Robin Q9(C03)决定是否接 GleanAdapter「（Robin 路径已取消 2026-09-13；触发改为 Glean 期权重启或 Phase 5+ POC 客户已有 Glean）」。
 
 ### 3.2 ECE TASKS 任务
 
@@ -120,7 +120,7 @@
 
 ### 3.5 风险/备注
 
-- **Phase 5+ 触发**:若 Robin Q9 确认 Glean schema 自定义 → 写 `src/ece/adapters/glean/graph_adapter.py`
+- **Phase 5+ 触发**:若 Robin Q9 确认 Glean schema 自定义 → 写 `src/ece/adapters/glean/graph_adapter.py`「（Robin 路径已取消 2026-09-13；触发改为 Glean 期权重启或 Phase 5+ POC 客户已有 Glean）」
 - **备注**:v0 `entities` 表 + `attributes JSONB` 已能表达大多数企业对象;图遍历通过 SQL recursive query(ARCHITECTURE §7)而非 Cypher
 
 ---
@@ -314,7 +314,7 @@ ECE 仓 `ece/docs/adr/` 已有 ADR-001 ~ ADR-010(从最初 ls 看到):
 | ece/ADR-007 | Procurement Context as First Domain | (根目录无对应 — ECE 自己的领域选择) |
 | ece/ADR-008 | Synthetic Enterprise Dataset for MVP | (根目录无对应) |
 | ece/ADR-009 | Lean Stack | (根目录无对应) |
-| ece/ADR-010 | Domain Pack Isolation | 根 ADR-010(根域包隔离,ECE ADR-010 也是域包隔离,视角略不同) |
+| ece/ADR-010 | Domain Pack Isolation | (根目录无对应——领域包隔离是 ECE 工程决策) |
 
 **无冲突**:ECE ADR 编号 001-010 是 ECE 自己治理的 ADR(技术决策);根目录 ADR 001-010 是 Track A 战略决策。**两套独立编号不混淆**(per PRD §13.5)。
 
@@ -324,8 +324,8 @@ ECE 仓 `ece/docs/adr/` 已有 ADR-001 ~ ADR-010(从最初 ls 看到):
 |---|---|---|---|
 | 数据存储 | PostgreSQL + pgvector(ECE ADR-002/009) | D1 Postgres(根 Phase 5 §1.2) | ✅ 完全一致 |
 | 权限前置 | Permission Before Intelligence(ECE ADR-004) | K1 Permission Engine(根 ADR-003) | ✅ 完全一致 |
-| LLM Provider | OpenAI-compatible + 国产开源(ECE ADR-006) | LLM 不可知 + 规则优先(根 ADR-010) | ✅ 完全一致 |
-| 领域包隔离 | src/domain_packs/ 与 src/ece/ 解耦(ECE ADR-010) | O Build 决策(根 ADR-009 + ADR-010) | ✅ 完全一致 |
+| LLM Provider | OpenAI-compatible + 国产开源(ECE ADR-006) | 规则优先(根 ADR-010);LLM 不可知由 ece/ADR-006 承担 | ✅ 完全一致 |
+| 领域包隔离 | src/domain_packs/ 与 src/ece/ 解耦(ECE ADR-010) | (根目录无对应,ece/ADR-010 独立承担) | ✅ 完全一致 |
 | 不引入 Neo4j | ECE ADR-003 明文禁止 | 根 ADR-009 Lean Stack 缓交横向基础设施 | ✅ 完全一致 |
 
 **结论**:ECE 仓已有 ADR 与 Track A 根目录 ADR 完全一致,**无决策冲突**。Track B session 可放心按 `ece/TASKS.md` 推进。
