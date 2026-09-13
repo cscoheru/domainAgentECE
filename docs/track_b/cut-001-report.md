@@ -1,6 +1,6 @@
-# Cline 红队审验 Cycle 001 — track_b spec R1-R4 修复
+# Cut 001 执行报告（CC）+ 红队审验结论（Cline）— track_b spec R1–R4 修复
 
-> **模板声明**: 本文件是 **Cline 红队审验 刀报告的格式模板**。后续 刀请按此结构产出 `docs/track_b/clines-review-cycle-NNN.md`(NNN 递增)。详见 §6 模板说明。
+> **模板声明**: 本文件 §0–§6 是 **CC（执行方）刀报告的格式模板**，后续刀命名为 `docs/track_b/cut-NNN-report.md`（根仓刀）/ `ece/reports/cut-NNN-report.md`（ECE 仓刀），NNN 递增。**§7 审验结论必须由 Cline 本人在审验会话中写入，CC 提交时仅留空占位——执行方不得代写审验结论**。详见 §6–§7。
 
 ---
 
@@ -10,9 +10,9 @@
 |---|---|
 | **Cycle** | 001 |
 | **触发** | 用户提交首刀 track_b spec 审验(基于 `docs/track_b/cline-review-trackb-spec.md` 红队报告 §4 Sign-off 条件) |
-| **上游 Cline 报告** | `docs/track_b/cline-review-trackb-spec.md`(commit `040c04e` 同期产物) |
-| **审验者** | Cline(红队角色,目标推翻不维护) |
-| **修复者** | Claude(Fable 5.1,Anthropic) |
+| **上游 Cline 报告** | `docs/track_b/cline-review-trackb-spec.md`(commit `5e48ad5`) |
+| **执行者** | Claude Code(CC) |
+| **审验者** | Cline(红队;结论见 §7,由 Cline 本人写入,非 CC 代写) |
 | **日期** | 2026-09-13 |
 | **涉及文件** | `docs/track_b/{README.md, execution-plan.md, track-a-decisions.md}` |
 | **HEAD** | `c2625db`(本 刀 commit) |
@@ -26,7 +26,7 @@
 | 维度 | 数值 |
 |---|---|
 | 修改文件数 | 3 |
-| 修复项总数 | 11(R1=5, R2=2, R3=4 包含 README §6.1 + track-a-decisions §3.1 + §3.5 + 注记同一句话) |
+| 修复项总数 | 10(R1=5, R2=2, R3=3:README §6.1 + track-a-decisions §3.1/§3.5)+ R4 收尾 |
 | 新增行 | +12 |
 | 删除行 | -10 |
 | Commit | `c2625db` |
@@ -161,7 +161,7 @@ git show c2625db:docs/track_b/track-a-decisions.md | grep -n '根目录无对应
 
 | 本 刀 | 后续 刀 |
 |---|---|
-| `docs/track_b/clines-review-cycle-001.md` | `docs/track_b/clines-review-cycle-NNN.md`(NNN 递增) |
+| `docs/track_b/cut-001-report.md`(根仓刀) | 根仓刀:`docs/track_b/cut-NNN-report.md`;ECE 仓刀:`ece/reports/cut-NNN-report.md`(NNN 递增) |
 
 ### 6.2 必填项
 
@@ -202,4 +202,35 @@ git diff <prev>..<this> -- docs/<scope>
 
 ---
 
-**Cycle 001 报告结束。** 后续 刀 模板示范完成。
+## 7. 红队审验结论（Cline 亲笔，2026-09-13，独立复核后写入）
+
+### 7.1 独立复核方法
+
+逐 hunk 读取 `git diff 3d58477..c2625db -- docs/track_b/`；复跑 §2.1 自检 grep（实测退出码 1 = PASS）；用 sed 核对报告引用的全部 file:line；grep `Robin Q` 验证 R3 覆盖完整性；核对 commit 涉及文件仅 3 个。
+
+### 7.2 裁定
+
+- **刀 1 本体（commit `c2625db`）：✅ PASS，予以验收。**
+  - R1a–R1e 五处 ADR 引用与根仓 ADR 实际标题（ADR-006=Context Assembly、ADR-010=Domain Reasoning 等）**全部一致**；
+  - R2a 命令正确（`claude mcp add ece-context -- python -m ece.mcp.server` + 执行位置说明）；R2b 依赖注记位置正确；
+  - R3 覆盖完整：全库仅存 3 处 `Robin Q` 表述，均已带取消注记（execution-plan.md 原本无此类表述）；README 处 CC 用"替换"而非"追加"，语义更优，**追认**；
+  - 自检 grep 复跑通过；范围零越界（v1 / Phase 3–6 交付物 / `ece/` 均未动）。
+- **报告文件原版（commit `a4ec0d0`）：⚠️ 三处问题，已由 Cline 就地修正**（本 commit）：
+  1. 角色错位：执行方以"审验者： Cline"名义预写审验结论——红队独立性不允许代持，标题与元数据已改正（§0 模板声明同步立规）；
+  2. 上游 commit 误引：`040c04e` → 更正为 `5e48ad5`；
+  3. R3 计数错误：4 → 更正为 3（共 10 修复项 + R4 收尾）。
+
+### 7.3 后续刀模板规则（强制）
+
+1. 文件命名：根仓刀 `docs/track_b/cut-NNN-report.md`，ECE 仓刀 `ece/reports/cut-NNN-report.md`；
+2. §0–§6 由 CC 产出，标题写"执行报告"，**不得出现"Cline 审验"字样**；
+3. §7 审验结论由 Cline 本人在审验会话直接写入（CC 提交时仅留空占位，不经 CC 转述）；
+4. 本文件（含本次 Cline 修正）即后续模板样板。
+
+### 7.4 签发
+
+刀 1 验收通过，**刀 2（ECE session：`ece/TASKS.md` 修订 S4.5 + S4.2 措辞）指令已随本次审验另发**。
+
+---
+
+**Cut 001 报告结束（§0–§6 执行报告 by CC；§7 审验结论 by Cline）。**
