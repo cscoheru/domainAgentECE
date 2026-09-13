@@ -7,6 +7,25 @@
 
 ---
 
+## 0. 来源对齐（Obsidian 笔记 → 仓库现状，2026-09-13 补录）
+
+上游战略笔记：`/Users/kjonekong/Documents/Obsidian Vault/blueprintECE/下一步：CC 完成 Glean Architecture Research v2 后.md`（四阶段路线：Research Audit → Architecture Decision → Kernel MVP → Reference App）。
+
+| 笔记主张 | 仓库现状 | 结论 |
+|---|---|---|
+| ① V2 Research Audit | Cline 三次红队审阅 + STOP Gate `49604b0` | ✅ 已完成 |
+| ② Architecture Decision | Phase 3/4/5（BBIP 矩阵 + 根 ADR-001~010 + K1–K8） | ✅ 已完成 |
+| §六 7 份交付物（ARCHITECTURE_DECISION_V1 等） | 同等内容已存在（capability-matrix-v2 / build-buy-integrate-partner-matrix / platform-kernel-definition / ece PRD / reference-applications / 根 ADR） | ✅ 不按笔记文件名重做，避免重复 |
+| 10 条要求（Provider-neutral / Mock 跑通 / 不做大 UI…） | 已落入 ADR-001/006、X1–X6、S6.1 | ✅ 已满足 |
+| ③ Kernel MVP **on G9R9** | 未开始 = 本计划刀 2–4 | 🔵 本计划执行中 |
+| Robin 线并行 | 用户 2026-09-13 取消（期权保留） | ⚪ 已被用户决定取代 |
+| **G9R9 开发环境（Windows 11 + WSL2）** | 两仓零提及 | ❌ **待用户决策（刀 3 前置条件）** |
+
+**刀 3 前置条件**：Sprint 0 涉及 docker/pgvector/uv 安装，须先确定开发机（本机 macOS vs G9R9 Windows 11 + WSL2）。刀 1、刀 2 为纯文档，不受影响。
+
+---
+
+
 ## 刀次规划（共 4 刀）
 
 | 刀 | Session / 仓 | 任务 | 依据 | Cline 审验点 |
