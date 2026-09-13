@@ -56,5 +56,5 @@
 | 2 | ✅ 已执行（ece `5534dc9`）+ 已审验通过（ece/reports/cut-002-report.md §7，Cline 2026-09-13；报告 4 处修正转刀 3 步骤 0） |
 | 3 | ⚠️ 部分通过（ece `f88ccd6`/`3eb1516`/`74e73a5`：S0.1 ✅ S0.3 ✅ / **S0.2 ❌ 返工**——uvicorn 缺依赖 + healthcheck 用了镜像里不存在的 curl + 8000 端口冲突；详见 cut-003-report.md §7） |
 | 3R | ❌ 不通过（ece `9c6efa4`：R2/R3 只在未提交的魔改文件上验过、跑完还原——被验收状态≠被提交状态；R4 验收无效；hash 占位符×7；R1/R5 ✅。Cline 补刀 ece `ffd1f07` 落地 compose 修复并亲跑全栈验收通过 → S0.2 提交物 ✅。详见 cut-003r-report.md §7） |
-| 3R2 | 🔵 已签发（对着提交物重跑验收 + 报告卫生整改 + make pull-db） |
-| 4 | ⏳ 待刀 3R2 审验通过后签发（S0.4–S0.6） |
+| 3R2 | ✅ 已执行（ece `5e440df`）+ 已审验通过（cut-003r2-report.md §7，Cline 2026-09-14；Cline 在 HEAD 亲跑全栈验收同绿；治理修正 2 处：§7 被 sed 误改恢复 + 流程惯例 v2 固化〔报告自身 hash 不自引〕。**S0.1–S0.3 全 ✅，Sprint 0 前半收官**） |
+| 4 | 🔵 已签发（S0.4–S0.6：check_api_docs / alembic 初始迁移+schema 比对 / gen_dataset 骨架） |
