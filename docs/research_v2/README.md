@@ -12,7 +12,7 @@
 | Phase | 内容 | 状态 | 完成日 | Notes |
 |---|---|---|---|---|
 | **0** | Partner 会谈准备 | ✅ DONE | 2026-09-13 | Deliverables: [`partner-meeting-brief.md`](../partner/partner-meeting-brief.md) + [`questions-for-glean.md`](../partner/questions-for-glean.md). Evidence C26-C34 added. WebFetch/WebSearch blocked by network policy; v1 evidence still valid. |
-| 1 | Evidence Collection | ⏳ PENDING | — | Awaiting user confirmation |
+| **1** | Evidence Collection | ⚠️ BLOCKED | 2026-09-13 | Deliverable: [`evidence-matrix-v2.md`](evidence-matrix-v2.md) produced. All 12 seed+supplementary URLs BLOCKED by network policy. No C35+ new evidence. v1 baseline (C01-C25, 2026-09-03) + Phase 0 internal evidence (C26-C34) maintained. Awaiting user decision on Phase 2 path. |
 | 2 | Capability Map | ⏳ PENDING | — | — |
 | 3 | Architecture Reconstruction | ⏳ PENDING | — | — |
 | 4 | Build/Buy/Integrate/Partner | ⏳ PENDING | — | — |
