@@ -19,9 +19,9 @@
 | 10 条要求（Provider-neutral / Mock 跑通 / 不做大 UI…） | 已落入 ADR-001/006、X1–X6、S6.1 | ✅ 已满足 |
 | ③ Kernel MVP **on G9R9** | 未开始 = 本计划刀 2–4 | 🔵 本计划执行中 |
 | Robin 线并行 | 用户 2026-09-13 取消（期权保留） | ⚪ 已被用户决定取代 |
-| **G9R9 开发环境（Windows 11 + WSL2）** | 两仓零提及 | ❌ **待用户决策（刀 3 前置条件）** |
+| **G9R9 开发环境（Windows 11 + WSL2）** | 用户已决策：Mac 先行，G9R9 于 S6.5 做 Windows 兼容验证 | ✅ 已决策 |
 
-**刀 3 前置条件**：Sprint 0 涉及 docker/pgvector/uv 安装，须先确定开发机（本机 macOS vs G9R9 Windows 11 + WSL2）。刀 1、刀 2 为纯文档，不受影响。
+**刀 3 开发机决策（用户已定，2026-09-13）**：**Mac 先行开发**（本机，`/Users/kjonekong/projects/domainAgentECE/ece`）；G9R9（Windows 11 + WSL2）推迟到 **S6.5 私有化验收阶段做 Windows 兼容验证**——届时在 Sprint 6 规划中作为验收项之一，不提前做。刀 1、刀 2 为纯文档，不受影响。
 
 ---
 
