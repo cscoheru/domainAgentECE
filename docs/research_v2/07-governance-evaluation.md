@@ -28,7 +28,7 @@
 | 能力维度 | Confirmed | Inferred | Unknown |
 |---|---|---|---|
 | Platform Observability 指标齐全 | ✓ (C14) | | |
-| 业务正确性评估 | | ✗ (C22 不含) | |
+| 业务正确性评估 | | ✗ (C22 不含,**C38 收紧**:execution-path/performance 评估 ≠ domain correctness;Glean 官方 "evaluations" 语义指向执行路径与性能,不构成 domain evaluation 证据) | |
 | 领域推理质量评估 | | ✗ (C22 不含) | |
 | Agent Governance(rollout/share/certify) | ✓ (C13) | | |
 | Glean Protect 安全合规 | ✓ (C01) | | |
@@ -52,7 +52,9 @@
 ### 4.2 关键判断 — Domain Evaluation 是我方最高 IP 空白层
 
 v3 Red Team 已识别(v1 §0 + v3 §0.8):
-> 若 Glean 观测仍停留在平台级指标,则 **Domain Evaluation 是我们最高 IP 价值的空白层**
+> 若 Glean 观测仍停留在平台级指标(平台指标 vs 业务正确性的二分),则 **Domain Evaluation 是我们最高 IP 价值的空白层**
+>
+> **C38(2026-09-13 Cline 抓 Agent Builder FAQ) 定稿措辞**: "未见 Glean 提供领域正确性/业务推理质量评估的公开证据;官方 Agent 治理文案出现 'evaluations'(语义指向执行路径与性能,C38),不构成 domain evaluation 的证据。"
 
 具体表现:
 - Glean 给"用了多少次、采纳率多少"——**平台级**

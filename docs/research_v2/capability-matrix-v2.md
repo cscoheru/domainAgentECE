@@ -32,10 +32,10 @@
 | 5 | **Permissions / ACL 继承** | ✓ (C06) | ✓ Verification API (C16) | | △ 客户端实现 | **极高** | ✓ Permission Before Intelligence | **Build + Integrate** |
 | 6 | **Context Assembly** | ✓/? (C02 + C18) | ? | | ✓ | **极高** | ✓ 12 步流水线 | **Build**(核心架构) |
 | 7 | **Agent Runtime** | ✓ (C10) | ✓ Platform API (C15) | ✓ | △ 轻量 | 高 | ✓ Procurement Agent | **Partner/Integrate + 自建 Domain Agent** |
-| 8 | **Agent Builder UI** | ✓ (C10) | ✓ | ✓ | × | 中 | × | **Partner**(不做 Builder UI) |
-| 9 | **MCP Tool Layer** | ✓ (C19) | ✓ Client API (C17) | ✓ | ✓ | 中 | ✓ 原生 MCP | **Build + Integrate**(MCP 是事实标准) |
+| 8 | **Agent Builder UI**(conversational builder **beta** C37;agent version control **GA** C37) | ✓ (C10, C37) | ✓ | ✓ | × | 中 | × | **Partner**(不做 Builder UI) |
+| 9 | **MCP Tool Layer**(remote MCP servers **beta** C37) | ✓ (C19, C37) | ✓ Client API (C17) | ✓ | ✓ | 中 | ✓ 原生 MCP | **Build + Integrate**(MCP 是事实标准) |
 | 10 | **Actions 写回** | ✓ (C08) | ✓ OpenAPI spec (C09) | ✓ | ✓ | 高 | × (v0 关闭) | **Integrate + 关闭**(ADR-004) |
-| 11 | **Agent Identity** (scoped credentials) | ✓ (C29) | ? | ? | ✗ | 高 | × | **later**(Phase 5+) |
+| 11 | **Agent Identity** (scoped credentials + 审计归属 + admin 可轮换/吊销;**beta** C36) | ✓ (C29 superseded by C36) | ? | ? | ✗ | 高 | × | **later**(Phase 4-5) |
 | 12 | **Governance** (rollout/share/certify) | ✓ (C13) | ✓ Verification API (C16) | ✓ | △ | 高 | △ 基础 | **Integrate**(Phase 4+) |
 | 13 | **Evaluation (Platform Observability)** | ✓ (C14) | ? | ? | ✓ 简化版 | 中 | ✓ context_requests/items | **Build**(简化版)+ 集成 Glean 完整版 |
 | 14 | **Evaluation (Domain / Business Correctness)** | ✗ (C22 确认空白) | ? | ? | **✓** | **极高** | ✓ E1-E6 | **Build**(核心 IP,最高价值) |

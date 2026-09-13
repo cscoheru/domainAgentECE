@@ -36,7 +36,7 @@
 | Event Trigger / 任务路由 | ✓ (C12) | | |
 | Agent Governance(rollout/share/certify) | ✓ (C13) | | |
 | Framework-agnostic(外部 SDK) | ✓ (C17) | | |
-| Workflow 细节(branching/looping/HITL) | | | ✗ (C11) |
+| Workflow 细节(branching/looping/HITL/per-step model) | | △ (C11 部分解答 by C37: agent looping=beta, schedule agents=GA, agent version control=GA, conversational builder=beta) | branching / HITL / per-step model 仍 UNKNOWN |
 | Per-step model selection | | | ✗ (C11) |
 | Agent-to-Agent 标准化协议(A2A) | | △ 推断(2026 趋势) | |
 | Memory 模型细节 | | △ | |
@@ -73,9 +73,9 @@
 
 ### 4.4 UNKNOWN 转 Robin 会谈必问
 
-- Agent Builder workflow 完整规范(C11 / Q10)
+- Agent Builder workflow 完整规范(C11: branching/HITL/per-step model 仍 UNKNOWN;**agent looping=beta / agent version control=GA / schedule agents=GA / conversational builder=beta — 已由 C37 部分解答** / Q10 补)
 - Agent-to-Agent 标准化协议
-- Agent Harness 时间表与定位(C25)
+- Agent Harness 时间表与定位(C25 → **C41**: Harness 已入 PRODUCT 导航但无详情页;Transform 仍 Coming soon)
 
 ## 5. References
 

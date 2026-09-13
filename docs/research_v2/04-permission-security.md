@@ -32,7 +32,8 @@
 | 权限实时同步 | ✓ (C07) | | |
 | Permission filtering 位置 | ✓ (C06 - 检索过程实时) | | |
 | 跨层级 ACL(User/Role/Dept/Classification) | ✓ (C16 - Verification/Governance API) | | |
-| Agent Identity(scoped credentials) | ✓ (C29 STRONGLY_INFERRED) | | |
+| Agent Identity(scoped service credentials + 审计归属 agent 自身账户 + admin 可轮换/吊销;**beta**) | ✓ (C29 → C36 CONFIRMED,2026-09-13) | | | C29 superseded by C36 |
+| Tenant 级隔离(MCP) | ✓ (C19) | | |
 | Tenant 级隔离(MCP) | ✓ (C19) | | |
 | OAuth DCR 支持 | ✓ (C19) | | |
 | MDM 部署支持 | ✓ (C19) | | |
@@ -49,7 +50,7 @@
 | **Permission 过滤执行位置** | **检索前**(Permission Before Intelligence) | ADR-004 铁律;与 Glean 同模式(C06);E2=0 CI 门槛 |
 | ACL 数据模型 | **自建**(acl_entries 表) | ECE 核心抽象,`DATA_MODEL.md` §3 |
 | Classification 默认矩阵 | **自建**(seed 固化) | Glean 不公开语义 |
-| Agent Identity(scoped credentials) | **Phase 5 后考虑** | C29 是 2026 新概念,ECE v0 actingUser 写死 |
+| **Agent Identity**(scoped credentials + 审计归属 + admin 可轮换/吊销;官方 **beta** 状态) | **Phase 4-5 决策**;ECE v0 仍 actingUser 写死 | C36(2026-09-13) 详情:审计归属 agent 自身账户 + admin 可轮换/吊销任何 credential。**ECE v0 不实现**,Phase 4 视 Robin 会谈决定是否吸收为 ECE 内生能力 |
 | 间接泄露防护 | **自建评测 + 规则**(E2 专项) | C22 暗示 Glean 无业务正确性评估,我方最高 IP |
 | 写回权限 | **关闭**(ADR-004 + env kill-switch) | /actions/execute v0 强制关闭 |
 

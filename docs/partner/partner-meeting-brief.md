@@ -218,7 +218,7 @@ Industry Applications
 
 ### 10.2 Phase 0 新增证据(C26-C29)
 
-> **⚠️ 重要**: 以下证据来自 v1 抓取(2026-09-03)的草稿引用,**2026-09-13 Phase 0 复核 WebFetch/WebSearch 被网络策略屏蔽,未能直接重新验证官方页面**。BLOCKED 状态已在 PRD §14 显式允许并要求标注。Phase 1 将重抓并正式登记到 `evidence-matrix-v2.md`。
+> **校正(2026-09-13 Cline 红队审查)**: claude.ai WebFetch 工具特定限制(**非网络层屏蔽**)。Cline 2026-09-13 用备用通道对 6 个种子 URL 完成独立验证,带回 C35-C42 八条新证据,见 [`/docs/research_v2/evidence-matrix-v2.md`](../research_v2/evidence-matrix-v2.md) §4。其中 C36(Agent Identity beta) 升级取代 C29,C26(Partner Network 博客存在性) 升级为 CONFIRMED(发布日期 2026-08-25 仍保留 v1 草稿 INFERRED)。
 
 | # | Claim | Source | Source Type | Confidence | Last Verified |
 |---|---|---|---|---|---|
@@ -249,12 +249,14 @@ Industry Applications
 
 ## 11. 验证与下步动作
 
-Phase 0 完成后 → **STOP,等待用户确认**,再进入 Phase 1。
-Phase 0 通过判据:
+Phase 0/1/2 全部完成(commits c1dd32b / f5d4d0e / 9f3a5cb)。Cline 红队审查已签发(commit 040c04e),R1-R7 全部完成(本文件经 Phase 2.5 修复后)。
+
+**Phase 0 通过判据**(已满足):
 
 - [x] 本文件已生成(战略定位 + 资产清单 + 谈判要点 + 红线 + 时间结构 + 证据附录)
 - [x] `questions-for-glean.md` 已生成(14 个必问问题,按优先级排序)
-- [x] `docs/research_v2/README.md` 进度看板已建立,Phase 0 标 ✅
-- [x] 证据 C26-C34 已记录(新 Glean 引用显式 BLOCKED 标注)
-- [ ] git commit + push 完成
-- [ ] 用户确认后开始 Phase 1(Evidence Collection)
+- [x] `docs/research_v2/README.md` 进度看板已建立,Phase 0/1/2 标 ✅
+- [x] 证据 C26-C34 已记录(C26 升级 CONFIRMED, C29 已被 C36 取代)
+- [x] git commit + push 完成(c1dd32b / f5d4d0e / 9f3a5cb / b166061 / <R7-commit>)
+- [x] Cline 红队审查通过(040c04e,R1-R7 全部完成)
+- [ ] 用户确认后进入 Phase 3(Architecture Reconstruction)

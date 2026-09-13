@@ -112,7 +112,7 @@
 
 **Red line**: 如果答案是"自助 + 文档为主,无 dedicated support" → 时间成本需重估。
 
-**Evidence ref**: C16, C17, C19
+**Evidence ref**: C16, C17, C19; also: developers.glean.com 新增 **"Cookbooks — Recipes: Runnable patterns that go from problem to working demo to scaffolded starter code — auth and permissions laid out for each"**(Cline 2026-09-13 验证) — **Partner enablement 信号**,值得直接问:Cookbooks 是否会开放 Partner 参与贡献?
 
 ---
 
@@ -171,7 +171,7 @@
 
 > **Question**: For partners building complex workflow agents (with branching, looping, human approval steps, per-step model selection), can you share the Agent Builder workflow specification — particularly how branching and human-in-the-loop are expressed?
 
-**Why ask**: C11 是 v1 UNKNOWN 项,决定我方 Agent Runtime 与 Glean Agent Builder 的边界。
+**Why ask**: C11 是 v1 UNKNOWN 项;**C37(Cline 2026-09-13) 已部分解答** — Fall'25 矩阵列出 agent looping=beta、schedule agents=GA、agent version control=GA、conversational agent builder=beta。**仍需 Robin 回答**:branching 复杂条件分支、HITL 人工审批步骤、per-step model selection 详细机制。决定我方 Agent Runtime 与 Glean Agent Builder 的边界。
 
 **What we hope to learn**:
 - Agent workflow 是否支持 branching / looping
@@ -205,7 +205,7 @@
 
 > **Question**: How much of agent definition can be created and managed outside of the Builder UI — via Platform API or as-code definitions? Can partners use tools like Claude Code or Cursor to author agents, with Glean providing the runtime?
 
-**Why ask**: 与我方 code-first 工作方式匹配度。
+**Why ask**: 与我方 code-first 工作方式匹配度。**已知(C37)** — 部分 agent features(agent version control、schedule agents) 已 GA,部分(conversational builder) 仍 beta。Agent Definition 的边界已部分可观察;**Partner 视角** 需要知道:哪些 GA 能力已开放 Partner 自定义,哪些仍只走 Glean UI。
 
 **What we hope to learn**:
 - Agent Definition as Code 的支持程度
@@ -239,7 +239,7 @@
 
 > **Question**: When do you expect Platform API (Agents / Chat / Search / Skills / Triggers) to graduate from experimental preview to GA? What's the SLA target?
 
-**Why ask**: C15 标记 experimental preview,我方若依赖 Platform API 构建长期方案,需要 GA 承诺。
+**Why ask**: **C15 → C35(Cline 2026-09-13 独立通道再验证)** 仍标 experimental preview,我方若依赖 Platform API 构建长期方案,需要 GA 承诺与 breaking change 政策。Robin 的 "experimental" 持续时间预期是关键信号 — 已知 platform API 涉及 Agents/Chat/Search/Skills/Triggers(C15/C35),GA 时间表决定我方是否能以此为长期基础。
 
 **What we hope to learn**:
 - GA 时间表(具体日期或季度)

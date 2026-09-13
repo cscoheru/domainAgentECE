@@ -11,10 +11,9 @@
 
 | Phase | 内容 | 状态 | 完成日 | Notes |
 |---|---|---|---|---|
-| **0** | Partner 会谈准备 | ✅ DONE | 2026-09-13 | Deliverables: [`partner-meeting-brief.md`](../partner/partner-meeting-brief.md) + [`questions-for-glean.md`](../partner/questions-for-glean.md). Evidence C26-C34 added. WebFetch/WebSearch blocked by network policy; v1 evidence still valid. |
-| **1** | Evidence Collection | ⚠️ BLOCKED | 2026-09-13 | Deliverable: [`evidence-matrix-v2.md`](evidence-matrix-v2.md) produced. All 12 seed+supplementary URLs BLOCKED by network policy. No C35+ new evidence. v1 baseline (C01-C25, 2026-09-03) + Phase 0 internal evidence (C26-C34) maintained. User chose option C: accept v1 baseline, proceed to Phase 2 with deferred re-verify tags. |
-| **2** | Capability Map | ✅ DONE | 2026-09-13 | Deliverables: 9 module docs (M01-M09) + [`capability-matrix-v2.md`](capability-matrix-v2.md) with 16 capabilities × 8 columns. 6 capabilities marked Build (high IP), 6 marked Integrate/Partner. Highest IP: Domain Ontology / Reasoning / Evaluation + Permission Engineering (C23 confirms Glean blank). Awaiting user confirmation before Phase 3. |
-| 2 | Capability Map | ⏳ PENDING | — | — |
+| **0** | Partner 会谈准备 | ✅ DONE | 2026-09-13 | Deliverables: [`partner-meeting-brief.md`](../partner/partner-meeting-brief.md) + [`questions-for-glean.md`](../partner/questions-for-glean.md). Evidence C26-C34 added (C26 blog existence CONFIRMED by Cline 2026-09-13; date 2026-08-25 保留 v1 草稿 INFERRED). claude.ai WebFetch tool-specific limitation at time of writing; Cline 红队审查 2026-09-13 备用通道验证 6 URL 并带回 C35-C42. |
+| **1** | Evidence Collection | ⚠️ PARTIAL | 2026-09-13 | Deliverable: [`evidence-matrix-v2.md`](evidence-matrix-v2.md) produced. claude.ai WebFetch 工具特定限制(12 URL BLOCKED);v1 baseline (C01-C25, 2026-09-03) + Phase 0 internal evidence (C26-C34) maintained initially. Cline 红队审查(2026-09-13)用备用通道独立验证 6 URL 并带回 C35-C42 八条新 CONFIRMED 证据,经 R1-R7 修复后已纳入 evidence-matrix-v2.md §4. |
+| **2** | Capability Map | ✅ DONE | 2026-09-13 | Deliverables: 9 module docs (M01-M09) + [`capability-matrix-v2.md`](capability-matrix-v2.md) with 16 capabilities × 8 columns. 6 capabilities marked Build (high IP). Highest IP: Domain Ontology / Reasoning / Evaluation + Permission Engineering (C23 + C38 收紧). Cline 红队审查通过(有条件:R4 module/矩阵更新 + R5 卫生修复). Awaiting user confirmation before Phase 3. |
 | 3 | Architecture Reconstruction | ⏳ PENDING | — | — |
 | 4 | Build/Buy/Integrate/Partner | ⏳ PENDING | — | — |
 | 5 | Platform Kernel Definition | ⏳ PENDING | — | — |

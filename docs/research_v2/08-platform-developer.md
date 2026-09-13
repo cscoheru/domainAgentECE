@@ -34,7 +34,7 @@
 | 官方 SDK 4 语言 | ✓ (C20) | | |
 | Agent Definition as Code 程度 | | △ (C17 framework-agnostic 暗示部分支持) | |
 | Platform API GA 时间表 | | | ✗ |
-| IDE 集成(Claude Code / Cursor) | | △ 推断(2026 趋势) | |
+| IDE 集成(Claude Code / Cursor / Codex / Gemini CLI) | ✓ (C39 CONFIRMED,2026-09-13 — Glean 官方运营开发者文档 MCP server,支持一键 `claude mcp add`) | | |
 
 ## 4. 对 Platform Kernel 的含义
 
