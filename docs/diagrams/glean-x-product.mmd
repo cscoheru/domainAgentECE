@@ -1,0 +1,44 @@
+%% Glean x Product Boundary
+%% docs/diagrams/glean-x-product.mmd
+graph TB
+    subgraph OURS["DOMAIN PRODUCT — EvidenceIQ（我们自建）"]
+        UI["Domain UI<br/>审计工作台"]
+        AG1["Control Intake Agent"]
+        AG2["Evidence & Gap Agent"]
+        ONT["Domain Ontology<br/>控制项-证据类型-责任人<br/>(核心IP#1)"]
+        REA["Domain Reasoning<br/>充分性/新鲜度/覆盖度/归因<br/>(核心IP#2)"]
+        WF["Domain Workflow<br/>审计准备流程+审批点"]
+        EV["Domain Evaluation<br/>业务正确性回归集<br/>(核心IP#3)"]
+        KPI["Business Outcome<br/>准备周期/缺口提前期"]
+    end
+
+    ADAPTER["Context Adapter<br/>(唯一边界接口)"]
+
+    subgraph GLEAN["GLEAN（不自建，POC 接入）"]
+        GS["Enterprise Search"]
+        GC["Enterprise Context/Graph"]
+        GP["Permissions"]
+        GCO["Connectors & Actions"]
+        GA["Agent Infra & Governance"]
+        GO["Observability"]
+    end
+
+    ES["Enterprise Systems<br/>Confluence/Jira/HRIS/邮箱/工单"]
+
+    UI --> AG1 --> WF
+    UI --> AG2 --> WF
+    ONT --> AG1
+    ONT --> REA
+    REA --> AG2
+    WF --> EV
+    KPI --- EV
+
+    WF -->|search/get_record/create_task| ADAPTER
+    ADAPTER -->|GleanAdapter| GLEAN
+    ADAPTER -->|MockAdapter (MVP)| MOCK["Mock Enterprise<br/>(NimbusWorks)"]
+    GC --> GS
+    GCO --> ES
+    GP --- GS
+
+    classDef core fill:#f9f,stroke:#333,stroke-width:2px
+    class ONT,REA,EV core

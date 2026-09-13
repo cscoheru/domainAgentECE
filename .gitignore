@@ -1,0 +1,8 @@
+# macOS
+.DS_Store
+
+# editor local prefs
+.vscode/
+
+# ece/ is an independent product repo (governed by ece/CLAUDE.md) — never nest it here
+/ece/

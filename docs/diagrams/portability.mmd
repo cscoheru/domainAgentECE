@@ -1,0 +1,24 @@
+%% Portability
+%% docs/diagrams/portability.mmd
+graph TB
+    DP["Domain Product — EvidenceIQ<br/>(零平台依赖)"]
+    CA["ContextAdapter 接口<br/>search/get_*/create_task/<br/>send_message/update_record"]
+
+    DP -->|唯一依赖| CA
+
+    CA --> M["MockAdapter<br/>MVP·现在<br/>NimbusWorks 数据"]
+    CA --> G["GleanAdapter<br/>POC·骨架已建<br/>Client API+Actions"]
+    CA --> MCP["MCP 路径<br/>POC 备选<br/>Remote MCP Server"]
+    CA --> R["REST 直连<br/>客户无 Glean 时<br/>文档库/工单系统 API"]
+    CA --> DB["DB 快照<br/>评估演示<br/>脱敏导出"]
+
+    M -.接口语义一致.-> G
+    M -.接口语义一致.-> R
+
+    NOTE["切换成本 = 1 个工厂函数<br/>(application 层注入)"]
+    NOTE -.- CA
+
+    classDef current fill:#9f9,stroke:#333
+    classDef future fill:#bbf,stroke:#333
+    class M current
+    class G,MCP,R,DB future

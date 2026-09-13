@@ -1,0 +1,42 @@
+%% Glean Capability Map
+%% docs/diagrams/glean-capability.mmd
+graph TB
+    subgraph GLEAN["GLEAN（Enterprise AI Platform）"]
+        direction TB
+        subgraph L4["Governance Layer"]
+            PROTECT["Glean Protect<br/>(安全)"]
+            INTEL["Glean Intelligence<br/>(模型路由/Model Hub/<br/>用量控制/AI Gateway)"]
+        end
+        subgraph L3["Agent Layer"]
+            AB["Agent Builder<br/>reasoning agents +<br/>complex workflows"]
+            AO["Agent Orchestration<br/>事件触发/Agent间路由"]
+            AG["Agent Governance<br/>rollout/share/certify"]
+            AOB["Agent Observability<br/>adoption/error/votes/ROI"]
+        end
+        subgraph L2["Access Layer"]
+            SEARCH["Enterprise Search<br/>100+源/权限感知/引用"]
+            ASSIST["Glean Assistant<br/>问答/主动/内容/执行"]
+        end
+        subgraph L1["Context Layer（根基）"]
+            EG["Enterprise Graph"]
+            PG["Personal Graph"]
+            SOC["System of Context"]
+        end
+        CONN["275+ Connectors & Actions<br/>实时权限同步/写回动作/<br/>自定义连接器/OpenAPI Action/MCP"]
+    end
+
+    DEV["Developer Platform<br/>Platform API* / Client API /<br/>Indexing API / Web SDK /<br/>Agent Toolkit / Remote MCP"]
+    ES["Enterprise Systems<br/>(Confluence/Jira/HRIS/...)"]
+
+    ES -->|索引+权限同步| CONN
+    CONN --> L1
+    L1 --> L2
+    L1 --> L3
+    L4 -.治理.-> L3
+    L4 -.治理.-> L2
+    DEV -->|读写| GLEAN
+
+    classDef ours fill:#f9f,stroke:#333
+    classDef gap fill:#ff9,stroke:#333
+    NOTE1["❗空白: Domain Ontology/<br/>Reasoning/Evaluation<br/>(我们建)"]:::gap
+    NOTE1 -.- L3

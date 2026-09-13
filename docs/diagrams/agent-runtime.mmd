@@ -1,0 +1,41 @@
+%% Agent Runtime (MVP thin runtime)
+%% docs/diagrams/agent-runtime.mmd
+graph TB
+    subgraph UI["UI（审计工作台）"]
+        INPUT["输入: 审计范围<br/>框架+期间+系统范围"]
+        TRACE["Reasoning 面板"]
+        RESULT["Evidence Pack 展示"]
+    end
+
+    subgraph APP["Application"]
+        SVC["AuditPrepService<br/>(orchestration + adapter工厂)"]
+    end
+
+    subgraph ENGINE["WorkflowEngine（薄runtime,~300行）"]
+        S1["1 ingest"] --> S2["2 map"] --> S3["3 retrieve"] --> S4["4 reason"] --> S5["5 act"] --> S6["6 approve"] --> S7["7 package"]
+        TS["TraceStore<br/>每步输入/输出/依据/工具调用"]
+    end
+
+    subgraph DOMAIN["Domain"]
+        A1["Control Intake Agent<br/>(LLM节点)"]
+        A2["Evidence & Gap Agent<br/>(LLM节点)"]
+        RULES["确定性规则<br/>sufficiency/freshness/<br/>coverage/routing"]
+        ONT["Ontology+Knowledge注入"]
+    end
+
+    subgraph ADAPT["ContextAdapter"]
+        MOCK["MockAdapter<br/>(MVP,角色门控)"]
+        GLEANA["GleanAdapter<br/>(骨架+TODO)"]
+    end
+
+    INPUT --> SVC --> S1
+    S2 -.-> A1
+    A1 -.-> ONT
+    S3 -.-> A2
+    S4 -.-> RULES
+    A2 -.-> ONT
+    S3 -->|"search/get_record"| ADAPT
+    S5 -->|"create_task"| ADAPT
+    S1 & S2 & S3 & S4 & S5 & S7 --> TS
+    TS --> TRACE
+    S7 --> RESULT

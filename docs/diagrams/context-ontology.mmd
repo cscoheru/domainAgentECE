@@ -1,0 +1,29 @@
+%% Context Ontology (EvidenceIQ domain ontology)
+%% docs/diagrams/context-ontology.mmd
+graph TB
+    CP["ComplianceProgram<br/>SOC2 Type II"]
+    CP --> CD1["ControlDomain CC1 组织"]
+    CP --> CD5["ControlDomain CC5/CC6 访问"]
+    CP --> CD7["ControlDomain CC7/CC8 运行"]
+    CP --> CD9["ControlDomain CC9 供应商"]
+
+    CD5 --> CI["ControlItem 例: CC6.2 定期访问评审"]
+    CI --> REQ["requires EvidenceType[]<br/>access_review_record"]
+    CI --> OWN["hasOwner Role<br/>IT_OPS_LEAD (Emma)"]
+    CI --> SCOPE["appliesTo SystemScope<br/>ERP/OSS/CRM/HR"]
+    CI --> FREQ["frequency: quarterly ×2"]
+
+    EV["Evidence<br/>Q1 访问评审-ERP"]
+    EV --> SRC["source/url/updatedAt<br/>(新鲜度输入)"]
+    EV --> COV["covers SystemScope<br/>(覆盖度输入)"]
+    EV --> PERM["permissionRole<br/>security/compliance"]
+
+    REQ -->|匹配| EV
+    EV --> JUDGE["推理: 充分性/新鲜度/覆盖度"]
+    SCOPE --> JUDGE
+    JUDGE --> GAP["EvidenceGap<br/>G2: HRIS无评审记录"]
+    GAP --> AI2["ActionItem<br/>派工 Emma / 截止7-10"]
+    AI2 --> TASK["create_task 回执<br/>TK-1024"]
+
+    classDef ip fill:#f9f,stroke:#333,stroke-width:2px
+    class CI,REQ,JUDGE,GAP ip
