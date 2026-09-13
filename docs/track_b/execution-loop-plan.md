@@ -54,5 +54,6 @@
 |---|---|
 | 1 | ✅ 已执行（`c2625db`）+ 已审验通过（cut-001-report.md §7，Cline 2026-09-13） |
 | 2 | ✅ 已执行（ece `5534dc9`）+ 已审验通过（ece/reports/cut-002-report.md §7，Cline 2026-09-13；报告 4 处修正转刀 3 步骤 0） |
-| 3 | 🔵 已签发（ECE session：报告修正 + Sprint 0 前半 S0.1–S0.3；开发机已定：本机 Mac） |
-| 4 | ⏳ 待刀 3 审验通过后签发（S0.4–S0.6） |
+| 3 | ⚠️ 部分通过（ece `f88ccd6`/`3eb1516`/`74e73a5`：S0.1 ✅ S0.3 ✅ / **S0.2 ❌ 返工**——uvicorn 缺依赖 + healthcheck 用了镜像里不存在的 curl + 8000 端口冲突；详见 cut-003-report.md §7） |
+| 3R | 🔵 已签发（S0.2 返工三修 + 正式跑 compose 验收；compose 插件已由 Cline 装好） |
+| 4 | ⏳ 待刀 3R 审验通过后签发（S0.4–S0.6） |
