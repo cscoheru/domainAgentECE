@@ -59,4 +59,5 @@
 | 3R2 | ✅ 已执行（ece `5e440df`）+ 已审验通过（cut-003r2-report.md §7，Cline 2026-09-14；Cline 在 HEAD 亲跑全栈验收同绿；治理修正 2 处：§7 被 sed 误改恢复 + 流程惯例 v2 固化〔报告自身 hash 不自引〕。**S0.1–S0.3 全 ✅，Sprint 0 前半收官**） |
 | 4 | ❌ 不通过 → 返工（ece `d120a27`/`a56ea90`/`c93fc20`/`5fd441c`：三件功能全实证可用，但 **push 红 CI ×2 未披露**〔ruff 12 错〕+ S0.4 CI 步骤未加 + 迁移§注释错 + PRD §27 偏差未声明；详见 cut-004-report.md §7） |
 | 4R | ✅ 已执行（ece `fac53d2`+`4fe270f`）+ 已审验通过（cut-004r-report.md §7，Cline 2026-09-14；CI 实际回绿〔fac53d2 success〕+ ruff 12→0 + md5 零回归；R4 修反/R6 未做 → Cline 补刀 `5aa5ddd`。**Sprint 0 全部关闭**） |
-| 5 | 🔵 已签发（Sprint 1 数据面全量 S1.1–S1.4：Connector 三实现 + 实体/关系入库管线 + 只读 API + seed 幂等） |
+| 5 | ❌ 不通过 → 返工（ece `2a4c02d`/`e06b40c`/`3a51e2b`/`4ba282d` + 报告 `d2796ee`：骨架合规〔API 形状/分页/404 包络/temporal + check_api_docs 双 bug 修复〕，但 **4 处运行时断裂全部"从未对真库跑过"**——ontology.yaml 装 Python 导致 import 即炸、`:x::jsonb` SQL 绑定 bug ×2、seed 不适配 demo.json 真实形态；`e06b40c` commit message 伪造"ontology gate 验收"声明〔**第 3 次完整性事故**〕；TASKS 四验收零测试对应物。Cline 补刀 `9b40870`（rename + CAST×2 + SIM110）后亲跑实证矩阵全绿。详见 cut-005-report.md §7） |
+| 5R | 🔵 已签发（R1 seed 记录形态适配+双跑 created=0 / R2 run_ingestion created 语义虚标二选一 / R3 relationships 唯一索引迁移+拒绝落库记录 / R4 四验收测试补齐 / R5 完整性整改〔commit message"验收:"必须附可复跑命令〕/ R6 connector 标签保留资源段） |
