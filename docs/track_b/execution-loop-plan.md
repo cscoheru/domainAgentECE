@@ -35,7 +35,7 @@
 | **3** | ECE session | Sprint 0 前半 S0.1–S0.3（uv+pyproject+Makefile / docker-compose+healthz / CI 四件套） | TASKS Sprint 0 | `make setup && make test` 绿；`docker compose up` 后 `/healthz` 200；CI 本地触发红则阻断；import-linter 配置就位 |
 | **4** | ECE session | Sprint 0 后半 S0.4–S0.6（check_api_docs / alembic 初始迁移 / 合成数据生成器骨架） | TASKS Sprint 0 | 故意加路由不改文档 → CI 红（实测）；`alembic upgrade head` schema 与 DATA_MODEL §1–§5 一致；gen_dataset 统计打印正常 |
 
-**Sprint 0（刀 3+4）验收后**：Cline 另拟刀 5+（届时按 README §6.2 建议 1 决定先 Sprint 1 还是 Sprint 2）。
+**Sprint 0（刀 3+4）已验收关闭（2026-09-14）**：刀 5 起按 TASKS 顺序进 Sprint 1（数据面先行——S2 身份/权限/消歧依赖实体数据在库，"README §6.2 建议 1"出处已佚，以结构性依赖为准裁定）。
 
 ---
 
@@ -58,4 +58,5 @@
 | 3R | ❌ 不通过（ece `9c6efa4`：R2/R3 只在未提交的魔改文件上验过、跑完还原——被验收状态≠被提交状态；R4 验收无效；hash 占位符×7；R1/R5 ✅。Cline 补刀 ece `ffd1f07` 落地 compose 修复并亲跑全栈验收通过 → S0.2 提交物 ✅。详见 cut-003r-report.md §7） |
 | 3R2 | ✅ 已执行（ece `5e440df`）+ 已审验通过（cut-003r2-report.md §7，Cline 2026-09-14；Cline 在 HEAD 亲跑全栈验收同绿；治理修正 2 处：§7 被 sed 误改恢复 + 流程惯例 v2 固化〔报告自身 hash 不自引〕。**S0.1–S0.3 全 ✅，Sprint 0 前半收官**） |
 | 4 | ❌ 不通过 → 返工（ece `d120a27`/`a56ea90`/`c93fc20`/`5fd441c`：三件功能全实证可用，但 **push 红 CI ×2 未披露**〔ruff 12 错〕+ S0.4 CI 步骤未加 + 迁移§注释错 + PRD §27 偏差未声明；详见 cut-004-report.md §7） |
-| 4R | 🔵 已签发（lint 修复 + CI 加 check-api-docs 步骤 + CI 回绿证据 + §映射/PRD 对齐修正） |
+| 4R | ✅ 已执行（ece `fac53d2`+`4fe270f`）+ 已审验通过（cut-004r-report.md §7，Cline 2026-09-14；CI 实际回绿〔fac53d2 success〕+ ruff 12→0 + md5 零回归；R4 修反/R6 未做 → Cline 补刀 `5aa5ddd`。**Sprint 0 全部关闭**） |
+| 5 | 🔵 已签发（Sprint 1 数据面全量 S1.1–S1.4：Connector 三实现 + 实体/关系入库管线 + 只读 API + seed 幂等） |
