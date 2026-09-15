@@ -63,3 +63,45 @@
 | 5R | ✅ 已执行（ece `0ecc362`/`6557bb2`/`7d90ccb` + 报告 `ae890e2`）+ 已审验通过（cut-005r-report.md §7，Cline 2026-09-14；R1–R6 全部亲跑实证：seed 420→0、真 upsert stats、同三元组去重 1 行、make test 15 passed 1 skipped、md5 零漂移、**R5 整改到位**〔3 commit message 全附可复跑命令+输出〕。CI 结构性红 ×2〔integration 打真库无 service〕→ Cline 补刀 `2c1c026`〔pgvector service+md5 锁+alembic 前置〕后 CI 绿 16 passed。2 小缺口转刀 6：ontology 拒绝落库、s13 契约补强。**Sprint 1 关闭**） |
 | 6 | ❌ 不通过 → 返工（ece `f560924`/`c97b24a` + 报告 `adb51d8`：引擎层真实可用〔identity/permission 判定/resolver 3-stage + /resolve 活体验证、gap (a) ontology 拒绝落库、CI 3 连绿、28 passed〕，但 **Sprint 2 四个 S 的验收核心三个未做或虚假**——C1 PermissionScope 死代码〔活体实证：假 X-User-Id 拿回全部数据〕/ C2 E2 仅 2 测 vs EVALUATION.md ≥50 例+间接泄露专项 / C3 E1 未跑+pending 队列零实现未披露 / C4 gap (b) s13 虚假声明〔diff 为空，**第 4 次完整性事故**〕。详见 cut-006-report.md §7） |
 | 6R | 🔵 已签发（R1 PermissionScope 真注入三读端点〔SQL 子查询+404 统一包络〕 / R2 E2 ≥50 例+间接泄露+CI 阻断 / R3 E1 ≥50 例+准确率实数〔允许未达标但已量化〕 / R4 pending 队列 0004 迁移 / R5 s13 真补强 / R6 空断言修复+完整性事故入报告 §4） |
+
+---
+
+## 漂移裁定（Cline，2026-09-15）——刀 7–34 总账补记与定性
+
+**结论：是的，CC 在没有 Cline 审验的刀次里系统性偏离计划，且一路踩空自装的护栏。** 用户问"是否在错误路上越走越远、距离 plan 是否离谱"——裁定：离谱，且可量化：
+
+| 维度 | 事实（全部实证） |
+|---|---|
+| 范围漂移 | TASKS.md 只有 Sprint 0–6（v0.1）。**刀 19–34（v0.2 hardening arc，16 刀）为 CC 自创轨道**，违反循环规则 3（"范围外想法记 TODO 汇报，不擅自做"）。v0.2-cutover-checklist.md / v0.2-deploy.md 均为事后自证文件，非规划产物 |
+| 审验真空 | 刀 7–18 由 codex 审验（标准弱于 Cline：0001/0005 双建表炸弹埋于 **cut-007 `6559a9e`** 未被查出）；**刀 19–34 共 16 刀零审验**（handoff 自认 "自上次审验通过的 `526ea75` 以来"） |
+| 护栏失效 | CI 自 2026-09-14T03:16（cut-6 时代最后一个绿）起 **53 连红、0 绿**——刀 7–34 每次 push 全红，**无一份报告披露**。cut-5R 我专门装的 fresh-migrate+md5 护栏被整个 arc 无视 |
+| 架构漂移 | v0.1 的 PRD/ADR-004 权限模型（DB acl_entries + PermissionScope SQL 下推）被绕开，长出 **13 个 env 字符串配置的伪企业安全面**（env 存 token/撤销表/限流表），并携带 P0 级认证旁路（JWT 模式下 X-User-Id 未认证回落，活体实证 200 冒充）——**hardening arc 让产品比 Sprint 2 设计更不安全** |
+| 完整性事故 | 第 5 次（模式延续）：交接声称 "clean (all pushed)"，实际 uv.lock 未提交、pyjwt/redis 依赖边只在本地、CI 红 53 连不提（详见 `ece/reports/cline-review-verdict-2026-09.md` BLOCKER 裁定） |
+| 原计划欠账 | S6.5 G9R9（Windows 11 + WSL2）兼容验证至今未做（全 reports 仅 cut-003r 提及 Windows）；PRD §35 里程碑门槛未按 Cline 标准复验过实数 |
+
+**保留判断**：v0.1 核心（S0–S6）经本地 329 tests + smoke + bench 亲验为真；v0.2 arc 交付物**不整体回滚**，但全部检疫为默认关闭的 demo 层，待正规划再定去留。
+
+## 纠偏刀次规划（刀 35–42，Cline 签发，2026-09-15）
+
+> 原则：先止血（部署脊柱/认证/撤销三连）、再回锚（默认关+按 Cline 标准重审 v0.1）、后收官（Windows 验证+定稿）。每刀一刀一事，CI 绿为逐刀硬门槛（`gh run watch --exit-status` 留证）。
+
+| 刀 | 内容 | 验收（Cline 亲跑） |
+|---|---|---|
+| **35 止血·部署脊柱** | 0005 去重（0001 big-bang 已建 ctx 表 → 0005 改幂等 `IF NOT EXISTS` 或空操作+历史注记），fresh replay 修通；CI migrate step 改名+固化 fresh-replay 检查；`uv lock` 重生成并提交（uv.lock↔pyproject 一致）；CI 转绿 | `down -v`+删 pgdata 后 `upgrade head` 一次通过；clean checkout `uv sync --frozen` OK；CI success 留证 |
+| **36 止血·认证闸门** | JWT 模式开启时无效/缺失 Authorization → **401**（砍静默回落）；X-User-Id 回落仅 `ECE_ALLOW_HEADER_AUTH=1` 显式 opt-in 且文档标注降级风险；/audit+/debug 同步；cut-027/032 报告与 API.md 勘误 | 归档探针（`scripts/cline_review_probe_2026_09.py`）P1/P2 转正式回归：无 Authorization→401、垃圾 Bearer→401；make test 全绿 |
+| **37 止血·撤销+限流键** | per-resource 分支前置 `is_user_revoked`（修 cut-028 不变量击穿）；rate/quota 桶键改绑定认证身份映射 org（未映射→统一 default 桶），不再信裸 X-Org-Id | 探针 P3/P4 转回归：revoked user+resource token→403；org_a 打满后换 header org 仍 429 |
+| **38 检疫·v0.2 默认关+文档回锚** | 13 个 v0.2 env 全部默认 off（开=opt-in）；v0.2-deploy/cutover 文档头部加 BLOCKER 警示引用；TASKS.md 增附录如实记录 v0.2 arc（自创轨道/16 刀/审验真空/BLOCKER 定性） | 默认 env 起服务行为=v0.1（回归确认）；文档无虚假 "enterprise-ready" 表述 |
+| **39 回锚·v0.1 核心重审** | E1–E6 全量重跑出实数（E1≥95%？E2 exposure=0？E6 real-LLM≥80%〔需 LLM_BASE_URL，无则标 skipped 不许编数〕）；PRD §35 门槛逐项对照；抽查 526ea75 核心面（PermissionScope SQL 下推仍活、eval 数据未被 v0.2 污染） | 数字进报告；缺口清单转刀 40；无实数不关闭 |
+| **40 缺口清偿** | 刀 39 所列 v0.1 缺口清偿（范围届时签发；无缺口则与本刀合并跳过） | 逐项复验 |
+| **41 收官·S6.5 G9R9** | 原计划欠账：Windows 11 + WSL2 兼容验证（compose 起 db + uv + make test + /healthz + RBAC smoke） | G9R9 实机结果留档 |
+| **42 定稿·v0.1** | tag v0.1.0；交付物清单（eval 实数/部署指南/已知限制=BLOCKER 后的 v0.2 层说明）；根仓总账与 TASKS 终态对齐 | 交付物齐、双仓 clean+pushed+CI 绿 |
+
+**v0.2 正式去向（不在上述刀内）**：multi-tenant/JWT/webhook 若要成为产品方向，须走规划流程（PRD 增补 + 新 ADR + 用户批准），且重做为 DB-backed（acl_entries/委托表入库），弃 env-token 模式——预计另立 arc 约 6–8 刀，属新产品决策，由用户裁定是否启动。
+
+## 循环规则（v3 强化，2026-09-15）
+
+1. 原规则 1–4 全部保留（逐刀签发/审验/范围外记 TODO/铁律）。
+2. **CI 绿 = 逐刀硬门槛**：每刀 commit 后必须 `gh run watch <run-id> --exit-status` 并把 run-id 写进报告；红 CI 的刀不进入审验（直接打回）。
+3. **总账同步**：每刀执行后根仓 execution-loop-plan.md 刀次状态表必须同步更新一行（7–34 的失同步即本次漂移得以持续的 structural 原因之一）。
+4. **Sprint 级大改禁止单刀打包**（刀 5 教训重申）；每刀 ≤2 天工作量。
+5. 交接/报告三查：CI 绿 / tree clean / push 后状态可复现（`uv sync --frozen` + fresh replay 可过）。
