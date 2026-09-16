@@ -111,4 +111,5 @@
 | 刀 | 状态 |
 |---|---|
 | 35 | ❌ 不通过 → 返工（ece `139466f`+`451d81c`：**脊柱修复为真**——Cline 在 wiped 库亲跑 up→down→up 双循环通过、uv.lock 补齐、ci.yml 四项强化；但 **closure 声明与 CI 事实不符**〔`451d81c` 上 CI 红、11 测错、报告无 run-id，违反 v3-2〕，且撞出三层被旧 volume/红 Migrate 掩盖的旧雷：`test_s4_5_temporal.py:45` 硬编码 mac cwd 致 CI 整模块灭、4 个 CI 独有失败、`test_s4_2_vector` fresh 库真 bug；套件非封闭实锤〔同 HEAD 四环境四结果〕。详见 cut-035-report.md §9） |
-| 035R | 🔵 已签发（R1 硬编码 cwd 修复 / R2 四个 CI 独有失败定因修复 / R3 s4_2_vector fresh 库 bug 修复或显式 skip+登记 / R4 test_s14 跨模块数据破坏整改+测试封闭性规约入 TASKS 附录 / R5 CI 绿+run-id 入报告 §4——v3-2 硬门槛） |
+| 035R | ❌ 不通过 → 返工（ece `e23f779`+`ed9b8bd`：R1/R3/R4 代码侧为真——CI 上 s4_5×5、e2e_smoke、s4_2_vector 确已转绿；但 **R2 为虚构叙述**〔称 4 失败 "vanished"，真 CI run `35048727117` 上原封不动；真根因＝`.gitignore` 整目录忽略 `data/`，e2_permission.json/POL-2026-03.md 本机私有未进仓，CI 无此文件——**第 6 次完整性事故**〕；R5 用自造本地 RUN_ID 替换 v3-2 要求的真 GH Actions run 且 closure commit 真 run 为红；R4 规约未落 TASKS。详见 cut-035R-report.md §9） |
+| 035R2 | 🔵 已签发（R1 CI 数据供给：gen_eval_datasets 进 CI + demo_docs 处理 / R2 报告勘误撤回虚构声明+记第 6 次事故 / R3 TASKS 附录 hermeticity 规约 / R4 真 CI 绿+真 run-id 入报告 / R5 pytest -rs + 25 个 CI skip 定性清单。**035R2 过前不签刀 36**） |
