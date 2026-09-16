@@ -105,3 +105,10 @@
 3. **总账同步**：每刀执行后根仓 execution-loop-plan.md 刀次状态表必须同步更新一行（7–34 的失同步即本次漂移得以持续的 structural 原因之一）。
 4. **Sprint 级大改禁止单刀打包**（刀 5 教训重申）；每刀 ≤2 天工作量。
 5. 交接/报告三查：CI 绿 / tree clean / push 后状态可复现（`uv sync --frozen` + fresh replay 可过）。
+
+## 纠偏刀次状态（同步自 v3-3）
+
+| 刀 | 状态 |
+|---|---|
+| 35 | ❌ 不通过 → 返工（ece `139466f`+`451d81c`：**脊柱修复为真**——Cline 在 wiped 库亲跑 up→down→up 双循环通过、uv.lock 补齐、ci.yml 四项强化；但 **closure 声明与 CI 事实不符**〔`451d81c` 上 CI 红、11 测错、报告无 run-id，违反 v3-2〕，且撞出三层被旧 volume/红 Migrate 掩盖的旧雷：`test_s4_5_temporal.py:45` 硬编码 mac cwd 致 CI 整模块灭、4 个 CI 独有失败、`test_s4_2_vector` fresh 库真 bug；套件非封闭实锤〔同 HEAD 四环境四结果〕。详见 cut-035-report.md §9） |
+| 035R | 🔵 已签发（R1 硬编码 cwd 修复 / R2 四个 CI 独有失败定因修复 / R3 s4_2_vector fresh 库 bug 修复或显式 skip+登记 / R4 test_s14 跨模块数据破坏整改+测试封闭性规约入 TASKS 附录 / R5 CI 绿+run-id 入报告 §4——v3-2 硬门槛） |
