@@ -23,6 +23,7 @@
 | `EVIDENCE_V3_ADDENDUM.md` | 新增证据 C43–C48（证据纪律要求） | ⭐ |
 | `SELF_REVIEW_V3.md` | **红队自检**：5 项架构测试 + 8 条对抗性自审（含 3 条未缓解风险） | ⭐⭐⭐ |
 | `CODEX_REVIEW_BRIEF.md` | **送 Codex 的独立审查任务书**：两轮次 + 必答问题 + 反馈 schema + 取证命令 | ⭐⭐⭐ |
+| `CODEX_ROUND3_CLOSEOUT_REPORT.md` | **大刀收口最终报告**（判词 §七 格式：判定 / 七项状态 / P1 证据 / 已知问题 / commit / ready for audit） | ⭐⭐⭐ **先读** |
 | `CODEX_ROUND3_FINDINGS.md` | **第三轮判词落实记录**（CONDITIONAL PASS → P1' 补齐 DB 指纹 + 执行关系修正）| ⭐⭐⭐ |
 | `CODEX_ROUND2_FINDINGS.md` | **第二轮判词落实记录** + 第三轮送审范围（P1/P2/P3 + 三处修正 + 冻结声明） | ⭐⭐⭐ |
 | `A_CUSTOMER_VALIDATION.md` | **A 执行件**：48h Customer Access Test + 中国三问 + 访谈纪律 + 记录模板 + 判定门。**照着做即可** | ⭐⭐⭐ |
@@ -83,7 +84,7 @@ PentAGI    进程内(V0)
 | 项 | 事实 |
 |---|---|
 | **客户验证 = 0** | 无一场访谈、无一份脱敏数据。全部评分与阈值都是**计划** |
-| **权限硬门未通过** | ECE v0 实测 E2 = **5 暴露 + 5 失败**（C47）。`Permission Before Intelligence` 架构上强制、**实现上未达成** |
+| ~~权限硬门未通过~~ **已修复（2026-09-20）** | ECE v0 曾实测 E2 = **5 暴露 + 5 失败**（C47，*historical*）。**现为 61/61（0 暴露 0 失败）** —— ece `037260b` 修复 + `32a0b92` 单变量实验。`Permission Before Intelligence` 现已在实现层达成 |
 | **评测套件未跑通** | E3/E4 runner 裸崩；E5 = 0.0%（C47） |
 | **护城河假设未验证** | 红队判定"当前范围内护城河假设不成立" |
 | **C22/C23 无来源 URL** | "Glean 不覆盖领域层"是**推断**，V3 全文使用反证式措辞，未写成事实 |
@@ -110,12 +111,18 @@ V0 收缩为 6 步最小闭环（不再是"完整 Kernel"）：
           → Decision → Evidence → Context Update
 ```
 
-**下一阶段三动作（必须同时进入）**：
+**下一阶段推进关系**（Codex 第三轮判词 §10 修正 —— 旧表述"必须同时进入"已作废）：
 
 ```
-A. 一个真实客户问题验证        ← 可立即启动（Step 0 + Step 0.6）
-B. 一个最小 Reference Workflow  ← 由 A 决定，不提前拍板
-C. 一个可运行的 V0 technical spike ← 建议优先修 Permission 硬门（实测 5 暴露 + 5 失败）
+A 客户发现  ──┐
+              ├─→ B 选 Reference Workflow（等 A）
+C V0 Spike  ──┘   （A 与 C 并行，互不阻塞）
+```
+
+```
+A. 一个真实客户问题验证         ← 可立即启动（Step 0 Customer Access Test + Step 0.6 中国三问）
+B. 一个最小 Reference Workflow   ← 由 A 决定，不提前拍板
+C. 一个可运行的 V0 technical spike ← 可立即启动（纯技术，不依赖客户）
 ```
 
 **STOP** —— 不写 V4 / 不扩 PRD / 不重研 Glean / 不开始大规模实现。

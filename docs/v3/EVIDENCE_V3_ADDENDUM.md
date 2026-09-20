@@ -110,6 +110,12 @@ V3 阶段的核心新增论述是：
 
 ### C47 — ECE v0 实现现状实测（本机一手）
 
+> 📌 **HISTORICAL / SUPERSEDED（2026-09-20 当日）**：本条记录的是**修复前**的实测状态。
+> 其 E2 结果（5 暴露 + 5 失败）与 E1 结果（95.4%）此后已被修复：
+> **E2 → 61/61（0/0，ece `037260b`）**；**E1 → 98.5%（ece `93ed0e3`，清除测试污染）**。
+> **本条不删除**（作为修复前基线），但**不得**作为当前状态引用。
+> 当前状态见 `PRD_V3.md` §38.1 与 `ece/reports/eval-archive/2026-09-20-cut040R2/fixed/`。
+
 | 项 | 内容 |
 |---|---|
 | **Claim** | 截至 2026-09-20，ECE v0（Track B 参考实现）的实测状态为：基线 pytest **349 passed / 5 skipped / 3 deselected**（与 CI 签名一致）；**E1 实体消歧 = 98.5%（64/65，达标 ≥95%）**；**E2 权限套件 = 5 Unauthorized Exposure + 5 Failure（16.4%，未达标，硬门 Unauthorized Context Exposure = 0 未满足）**；**E3 / E4 runner 裸崩**（`'ContextPackage' object has no attribute 'get'`）；**E5 = 0.0%**（`'str' object has no attribute 'isoformat'`）。 |

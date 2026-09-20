@@ -909,7 +909,7 @@ User Goal → Create Context → Resolve Entities → Retrieve Knowledge/Evidenc
 | 7 | **Execution Adapter**（最朴素：进程内执行器） | **V0 新增**（极薄） |
 | 8 | **Context Update**（Evidence 回写 Context 的闭环） | **V0 新增** |
 | 9 | **Basic Trace**（本地 `context_requests` + Evidence 链） | 已有 |
-| 10 | **Permission Engine**（数据访问层强制，硬门） | 已有，**但实测未通过**（C47） |
+| 10 | **Permission Engine**（数据访问层强制，硬门） | 已有，✅ **实测已通过**（E2 61/61，2026-09-20） |
 
 ### 32.3 V0 明确不含
 
@@ -996,7 +996,7 @@ User Goal → Create Context → Resolve Entities → Retrieve Knowledge/Evidenc
 | T1 | **执行运行时接口设计过早**——过早抽象出一个错误的接口，比不抽象更贵 | 高 | ADR-011 只定**类别级**接口；V0 用进程内实现验证接口形状 |
 | T2 | **国产开源模型质量不达标**（复杂推理弱） | 高 | §27 Step 0.7 实测；规则优先降低模型依赖 |
 | T3 | **私有化部署约束与外部运行时冲突**——Trigger.dev 自托管可能有资源/依赖门槛 | 中 | P0 待补证据；V0 不依赖它 |
-| T4 | **权限硬门未通过**——实测 E2 = 5 暴露 + 5 失败（C47） | **高** | 已有明确根因与修复单（cut-040R-2）；作为 §37 硬门 |
+| T4 | ~~**权限硬门未通过**~~ **已解除（2026-09-20）** —— 曾实测 E2 = 5 暴露 + 5 失败（C47，*historical*）；现为 **61/61** | ~~高~~ 已关闭 | 修复见 ece `037260b`（六根因）+ `32a0b92`（单变量实验）。**注**：E3/E4/E5 runner 仍崩（R40R2.7），属 T4 的剩余部分 |
 | T5 | **评测状态被自身测试破坏**——seed 注入的属性被 pytest 洗掉（C48） | 中 | 把不变式放入 `seed_from_demo_json` 自愈；状态完整性测试 |
 | T6 | **对照系证据薄弱**——C43/C44 抓取受工具限制，C44 仅二手来源 | 中 | 边界为类别级，实现细节待补；不得用于容量规划 |
 | T7 | **领域包隔离被侵蚀**——外部运行时/Provider 的厂商标识渗透进 Kernel | 中 | CI grep 门禁（扩展到 runtimes/providers） |
@@ -1053,7 +1053,7 @@ User Goal → Create Context → Resolve Entities → Retrieve Knowledge/Evidenc
 |---|---|---|
 | **G-A** | **客户验证至少跑完 Step 0（48h CA 冒烟）+ Step 0.6（中国三问）** | ❌ 未执行 |
 | **G-B** | **国产开源模型实测（§27 Step 0.7）** | ❌ 未执行 |
-| **G-C** | **Permission 硬门 E2 = 0 暴露** | ❌ 实测未通过（C47） |
+| **G-C** | **Permission 硬门 E2 = 0 暴露** | ✅ **已通过**（61/61，2026-09-20） |
 
 **G-C 的说明**：这是**唯一一个纯技术、可立即推进**的前置（不依赖客户）。已有明确根因清单与修复单。V3 建议优先推进 G-C。
 
@@ -1067,39 +1067,44 @@ User Goal → Create Context → Resolve Entities → Retrieve Knowledge/Evidenc
 
 ### 38.1 现有实现资产（ECE v0 / Track B）
 
-ECE v0 是 Kernel 的**参考实现**。当前实测状态（C47，2026-09-20，本机亲跑）：
+ECE v0 是 Kernel 的**参考实现**。当前实测状态（全部由 CC 亲跑并归档，raw stdout 见归档目录）：
 
 | 项 | 实测 | 判定 |
 |---|---|---|
-| 基线测试 | 349 passed / 5 skipped / 3 deselected | ✅ 与 CI 签名一致 |
+| 基线测试 | **353 passed / 3 skipped / 0 failed**（本地，live API）<br>*历史*：CI 签名 349P/5S/3D（CI 无 live API，两个 E2 wrapper 会 skip） | ✅ exit 0 |
 | **E1 实体消歧** | **98.5%**（64/65） | ✅ 达标（≥95%） |
-| **E2 权限套件** | **5 暴露 + 5 失败（16.4%）** | ❌ **硬门未通过** |
-| **E3 Context 完整性** | **runner 裸崩**（`ContextPackage.get`） | ❌ 未跑通 |
-| **E4 Relationships** | **runner 裸崩**（同上） | ❌ 未跑通 |
-| **E5 Temporal** | **0.0%**（`str.isoformat`） | ❌ 未跑通 |
+| **E2 权限套件** | **0 暴露 + 0 失败（61/61）** | ✅ **硬门已通过** |
+| **E3 Context 完整性** | **runner 裸崩**（`ContextPackage.get`） | ❌ 未跑通（R40R2.7） |
+| **E4 Relationships** | **runner 裸崩**（同上） | ❌ 未跑通（R40R2.7） |
+| **E5 Temporal** | **0.0%**（`str.isoformat`） | ❌ 未跑通（R40R2.7） |
 | E6 Agent | 未跑（需 LLM） | ⏸ |
 
-**归档**：`ece/reports/eval-archive/2026-09-20-cut040R2/baseline-seeded/`
+> *历史*：E2 曾为 5 暴露 + 5 失败、E1 曾因测试污染降至 95.4% —— 两者均已于 2026-09-20 修复
+> （ece `037260b` / `93ed0e3`）。历史原始 stdout 保留于归档的 `baseline-seeded/` 与
+> `single-variable-v2/`（后者已 `superseded` 前者）。
+
+**归档**：`ece/reports/eval-archive/2026-09-20-cut040R2/`
 
 ### 38.2 诚实结论
 
-> **Kernel 的架构已在 ECE v0 中成型，但其核心不变式（Permission Before Intelligence）在实测中尚未达成，领域评测套件（E3/E4/E5）尚未跑通。**
+> **Kernel 的架构已在 ECE v0 中成型，核心不变式（Permission Before Intelligence）已实测通过（E2 61/61）。
+> 但领域评测套件 E3/E4/E5 的 runner 仍然崩，尚未跑通 —— Context 闭环的实测数字目前缺失。**
 
 **因此 V3 不得声称**：
 
 ```
 ❌ "Kernel 已实现"
-❌ "Permission Before Intelligence 已达成"
-❌ "领域评估体系已建立"
+❌ "领域评估体系已建立"（E3/E4/E5 尚未跑通）
 ```
 
 **可以声称**：
 
 ```
 ✅ Kernel 的分层与接口已在参考实现中成型
-✅ Permission 的强制点在架构上已固化（数据访问层 SQL 子查询）
+✅ Permission 的强制点在架构上已固化（数据访问层 SQL 子查询），且已实测通过（E2 = 0/0）
+✅ Permission Before Intelligence 在实现层已达成（61/61）
 ✅ 评测套件的框架与数据集已就位（E1–E6）
-✅ 其中 E1 已达标；其余在收敛中
+✅ E1 已达标（98.5%）；E3/E4/E5 待修 runner（R40R2.7）
 ```
 
 ### 38.3 与 Track B 的关系
