@@ -1014,6 +1014,204 @@ index 54262af..e9c7399 100644
 
 ---
 
+## 10. R2.1 — Codex 唯一 MINOR CONDITION 的处置
+
+### 10.1 裁定与条件
+
+Codex 对 §0–§9 的裁定是 **R2 = PASS WITH MINOR CONDITIONS**：
+
+| 裁定项 | 结论 |
+|---|---|
+| G6 负向对照 | **ACCEPT** —— 保留 |
+| README 那一行 | **ACCEPT** —— 保留，不构成 scope creep |
+| seed 原子事务边界 | **FOLLOW-UP** —— 明确不阻塞 R2、不建议扩大范围 |
+| **`rejected` 是否应使 seed 失败** | ⚠️ **唯一代码级条件** |
+
+条件原文给的是二选一：(a) 让 `rejected != []` 导致失败；或 (b) 证明
+`upsert_relationship()` 的 rejected 分支在 canonical fixture 下不可能发生，并说明理由。
+
+**取值：(a)。** (b) 不成立 —— 理由见 10.2，那正是不能选它的原因。
+
+### 10.2 先回答一个更基础的问题：`ok=True` 究竟证明了什么
+
+裁定问的是 `rejected` 的语义。但回答之前必须先问：**当前 `ok=True` 本身就可靠吗？**
+
+实测（`11-probe-inserted-semantics.txt`，命令 `uv run python /tmp/probe_noop2.py`）：
+
+```
+probe triple: (PR001)-[SUBMITTED_BY]->(S24-P-001)
+1st call -> inserted=True reason='ok'
+2nd call -> inserted=True reason='ok'   <-- conflicts with the 1st
+rows ACTUALLY tagged 'probe:noop': 1   <-- 2 calls reported inserted=True
+```
+
+**两次调用都报 `inserted=True`，库里只有一行。** 原因是两条独立的机制叠加：
+
+1. `upsert_relationship()`（`src/ece/entities/pipeline.py:230`）在
+   `ON CONFLICT DO NOTHING` 什么都没写的情况下，**仍然返回 `(True, "ok")`** ——
+   而它的 docstring 写的是 `inserted=True: row written`。
+2. `uq_relationships_triple`（migration `0002`）的键是
+   `(src_entity_id, relation, dst_entity_id, COALESCE(valid_from, …))` ——
+   **不含 `source_system`**。所以另一个 fixture 占住同一条 triple 时，我们的
+   DELETE（按自身 `source_system` 限定）删不掉它，INSERT 静默 no-op。
+
+后果：`inserted_by_type` 会**照常每 PR +1**，而库里我方的行数少一条。
+**只看计数器，`rejected == []` 且"计数正确"完全可能与 fixture 不完整共存。**
+
+所以正确的修复形态不是「再加一个 if」，而是**把判据从计数器换成库内实发行数**。
+
+### 10.3 修复形态
+
+`src/ece/seed.py::seed_demo_relationships()` 末尾新增两条彼此独立的判据：
+
+```python
+expected = len(pr_ids) * EXPECTED_RELS_PER_DEMO_PR
+
+if rejected:                       # 条件①：被拒边就是失败
+    problems.append(f"{len(rejected)} relationship(s) REJECTED …")
+
+owned = SELECT count(*) FROM relationships
+        WHERE source_system = 'demo:seed_relationships'
+
+if int(owned) != expected:         # 条件②：以库内实况为准，不看计数器
+    problems.append("fixture incomplete: {owned} rows … while {n} insert(s) were reported …")
+
+result = { "ok": len(problems) == 0, …, }
+if problems:
+    result["error"] = " | ".join(problems)
+```
+
+①直接回应裁定；②把 10.2 发现的那条静默路径一并关掉 —— 两条都属于
+「以"环境是否完整"为准，而不是以"函数是否跑完"为准」。
+
+返回键集不变（只在不完整时多一个 `error`），因此 `run_seed()` 既有的
+`if not relationships.get("ok"): raise RuntimeError(...)` **无需改动**即生效。
+
+配套改动两处：
+
+- `scripts/seed_relationships.py`：把 REJECTED 的打印**移到** `ok` 判断之前
+  （否则失败路径上这些明细不可达，只剩一行 error），docstring 补充 exit 1 的新含义。
+- `tests/integration/test_canonical_seed_completeness.py`：新增 **G7 / G8** 两个负向对照。
+
+### 10.4 ⭐ 负向对照：新 guard 对旧代码确实失败
+
+把 `src/ece/seed.py` `git stash` 回改动前，只跑 G7/G8（`04-guards-bite-old-code.txt`）：
+
+```
+G7（旧码）AssertionError: … got {'ok': True, 'prs': 200, 'departments': 4,
+    'removed': 1200,
+    'inserted_by_type': {'BELONGS_TO': 199, 'SUBMITTED_BY': 400, …},
+    'rejected': ['PR001 -BELONGS_TO-> D001: ontology rejected: forced by test_g7'],
+    'total_in_db': 1203}
+  assert True is False
+
+G8（旧码）AssertionError: … got {'ok': True, 'removed': 1199,
+    'inserted_by_type': {'BELONGS_TO': 200, …},   ← 计数器说 200
+    'rejected': [], 'total_in_db': 1204}
+  assert True is False
+```
+
+这两段**旧代码的输出本身就是缺陷的证据**：
+
+- **G7**：`rejected` 里明明躺着那条被拒边，`ok` 是 `True`，`BELONGS_TO` 只有 199 条
+  —— 即裁定所担心的「1200 期望 / 1199 交付 / `make seed` 仍显示成功」，**实测复现**。
+- **G8**：`inserted_by_type.BELONGS_TO = 200`，而实际只写入 199 条
+  —— **计数器撒谎，seed 说成功**。
+
+没有这一步，「`ok is False`」之类的断言就只是"看起来在检查"。
+
+### 10.5 验证（全部为本次实测）
+
+| 项目 | 结果 |
+|---|---|
+| `scripts/seed_relationships.py`（健康环境） | **exit 0**，`Total relationships in DB: 1204` |
+| 同上，外部 fixture 占走 1 条 triple | **exit 1**，`ERROR: fixture incomplete: 1199 rows tagged … expected 1200 (200 PRs x 6) while 1200 insert(s) were reported. A shortfall with no rejections means a foreign source_system already owns those triples.` |
+| `make seed` | **exit 0**；`Relationships: {BELONGS_TO: 200, SUBMITTED_BY: 400, SELECTS: 200, CONTAINS: 200, SUBJECT_TO: 200}` = 1200；0 rejected |
+| **全量 pytest** | **363 passed, 3 skipped, 0 failed**（R2 基线 361 + G7/G8 两条） |
+| G5/G6/G7/G8 单独跑 / 整模块跑 | 均通过（新增模块级前置，见 10.7 说明） |
+| E4 / E5 | 各 30/30 = **100.0%**，exit 0（未手工补种） |
+| E1 / E2 / E3 | **98.5% / 0 暴露 0 失败（61 cases）/ 100.0%** —— 与 R2 基线逐项一致 |
+| `ruff` + `mypy` | `All checks passed!` / `Success: no issues found in 2 source files` |
+| `lint-imports` | **Contracts: 2 kept, 0 broken** |
+| 改动范围 | **恰好 3 个文件**（`src/ece/seed.py`、`scripts/seed_relationships.py`、`tests/integration/test_canonical_seed_completeness.py`） |
+
+数据面未变（关系仍是 1200、每 PR 恰 6 条、幂等），E1/E2/E3 逐项复现 R2 基线 ——
+所以 R2.1 只改了**失败语义**，没有改成功路径的任何产出。
+
+### 10.6 新登记的观察：R2-obs-3（`upsert_relationship` 的返回契约）
+
+`pipeline.py:174` 写的是 `inserted=True: row written`，实测（10.2）不成立：
+no-op 的冲突插入与真正写入**返回值相同**。
+
+**本次刻意不改**，理由：
+
+- `upsert_relationship` 是共享基础设施，有多处调用者（`test_s12`、`test_s24_e2`、
+  `test_s4_5_temporal`、`seed_temporal_roles.py`、`seed_v0_spike_fixture.py`）。
+- 正确的修法是三态返回（inserted / already-present / rejected），属重构，
+  落在裁定「不要为了 FOLLOW-UP 扩大 R2」的边界之外。
+- 现有的 `tests/integration/test_seed_relationships.py:150` 断言是
+  `assert ins1 or not ins2` —— 在 `ins1=True` 时**恒真**，与它自己上方
+  「Only one should return True」的注释矛盾，因此**测不出**这个问题。
+  这一条同样只登记、不改：它属于既有的弱断言，改它需要先动共享基础设施。
+
+**影响面**：canonical seed 侧已由 10.3 的判据②覆盖（`owned` 对账）；
+残余风险限于其他直接读 `inserted` 返回值的调用点。
+
+### 10.7 测试自足性的一处补强
+
+`test_canonical_seed_completeness.py` 新增模块级前置：若 fixture 不完整则先 `run_seed()`。
+
+这不是被 R2 否定的「测试自愈」—— 那次否掉的是 **E4/E5 runner 在评测中途修图再打分**。
+这里是**断言之前**建立前置，断言本身仍然检验环境状态；环境真的坏掉时
+`run_seed()` 会 raise 而非返回半成品。动机是仓库自己的教训
+（`reports/cut-013-report.md`：「autouse fixtures must be SELF-SUFFICIENT」）：
+G8 需要先存在一条 demo BELONGS_TO 边，单独跑时不应因别的测试文件洗过库而假失败。
+
+### 10.8 Codex §9 的架构边界观察（建议纳入 closeout）
+
+裁定 §9 指出 R2 证明了三个东西**必须各自独立、不再互相偷偷修复**：
+
+```
+Dataset            ── 定义「测什么」
+Canonical Seed     ── 定义「测试环境是什么」
+Evaluation Runner  ── 定义「怎么测」
+```
+
+E4/E5 runner 现在的职责被收窄为「检查环境 → 不满足则拒绝评分（exit 2）」，
+而不再是「发现关系没了 → subprocess 补种 → 自己修好环境 → PASS」。
+
+**本报告按 §9 的要求把它作为 closeout 候选条目记录在此，未改写任何仓库文档**
+（README 的 canonical seed 一节已含 E4/E5 拒绝运行的表述；是否要在 closeout 里
+正式固化这条边界，留给 R2 终审后的 closeout 决定）。
+
+### 10.9 本次未改动（明确）
+
+- `run_seed()` 的事务边界（裁定 §6 明确列为 **follow-up / hardening**，不扩大范围）
+- `R2-obs-1`（`scripts/seed_temporal_roles.py` 孤儿脚本）与
+  `R2-obs-2`（`department` 的 `D001..D004` 仍走全局 max+1）—— 状态不变
+- `upsert_relationship()` 的返回契约（见 10.6）
+- 任何禁区文件：V3 PRD / V0 Execution Spec / Kernel Boundary / `rules.py` /
+  ontology / permission semantics / E1–E5 数据集 / evaluation threshold /
+  Context / Decision / Evidence —— 全部 `git status` 为空
+
+### 10.10 R2.1 归档（`ece/reports/r2-verification-r21/`）
+
+| 文件 | 内容 |
+|---|---|
+| `01-cli-wrapper-ok.txt` | wrapper CLI 正常路径 exit 0 |
+| `02-cli-wrapper-incomplete.txt` | 外部占位下 CLI exit 1 + 诊断 |
+| `03-make-seed.txt` | `make seed` 输出（1200 / 0 rejected） |
+| `04-guards-bite-old-code.txt` | ⭐ 新 guard 对改动前代码的失败输出 |
+| `05-pytest-full.txt` | 全量 pytest 原始输出 |
+| `06-e4.txt` / `07-e5.txt` | E4 / E5 |
+| `08-e1.txt` / `09-e2.txt` / `10-e3.txt` | E1 / E2 / E3 回归 |
+| `11-probe-inserted-semantics.txt` | ⭐ `inserted=True` 语义探针 |
+| `12-r21-diff.patch` | 本次全量 diff |
+| `13-scope.txt` | 改动范围（3 个文件） |
+
+---
+
 **Author**: Claude（Fable 5.1）
 **Date**: 2026-09-20
-**Status**: R2 PASS —— 待审。**未进入 S2。**
+**Status**: R2 PASS WITH MINOR CONDITIONS —— 唯一代码级条件已处置（§10）。
+事务边界按裁定列为 follow-up。**未进入 S2。**
