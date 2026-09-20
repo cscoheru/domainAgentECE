@@ -23,6 +23,7 @@
 | `EVIDENCE_V3_ADDENDUM.md` | 新增证据 C43–C48（证据纪律要求） | ⭐ |
 | `SELF_REVIEW_V3.md` | **红队自检**：5 项架构测试 + 8 条对抗性自审（含 3 条未缓解风险） | ⭐⭐⭐ |
 | `CODEX_REVIEW_BRIEF.md` | **送 Codex 的独立审查任务书**：两轮次 + 必答问题 + 反馈 schema + 取证命令 | ⭐⭐⭐ |
+| `CODEX_ROUND3_FINDINGS.md` | **第三轮判词落实记录**（CONDITIONAL PASS → P1' 补齐 DB 指纹 + 执行关系修正）| ⭐⭐⭐ |
 | `CODEX_ROUND2_FINDINGS.md` | **第二轮判词落实记录** + 第三轮送审范围（P1/P2/P3 + 三处修正 + 冻结声明） | ⭐⭐⭐ |
 | `A_CUSTOMER_VALIDATION.md` | **A 执行件**：48h Customer Access Test + 中国三问 + 访谈纪律 + 记录模板 + 判定门。**照着做即可** | ⭐⭐⭐ |
 | `../adr/ADR-011.md` | Kernel ↔ Runtime 边界决策 | ⭐⭐⭐ |
