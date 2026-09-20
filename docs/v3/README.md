@@ -19,6 +19,7 @@
 | `MVP_SCOPE_V3.md` | V0 最小范围（2–4 周）+ 规模红线 + 验收 DoD | ⭐⭐ |
 | `EVIDENCE_V3_ADDENDUM.md` | 新增证据 C43–C48（证据纪律要求） | ⭐ |
 | `SELF_REVIEW_V3.md` | **红队自检**：5 项架构测试 + 8 条对抗性自审（含 3 条未缓解风险） | ⭐⭐⭐ |
+| `CODEX_REVIEW_BRIEF.md` | **送 Codex 的独立审查任务书**：6 个必答问题 + 反馈 schema + 取证命令 | ⭐⭐⭐ |
 | `../adr/ADR-011.md` | Kernel ↔ Runtime 边界决策 | ⭐⭐⭐ |
 | `../diagrams/kernel-architecture-v3.mmd` | V3 架构 mermaid 图 | ⭐ |
 
