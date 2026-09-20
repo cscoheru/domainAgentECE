@@ -26,7 +26,7 @@
 | AD-V3-2 | Kernel 边界对照系从「Glean 单一」扩展为「Provider + Runtime 类别」 | 边界 | **新增** |
 | AD-V3-3 | **Evidence** 提升为一级业务对象 | 数据模型 | **新增** |
 | AD-V3-4 | **Domain Workflow Specification** 与 **Execution Workflow** 分层 | 语义 | **新增** |
-| AD-V3-5 | Adapter 从单一 ContextAdapter 推广为三类接口 | 抽象 | **扩展 ADR-001** |
+| AD-V3-5 | Adapter 从单一 ContextAdapter 推广为三类接口 | 抽象 | **扩展 ADR-001**〔V0 义务 SUPERSEDED → V1+〕 |
 | AD-V3-6 | Kernel 自建理由重心从「Glean 空白」移到「私有化 + 领域纵深 + 业务正确性」 | 战略 | **修正** |
 | AD-V3-7 | 私有化部署升为一级设计目标 | 部署 | **升格** |
 | AD-V3-8 | 不预设最终 vertical；Reference Application ≠ 产品定义 | 产品 | **继承并强化** |
@@ -131,9 +131,14 @@ Provider                          — 原料来源
 
 ---
 
-### AD-V3-5 — Adapter 三类接口（扩展 ADR-001）
+### AD-V3-5 — Adapter 三类接口（扩展 ADR-001）〔**V0 义务已 SUPERSEDED**〕
 
-**决策**：ADR-001 的单一 `ContextAdapter` 推广为三类接口：Provider Interface / Agent Runtime Interface / Execution Runtime Interface。
+> ⚠️ **SUPERSEDED for V0**（`V3_CLOSEOUT.md` §2.2 / §2.4）：**V0 不建三类接口抽象层。**
+> 本决策的**决策方向仍然有效**（三类接口是可替换性设计），但**降为 V1+ 方向**。
+> V0 只保留三件**具体实现**：Local Provider / InProcessExecutor / 固定 Agent（直接调用）。
+> 下文的"V0 实现"读作 **V1+ 目标**。
+
+**决策**：ADR-001 的单一 `ContextAdapter` 推广为三类接口：Provider Interface / Agent Runtime Interface / Execution Runtime Interface。**（V1+）**
 
 **与 ADR-001 的关系**：**扩展，不推翻**。ADR-001 的 11 个方法全部归入 Provider Interface 的 `context.*`。ADR-001 的 Mock-first 策略、CI 门禁、切换验收测试**全部继续有效**，并逐类复制。
 
@@ -195,13 +200,14 @@ Provider                          — 原料来源
 
 ### AD-V3-9 — V0 运行时必须是最朴素的进程内实现
 
-**决策**：V0 的 Execution Runtime Interface 与 Agent Runtime Interface 的默认实现必须是**进程内同步实现**（无队列、无重试、无 sandbox、无 agent loop）。
+**决策**：V0 的**执行与 Agent 能力**必须是最朴素的**进程内具体实现**（无队列、无重试、无 sandbox、无 agent loop）。
+〔V3_CLOSEOUT §2.2 收口：**不抽象为 interface** —— V0 直接使用 Local Provider / InProcessExecutor / 固定 Agent。〕
 
 **依据**：
 
 1. 若 V0 就引入 Trigger.dev / DSH，会**在验证 Kernel 之前先验证集成**——两个变量同时变，无法归因。
-2. 进程内实现足以验证接口形状；接口形状才是 V3 要锁定的东西。
-3. 符合 V0 "2–4 周"的规模约束。
+2. 进程内实现足以跑通 6 步闭环；V0 要验证的是**闭环成立**，不是接口形状。（接口形状是 V1 的事。）
+3. 符合 V0 "2–4 周"的规模约束（Codex：可比 2–4 周更小）。
 
 **被否决的备选**：
 
@@ -325,7 +331,7 @@ Provider                          — 原料来源
 | AD-V3-2 类别级边界 | 新增任一 Provider/Runtime 不需改边界文档 | 持续 |
 | AD-V3-3 Evidence 一级 | V0 存在 `Evidence` 对象且结论可追溯 | V0 验收 |
 | AD-V3-4 Workflow 分层 | 存在独立的 Workflow Spec 文件且不含 task 图 | V0 验收 |
-| AD-V3-5 三类接口 | V0 三个接口各有进程内实现 | V0 验收 |
+| AD-V3-5 三类接口 | ~~V0 三个接口各有进程内实现~~ → **V1+ 方向**（V0 不建抽象层，见 V3_CLOSEOUT §2.2） | V1 验收 |
 | AD-V3-6 理由重心 | 文档中无"Glean 没有 X"式断言 | V3 审阅时 |
 | AD-V3-7 私有化 | 断网 + 本地模型跑通 | V0 验收（**待补验收项**） |
 | AD-V3-8 不预设 vertical | 无任何文档宣布最终 vertical | V3 审阅时 |

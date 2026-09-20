@@ -78,15 +78,23 @@ Return Business Outcome
 | **AgentRef** | 固定 1–2 个 Agent，code-first 定义 |
 | **Policy** | 最小集（该切片的业务规则） |
 
-### 3.2 接口（三类，各一实现）
+### 3.2 运行时（**V0 不建三类接口抽象层**）
 
-| 接口 | V0 实现 | 说明 |
-|---|---|---|
-| `ProviderInterface` | `InProcessProvider` + `LocalKnowledgeProvider` | 直连 Kernel 自己的库 + 本地文件 |
-| `AgentRuntimeInterface` | `InProcessAgent` | **一次 LLM 调用，无 loop、无 sandbox** |
-| `ExecutionRuntimeInterface` | `InProcessExecutor` | **同步函数调用，无队列、无重试** |
+> ⚠️ **V3_CLOSEOUT §2.2 明确**：**V0 不建三类接口抽象层，不实现任何 Adapter。**
+> V0 只保留**具体实现**，直接调用。
+
+| V0 的三个具体件（**不是 interface**） | 说明 |
+|---|---|
+| **Local Provider** | 直连 Kernel 自己的库 + 本地文件 |
+| **InProcessExecutor** | **同步函数调用，无队列、无重试** |
+| **固定 Agent** | **单次 LLM 调用，无 loop、无 sandbox**；**无 Selection 概念** |
 
 **V0 不实现任何外部 Provider / Runtime 适配器**（Glean / Trigger.dev / DSH / PentAGI 全部留到 V1+）。
+
+> 📌 **HISTORICAL / V1+ DIRECTION**：`ProviderInterface` / `AgentRuntimeInterface` /
+> `ExecutionRuntimeInterface` 三类接口的设计**曾出现在 V3 的早期草案**（`KERNEL_ARCHITECTURE_V3.md` §3、
+> `docs/adr/ADR-011.md` §3），作为**可替换性设计**。`V3_CLOSEOUT.md` §2.4 已将其
+> **降为 V1+ 方向**：V0 不建抽象层。**不得**把三类 interface 当成 V0 交付物。
 
 ### 3.3 业务切片（一个，且只有一个）
 
@@ -129,15 +137,34 @@ V0 **只做一条业务切片**。切片候选（**未定，由客户验证决�
 
 ### 3.7 评测
 
+> 当前状态（2026-09-20，R40R2.7 后）。**旧状态一律标注 *historical***，不作为当前引用。
+
 | 套件 | 门槛 | 现状 |
 |---|---|---|
-| E1 实体消歧 | ≥95% | ✅ 98.5% |
-| E2 权限 | 暴露 = 0 | ❌ 5 暴露 + 5 失败 |
-| E3 Context 完整性 | ≥90% | ❌ runner 裸崩 |
-| E4 Relationships | 0 错误关系 | ❌ runner 裸崩 |
-| E5 Temporal | ≥95% | ❌ 0.0% |
-| E6 Agent | 人工可接受 | ⏸ 未跑 |
+| E1 实体消歧 | ≥95% | ✅ **98.5%** |
+| E2 权限 | 暴露 = 0 | ✅ **61/61，0 暴露 0 失败**（*historical*：曾为 5 暴露 + 5 失败） |
+| E3 Context 完整性 | ≥90% | ⚠️ **15.0%（runner 已不崩，暴露真实失败）** —— 见下方说明 |
+| E4 Relationships | 0 错误关系 | ✅ 100%（30/30）—— **注意：边界 `[0,100]` 使对象缺失时也判定通过，属 vacuous pass** |
+| E5 Temporal | ≥95% | ❌ **0.0%（runner 已不崩，暴露真实失败）** |
+| E6 Agent | 人工可接受 | ⏸ 未跑（需 LLM） |
 | **纯 RAG baseline 对照** | ECE 优于 baseline | ⏸ 未跑 |
+
+**E3 / E5 真实失败的性质（R40R2.7 已定位，**未修**，待裁定）**：
+
+1. **E3 的 85 个失败 = 数据集过期，不是 Kernel 逻辑失败。**
+   `_next_display_id` 按"现有最大数字 +1"分配；`test_s14_seed_idempotent` 的 DELETE+重播
+   会让 `display_id` **整体上移**（当前 PR 的 display_id 已是 `PR202–PR401`，`PR001` 已不存在）。
+   而 `e3_context.json` 引用的正是 `PR001` 等旧 display_id。
+   **诊断证据**：从当前 DB 重新生成数据集后，E3 = **100.0% PASS**。
+   （诊断在 `/tmp` 进行，仓库数据集已还原 —— **未用改数据的方式让测试变绿**。）
+
+2. **E5 有超越过期的真实问题**（即使数据集重新生成仍为 0.0%）：
+   - `expected_count = 5`，实测 **6** —— 多出的一条来自**测试创建的**关系
+     （`src.system = 'test:seed_relationships_test'`）。属测试污染。
+   - `as_of=2024-01-01` 命中 6 条，而 `as_of=2024-12-31` / `2025-06-30` 命中 **0 条** ——
+     关系行的 `valid = [None, None]`（无有效期），时态过滤对无窗口行的语义需明确。
+
+3. **E4 的 100% 是 vacuous**：对象不存在 → 0 条关系 → 落在 `[0,100]` 内即判通过。
 
 ---
 
@@ -183,10 +210,12 @@ LLM: OpenAI 兼容端点（支持 vLLM / Ollama 本地部署国产模型）
 ### 6.1 功能验收
 
 ```
-☐ 一条完整闭环可端到端跑通（§2 的 13 步）
+☐ 一条完整闭环可端到端跑通（§2 的 6 步，以 V3_CLOSEOUT §2 为准）
 ☐ Evidence 对象存在且每条结论可追溯
 ☐ Domain Workflow Specification 独立于执行图存在
-☐ 三类接口各有进程内实现，Kernel 核心零厂商标识（CI 断言）
+☐ **V0 运行时三件就位**：Local Provider / InProcessExecutor / 固定 Agent
+   （**不要求**三类 interface 抽象层 —— V3_CLOSEOUT §2.2）
+☐ Kernel 核心零厂商标识（CI 断言）
 ☐ 切用户重问，数据隔离在 UI 可见
 ☐ 证据不足时输出 insufficient_context（不猜测）
 ```
@@ -195,8 +224,8 @@ LLM: OpenAI 兼容端点（支持 vLLM / Ollama 本地部署国产模型）
 
 ```
 ☑ Permission 暴露 = 0（硬门，一票否决）          ← **已通过**（61/61）
-☐ E1 ≥ 95%                                      ← 当前 98.5% ✅
-☐ E3 ≥ 90%                                      ← 当前裸崩
+☑ E1 ≥ 95%                                      ← **98.5%**
+⚠ E3 ≥ 90%                                      ← **15.0%**（runner 已不崩；失败为数据集过期，待裁定）
 ☐ Provenance = 100%
 ☐ ECE 优于纯 RAG baseline                        ← 未跑
 ☐ 确定性判断零 LLM 调用（可检）
@@ -228,13 +257,15 @@ LLM: OpenAI 兼容端点（支持 vLLM / Ollama 本地部署国产模型）
 | 业务切片 | **1** |
 | 领域包 | **1** |
 | 框架 | **1** |
-| Agent | **1–2** |
-| Provider 实现 | **2**（进程内 + 本地知识） |
-| Runtime 实现 | **1**（进程内） |
+| Agent | **1**（固定，**无 Selection**） |
+| Local Provider | **1** |
+| InProcessExecutor | **1** |
+| **接口抽象层** | **0**（V3_CLOSEOUT §2.2：V0 不建三类 interface） |
+| 外部 Provider / Runtime 适配器 | **0** |
 | 连接器 | **≤3**（mock） |
 | 控制项/评估项 | **代表性最小集** |
 | 新增外部依赖 | **0** |
-| 工期 | **2–4 周** |
+| 工期 | **2–4 周**（Codex 判定：**可比 2–4 周更小**） |
 
 **超出任一上限 = V0 范围失控**，应回退到 `PRD_V3.md` §32 重新裁剪。
 
@@ -245,7 +276,7 @@ LLM: OpenAI 兼容端点（支持 vLLM / Ollama 本地部署国产模型）
 | v1 范围（EvidenceIQ） | V3 处置 |
 |---|---|
 | 1 Persona / 1 Problem / 1 Workflow / 1–2 Agents | ✅ 继承同样的规模纪律 |
-| ContextAdapter 3 工具（search/get_record/create_task） | ✅ 继承，归入 ProviderInterface |
+| ContextAdapter 3 工具（search/get_record/create_task） | ✅ 继承为 **Local Provider 的 3 个方法**（V0 不建 interface 抽象层） |
 | MockAdapter + GleanAdapter 骨架 | ✅ 继承 Mock-first；Glean 适配器**推迟到 V1** |
 | CI 断言 `src/domain/**` 无 `glean|mcp` | ✅ 继承并扩展到 provider/runtime 厂商标识 |
 | 排除 ISO27001 多框架 | ⚠️ **需重新评估**——红队 G2 指出这可能排除了可达市场的主流框架 |

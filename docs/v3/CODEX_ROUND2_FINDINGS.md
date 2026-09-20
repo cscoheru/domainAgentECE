@@ -53,7 +53,9 @@ Kernel Architecture **FREEZE** · Customer Validation **GO** · V0 **GO（可开
 而 **e2-059 / e2-060 / e2-061（ACL 案）在 baseline 代码上同样通过** —— 因为 ACL 数据已由修后的
 seed 写成域类型。→ **RC-9 是数据/seed 修复，不是代码修复**。
 
-**证据等级**：由「可信」提升为 **严格因果证明**（单变量，数据集恒定）。
+**证据等级**（~~原文~~ **已于第三轮判词后 SUPERSEDED**）：~~由「可信」提升为 **严格因果证明**（单变量，数据集恒定）。~~
+> ⚠️ **该表述已撤回** —— Codex 第三轮判词 [MAJOR] 指出本实验只固定了数据集、**未固定 DB 状态**。
+> 修正后的严格口径见 `CODEX_ROUND3_FINDINGS.md` §2.5 与 `CODEX_ROUND3_CLOSEOUT_REPORT.md` §3.3。
 
 ---
 

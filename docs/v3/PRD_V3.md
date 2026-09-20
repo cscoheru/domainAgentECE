@@ -1074,9 +1074,9 @@ ECE v0 是 Kernel 的**参考实现**。当前实测状态（全部由 CC 亲跑
 | 基线测试 | **353 passed / 3 skipped / 0 failed**（本地，live API）<br>*历史*：CI 签名 349P/5S/3D（CI 无 live API，两个 E2 wrapper 会 skip） | ✅ exit 0 |
 | **E1 实体消歧** | **98.5%**（64/65） | ✅ 达标（≥95%） |
 | **E2 权限套件** | **0 暴露 + 0 失败（61/61）** | ✅ **硬门已通过** |
-| **E3 Context 完整性** | **runner 裸崩**（`ContextPackage.get`） | ❌ 未跑通（R40R2.7） |
-| **E4 Relationships** | **runner 裸崩**（同上） | ❌ 未跑通（R40R2.7） |
-| **E5 Temporal** | **0.0%**（`str.isoformat`） | ❌ 未跑通（R40R2.7） |
+| **E3 Context 完整性** | **15.0%**（100 例） | ⚠️ runner 已修（R40R2.7 不再崩）；失败为**数据集过期**（display_id 漂移），重生成后 **100%** |
+| **E4 Relationships** | **100%**（30/30） | ⚠️ runner 已修；但边界 `[0,100]` 使对象缺失时也通过 —— **vacuous pass** |
+| **E5 Temporal** | **0.0%**（30 例） | ❌ runner 已修（不再崩）；暴露**真实失败**：expected 5 / 实测 6（多出者为测试创建的关系）+ `as_of` 过滤对 `valid=[None,None]` 行返回 0 |
 | E6 Agent | 未跑（需 LLM） | ⏸ |
 
 > *历史*：E2 曾为 5 暴露 + 5 失败、E1 曾因测试污染降至 95.4% —— 两者均已于 2026-09-20 修复

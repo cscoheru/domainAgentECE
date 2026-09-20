@@ -23,6 +23,7 @@
 | `EVIDENCE_V3_ADDENDUM.md` | 新增证据 C43–C48（证据纪律要求） | ⭐ |
 | `SELF_REVIEW_V3.md` | **红队自检**：5 项架构测试 + 8 条对抗性自审（含 3 条未缓解风险） | ⭐⭐⭐ |
 | `CODEX_REVIEW_BRIEF.md` | **送 Codex 的独立审查任务书**：两轮次 + 必答问题 + 反馈 schema + 取证命令 | ⭐⭐⭐ |
+| `CODEX_FINAL_CLOSEOUT.md` | **最终收口刀报告**（两处剩余问题处置 + R40R2.7 runner 修复 + 真实失败记录 + Remaining Issues） | ⭐⭐⭐ **先读** |
 | `CODEX_ROUND3_CLOSEOUT_REPORT.md` | **大刀收口最终报告**（判词 §七 格式：判定 / 七项状态 / P1 证据 / 已知问题 / commit / ready for audit） | ⭐⭐⭐ **先读** |
 | `CODEX_ROUND3_FINDINGS.md` | **第三轮判词落实记录**（CONDITIONAL PASS → P1' 补齐 DB 指纹 + 执行关系修正）| ⭐⭐⭐ |
 | `CODEX_ROUND2_FINDINGS.md` | **第二轮判词落实记录** + 第三轮送审范围（P1/P2/P3 + 三处修正 + 冻结声明） | ⭐⭐⭐ |
@@ -85,7 +86,7 @@ PentAGI    进程内(V0)
 |---|---|
 | **客户验证 = 0** | 无一场访谈、无一份脱敏数据。全部评分与阈值都是**计划** |
 | ~~权限硬门未通过~~ **已修复（2026-09-20）** | ECE v0 曾实测 E2 = **5 暴露 + 5 失败**（C47，*historical*）。**现为 61/61（0 暴露 0 失败）** —— ece `037260b` 修复 + `32a0b92` 单变量实验。`Permission Before Intelligence` 现已在实现层达成 |
-| **评测套件未跑通** | E3/E4 runner 裸崩；E5 = 0.0%（C47） |
+| **评测套件部分失败** | E3 = 15.0%（数据集过期所致，重生成后 100%）；E5 = 0.0%（含真实问题）；E4 = 100% 但 vacuous。**runner 已不崩**（R40R2.7 已修） |
 | **护城河假设未验证** | 红队判定"当前范围内护城河假设不成立" |
 | **C22/C23 无来源 URL** | "Glean 不覆盖领域层"是**推断**，V3 全文使用反证式措辞，未写成事实 |
 | **C43/C44 抓取受限** | Trigger.dev 原文抓取被工具限制拒绝；DSH 仅二手来源 |
