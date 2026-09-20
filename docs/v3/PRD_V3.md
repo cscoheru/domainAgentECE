@@ -2,7 +2,12 @@
 
 > Version: 3.0
 > Date: 2026-09-20
-> Status: **Active**
+> Status: **Active — 已收口**
+>
+> ⚠️ **V3 收口修订（2026-09-20）**：Codex 独立审查判定「Kernel 职责有向 Agent Platform 膨胀的风险；V0 与 2–4 周不匹配」。
+> **§17（Agent Selection）、§32（V0 Scope）、§16.2（Workflow 步骤序列示例）已被 `V3_CLOSEOUT.md` 取代**；
+> §22/§23/§24（Adapter 设计）推迟。**其余章节不变。**
+> **V3 = Architecture Hypothesis，不是 Product-Market Validation。**
 > 取代关系：本文件**不废除** `RESEARCH_PRD_V2.md`（降级为 V2 阶段交付物，保留不删，作为证据链与决策史）
 > 上游输入：`RESEARCH_PRD_V2.md`（V2 Master PRD）· `RED_TEAM_REVIEW.md`（v3 战略约束）· `docs/research/`（v1）· `docs/research_v2/`（v2，C01–C42）· `docs/architecture_v2/`（K1–K8 定义）· `docs/product_v2/reference-applications.md` · `docs/v3/EVIDENCE_V3_ADDENDUM.md`（C43–C48）· 用户指令文件（2026-09-20）
 > 治理文件：根 `CLAUDE.md`（商业战略）· `ece/CLAUDE.md`（工程铁律）

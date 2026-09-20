@@ -2,7 +2,11 @@
 
 > Version: 1.0
 > Date: 2026-09-20
-> Status: **Active**
+> Status: **Active — 已收口**
+>
+> ⚠️ **V3 收口修订（2026-09-20）**：本矩阵 **行 5（Knowledge/Retrieval）、行 10（Agent Selection）、行 20（Tool Selection）已收窄/移出**；
+> **行 25（Private Deployment）作废**（范畴错误：它是非功能约束，不是能力行）。逐项裁决见 **`V3_CLOSEOUT.md` §1**。
+> 其余 22 行不变。
 > 关联: `docs/v3/PRD_V3.md` · `docs/v3/RUNTIME_COMPARISON.md` · `docs/v3/KERNEL_ARCHITECTURE_V3.md` · `docs/adr/ADR-011.md`
 > 证据: `docs/v3/EVIDENCE_V3_ADDENDUM.md`（C43–C48）+ `docs/research_v2/evidence-matrix-v2.md`（C01–C42）
 

@@ -2,7 +2,11 @@
 
 > Version: 1.0
 > Date: 2026-09-20
-> Status: **Active**
+> Status: **Active — §2/§3/§4/§7 已被取代**
+>
+> ⚠️ **V3 收口修订（2026-09-20）**：本文件的 **§2（13 步闭环）、§3（V0 范围内）、§4（范围外）、§7（规模红线）已被 `V3_CLOSEOUT.md` §2 取代**。
+> V0 收缩为 **6 步最小闭环**（Context → Entity/Knowledge → 一个确定性 Business Rule → Decision → Evidence → Context Update），
+> 且**不建三类接口抽象层**、**不实现任何 Adapter**。§5/§6/§8/§9 仍然有效。
 > 关联: `docs/v3/PRD_V3.md` §31/§32 · `docs/v3/KERNEL_ARCHITECTURE_V3.md` · `docs/adr/ADR-011.md`
 > 上游: `docs/product/mvp-scope.md`（v1，EvidenceIQ 范围）· `docs/product_v2/reference-applications.md`
 

@@ -2,7 +2,11 @@
 
 > Version: 1.0
 > Date: 2026-09-20
-> Status: **Active**
+> Status: **Active — §3 推迟到 V1**
+>
+> ⚠️ **V3 收口修订（2026-09-20）**：本文件的 **§3（三类接口抽象）推迟到 V1**——V0 只保留具体实现
+> （1 个 Local Provider + 1 个 InProcessExecutor，直接调用），**不建抽象层**。
+> 五层架构与 §9 的 8 条不变式作为 **V1+ 的架构假设**保留。见 `V3_CLOSEOUT.md` §2.4。
 > 关联: `docs/v3/PRD_V3.md` · `docs/v3/KERNEL_BOUNDARY.md` · `docs/adr/ADR-011.md`
 > 前置: `docs/architecture_v2/platform-kernel-definition.md`（K1–K8 定义，V3 继承并扩展其边界）
 

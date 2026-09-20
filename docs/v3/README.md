@@ -1,8 +1,10 @@
 # docs/v3 — Domain Intelligence Kernel (PRD V3)
 
-> Version: 1.0
+> Version: 1.1
 > Date: 2026-09-20
-> Status: **DELIVERED — 待人工审阅**
+> Status: **CLOSED OUT — V3 收口完成，STOP**
+> ⚠️ **先读 `V3_CLOSEOUT.md`** —— 它是 V3 的收口裁定，取代下列文件中被点名的部分。
+> **V3 = Architecture Hypothesis，不是 Product-Market Validation。**
 > 本目录为 V3 阶段交付物。**不修改** v1（`docs/research/` `docs/architecture/` `docs/product/` `docs/cases/` `docs/customer/`）与 v2（`docs/research_v2/` `docs/architecture_v2/` `docs/product_v2/`）的任何文件。
 
 ---
@@ -11,7 +13,8 @@
 
 | 文件 | 内容 | 审阅优先级 |
 |---|---|---|
-| **`PRD_V3.md`** | 主 PRD，40 章 + 3 附录（V3 指令 §21 要求的全部章节） | ⭐⭐⭐ |
+| **`V3_CLOSEOUT.md`** | **收口裁定**：Kernel 边界终裁 / V0 最小闭环 / 删除推迟清单 / 下一步三动作 | ⭐⭐⭐ **先读** |
+| **`PRD_V3.md`** | 主 PRD，40 章 + 3 附录（§17/§32/§16.2 已被收口取代） | ⭐⭐⭐ |
 | **`KERNEL_BOUNDARY.md`** | 26 行能力边界矩阵 + 边界自检 + MUST NOT 清单 | ⭐⭐⭐ |
 | **`RUNTIME_COMPARISON.md`** | Kernel vs Trigger.dev / DSH / PentaGI / Glean / Generic Agent Platform / RAG Platform | ⭐⭐⭐ |
 | `KERNEL_ARCHITECTURE_V3.md` | 五层架构 + 三类接口 + 数据模型 + 8 条架构不变式 | ⭐⭐ |
@@ -86,28 +89,33 @@ PentAGI    进程内(V0)
 
 ---
 
-## 5. STOP / GO
+## 5. 收口后状态（STOP）
 
-**GO（全部满足才进入 Technical Spike）**：
+Codex 独立审查判词：**架构自洽但过完整；Kernel 职责有向「上层 Agent Platform」膨胀的风险；V0 与 2–4 周不匹配。**
 
-```
-☑ Architecture Boundary = Clear          （本目录交付，待审阅）
-☑ Core Objects = Defined                 （PRD_V3 §10）
-☑ V0 Scope = Small                       （MVP_SCOPE_V3，2–4 周）
-☑ Runtime Interfaces = Defined            （PRD_V3 §20 + ADR-011）
-☐ Reference Workflow = Selected           ← 未完成（需客户验证）
-☐ Customer Validation Path = Defined      ← 路径已定义，未执行
-```
-
-**三个硬前置**：
+收口结果见 **`V3_CLOSEOUT.md`**。要点：
 
 ```
-G-A  客户验证 Step 0 + Step 0.6           ❌ 未执行
-G-B  国产开源模型实测                      ❌ 未执行
-G-C  Permission 硬门 E2 = 0               ❌ 未通过  ← 唯一不依赖客户，可立即推进
+Kernel 核心收窄为 5 项：
+  Context · Domain Ontology · Deterministic Business Rules · Decision · Evidence
+
+移出 Kernel：
+  Retrieval 机制 / Tool 选择与执行 / Agent·Runtime 动态选择 / 执行编排
+
+V0 收缩为 6 步最小闭环（不再是"完整 Kernel"）：
+  Context → Entity/Knowledge → 一个确定性 Business Rule
+          → Decision → Evidence → Context Update
 ```
 
-**本阶段 STOP**：不写生产代码，等待人工审阅。
+**下一阶段三动作（必须同时进入）**：
+
+```
+A. 一个真实客户问题验证        ← 可立即启动（Step 0 + Step 0.6）
+B. 一个最小 Reference Workflow  ← 由 A 决定，不提前拍板
+C. 一个可运行的 V0 technical spike ← 建议优先修 Permission 硬门（实测 5 暴露 + 5 失败）
+```
+
+**STOP** —— 不写 V4 / 不扩 PRD / 不重研 Glean / 不开始大规模实现。
 
 ---
 
