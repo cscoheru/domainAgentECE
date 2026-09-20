@@ -87,7 +87,7 @@ PentAGI    进程内(V0)
 |---|---|
 | **客户验证 = 0** | 无一场访谈、无一份脱敏数据。全部评分与阈值都是**计划** |
 | ~~权限硬门未通过~~ **已修复（2026-09-20）** | ECE v0 曾实测 E2 = **5 暴露 + 5 失败**（C47，*historical*）。**现为 61/61（0 暴露 0 失败）** —— ece `037260b` 修复 + `32a0b92` 单变量实验。`Permission Before Intelligence` 现已在实现层达成 |
-| **评测套件部分失败** | E3 = 15.0%（数据集过期所致，重生成后 100%）；E5 = 0.0%（含真实问题）；E4 = 100% 但 vacuous。**runner 已不崩**（R40R2.7 已修） |
+| **评测套件已全绿** | E1 98.5% / E2 61/61 / **E3 100%** / **E4 100%（非 vacuous）** / **E5 100%**；pytest 359P/3S/0F。*历史*（Final Evidence Repair 之前）：E3 15%、E5 0%、E4 vacuous |
 | **护城河假设未验证** | 红队判定"当前范围内护城河假设不成立" |
 | **C22/C23 无来源 URL** | "Glean 不覆盖领域层"是**推断**，V3 全文使用反证式措辞，未写成事实 |
 | **C43/C44 抓取受限** | Trigger.dev 原文抓取被工具限制拒绝；DSH 仅二手来源 |
@@ -134,11 +134,18 @@ C. 一个可运行的 V0 technical spike ← 可立即启动（纯技术，不�
 | 动作 | 状态 |
 |---|---|
 | **A** 客户问题验证 | 执行件已交付并**按第二轮判词修正**（`A_CUSTOMER_VALIDATION.md`）；**实际访谈未开始**（需真人） |
-| **C** V0 technical spike | **Permission 硬门 5 暴露 + 5 失败 → 61/61 全绿**（ece `037260b`）<br>**+ P1 严格单变量实验**：同一数据集下 baseline 代码 4E/4F vs 修后 0E/0F（ece `93ed0e3`）<br>**+ P2 E1 hermeticity 已修**：全套 pytest 后零重名，E1 回到 98.5%<br>未做：R40R2.7（E3/E4/E5 runner 仍崩） |
-| — | A 未跑完前，**不拍板 B**（选 Reference Workflow） |
+| **C** V0 technical spike | ✅ **Permission 硬门 PASS**（61/61）<br>✅ **P1 PASS**（F0==F1==F2，fixed DB + fixed dataset + same runtime）<br>✅ **P2 / E1 PASS**（98.5%，hermetic）<br>✅ **R40R2.7 PASS**（runner 契约修复）<br>✅ **E3 / E4 / E5 PASS**（100% / 100% 非 vacuous / 100%）<br>✅ **4 类 guard 就位**（G1–G4）<br>**→ 当前进入正式 V0 technical spike 阶段** |
+| — | **A Customer Validation 尚未完成**；**B Reference Workflow 仍等待 A** |
 
-**Codex 第二轮判词结论**：V3 架构 **GO（可封版）** · Kernel Architecture **FREEZE** ·
-Customer Validation **GO** · V0 **GO（可开始 Technical Spike）**。详见 `CODEX_ROUND2_FINDINGS.md`。
+**最终结论（Codex 全部轮次判词收束）**：
+
+```
+技术：V3 Architecture = GO / FREEZE   ·   ECE Evaluation = GO   ·   V0 Technical Spike = GO
+市场：A Customer Validation = NOT DONE ·   B Reference Workflow = WAITING FOR A
+```
+
+> **这不是"产品已经验证"。** 准确表述：**架构与最小技术验证条件已经具备，
+> 下一阶段进入客户验证 + V0 技术 Spike。** 不要把技术 GO 写成 PMF GO。
 
 ---
 

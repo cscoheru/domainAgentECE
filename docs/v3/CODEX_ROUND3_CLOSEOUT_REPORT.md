@@ -4,6 +4,12 @@
 > 依据: Codex 第三轮补充判词（`blueprintECE/0920/codex第三轮补充判词及签发第一刀.md`）
 > 授权范围: 工程与证据收口（**非**架构再设计）
 > ece 仓 commit: `32a0b92` → 本轮追加（见 §6）
+>
+> ⚠️ **SUPERSEDED（同日，由 `CODEX_FINAL_EVIDENCE_REPAIR.md` 取代）**
+> 本文件记录的是 **Final Evidence Repair 之前**的状态 —— 当时 E3 = 15%、E5 = 0%、E4 = vacuous pass。
+> 那些问题**此后已全部修复**（E3/E4/E5 = 100%）。本文件保留作**历史记录**；
+> **其 E3/E4/E5 数字不得作为当前状态引用。** 当前状态见 `MVP_SCOPE_V3.md` §3.7 与 `README.md`。
+>
 
 ---
 
@@ -116,7 +122,7 @@
 | # | 问题 | 影响 | 处置 |
 |---|---|---|---|
 | **K1** | `/permissions/check` 的 `req.user_ref` 允许调用者指定授权主体 | V0 不阻塞；**Production 阻塞** | 已登记为 **TASKS.md 附录 J / PG-1**（V0 允许 / Production 禁止） |
-| **K2** | E3 / E4 / E5 runner 仍崩（`ContextPackage.get` / `asOf isoformat`） | Context 闭环的实测数字缺失 | R40R2.7，**未修**（不在本刀授权范围；每处约 2 行） |
+| **K2** | E3 / E4 / E5 runner 仍崩（`ContextPackage.get` / `asOf isoformat`） | Context 闭环的实测数字缺失 | ~~R40R2.7，未修~~ → **已由 R40R2.7 + Final Evidence Repair 解决**（E3/E4/E5 = 100%）。*本条为 2026-09-20 时点记录* |
 | **K3** | ACL 模型无 `classification` 维度 | 若产品需 classification 相关 ACL，必须改模型 | 已在 `engine.py` 就地标注（**不要**再靠改数据集绕过） |
 
 **本轮新发现并已修复（第 4 条，不遗留）**：

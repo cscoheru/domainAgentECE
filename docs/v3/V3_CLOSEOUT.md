@@ -144,7 +144,7 @@ C V0 Spike  ──┘   （A 与 C 并行，互不阻塞）
 |---|---|---|---|
 | **A** | **一个真实客户问题验证** | Step 0（48h **Customer Access Test**，≥10 人外联、≥5 人应约）+ Step 0.6（中国三问：监管真实性 / 模型部署形态 / 私有化决策链） | 无（可立即启动） |
 | **B** | **一个最小 Reference Workflow** | 由 A 的结果决定，**不提前拍板**。候选仍为采购 / 知识管理 / 审计 / Video Factory 等 | 依赖 A |
-| **C** | **一个可运行的 V0 technical spike** | 本文件 §2 的 6 步闭环 | **可立即启动**（纯技术，不依赖客户）。<br>**进展**：Permission 硬门已由 5 暴露 + 5 失败修至 **61/61**（ece `037260b`），并已补严格单变量实验（`93ed0e3`）。<br>下一步：R40R2.7（E3/E4/E5 runner 仍崩） |
+| **C** | **一个可运行的 V0 technical spike** | 本文件 §2 的 6 步闭环 | **可立即启动**（纯技术，不依赖客户）。<br>**进展**：Permission 硬门已由 5 暴露 + 5 失败修至 **61/61**（ece `037260b`），并已补严格单变量实验（`93ed0e3`）。<br>**R40R2.7 已完成**：六根因修复 + 严格单变量实验 + runner 契约修复 + Final Evidence Repair。<br>**E3 = 100% / E4 = 100%（非 vacuous）/ E5 = 100%**；pytest 359P/3S/0F；4 类 guard 就位（`G1`–`G4`）。 |
 
 ---
 
@@ -184,9 +184,15 @@ Codex 原话：**"但这是最后一次。"**
 | 2026-09-20 | **Codex 第二轮判词：11 PASS / 1 FAIL(E1 hermeticity) / 1 需修正** | `blueprintECE/0920/Codex 第二轮正式判词.md` |
 | 2026-09-20 | P1 单变量实验 + P2 E1 hermeticity 已落实 | ece 仓 `93ed0e3` |
 | 2026-09-20 | P3 + 三处修正已落实 | `CODEX_ROUND2_FINDINGS.md` |
+| 2026-09-20 | 第三轮判词 → 大刀收口（P1 dependency coverage + 谓词修复 + PG-1） | ece `f3a6639` · `CODEX_ROUND3_CLOSEOUT_REPORT.md` |
+| 2026-09-20 | 第三轮最后审验 → 最终收口刀（runner 契约修复） | ece `a698dd4` · `CODEX_FINAL_CLOSEOUT.md` |
+| 2026-09-20 | **最终判定 NO-GO（非架构 NO-GO）→ Final Evidence Repair** | ece `db24826` · `CODEX_FINAL_EVIDENCE_REPAIR.md` |
+| 2026-09-20 | **技术 GO** → FINAL DOCUMENT SYNCHRONIZATION（本文件 §7） | 本次 commit |
 
-**第二轮判词结论**：V3 架构 **GO — 可以封版**；V3 PRD **STOP**；Glean Research **STOP**；
-Kernel Architecture **FREEZE**；Customer Validation **GO**；V0 **GO — 可以开始 Technical Spike**。
+**最终结论（技术）**：V3 架构 **GO / FREEZE** · ECE Evaluation **GO** · V0 Technical Spike **GO**。
+**市场**：A Customer Validation **GO（未完成）** · B Reference Workflow **WAIT FOR A**。
+
+> **这不是产品已验证。** 准确表述：**架构与最小技术验证条件已经具备，下一阶段进入客户验证 + V0 技术 Spike。**
 
 ---
 

@@ -4,6 +4,12 @@
 > 依据: Codex 第三轮最后审验（`blueprintECE/0920/codex第三轮最后审验.md`）
 > 性质: **最终收口刀**（非架构迭代）。V3_CLOSEOUT 保持最终裁定。
 > ece commit: `f3a6639` → 本轮追加 · 根仓 commit: 本轮追加
+>
+> ⚠️ **SUPERSEDED（同日，由 `CODEX_FINAL_EVIDENCE_REPAIR.md` 取代）**
+> 本文件记录的是 **Final Evidence Repair 之前**的状态 —— 当时 E3 = 15%、E5 = 0%、E4 = vacuous pass。
+> 那些问题**此后已全部修复**（E3/E4/E5 = 100%）。本文件保留作**历史记录**；
+> **其 E3/E4/E5 数字不得作为当前状态引用。** 当前状态见 `MVP_SCOPE_V3.md` §3.7 与 `README.md`。
+>
 
 ---
 
