@@ -1,0 +1,128 @@
+%% Domain Intelligence Kernel — Architecture V3
+%% Last Verified: 2026-09-20
+%% Source: docs/v3/KERNEL_ARCHITECTURE_V3.md + docs/v3/KERNEL_BOUNDARY.md
+%% Reference: docs/v3/PRD_V3.md §18-§20, docs/adr/ADR-011.md
+%%
+%% 标注规范:
+%%   K = Kernel 自建 (PRIMARY)        — 绿色
+%%   A = Adapter (Kernel 通过接口调用) — 紫色
+%%   R = Runtime PRIMARY (外部系统)    — 蓝色
+%%   P = Provider (可插拔原料来源)     — 黄色
+%%   S = Enterprise System (事实来源)  — 灰色
+%%   V0 = V0 实现 / V1+ = 后续阶段      — 虚线边框
+%%   [C##] = 证据编号 (C01-C48)
+
+flowchart TB
+
+    subgraph APP["Enterprise Applications (Reference Apps — 非产品定义)"]
+        direction LR
+        A1["审计证据准备<br/>(候选)"]
+        A2["采购评估<br/>(候选)"]
+        A3["KM / HR Q&A<br/>(候选)"]
+        A4["最终 vertical<br/>未定 — 客户验证决定"]
+    end
+
+    subgraph KERNEL["DOMAIN INTELLIGENCE KERNEL (产品本体)"]
+        direction TB
+
+        subgraph L1["① Context Layer [K]"]
+            direction LR
+            K1["Context<br/>结构化业务情境<br/>+ Lifecycle"]
+            K2["Entity / Relation<br/>跨系统归一 + 时态"]
+            K3["Permission Scope<br/>数据访问层强制<br/>E2 = 0 硬门"]
+        end
+
+        subgraph L2["② Semantic Layer [K]"]
+            direction LR
+            K4["Domain Ontology<br/>YAML Context Spec<br/>ADR-009"]
+            K5["Knowledge<br/>领域/企业/通用<br/>三类分离"]
+            K6["Business Rules<br/>确定性判据<br/>纯代码"]
+        end
+
+        subgraph L3["③ Judgment Layer [K]"]
+            direction LR
+            K7["Reasoning<br/>规则优先 + LLM 轻量<br/>ADR-010"]
+            K8["Decision<br/>含 insufficient_context 态"]
+            K9["Domain Evaluation<br/>业务正确性<br/>ADR-008"]
+        end
+
+        subgraph L4["④ Evidence Layer [K] (V3 新增)"]
+            direction LR
+            K10["Evidence<br/>source/claim/time/actor<br/>evidence_id"]
+            K11["Provenance / Trace<br/>结论可追溯"]
+            K12["Context Update<br/>闭环回写"]
+        end
+
+        subgraph L5["⑤ Orchestration Semantics [K] (V3 新增)"]
+            direction LR
+            K13["Domain Workflow<br/>Specification<br/>业务语言"]
+            K14["Agent / Tool /<br/>Runtime Selection<br/>V0: 固定"]
+        end
+    end
+
+    subgraph ADAPTER["ADAPTER BOUNDARY [A] (V3 核心抽象, ADR-011)"]
+        direction LR
+        AD1["ProviderInterface<br/>context.* / knowledge.*<br/>V0: InProcess + Local"]
+        AD2["AgentRuntimeInterface<br/>agent.invoke / capabilities<br/>V0: InProcessAgent"]
+        AD3["ExecutionRuntimeInterface<br/>execution.submit/status/result<br/>V0: InProcessExecutor"]
+    end
+
+    subgraph EXT["External Capabilities (全部可替换)"]
+        direction TB
+        subgraph RUNTIME["Execution Runtimes [R]"]
+            R1["Trigger.dev [C43]<br/>Queue/Retry/Durable<br/>V1+"]
+            R2["其他 Workflow Runtime<br/>V1+"]
+        end
+        subgraph AGENTRT["Agent Runtimes / Harness [R]"]
+            R3["DeepSeek Harness [C44]<br/>Agent Loop/Sandbox/Session<br/>V1+"]
+            R4["PentAGI [C45]<br/>领域 Agent 应用<br/>V1+"]
+            R5["Glean Agent Harness<br/>[C25 UNKNOWN]"]
+        end
+        subgraph PROVIDER["Providers [P]"]
+            P1["Glean [C01-C42]<br/>搜索/连接器/ACL 继承"]
+            P2["Local Knowledge<br/>V0 默认"]
+            P3["Enterprise API<br/>只读优先"]
+            P4["MCP [C19]<br/>双向互操作"]
+        end
+    end
+
+    subgraph ENTERPRISE["Enterprise Systems [S]"]
+        direction LR
+        S1["ERP / OA / HRIS"]
+        S2["工单 / 文档库"]
+        S3["合同 / 数据仓库"]
+    end
+
+    %% Main flow
+    APP --> KERNEL
+    KERNEL -->|"Execution Intent<br/>{workflow_spec_ref, context_ref,<br/>evidence_requirements, permission_scope}"| ADAPTER
+    ADAPTER --> RUNTIME
+    ADAPTER --> AGENTRT
+    ADAPTER --> PROVIDER
+    PROVIDER --> ENTERPRISE
+
+    %% Feedback loop (V3 新增闭环)
+    RUNTIME -. "ExecutionResult<br/>{execution_ref, evidence_candidates[]}" .-> ADAPTER
+    AGENTRT -. "AgentResult" .-> ADAPTER
+    ADAPTER -. "evidence_candidates<br/>(运行时无权写企业事实)" .-> K10
+    K12 -. "Context Update<br/>→ next action" .-> K1
+
+    %% V3 新增对象的依赖
+    K13 -. "业务语义 → task 图<br/>由 Adapter 生成" .-> AD3
+    K14 -. "选择执行者" .-> ADAPTER
+
+    classDef kernel fill:#d4edda,stroke:#28a745,color:#155724,stroke-width:3px
+    classDef adapter fill:#e2d5f0,stroke:#7b3f9d,color:#4a1f5e,stroke-width:3px
+    classDef runtime fill:#cce5ff,stroke:#0066cc,color:#003366
+    classDef provider fill:#fff4cc,stroke:#cc9900,color:#664400
+    classDef ent fill:#e2e3e5,stroke:#6c757d,color:#495057
+    classDef app fill:#f8f9fa,stroke:#adb5bd,color:#495057,stroke-dasharray:5 5
+    classDef unknown fill:#f0f0f0,stroke:#999999,color:#333333,stroke-dasharray:5 5
+
+    class K1,K2,K3,K4,K5,K6,K7,K8,K9,K10,K11,K12,K13,K14 kernel
+    class AD1,AD2,AD3 adapter
+    class R1,R2,R3,R4 runtime
+    class P1,P2,P3,P4 provider
+    class S1,S2,S3 ent
+    class A1,A2,A3 app
+    class A4,R5 unknown
