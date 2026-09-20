@@ -1,12 +1,22 @@
 # KERNEL_BOUNDARY.md — Kernel 能力边界矩阵
 
-> Version: 1.0
+> Version: 1.1（v1.0 = 2026-09-20 初版；v1.1 = 同日收口一致性修复）
 > Date: 2026-09-20
-> Status: **Active — 已收口**
+> Status: **Active — 已收口，矩阵与 `V3_CLOSEOUT.md` §1 一致**
 >
-> ⚠️ **V3 收口修订（2026-09-20）**：本矩阵 **行 5（Knowledge/Retrieval）、行 10（Agent Selection）、行 20（Tool Selection）已收窄/移出**；
-> **行 25（Private Deployment）作废**（范畴错误：它是非功能约束，不是能力行）。逐项裁决见 **`V3_CLOSEOUT.md` §1**。
-> 其余 22 行不变。
+> ⚠️ **V3 收口修订（2026-09-20，v1.1）**：矩阵本体已按 `V3_CLOSEOUT.md` §1 逐行修正 ——
+>
+> | 行 | 修正 |
+> |---|---|
+> | 1 Permission Enforcement | 收窄为「仅**强制点** + scope 契约」；policy 来源可外包 |
+> | 5 Knowledge / Retrieval | **拆分**：仅 Knowledge 留 Kernel；Retrieval 机制移出 → Provider |
+> | 9 Domain Workflow Specification | 硬收窄为「仅业务判据 + 责任人 + 审批要求」；含执行顺序即移出 |
+> | 10 Agent Selection / Action Planning | **降级为接口声明**（不再是 Kernel PRIMARY） |
+> | 20 Tool Layer | 收窄为「仅 Tool **准入** / 权限收口」；选择与执行移出 |
+> | 25 Private Deployment | **转约束行**（非能力，不计入所有权） |
+>
+> 另修正 §3.1 的权限判据（区分强制点与 policy 来源）与 §3.2 的 Workflow 示例（由执行顺序改为业务判据）。
+> 逐项裁决依据见 **`V3_CLOSEOUT.md` §1**。**未新增任何能力、未重新设计 Kernel。**
 > 关联: `docs/v3/PRD_V3.md` · `docs/v3/RUNTIME_COMPARISON.md` · `docs/v3/KERNEL_ARCHITECTURE_V3.md` · `docs/adr/ADR-011.md`
 > 证据: `docs/v3/EVIDENCE_V3_ADDENDUM.md`（C43–C48）+ `docs/research_v2/evidence-matrix-v2.md`（C01–C42）
 
@@ -26,7 +36,7 @@
 
 | 参与方 | 是什么 | 不是什么 |
 |---|---|---|
-| **Kernel**（Domain Intelligence Kernel） | 业务智能层：Context / Entity / Ontology / Evidence / Reasoning / Decision / Domain Workflow Spec / Agent Selection / Policy | 不是执行引擎，不是 Agent Harness，不是搜索引擎，不是连接器平台 |
+| **Kernel**（Domain Intelligence Kernel） | 业务智能层：Context（含 Entity / Relation / Temporal / Permission scope）/ Domain Ontology / Deterministic Business Rules / Decision / Evidence。【**V3 收口**：Retrieval 机制、Tool 选择与执行、Agent·Runtime 动态选择、执行编排**均不属于 Kernel**；Agent/Runtime Selection 仅保留**接口声明**】 | 不是执行引擎，不是 Agent Harness，不是搜索引擎，不是连接器平台，不是编排器 |
 | **Trigger.dev** | Durable Workflow / Execution Runtime：Tasks / Runs / Queues / Retry / Wait / Concurrency / Scheduling / Durable Execution / Observability [C43] | 不懂业务语义，不做业务决策 |
 | **DSH**（DeepSeek Harness） | 插件化 Agent Runtime / Agent Harness：Agent Loop / Tools / Skills / Session / Sandbox / Subagents / Storage / Trajectory [C44] | 不提供企业上下文，不提供领域本体，不做跨 Agent 的业务语义共享 |
 | **PentAGI** | 领域 Agent 应用（自主渗透测试）：多 Agent 监督 + 沙箱执行 + 模型无关 [C45] | 不是通用 Kernel；是被 Kernel 调用的一类 capability，也是"领域 Agent 应用"的参照物 |
@@ -47,20 +57,21 @@
 - `Provider` — 可作为 Kernel 的一项数据/能力来源接入（可替换）
 - `Source` — 事实来源
 - `UNKNOWN` — 证据不足，不得作为设计前提（per `RESEARCH_PRD_V2.md` §4.5）
+- `约束` — **非功能约束**，不属于任何一方「拥有」的能力，**不计入所有权**（见行 25）
 - `—` — 不属于该系统的职责
 
 | # | Capability | Kernel | Trigger.dev | DSH | PentAGI | Glean | Enterprise System | 证据 / 备注 |
 |---|---|---|---|---|---|---|---|---|
-| 1 | **Permission Enforcement**（访问裁决） | **PRIMARY** | — | — | — | Provider（源系统 ACL 继承） | Source（ACL 事实） | ADR-003；ECE P2 铁律；C06/C07。**Kernel 在数据访问层强制，不靠 prompt** |
+| 1 | **Permission Enforcement**（访问裁决） | **PRIMARY**（仅**强制点** + scope 契约） | — | — | — | Provider（**policy 来源**：源系统 ACL 继承） | Source（ACL 事实） | ADR-003；ECE P2 铁律；C06/C07。**Kernel 在数据访问层强制，不靠 prompt**；**V3 收口**：policy **来源**可外包给 Provider，**强制点**不可（`V3_CLOSEOUT.md` §1.1） |
 | 2 | **Business Context**（业务情境结构化状态） | **PRIMARY** | — | — | — | Provider（企业实体/关系原料） | Source | C02/C18；C47 |
 | 3 | **Enterprise Entity / Relationship**（企业实体与关系） | **PRIMARY**（归一后） | — | — | — | Provider | Source | C18/C23；跨系统归一 = Kernel 自建（ADR-007） |
 | 4 | **Domain Ontology**（领域本体：控制项↔证据、评标标准…） | **PRIMARY** | — | — | 领域内自带（安全测试本体） | UNKNOWN（schema 可定制性 = C03 永久 UNKNOWN） | — | ADR-009；**不得**把 Glean 的企业图谱等同于领域本体（见 §4） |
-| 5 | **Knowledge / Retrieval** | **PRIMARY**（Context 抽象 + 4 路召回） | — | Tool | Tool | Provider（横向搜索） | Source | ADR-006/K8；**不重建横向搜索引擎** |
+| 5 | **Knowledge / Retrieval** | **PRIMARY**（**仅 Knowledge 作为 Context 要素**） | — | Tool | Tool | Provider（**Retrieval 机制**：召回 / 融合 / 排序 + 横向搜索） | Source | ADR-006/K8；**V3 收口**：Retrieval 机制已**移出 Kernel** → Provider（`V3_CLOSEOUT.md` §1.1/§1.3）；**不重建横向搜索引擎** |
 | 6 | **Evidence**（业务证据对象） | **PRIMARY** | Execution Reference（run/trace，**非业务证据**） | Agent Output | Agent Output | Provider（可作证据来源） | Source | 见 §5 Evidence 模型；**这是 V3 新增的一级对象** |
 | 7 | **Reasoning**（业务推理） | **PRIMARY**（规则优先 + LLM 轻量） | — | Agent-level（模型推理） | Agent-level | Agent-level | — | ADR-010；C22/C23 仅反证式表述 |
 | 8 | **Business Decision**（业务裁决） | **PRIMARY** | — | Agent 产出建议 | Agent 产出建议 | Agent 产出建议 | 人类最终负责 | 采购场景 v0 定位"建议生成"非自动决策 |
-| 9 | **Domain Workflow Specification**（业务上应怎么做） | **PRIMARY** | — | — | — | — | — | **V3 新概念**，见 §3 |
-| 10 | **Agent Selection / Action Planning** | **PRIMARY** | — | — | — | — | — | Kernel 依据 Context 决定"用谁做" |
+| 9 | **Domain Workflow Specification**（业务上应怎么做） | **PRIMARY**（**仅业务判据 + 责任人 + 审批要求**） | — | — | — | — | — | **V3 新概念**；**V3 收口**：硬收窄 —— **一旦含执行顺序 / 分支 / 重试 / 并发，即移出 Kernel**（`V3_CLOSEOUT.md` §1.1）；见 §3.2 |
+| 10 | **Agent Selection / Action Planning** | **接口声明**（**V0 不实现动态选择**） | — | — | — | — | — | **V3 收口**：**降级为接口 / 策略声明** —— 去掉后 Kernel 仍能产出 Decision，故不作核心能力（`V3_CLOSEOUT.md` §1.1）；动态选择推迟到 V1 |
 | 11 | **Policy**（业务规则/合规策略） | **PRIMARY** | — | — | 领域内自带 | Provider（Glean Protect = 平台安全策略） | Source | 注意区分：Kernel Policy = **业务规则**；Glean Protect = **平台安全** |
 | 12 | **Domain Evaluation**（业务正确性） | **PRIMARY** | — | — | 领域内自带 | **反证式空白**（C22 收紧后措辞，见 §6） | — | ADR-008；最高 IP 声明必须带限定语 |
 | 13 | **Platform Observability**（采纳率/错误率/ROI） | 简化版 | PRIMARY（run tracing） | Trajectory | Langfuse 集成 | PRIMARY（完整版） | — | C14；Row 13 裁决 = Build 简化 + Integrate 完整 |
@@ -70,15 +81,34 @@
 | 17 | **Queue / Retry / Scheduler** | — | **PRIMARY** | Runtime dependent | Runtime dependent | Provider | — | 铁律 3 禁止自研 |
 | 18 | **Durable Execution / Checkpointing** | — | **PRIMARY** | Runtime dependent | Runtime dependent | — | — | C43 |
 | 19 | **Sandbox / 隔离执行环境** | — | — | **PRIMARY** | **PRIMARY** | — | — | C44/C45 |
-| 20 | **Tool Layer / Tool Contract** | **PRIMARY**（MCP 归一 + 权限收口） | Tool execution | Tool | Tool | Provider（Remote MCP Server） | — | ADR-004；C19；工具**准入**归 Kernel，**执行**归 Runtime |
+| 20 | **Tool Layer / Tool Contract** | **PRIMARY**（**仅 Tool 准入 / 权限收口**） | Tool execution | Tool | Tool | Provider（Remote MCP Server） | — | ADR-004；C19；工具**准入**归 Kernel；**V3 收口**：工具**选择与执行移出 Kernel** → Runtime/Harness（`V3_CLOSEOUT.md` §1.1/§1.3） |
 | 21 | **Enterprise API Access** | **Adapter** | Tool execution | Tool | Tool | Connector | **PRIMARY** | — |
 | 22 | **Enterprise Search** | Provider | — | Tool | Tool | **PRIMARY / Provider** | Source | 明确**不自建**横向搜索（capability-matrix-v2 Row 2） |
 | 23 | **Connector Ecosystem** | 自建框架 + 3 个 mock | — | — | — | Provider（275+） | Source | C05/C09；**绝不自建 275+** |
 | 24 | **Temporal Context**（as_of / 有效期） | **PRIMARY** | — | — | — | UNKNOWN | Source | ECE 已有 `relationships.valid_from/valid_to` |
-| 25 | **Private Deployment** | **PRIMARY**（设计前提） | 可自托管（Apache 2.0）[C43] | 本地可运行 [C44] | 可自托管 [C45] | Deployment-dependent（SaaS 为主） | **PRIMARY** | 红队 v3 主路径 D：数据主权 = 中国市场的信任货币 |
+| 25 | **Private Deployment**〔**约束行**〕 | **约束**（非能力） | 可自托管（Apache 2.0）[C43] | 本地可运行 [C44] | 可自托管 [C45] | SaaS 为主（约束下不适用） | 约束来源 | **V3 收口行**：**非功能约束，不属于任何参与方「拥有」的能力，不计入所有权**（`V3_CLOSEOUT.md` §1.4）。红队 v3 主路径 D：数据主权 = 中国市场的信任货币 |
 | 26 | **Model Independence** | **PRIMARY**（OpenAI 兼容端点） | — | **PRIMARY**（无强制供应商）[C44] | **PRIMARY**（多供应商）[C45] | Provider | — | ECE 铁律 5：LLM 不可知 |
 
-**行数**：26（指令草表 15 行；补充 11 行，其中 `Permission Enforcement` / `Domain Evaluation` / `Temporal Context` / `Private Deployment` / `Policy` 为关键补漏）。
+**行数**：26（指令草表 15 行；补充 11 行，其中 `Permission Enforcement` / `Domain Evaluation` / `Temporal Context` / `Policy` 为关键补漏）。
+**其中行 25 为约束行**（非能力，不计入所有权）—— 即 **25 行能力 + 1 行约束 = 26 行**。
+
+**V3 收口后 Kernel 仍为 `PRIMARY` 的行**（6 行收口改动后逐行核验所得）：
+
+```
+行 1  Permission Enforcement      仅强制点 + scope 契约
+行 2  Business Context
+行 3  Enterprise Entity / Relationship
+行 4  Domain Ontology
+行 6  Evidence
+行 7  Reasoning                   规则优先
+行 8  Business Decision
+行 9  Domain Workflow Specification  仅业务判据 + 责任人 + 审批要求
+行 11 Policy
+行 12 Domain Evaluation
+行 24 Temporal Context
+```
+
+**已不再是 Kernel `PRIMARY` 的行**：行 5（仅 Knowledge 保留）、行 10（降为接口声明）、行 20（仅 Tool 准入）、行 25（转约束行）。
 
 ---
 
@@ -93,7 +123,8 @@
 - 因此 Kernel 必须在**数据访问层**（SQL 子查询）强制，而非检索后过滤（post-filter 会通过排序/计数侧信道泄露）。
 - **不与任何 Runtime 共享**：Trigger.dev / DSH / PentAGI 都不做这件事，也不应该做。
 
-> **判据**：任何设计方案若把权限判定放到 Kernel 之外，直接否决。
+> **判据**：任何设计方案若把权限的**强制点**放到 Kernel 之外，直接否决。
+> （**V3 收口补充**：policy **来源**可以是 Provider —— 例如 Glean 的源系统 ACL 继承；但**强制点**必须在 Kernel。二者不可混淆。）
 
 ### 3.2 行 9 — Domain Workflow Specification
 
@@ -103,18 +134,23 @@
 |---|---|---|
 | 归属 | **Kernel** | Trigger.dev / 任意执行运行时 |
 | 表达 | "业务上应该怎么完成这件事" | "计算机实际上怎么可靠执行这些任务" |
-| 示例 | 供应商年度准入：取历史 → 查质量记录 → 查合同 → 查财务 → 规则判断 → 生成风险判断 → 人工确认 → 更新状态 | Task A → Task B → Wait → Task C → Human Approval → Task D |
+| 示例 | 供应商年度准入：**需核查的判据**（质量记录在覆盖期内无重大不合格 / 合同在有效期内 / 财务无逾期 / 准入标准满足）＋ **责任人**（采购负责人）＋ **审批要求**（超阈值须财务复核） | Task A → Task B → Wait → Task C → Human Approval → Task D |
 | 变化频率 | 低（业务规则变化时） | 高（工程/基础设施变化时） |
 | 谁看懂 | 业务专家 | 工程师 |
 
 **两者不可混为一谈**，也不可合并成一张图。Kernel 产出前者，映射到后者由 Adapter 完成。
 
-### 3.3 行 24 + 行 25 — Temporal Context 与 Private Deployment
+> ⚠️ **V3 收口（硬收窄）**：Domain Workflow Specification **只描述「业务判据 + 责任人 + 审批要求」**。
+> **一旦包含执行顺序、分支、重试、并发，即成为执行编排器，立即移出 Kernel**（`V3_CLOSEOUT.md` §1.1）。
+> 上表左列的 Example 已按此重写为**判据形式**，不再使用箭头序列。
 
-这两行是**中国市场的入场券**（红队 v3 §0.6/§0.7.3）：
+### 3.3 行 24（Temporal Context）+ 行 25（Private Deployment，**约束行**）
 
-- **Temporal**：审计/合规/采购结论几乎全部是时间相关的（"这条政策在审计期内是否有效"）。没有时态的企业 Context 在审计场景直接失效。
-- **Private**：数据不出域。这不是"部署选项"，是**架构前提**。若 Kernel 的任一必需层只能跑在 SaaS 上，则整个产品在中国可达市场不成立。
+这两项是**中国市场的入场券**（红队 v3 §0.6/§0.7.3），但**性质不同**：
+
+- **Temporal（行 24，能力）**：审计/合规/采购结论几乎全部是时间相关的（"这条政策在审计期内是否有效"）。没有时态的企业 Context 在审计场景直接失效。→ 归 Kernel（Context 的组成部分）。
+- **Private（行 25，约束）**：数据不出域。这不是"部署选项"，是**架构前提**。若 Kernel 的任一必需层只能跑在 SaaS 上，则整个产品在中国可达市场不成立。
+  → **它不是一个"能力"，因此没有所有者归属**；它是施加在**所有层**上的约束（见 §2 行 25 的「约束行」标注与 `V3_CLOSEOUT.md` §1.4）。
 
 ---
 
