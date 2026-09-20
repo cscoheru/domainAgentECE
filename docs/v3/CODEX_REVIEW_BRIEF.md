@@ -8,7 +8,8 @@
 >
 > **两个轮次（按送审阶段选一节）**：
 > - **第一轮 — 审 V3 本体**（§1–§7）：送审对象 = commit `96dd20d` 的 8 份 V3 文档。**已执行**（2026-09-20，判词见 `blueprintECE/0920/基于v3的codex反馈.md`）。
-> - **第二轮 — 审 收口 + 矩阵修复 + A/C 执行**（§8–§9）：送审对象 = `e159f88`（收口）+ `17c08cc`（矩阵修复）+ ece 仓 `037260b`（Permission 修复）+ `A_CUSTOMER_VALIDATION.md`。**待执行**。
+> - **第二轮 — 审 收口 + 矩阵修复 + A/C 执行**（§8–§9）：送审对象 = `e159f88`（收口）+ `17c08cc`（矩阵修复）+ ece 仓 `037260b`（Permission 修复）+ `A_CUSTOMER_VALIDATION.md`。**已执行**（2026-09-20，判词见 `blueprintECE/0920/Codex 第二轮正式判词.md`：11 PASS / 1 FAIL / 1 需修正）。
+> - **第三轮 — 审 第二轮判词落实**：送审范围**已移至 `CODEX_ROUND2_FINDINGS.md` §7**（P1 单变量实验 / P2 E1 hermeticity / P3 判定门改写 / 三处 errata / 冻结声明）。
 
 ---
 

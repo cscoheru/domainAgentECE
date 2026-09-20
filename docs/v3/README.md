@@ -23,7 +23,8 @@
 | `EVIDENCE_V3_ADDENDUM.md` | 新增证据 C43–C48（证据纪律要求） | ⭐ |
 | `SELF_REVIEW_V3.md` | **红队自检**：5 项架构测试 + 8 条对抗性自审（含 3 条未缓解风险） | ⭐⭐⭐ |
 | `CODEX_REVIEW_BRIEF.md` | **送 Codex 的独立审查任务书**：两轮次 + 必答问题 + 反馈 schema + 取证命令 | ⭐⭐⭐ |
-| `A_CUSTOMER_VALIDATION.md` | **A 执行件**：48h CA 冒烟 + 中国三问 + 访谈纪律 + 记录模板 + 判定门。**照着做即可** | ⭐⭐⭐ |
+| `CODEX_ROUND2_FINDINGS.md` | **第二轮判词落实记录** + 第三轮送审范围（P1/P2/P3 + 三处修正 + 冻结声明） | ⭐⭐⭐ |
+| `A_CUSTOMER_VALIDATION.md` | **A 执行件**：48h Customer Access Test + 中国三问 + 访谈纪律 + 记录模板 + 判定门。**照着做即可** | ⭐⭐⭐ |
 | `../adr/ADR-011.md` | Kernel ↔ Runtime 边界决策 | ⭐⭐⭐ |
 | `../diagrams/kernel-architecture-v3.mmd` | V3 架构 mermaid 图 | ⭐ |
 
@@ -122,9 +123,12 @@ C. 一个可运行的 V0 technical spike ← 建议优先修 Permission 硬门�
 
 | 动作 | 状态 |
 |---|---|
-| **A** 客户问题验证 | 执行件已交付（`A_CUSTOMER_VALIDATION.md`）；**实际访谈未开始**（需真人） |
-| **C** V0 technical spike | **第一增量已完成**：Permission 硬门 5 暴露 + 5 失败 → **61/61 全绿**（ece 仓 `037260b`）<br>未做：R40R2.7（E3/E4/E5 runner 仍崩） |
+| **A** 客户问题验证 | 执行件已交付并**按第二轮判词修正**（`A_CUSTOMER_VALIDATION.md`）；**实际访谈未开始**（需真人） |
+| **C** V0 technical spike | **Permission 硬门 5 暴露 + 5 失败 → 61/61 全绿**（ece `037260b`）<br>**+ P1 严格单变量实验**：同一数据集下 baseline 代码 4E/4F vs 修后 0E/0F（ece `93ed0e3`）<br>**+ P2 E1 hermeticity 已修**：全套 pytest 后零重名，E1 回到 98.5%<br>未做：R40R2.7（E3/E4/E5 runner 仍崩） |
 | — | A 未跑完前，**不拍板 B**（选 Reference Workflow） |
+
+**Codex 第二轮判词结论**：V3 架构 **GO（可封版）** · Kernel Architecture **FREEZE** ·
+Customer Validation **GO** · V0 **GO（可开始 Technical Spike）**。详见 `CODEX_ROUND2_FINDINGS.md`。
 
 ---
 

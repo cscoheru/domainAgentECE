@@ -86,9 +86,20 @@ Context
 
 ### 2.3 V0 的成功判据
 
-> **证明「Context + Domain Semantics + Deterministic Reasoning + Evidence」这一组合能够形成一个真实业务价值闭环。**
+> **证明 Kernel technical loop 成立** —— 即
+> `Context → Entity/Knowledge → 一个确定性 Business Rule → Decision → Evidence → Context Update`
+> 这一条链能够在窄切片上端到端跑通,且每步产出可验证。
 
 不是"做出完整 Kernel"。
+
+> ⚠️ **Codex 第二轮判词 §5 修正**：原文写的是「能够形成一个**真实业务价值闭环**」——**这个说法太强**。
+> V0 最多证明**技术闭环成立**。
+> **真实业务价值必须由 A（Customer Validation）来证明。**
+> 因此明确：**V0 不负责证明 PMF（Product-Market Fit）。**
+> 这是一条重要边界 —— 越界会把"工程跑通"误当作"市场成立"。
+>
+> 另外,判定一个 Kernel 不是"规则引擎 + RAG"的关键**不是那 5 项核心对象本身**,
+> 而是链尾的 **Context Update**（结论回流改变下一轮的业务状态）。V0 必须真的实现这一步。
 
 ### 2.4 对 ADR-011 的影响
 
@@ -133,9 +144,40 @@ ADR-011 的状态仍为 Accepted，但其 **§3（三类接口）与 §5（V0 �
 ```
 V3 = Architecture Hypothesis   ✅ 已交付并收口
 V3 ≠ Product-Market Validation ❌ 未做，也不由文档解决
-
-STOP ── 不写 V4 / 不扩 PRD / 不重研 Glean / 不开始大规模实现
 ```
+
+### 5.1 架构冻结点（Codex 第二轮判词 §1 明令）
+
+> **本文件是架构冻结点。不要再出现 V3.1 / V3.2 / V4 架构迭代。**
+
+Codex 原话：**"但这是最后一次。"**
+
+因此自本文件起：
+
+```
+✅ 允许：执行（P1/P2 测试卫生、V0 spike、客户验证）
+✅ 允许：对本文件与 V3 文档做 errata 级修正（错别字、措辞、事实更正）
+❌ 不允许：新增架构层级、新增核心对象、新增接口族
+❌ 不允许：V3.1 / V3.2 / V4 的架构重写
+❌ 不允许：再写 PRD
+```
+
+若执行过程中发现架构确实有错，**走 ADR（新增一条，不重写既有的），不重写 PRD。**
+
+---
+
+## 6. 后续状态跟踪
+
+| 日期 | 事件 | 位置 |
+|---|---|---|
+| 2026-09-20 | Codex 第一轮判词 → 本收口 | `blueprintECE/0920/基于v3的codex反馈.md` |
+| 2026-09-20 | 矩阵一致性修复（8.B） | `KERNEL_BOUNDARY.md` v1.1 |
+| 2026-09-20 | **Codex 第二轮判词：11 PASS / 1 FAIL(E1 hermeticity) / 1 需修正** | `blueprintECE/0920/Codex 第二轮正式判词.md` |
+| 2026-09-20 | P1 单变量实验 + P2 E1 hermeticity 已落实 | ece 仓 `93ed0e3` |
+| 2026-09-20 | P3 + 三处修正已落实 | `CODEX_ROUND2_FINDINGS.md` |
+
+**第二轮判词结论**：V3 架构 **GO — 可以封版**；V3 PRD **STOP**；Glean Research **STOP**；
+Kernel Architecture **FREEZE**；Customer Validation **GO**；V0 **GO — 可以开始 Technical Spike**。
 
 ---
 

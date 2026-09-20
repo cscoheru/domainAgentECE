@@ -71,7 +71,7 @@
 | 7 | **Reasoning**（业务推理） | **PRIMARY**（规则优先 + LLM 轻量） | — | Agent-level（模型推理） | Agent-level | Agent-level | — | ADR-010；C22/C23 仅反证式表述 |
 | 8 | **Business Decision**（业务裁决） | **PRIMARY** | — | Agent 产出建议 | Agent 产出建议 | Agent 产出建议 | 人类最终负责 | 采购场景 v0 定位"建议生成"非自动决策 |
 | 9 | **Domain Workflow Specification**（业务上应怎么做） | **PRIMARY**（**仅业务判据 + 责任人 + 审批要求**） | — | — | — | — | — | **V3 新概念**；**V3 收口**：硬收窄 —— **一旦含执行顺序 / 分支 / 重试 / 并发，即移出 Kernel**（`V3_CLOSEOUT.md` §1.1）；见 §3.2 |
-| 10 | **Agent Selection / Action Planning** | **接口声明**（**V0 不实现动态选择**） | — | — | — | — | — | **V3 收口**：**降级为接口 / 策略声明** —— 去掉后 Kernel 仍能产出 Decision，故不作核心能力（`V3_CLOSEOUT.md` §1.1）；动态选择推迟到 V1 |
+| 10 | **Agent Selection / Action Planning** | **V0: 固定 Agent**（**无 Selection 概念**） | — | — | — | — | — | **V3 收口**：去掉后 Kernel 仍能产出 Decision，故不作核心能力。**Codex 第二轮判词 §3 修正**：V0 只有一个固定 Agent，因此 **V0 根本不存在 Selection** —— 工程上必须理解成「V0: Fixed Agent」，**不是**「Agent Selection Interface」，否则极易被实现成一个多余的 selector。动态选择推迟到 V1，且届时须另写 ADR |
 | 11 | **Policy**（业务规则/合规策略） | **PRIMARY** | — | — | 领域内自带 | Provider（Glean Protect = 平台安全策略） | Source | 注意区分：Kernel Policy = **业务规则**；Glean Protect = **平台安全** |
 | 12 | **Domain Evaluation**（业务正确性） | **PRIMARY** | — | — | 领域内自带 | **反证式空白**（C22 收紧后措辞，见 §6） | — | ADR-008；最高 IP 声明必须带限定语 |
 | 13 | **Platform Observability**（采纳率/错误率/ROI） | 简化版 | PRIMARY（run tracing） | Trajectory | Langfuse 集成 | PRIMARY（完整版） | — | C14；Row 13 裁决 = Build 简化 + Integrate 完整 |
@@ -108,15 +108,24 @@
 行 24 Temporal Context
 ```
 
-**已不再是 Kernel `PRIMARY` 的行**：行 5（仅 Knowledge 保留）、行 10（降为接口声明）、行 20（仅 Tool 准入）、行 25（转约束行）。
+**已不再是 Kernel `PRIMARY` 的行**：行 5（仅 Knowledge 保留）、行 10（**V0: 固定 Agent，无 Selection**）、行 20（仅 Tool 准入）、行 25（转约束行）。
 
 ---
 
 ## 3. 本矩阵最重要的三行
 
-### 3.1 行 1 — Permission Enforcement
+### 3.1 行 1 — Permission Enforcement（**概念上应读作 Enforcement Boundary**）
 
 **这是 Kernel 之所以是 Kernel 的第一理由。**
+
+> ⚠️ **Codex 第二轮判词 §3 修正**：把这一项理解成 **IAM（身份与访问管理）** 是错的。
+> Kernel 拥有的不是"一套账号体系"，而是 **enforcement boundary**：
+> **在哪一点上裁决、按什么 scope 裁决**。
+> 身份目录、组同步、凭据轮换、策略库都可以来自外部（Provider / 企业 IAM）；
+> **Kernel 只负责那个不可外包的裁决点**。
+> 这也修正了 `V3_CLOSEOUT.md` §1.1 的一处措辞含混 —— 那里把「企业交付前提」与
+> 「Kernel 核心能力」混在一起说；正确的表述是：**Kernel 拥有 enforcement point + scope contract，
+> policy source 可以外部提供。**
 
 - 企业的第一道墙不是"数据不够"，而是"谁可以看到什么"（红队 v3 §0.1：企业森严的部门壁垒）。
 - 若权限靠 prompt 约束（"请不要回答没有权限的信息"），则整个系统在企业场景**不可交付**——法务/审计不接受。
