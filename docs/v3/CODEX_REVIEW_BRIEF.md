@@ -8,7 +8,7 @@
 >
 > **两个轮次（按送审阶段选一节）**：
 > - **第一轮 — 审 V3 本体**（§1–§7）：送审对象 = commit `96dd20d` 的 8 份 V3 文档。**已执行**（2026-09-20，判词见 `blueprintECE/0920/基于v3的codex反馈.md`）。
-> - **第二轮 — 审 V3 收口**（§8–§9）：送审对象 = commit `e159f88` 的 `V3_CLOSEOUT.md` 与 6 个文件头部的收口标记。**待执行**。
+> - **第二轮 — 审 收口 + 矩阵修复 + A/C 执行**（§8–§9）：送审对象 = `e159f88`（收口）+ `17c08cc`（矩阵修复）+ ece 仓 `037260b`（Permission 修复）+ `A_CUSTOMER_VALIDATION.md`。**待执行**。
 
 ---
 
@@ -223,17 +223,40 @@ grep -n "grep -" docs/v3/KERNEL_ARCHITECTURE_V3.md docs/v3/PRD_V3.md
 
 ---
 
-## 8. 第二轮：V3 收口审验（2026-09-20 追加）
+## 8. 第二轮：V3 收口 + 矩阵一致性修复 + A/C 执行审验（2026-09-20 追加）
 
-**背景**：第一轮审查（判词见 `blueprintECE/0920/基于v3的codex反馈.md`）判定「Kernel 职责有向 Agent Platform 膨胀的风险；V0 与 2–4 周不匹配」，要求只做一次收口。作者已交付 **`docs/v3/V3_CLOSEOUT.md`**（commit `e159f88`）。本轮审验**该收口本身**，不是重审 V3 全部。
+**背景**：第一轮审查（判词见 `blueprintECE/0920/基于v3的codex反馈.md`）判定「Kernel 职责有向 Agent Platform 膨胀的风险；V0 与 2–4 周不匹配」，要求只做一次收口。
+
+本轮**合并审验三部分**（按作者交付顺序）：
+
+| 部分 | 交付物 | commit | 性质 |
+|---|---|---|---|
+| **8.A 收口裁定** | `docs/v3/V3_CLOSEOUT.md` | `e159f88` | 对上一轮反馈的回应 |
+| **8.B 矩阵一致性修复** | `docs/v3/KERNEL_BOUNDARY.md` 修订 | `17c08cc` | 缺陷修复（头部声明与正文不符） |
+| **8.C A/C 执行** | `ece/` 仓 Permission 修复 + `docs/v3/A_CUSTOMER_VALIDATION.md` | `037260b`（ece 仓） | V0 spike 第一步 + 客户验证执行件 |
+
+**不是**重审 V3 全部文档。§8.1 已界定送审范围。
+
+> 提示：8.B 是 8.A 暴露出的缺陷 —— 作者在 8.A 里于 `KERNEL_BOUNDARY.md` 头部**声称**改了四行矩阵，实际只加了标记、正文未动。用户审阅时发现。**请把"这次修复是否真的彻底"当作独立问题（Q4）。**
 
 ### 8.1 送审文件清单
 
 **必读（本轮判词的主要依据）**：
 
 ```
-docs/v3/V3_CLOSEOUT.md        142 行 —— 收口裁定本体
-docs/v3/CODEX_REVIEW_BRIEF.md §8 —— 本节（轮次范围与问题定义）
+docs/v3/V3_CLOSEOUT.md        收口裁定本体（8.A）
+docs/v3/KERNEL_BOUNDARY.md    26 行矩阵本体（8.B，§2 需逐行核验）
+docs/v3/A_CUSTOMER_VALIDATION.md  客户验证执行件（8.C）
+docs/v3/CODEX_REVIEW_BRIEF.md §8  本节（轮次范围与问题定义）
+```
+
+**8.C 的工程部分（在另一个仓）**：
+
+```
+ece/ 仓 commit 037260b —— Permission 硬门修复（6 根因）
+ece/reports/eval-archive/2026-09-20-cut040R2/README.md   实测归档说明（含全部原始数字与复现命令）
+ece/reports/eval-archive/2026-09-20-cut040R2/fixed/*.txt  raw stdout（E1/E2/E2-post-pytest/E3-E5/PYTEST）
+ece/reports/eval-archive/2026-09-20-cut040R2/baseline-seeded/*.txt  改前基线
 ```
 
 **必对照（用于核对"收口是否真的回应了上一轮的三点"）**：
@@ -304,6 +327,44 @@ docs/v3/SELF_REVIEW_V3.md
 - 6 步闭环与"2–4 周"是否**这次真的**匹配？（上一轮你说不匹配，作者缩了，请再判一次。）
 - 若 6 步仍然偏大，**最小可信子集**是什么？
 
+### 8.2b 8.C 部分必答（A/C 执行）
+
+**Q6（最重要）—— Permission 修复是"真修好了"，还是"让测试通过了"？**
+
+作者报告 E2 由 5 暴露 + 5 失败 → **61/61 全绿**。请判定这个全绿是否可信：
+
+- **RC-11（未知身份）**：去掉 `/permissions/check` 的提前 deny，让未知 `user_ref` 走裸 Identity + 分类矩阵。
+  作者的论证是"反探测不变：未知用户永不匹配 ACL subject，判定只依赖分类与空 dept/roles"。
+  **这个论证站得住吗？** 有无侧信道（例如 deny 的 `reason` 字段在不同分类下不同，可被用来探测对象是否存在）？
+  这算不算一处**安全退化**换来的测试通过？
+- **RC-7（换专属对象）**：e2-060/e2-061 改用 PR003/CON002。作者的理由是"ACL 行只按 (subject,object) 键，
+  与分类案共用对象则期望不可同时满足"。**但这是不是"改考题以迁就实现"？**
+  如果 ACL 模型确实无法表达"同一 (user,object) 在不同 classification 下不同结果"，那是否说明
+  **ACL 模型本身有缺陷**，而改数据集只是把缺陷藏起来？
+- **4 个测试把 bug 当契约**：`assert is_management is True` 与两个用 `demo-user-procurement`
+  过 admin 门禁的测试被修改。**修改测试断言使其通过，与"修 bug"的界线在哪里？**
+  作者的处置是否正确，还是有更该改的地方（例如 admin 门禁本身的设计）？
+- **E1 从 98.5% 降到 95.4%**：作者归因为"测试污染（R4-Acme/R4-Globex 各 5 份重名），非代码回归"，
+  依据是"全库仅这 2 个重名实体，且正好是 E1 的 2 个新失败；e1_resolution.json 本身未变"。
+  **请独立核验这个归因。** 若成立，那 E1 指标**非 hermetic** 是独立缺陷（作者未修）；
+  若不成立，则是被掩盖的回归。
+
+**Q7 —— `A_CUSTOMER_VALIDATION.md` 是否真的可执行？**
+
+- 48 小时冒烟能否真的按它启动（联系人从哪来、谁执行）？
+- §1.4 / §5.3 的判定门是否**可机械判定**，还是需要主观裁量？
+- §2 的中国三问、§3 的访谈纪律，有没有把"我们想听的答案"写进问题里（引导性）？
+- 作者声称"这一步不卖任何东西"，但 §6 已列出 POC 触发条件 —— 二者是否矛盾？
+
+**Q8（元问题，接第一轮 Q1）—— 这一轮整体是否又一次"用文档回应文档"？**
+
+第一轮你要求"不要再通过增加抽象、增加对象、增加接口来解决"。
+
+本轮：**8.C 里 C 部分是真正的执行**（改 6 处源码 + 跑实测 + 归档 raw stdout + 修 4 个测试），
+这是上一轮 Q1 想要的形态；但 8.A/8.B 仍是文档，且 8.C 里的 A 部分（客户验证）**又新增了一份文档**。
+
+请判定：**这一轮的比例可接受吗？还是应该砍掉 A 的执行件、直接让作者去跑？**
+
 ### 8.3 不要求你做的事
 
 - 不要重读 PRD_V3 全文（1208 行）—— 收口只改了它的头部标记与三处被点名章节
@@ -313,15 +374,23 @@ docs/v3/SELF_REVIEW_V3.md
 
 ### 8.4 反馈格式
 
-沿用 §5 的 schema（严重度 + 类型 + 证据 + 后果 + 具体改法）。结尾三段改为：
+沿用 §5 的 schema（严重度 + 类型 + 证据 + 后果 + 具体改法）。结尾改为**按三部分分别给判词**：
 
 ```
-1. 收口判词: 收口有效 / 收口不足 / 收口本身跑偏
-2. 若仍有必改项，列出（最多 3 条，每条一句话）
-3. V3 是否可以就此封版进入下一阶段（客户验证 + V0 spike）？
+1. 8.A 收口判词:      收口有效 / 收口不足 / 收口本身跑偏
+2. 8.B 矩阵修复判词:  修复彻底 / 仍有残留 / 引入了新问题
+3. 8.C 执行判词:      Permission 修复可信 / 掩盖问题 / 有安全退化
+                      A 执行件可用 / 需改 / 应删掉直接去跑
+4. 三个必改项（按重要性，每条一句话）
+5. 一件你认为应当直接删掉而不是修的东西
+6. V3 是否可以就此封版，进入客户验证 + V0 spike？
 ```
 
-**特别要求**：如果 Q1 的答案是"这是同一种病的复发"，请直说，并给出**不用写文档**的替代收口方式。
+**特别要求**：
+
+- 若 Q1/Q8 的答案是"这是同一种病的复发"（用文档回应文档），请直说，并给出**不用写文档**的替代方式。
+- 若 Q6 判定 Permission 修复中有任何一处是**改考题迁就实现**或**安全退化**，请明确指出是哪一处、以及正确的做法。
+- 若 Q6 的 E1 归因核验**不成立**（即确有被掩盖的回归），这是本轮最高优先级 finding。
 
 ### 8.5 取证命令
 
@@ -347,13 +416,53 @@ grep -n "Context（含\|Domain Ontology\|Deterministic Business Rules" docs/v3/V
 # 6. V0 6 步 vs 原 13 步的对照
 sed -n '/^## 2. V0 最小闭环/,/^## 3\./p' docs/v3/V3_CLOSEOUT.md
 sed -n '/^## 2. 最小闭环/,/^## 3\./p' docs/v3/MVP_SCOPE_V3.md
+
+# ===== 8.B 矩阵一致性 =====
+# 7. 矩阵是否真的被改了（不是只加头部标记）
+git show 17c08cc --stat
+git show 17c08cc -- docs/v3/KERNEL_BOUNDARY.md | head -80
+
+# 8. 逐行提取 Kernel 列，确认无残留 PRIMARY 冲突
+python3 - <<'PY'
+import re, pathlib
+t = pathlib.Path("docs/v3/KERNEL_BOUNDARY.md").read_text(encoding="utf-8")
+for n, cap, k in re.findall(r'^\| (\d+) \| (.+?) \| (.+?) \|', t, re.M):
+    if "PRIMARY" in k: print(f"{n:>2} {cap.strip()[:50]:<50} | {k.strip()}")
+PY
+
+# ===== 8.C / ece 仓 =====
+cd /Users/kjonekong/projects/domainAgentECE/ece
+
+# 9. Permission 修复的全部改动
+git show --stat 037260b
+
+# 10. 改前基线 vs 改后（原始 stdout，勿信转述）
+cat reports/eval-archive/2026-09-20-cut040R2/baseline-seeded/E2.txt
+cat reports/eval-archive/2026-09-20-cut040R2/fixed/E2.txt
+cat reports/eval-archive/2026-09-20-cut040R2/fixed/E2-post-pytest.txt
+
+# 11. 独立核验「E1 掉分是测试污染」的归因（Q6 最后一条）
+docker compose exec -T db psql -U ece -d ece -c \
+  "SELECT name, count(*) FROM entities WHERE entity_type IN ('supplier','person') \
+   GROUP BY name HAVING count(*) > 1 ORDER BY 2 DESC;"
+git -C . diff HEAD~1 --stat -- data/eval/e1_resolution.json   # 预期：无改动
+cat reports/eval-archive/2026-09-20-cut040R2/fixed/E1.txt
+
+# 12. 确认 E2 的两个 wrapper 测试是真跑（不是 skip）
+uv run pytest tests/integration/test_e2_permission.py -o addopts="" -v
+
+# 13. 确认新增的状态完整性测试真的在守 RC-6
+#     （把它指向的注入点改回 run_seed() 之外的旧写法应当让它失败）
+sed -n '/R40R2.1/,/^def /p' src/ece/seed.py | head -30
 ```
 
 ---
 
 ## 9. 一句话交给 Codex（第二轮）
 
-> 作者按你的三点反馈做了一次收口，并把收口**也写成了一份文档**。请先判断**这件事本身是否又是"用文档回应文档"**；再逐条攻击它的五项边界裁决是否判对，尤其是收窄后的 Kernel 是否**过度收窄到与普通规则引擎难以区分**。项目历史上红队判 FAIL 多次且救回过真问题，请照同样标准审。
+> 作者按你的三点反馈做了收口（8.A），但收口**又写成了一份文档**，而且**在头部声称改了矩阵却没改正文** —— 用户审阅时抓到，才补了 8.B 的一致性修复。8.C 则是第一次真正的执行：改 6 处源码把 E2 权限硬门从 5 暴露 5 失败修到 61/61，并归档了全部原始 stdout。
+>
+> 请重点判三件事：**① 这一轮是否仍在"用文档回应文档"；② Permission 的全绿是"真修好"还是"改考题/改测试/安全退化换来的"；③ E1 掉分归因于"测试污染"是否成立**（这是本轮最高优先级的可证伪主张）。项目历史上红队判 FAIL 多次且救回过真问题，请照同样标准审。
 
 ---
 

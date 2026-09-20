@@ -22,7 +22,8 @@
 | `MVP_SCOPE_V3.md` | V0 最小范围（2–4 周）+ 规模红线 + 验收 DoD | ⭐⭐ |
 | `EVIDENCE_V3_ADDENDUM.md` | 新增证据 C43–C48（证据纪律要求） | ⭐ |
 | `SELF_REVIEW_V3.md` | **红队自检**：5 项架构测试 + 8 条对抗性自审（含 3 条未缓解风险） | ⭐⭐⭐ |
-| `CODEX_REVIEW_BRIEF.md` | **送 Codex 的独立审查任务书**：6 个必答问题 + 反馈 schema + 取证命令 | ⭐⭐⭐ |
+| `CODEX_REVIEW_BRIEF.md` | **送 Codex 的独立审查任务书**：两轮次 + 必答问题 + 反馈 schema + 取证命令 | ⭐⭐⭐ |
+| `A_CUSTOMER_VALIDATION.md` | **A 执行件**：48h CA 冒烟 + 中国三问 + 访谈纪律 + 记录模板 + 判定门。**照着做即可** | ⭐⭐⭐ |
 | `../adr/ADR-011.md` | Kernel ↔ Runtime 边界决策 | ⭐⭐⭐ |
 | `../diagrams/kernel-architecture-v3.mmd` | V3 架构 mermaid 图 | ⭐ |
 
@@ -116,6 +117,14 @@ C. 一个可运行的 V0 technical spike ← 建议优先修 Permission 硬门�
 ```
 
 **STOP** —— 不写 V4 / 不扩 PRD / 不重研 Glean / 不开始大规模实现。
+
+### 执行进展（2026-09-20）
+
+| 动作 | 状态 |
+|---|---|
+| **A** 客户问题验证 | 执行件已交付（`A_CUSTOMER_VALIDATION.md`）；**实际访谈未开始**（需真人） |
+| **C** V0 technical spike | **第一增量已完成**：Permission 硬门 5 暴露 + 5 失败 → **61/61 全绿**（ece 仓 `037260b`）<br>未做：R40R2.7（E3/E4/E5 runner 仍崩） |
+| — | A 未跑完前，**不拍板 B**（选 Reference Workflow） |
 
 ---
 
