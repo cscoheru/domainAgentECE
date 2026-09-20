@@ -6,6 +6,7 @@
 > **本文件是 V3 的收口裁定**，取代 `PRD_V3.md` / `KERNEL_BOUNDARY.md` / `MVP_SCOPE_V3.md` / `ADR-011.md` 中被点名的部分。其余内容不变。
 > **V3 = Architecture Hypothesis，不是 Product-Market Validation。**
 > 本文件之后 STOP：不写 V4，不扩 PRD，不重新研究 Glean，不开始大规模实现。
+> **本文件自身的审验范围**（送审文件清单 / 五个必答问题 / 取证命令）见 `CODEX_REVIEW_BRIEF.md` **§8**。
 
 ---
 
