@@ -23,6 +23,7 @@
 | `EVIDENCE_V3_ADDENDUM.md` | 新增证据 C43–C48（证据纪律要求） | ⭐ |
 | `SELF_REVIEW_V3.md` | **红队自检**：5 项架构测试 + 8 条对抗性自审（含 3 条未缓解风险） | ⭐⭐⭐ |
 | `CODEX_REVIEW_BRIEF.md` | **送 Codex 的独立审查任务书**：两轮次 + 必答问题 + 反馈 schema + 取证命令 | ⭐⭐⭐ |
+| `CODEX_FINAL_EVIDENCE_REPAIR.md` | **Final Evidence Repair**（E3/E4/E5 有效性修复 + 4 类 guard;5 项全绿） | ⭐⭐⭐ **先读** |
 | `CODEX_FINAL_CLOSEOUT.md` | **最终收口刀报告**（两处剩余问题处置 + R40R2.7 runner 修复 + 真实失败记录 + Remaining Issues） | ⭐⭐⭐ **先读** |
 | `CODEX_ROUND3_CLOSEOUT_REPORT.md` | **大刀收口最终报告**（判词 §七 格式：判定 / 七项状态 / P1 证据 / 已知问题 / commit / ready for audit） | ⭐⭐⭐ **先读** |
 | `CODEX_ROUND3_FINDINGS.md` | **第三轮判词落实记录**（CONDITIONAL PASS → P1' 补齐 DB 指纹 + 执行关系修正）| ⭐⭐⭐ |
