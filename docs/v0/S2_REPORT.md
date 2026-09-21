@@ -222,3 +222,46 @@ S2 已就位的是：`persist_evidence(engine, ctx, dec)` 的输入契约（§3 
 **Author**: Claude（Fable 5.1）
 **Date**: 2026-09-21
 **Status**: S2 完成，等审阅。**审阅通过前不进入 S3。**
+
+---
+
+## 9. 审验后追加（2026-09-21）
+
+**裁定**: **PASS WITH CONDITIONS**（来源: `Obsidian Vault/0921/codex给s2 report的裁定.md`）——
+审验者跑了 `make db-upgrade` / `pytest -v` / `make test` / `alembic downgrade→upgrade` 等真实命令并对三处做了对抗性变异测试。
+
+**1 个真实 failure 被找到并闭合（唯一一个条件）**：
+
+```
+failure:    _subject_entity 的类型过滤无测试覆盖
+            去掉过滤后 7 个测试全绿, 变异存活)
+root cause: 所有测试 fixture 的 entities[] 都恰好只有 purchase_request,
+            match-all 变异下行为不变, 断言无法区分
+proposed minimal fix:
+            补 test_subject_entity_filter_is_enforced (负向 + 正向),
+            且正向刻意把 supplier 放在 entities[0],
+            让"忽略过滤取第一个"变异必败
+```
+
+**已闭合**（commit `4254418`）：新增 `test_subject_entity_filter_is_enforced`，
+含两条断言（① 无 purchase_request → 拒；② supplier 在 `[0]`、PR 在 `[1]` → 取 PR 的 src）。
+
+**对抗性变异实测咬合力**（不是"应该能"）：
+
+| 变异 | 期望 | 实测 |
+|---|---|---|
+| `e.get("type") in ("purchase_request", "supplier")` | ① 必咬 | ✅ `DID NOT RAISE ValueError`（test red） |
+| `return ctx.entities[0]` 替代 `return subjects[0]` | ② 必咬 | ✅ `Extra items in the left set: 'SUPPLIER-B'` / `'SPIKE-PR-001'`（test red） |
+
+**全量 `make test`**: 371 passed, 3 skipped, **0 failed**（commit 4254418）。
+
+**关于 §10.1 第四跳（`input_context_ref → 原始 Context`）**：
+裁定确认为**测试缺口而非规格实现问题**，属 S6 义务。S6 的证据反查专项测试
+必须真实走这一跳（前缀匹配：`ctx_<24hex>` → `context_requests.request_id` 前 24 位 hex），
+不接受只断言回读值。
+
+---
+
+**Author**: Claude（Fable 5.1）
+**Date**: 2026-09-21
+**Status**: **S2 + 审验条件已闭合。可以进入 S3（`evaluate_rule_R_SPIKE_REVIEW` + `build_decision`，纯函数，先写确定性测试）。**
