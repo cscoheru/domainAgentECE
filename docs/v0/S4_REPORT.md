@@ -151,3 +151,32 @@ S5 的关键契约：**禁止"把 Decision 塞进 Context 冒充更新"**（spec
 **Author**: Claude（Fable 5.1）
 **Date**: 2026-09-21
 **Status**: S4 完成，等审验。**审验通过前不进入 S5。**
+
+---
+
+## 10. 审验后追加（2026-09-21）
+
+**裁定**: **PASS WITH CONDITIONS**（来源: `Obsidian Vault/0921/codex给s4的裁定.md`）。
+**GO S5**，条件 = 补 `auto_approved` 决策值透传测试。已闭合（commit `7df2245`）。
+
+**审验跑了 3 个不重叠的独立变异**（E/F/G）：
+- **E** 删 `review_updated_at` → 2 红 ✅
+- **F** `review_status` bind 写死 `"review_required"` → ⚠️ **5 绿，变异存活**
+- **G** `_resolve_entity_id` 忽略过滤（全表取）→ 2 红 ✅
+
+**F 是真洞**：4 个 impl 当自测全部用 `amount=1_280_000, qc=1`（恒 `review_required`），
+没有任何测试构造 `auto_approved` 分支来验透传 —— 一个把 bind 写死成 `"review_required"` 的实现可全过。
+**裁定 §4 处置**：本轮过程偏差（先写实现后写测试）+ F 变异存活，**不 HOLD**，但 **S5 起恢复测试先行**（测试先 commit、实现后 commit，红→绿可见）；且每轮审验继续做独立变异而非采信自报。
+
+**闭合（commit `7df2245`）**：新增 `test_auto_approved_decision_value_propagates_through`，
+构造 `decision_value="auto_approved"`（amount=500_000、qc=1），apply 后重读断言
+`attrs["review_status"] == "auto_approved"`。**M-F 变异（bind 写死）→ 新测试红 ✅**。
+
+**全量 `make test`**: 400 passed, 3 skipped, 3 deselected, 0 failed。
+**commit**: ece `e68c7e1`（S4 主体） + `7df2245`（条件闭合）。
+
+---
+
+**Author**: Claude（Fable 5.1）
+**Date**: 2026-09-21
+**Status**: **S4 + 审验条件已闭合。GO S5（`run_v0_loop` 六步编排 + 逐步断言）。**
