@@ -145,3 +145,31 @@ S3 已就位给 S4 的契约：`decision_value="review_required"` 与 `decision_
 **Author**: Claude（Fable 5.1）
 **Date**: 2026-09-21
 **Status**: S3 完成，等审验。**审验通过前不进入 S4。**
+
+---
+
+## 9. 审验后追加（2026-09-21）
+
+**裁定**: **PASS**（来源: `Obsidian Vault/0921/codex给s3的裁定.md`）—— GO S4。
+
+审验者额外跑了 **5 个不与本报告重叠的独立变异**，全咬：
+- A. `>=` → `>`（off-by-one）：边界格 `[1000000-1]`、`[1000000-2]` 红
+- B. `<` → `<=`：quote 边界 `[1000000-3]`、`[1000001-3]` 红
+- C. 决策 `AND` → `OR`：红
+- D. `claim` 键改名：6 键断言咬
+- E. `request_id` 写死 `""`：schema 测试咬
+
+**5 个独立变异 + 本报告的 4 个 = 9 个变异全部咬合**（最大覆盖面：AND/OR、边界 off-by-one、键名去重、`request_id` 与 `input_context_ref` 隔离、6 键完整性、Decision 字典化前 vs 后）。还原后 **23/23 绿**。
+
+**两个非阻塞观察（已记录，不在本轮行动）**：
+- criterion 2 的"引用常量"无变异可咬（同值字面量会通过），但**防漂移机制由边界矩阵自身承担**——若 `PRICE_COMPARISON_THRESHOLD` 漂移，过时字面量立刻被矩阵测试抓住。
+- `build_decision` 按 `name` 索引条件 —— 传入非本规则输出的条件列表会 `KeyError`；S5 接线时真实规则输出无此风险，属 spike 可接受。
+
+**全量 `make test`**: 394 passed, 3 skipped, 3 deselected, 0 failed。
+**commit**: ece `abf08af` / root `08e6c58`。
+
+---
+
+**Author**: Claude（Fable 5.1）
+**Date**: 2026-09-21
+**Status**: **S3 + 审验 PASS。可以进入 S4（`apply_context_update`，写回 `entities.attributes` 并以重读为判据）。**
