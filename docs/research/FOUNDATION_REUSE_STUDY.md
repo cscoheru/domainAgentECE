@@ -35,8 +35,22 @@ Kernel 应该拥有的是**业务语义与业务智能边界**，而不是所有
 ### 1.2 发现了什么（五条结论）
 
 **结论一：不存在可以作为"完整 Kernel foundation"的开源项目。**
-九个候选全部源码级考察完毕（3 个 `CLOSE`、5 个 `REFERENCE ONLY`、1 个可"取零件"）。
+九个候选全部完成源码级考察（3 个 `CLOSE`、5 个 `REFERENCE ONLY`、1 个可"取零件"）。
 **没有任何一个候补能覆盖 Kernel 的六项核心能力。**
+
+> ⚠️ **考察范围的一处限定**（Codex 裁定 §一 要求修正；原文曾简写为"九个候选全部源码级考察完毕"）：
+>
+> **六个候选（A–F）的仓库坐标由指令明确给出**（`ZJU-REAL/HugAgentOS`、`semantica-agi/semantica`、
+> `trustgraph-ai/trustgraph`、`turtacn/OpenEAAP`、`GramosoftAI/GSearchAI`、`qiantongtech/qKnow`）；
+> **三个候选（G/H/I）指令未给仓库坐标**，其中 `mcp-agent-framework` 在 GitHub 上**不存在同名仓库** ——
+> 本研究**采用了替代坐标（最接近者）进行调查**。
+>
+> 因此准确表述是：**六个明确坐标候选 + 三个采用替代坐标调查的候选**，
+> **后三者的结论以坐标推断为前提，需确认**。
+> 不应被读成"九个都经过了同等确定性的 repo identity verification"。
+>
+> （Codex 裁定原文此处写作"八个明确坐标候选"；经复核指令原文，
+> **明确给出路径的是六个（A–F）**，此处按实际数量更正。）
 
 **结论二（最重要）：全部九个候选里，没有一个把 Business Evidence 建成为可用的一等对象。**
 唯一真正把它建成一等对象的 `DataLogicEngine`（`TraceEvidence` 带 content hash、locator、
@@ -753,18 +767,23 @@ Domain Evaluation 也须自建**（可借形状，不可借语义）。
 
 ## 12. 报告状态
 
-### **PASS WITH CONDITIONS**
+### **PASS WITH CONDITIONS → 研究任务已关闭**
 
-研究任务本身完成：九个候选全部源码级考察，指令 §16 要求的十节齐备，
-指令 §17 的证据纪律（Claim / Source / Evidence / Confidence / Last Verified）在
+> **Codex 裁定（2026‑09‑21）**：*"这份 Foundation Reuse Study 的核心结论基本成立，
+> 而且与我们前面的 V3 架构判断是相容的"* —— 不建议回头改 V3，也不因此做 V4。
+> **Foundation Reuse Study 可以正式关闭。** 详见 §13。
+
+研究任务本身完成：九个候选完成源码级考察（其中三个采用替代坐标，见 §1.2 限定），
+指令 §16 要求的十节齐备，指令 §17 的证据纪律
+（Claim / Source / Evidence / Confidence / Last Verified）在
 `FOUNDATION_REUSE_CODE_NOTES.md` 中逐条落实。
 
 三个条件（**都不阻塞 V0**）：
 
-| # | 条件 | 影响 |
+| # | 条件 | 处置 |
 |---|---|---|
-| 1 | **确认 Candidate G/H/I 的仓库坐标** | 若 Codex 所指另有其库，这三节结论需重做 |
-| 2 | TrustGraph 的 **CLA 正文在仓外**（*Fiduciary* CLA），未读到原文 | 仅在未来考虑采纳其 provenance 设计时才需要 |
+| 1 | **Candidate G/H/I 的仓库坐标** | ⚠️ **仍需确认**。表述已按 Codex §一 修正（§1.2 限定）；若 Codex 所指另有其库，这三节结论需重做。**不阻塞 V0** |
+| 2 | TrustGraph 的 **CLA 正文在仓外**（*Fiduciary* CLA），未读到原文 | ✅ **按 Codex §二 降级**：现在不必解决。仅当**真的要 fork / vendor / 修改 / 分发其代码**时才进入法务确认；若只是"参考其 PROV-O 命名图设计"则无碍 |
 | 3 | Semantica 的 `evals/` 深度为 **UNKNOWN** | 不影响结论（Domain Evaluation 我们本来就自建） |
 
 ### 本研究**未做**的事（指令 §15/§19/§21）
@@ -789,4 +808,96 @@ Domain Evaluation 也须自建**（可借形状，不可借语义）。
    是否要纳入长期法务备案 —— 本研究**不建议采纳它**，故此项仅为备案。
 6. 本研究**不改变 V0**。若你认可这一点，V0 按原计划继续。
 
-**STOP。** 等待 Codex 审阅。**不自行进入技术 Spike，不自行签发 ADR，不进入 S2。**
+---
+
+## 13. Codex 裁定与归档修正（2026‑09‑21）
+
+> 裁定书：`Obsidian Vault/blueprintECE/0921/codex给foundation reuse oss research的裁定.md`
+
+### 13.1 裁定
+
+**PASS WITH CONDITIONS → 研究任务可以正式关闭。**
+Codex 明确：**不建议回头改 V3，也不因此做 V4**；核心结论"基本成立，且与前面的 V3 架构判断相容"。
+
+Codex 提炼的判断（比本研究原文更凝练，值得作为结论口径）：
+
+> **本研究真正证明的不是"没有好 OSS"，而是：**
+> **没有现成 OSS 能把我们的 Domain Intelligence Kernel 整体替掉。**
+
+并且认可本研究把两类东西区分开了：
+
+```
+通用基础设施    Context / Provenance / Context Update     ← 有 OSS 可借
+─────────────────────────────────────────────────────
+我们的语义层    Evidence / Business Rules / Domain Ontology
+                Decision Semantics / Permission Scope
+                Domain Evaluation / Context Update semantics  ← 必须自建
+```
+
+以及它给出的最终框架（**建议作为本研究的一句话结论**）：
+
+> **不要寻找"我们的开源 Kernel"；应该寻找"我们的 Kernel 可以站在什么开源基础设施之上"。**
+> 这两个问题完全不同。
+> —— 我们的代码量可能很小，但**语义密度**非常高。
+
+裁定同时确认了本研究对 Semantica 的处理方式是正确的：**不犯"它和我们很像 → 直接采用"这个常见错误**，
+并**赞成 V0 完全不接 Semantica**，只留 `V1+ candidate / post-V0 micro-spike`。
+（OpenEAAP 亦然：它确实是完整的 Enterprise AI Agent Platform，要求
+PostgreSQL + Redis + Milvus + MinIO 等基础设施 —— 这正好说明它不该成为 V0 的底座。）
+
+### 13.2 三处修正的处置
+
+| Codex 指出的问题 | 本研究已做的修正 |
+|---|---|
+| **一、G/H/I 坐标不能留在正式结论里** —— 原文"九个候选全部源码级考察完毕"说得过头 | ✅ 已在 **§1.2 结论一** 加入限定：**六个明确坐标候选（A–F）+ 三个采用替代坐标调查的候选（G/H/I）**，后者结论以坐标推断为前提、需确认。（注：裁定原文写"八个明确坐标候选"，经复核指令原文为**六个**，此处按实际数量更正） |
+| **二、TrustGraph 的 CLA 不要现在花时间解决** | ✅ 已在 **§12 条件表**降级：现在不必解决；仅当真要 fork / vendor / 修改 / 分发其代码时才进入法务确认 |
+| **三、HugAgentOS 的许可证条件值得记录** | ✅ 见 §13.3 |
+
+### 13.3 Codex 对 HugAgentOS 的补充证据（强化原判断）
+
+Codex 提供了比本研究更进一步的公开证据：HugAgentOS 当前已包含
+**Admin Console / Skills / Marketplace / Prompts / MCP / Agents / Billing / Usage logs / Teams / License**
+等**完整平台能力**。
+
+> 这**进一步支持**本研究的判断：**它不是一个 kernel，而是一个
+> Enterprise Agent Platform** —— 而这条路线正是我们**刻意避免**的。
+> 结论：**可作为参考实现，但不是我们应该把 Kernel 建在上面的东西。**
+> 其许可证（Apache-2.0 + 附加条款：竞争性 multi-tenant SaaS 受限、UI attribution 要求、
+> 内部使用明确允许）**如实记录即可**。
+
+### 13.4 Codex 对 Evidence 的补充（本研究结论被提升为战略判断）
+
+Codex 认为本研究的 Evidence 发现应**直接提升为一条战略架构判断**：
+
+```
+Runtime Trace  ≠  Agent Output  ≠  Business Evidence
+```
+
+它给出的判据是一个 Business Evidence 必须能回答的问题集
+（与本研究 §11 的字段级横切分析同构，但以业务语言表述）：
+
+```
+为什么？      依据什么？    哪个事实？    哪个时间点？
+哪个业务规则？ 哪个 Context？ 哪个 Decision？ 哪个 Agent？ 哪个执行过程？
+```
+
+> **"Evidence 不是给 LLM 加几个 citation 就完成了。"**
+> —— 这进一步说明坚持 Evidence 自建**有实际技术依据**，不是保守。
+
+### 13.5 下一步（Codex 对用户的建议）
+
+```
+① 关闭 Foundation Reuse Study
+② 不要继续研究更多 OSS
+③ 不要现在做 Semantica Spike
+④ 回到已冻结的主线：A Customer Validation + C V0 Technical Spike
+   （C = 原 V0 六步闭环：Context → Entity/Knowledge → Deterministic Rule
+     → Decision → Evidence → Context Update）
+⑤ Semantica 仅留 V1+ candidate / post-V0 micro-spike
+```
+
+> **本研究到此为止。** 归档完成后不再产生新内容。
+>
+> 本研究**未做的仍是未做**：未改 PRD_V3 / KERNEL_BOUNDARY / V3_CLOSEOUT / 任何 V0 文档；
+> 未装依赖；未 fork；未把任何 OSS 引入 production code；未排名、未给 Overall Score；
+> **未签发 ADR**（§6 那条"Evidence 溯源子模型对齐 PROV-O"仍只是建议，未固化）。

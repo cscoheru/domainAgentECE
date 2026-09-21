@@ -83,6 +83,14 @@ curl -s https://raw.githubusercontent.com/<owner>/<repo>/<branch>/<path>
 
 > ⚠️ **本条必须由 Codex 确认**：G/H/I 三个候选的坐标是我按名称推断的。
 > 若指令所指另有其库，这三项结论需重做。**不要把我推断的坐标当成既定事实。**
+>
+> **准确的数量口径（供归档引用）**：指令**明确给出仓库路径的是六个（A–F）**；
+> **未给路径的是三个（G/H/I）**，本研究对这三者采用了**替代坐标（最接近者）**。
+> 因此全文凡涉及范围处应写作「**六个明确坐标候选 + 三个采用替代坐标调查的候选**」，
+> **不得简写为"九个候选全部完成相同确定性的仓库身份核验"**。
+>
+> （Codex 裁定 §一 采纳本条并建议修正表述，其原文写作"八个明确坐标候选"；
+> 经复核指令原文，明确给出路径的是**六个**，此处按实际数量更正。）
 
 ### 0.4 与既有文档的关系（避免重复劳动与自相矛盾）
 
@@ -158,6 +166,21 @@ curl -s https://raw.githubusercontent.com/ZJU-REAL/HugAgentOS/main/LICENSE | hea
 >   或未来要做成**多租户 SaaS**，**必须取得商业许可**。这条需要业务方决策，不是工程能绕过的。
 >
 > 另注：社区版是**功能受限版**（商业版组件不随分发），所以"社区版能力"≠"项目 README 展示的全部能力"。
+
+**Codex 裁定 §三 的补充证据（2026‑09‑21）**：HugAgentOS 当前已包含
+**Admin Console / Skills / Marketplace / Prompts / MCP / Agents / Billing / Usage logs / Teams / License**
+等**完整平台能力**（依据 `document/zh-CN/modules/admin-console.md` 等模块文档）。
+
+> 这**进一步支持**本研究的判断：**它不是一个 kernel，而是一个 Enterprise Agent Platform** ——
+> 而这条路线正是我们**刻意避免**的（根 `CLAUDE.md` §4.1 禁止构建 Generic Agent Builder /
+> Prompt Marketplace / Skill Marketplace；`KERNEL_BOUNDARY.md:227-228` 同）。
+> 结论：**可作为参考实现，但不是我们应该把 Kernel 建在上面的东西。**
+>
+> ⚠️ **一处需要并记的细节**（本研究源码侧证据，与上条不矛盾）：这些模块的**可用性分版**。
+> `README:236` 显示 "Teams, organization agents, and permission matrices" 属 **Enterprise Edition 专属**；
+> `core/auth/tenancy.py:1-10` 亦自述该产品"**does not yet have**"多租户方案。
+> **即：平台边界（Codex 论点）成立，但其中一部分能力只在商业版交付** ——
+> 这与 §1.1 补充条款 3（商业版组件不在本许可内）是同一件事的两面。
 
 ### 1.2 ⭐ 一个必须先说的结构性事实：这是一个**只读下游镜像**
 
@@ -730,6 +753,9 @@ triplet/RDF —— oxigraph/blazegraph/jena/rdf4j/anzo。
 - ⚠️ **UNKNOWN**：CLA 正文**在仓外**（命名为 *Fiduciary* Contributor License Agreement），
   **我没有读到该文书本身**。"不转让版权"是项目自己的摘要，未经原文核验。
   若该文书含再许可/转让条款，则存在商业版的可能性 → 记为待核项。
+  > ✅ **裁定后处置（Codex §二）**：**现在不必解决。**
+  > 仅当**真的要 fork / vendor / 修改 / 分发其代码**时才进入法务确认；
+  > 若只是"**参考其 PROV-O 命名图设计**"则无碍。**不值得为此阻塞 V0。**
 - 商业层：README 宣传 "consumed as a fully managed SaaS"，且有托管 UI
   （`config-ui.demo.trustgraph.ai`）。**本仓内无许可门控的企业模块**（CONFIRMED 于树中缺失）；
   **付费 SaaS 的存在属 INFERRED**。
