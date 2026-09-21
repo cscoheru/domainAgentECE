@@ -85,15 +85,17 @@ uv run pytest tests/integration/test_v0_loop.py -q  →  7 passed
 
 ### 2.5 5 个变异实测咬合
 
-变异由 `/tmp/s5_mutations.py` 执行：改源码 → 跑测试 → 记录红集 → 还原。**每个变异都指名它必须杀死的测试**。
+变异由一次性 harness 执行（改源码 → 跑 `pytest tests/integration/test_v0_loop.py -q` →
+记录 `FAILED` 行 → 还原；harness 是临时文件、不入库）。**每条的精确改动如下，可手工复现**
+（锚点在 `src/ece/v0/loop.py` 中各出现恰好一次）：
 
-| 变异 | 做法 | 必须咬 | 实测红集 |
+| 变异 | `old` → `new` | 必须咬 | 实测红集 |
 |---|---|---|---|
-| **M-α** | step [6] 绑定 `evidence_ids[-1]` 而非 `[0]` | happy_path | `{happy_path}` ✅ |
-| **M-β** | 规则拿到的报价数 `len(quotes) + 3` | happy_path | `{happy_path, auto_approved, carries_every_step, re_read_asks}` ✅ |
-| **M-γ** | denied 分支改为 `if False:`（规则在无 context 上求值） | denied | `{denied}` ✅ |
-| **M-δ** | "重读"返回**更新前快照** `pr_attrs_before`（循环从未闭合） | re_read_asks | `{happy_path, auto_approved, carries_every_step, re_read_asks}` ✅ |
-| **M-ε** | 闭环判据比较字面量 `"review_required"` 而非 `dec["decision_value"]` | auto_approved | `{auto_approved}` ✅ |
+| **M-α** | `…dec, evidence_ids[0])` → `…dec, evidence_ids[-1])` | happy_path | `{happy_path}` ✅ |
+| **M-β** | `…pr["attrs"]["amount"], len(quotes))` → `…, len(quotes) + 3)` | happy_path | `{happy_path, auto_approved, carries_every_step, re_read_asks}` ✅ |
+| **M-γ** | `    if ctx.denied and pr is None:` → `    if False:` | denied | `{denied}` ✅ |
+| **M-δ** | `    re_read_attrs = _re_read_through_assembly(engine, user_ref, display_id)` → `    re_read_attrs = dict(pr_attrs_before)` | re_read_asks | `{happy_path, auto_approved, carries_every_step, re_read_asks}` ✅ |
+| **M-ε** | `    if re_read_attrs.get(DECISION_KEY) != dec["decision_value"]:` → `… != "review_required":` | auto_approved | `{auto_approved}` ✅ |
 
 **5/5 咬合。**
 
