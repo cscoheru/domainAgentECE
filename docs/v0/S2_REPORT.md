@@ -4,6 +4,7 @@
 > 上游: `docs/v0/V0_EXECUTION_SPEC.md` §7（Evidence 最小 schema）+ §14（S2 行）·
 > Codex 对该 spec 的审验裁定（批准 S1–S6 顺序执行，并单独授权 S2 实现 `evidence_records` + `persist_evidence`）
 > 范围: `evidence_records` 迁移 + `persist_evidence()` + 最小 persistence test
+> **审验导航见 `docs/v0/S2_REVIEW_BRIEF.md`**（给能读取本仓库的审阅者：路径地图 + 追问清单 + 判定要求）
 
 ---
 
@@ -65,7 +66,7 @@ evidence_records 列数 = 12
 |---|---|---|
 | 每条 **passed** 条件产出一条 Evidence | 3 条条件（2 passed / 1 failed）→ 查表 | **2 行**，且 claim 集合恰为两条通过项 ✅ |
 | 返回值与库内一致 | `len(returned) == len(rows_in_db)` | 一致 ✅ |
-| 反查链 `decision → evidence → source → context` | 逐跳断言 `decision_id` / `source_system` / `source_record_id` / `input_context_ref` | 四跳全部可查，`input_context_ref == ctx.package_id` ✅ |
+| 反查链 `decision → evidence → source → context` | 逐跳断言 `decision_id` / `source_system` / `source_record_id` / `input_context_ref` | 前三跳已证；**第四跳（→ 原始 Context）见 §2.2，我承认没验证到位** ⚠️ |
 | Evidence 按 decision 隔离 | 两个 decision 各写一次，互相不可见 | 1 / 2 行，互不串台 ✅ |
 | 无 passed 条件 | 只传 failed 条件 | 返回 `[]`，**库内 0 行**，且不报错 ✅ |
 | `evidence_id` 形状 | 逐行断言前缀 | `ev_` ✅ |
@@ -83,6 +84,30 @@ evidence_records 列数 = 12
 | 实体缺 `src` provenance | `pytest.raises(ValueError, match="provenance")` |
 
 **7 passed**（4 正向 + 3 负向）。这 3 个 `raises` 通过，即证明那三处 guard 确实会拒绝写入。
+
+### 2.2 ⚠️ 一处我没验证到位的地方：§10.1 的**第四跳**（自查发现，主动上报）
+
+规格 §10.1 的判据是"**链路每一跳可查**"，链路是：
+
+```
+decision → evidence → source → input_context_ref → 原始 context package
+  ①            ②          ③              ④ ← 这一跳
+```
+
+**我的测试只断言了 `evidence["input_context_ref"] == ctx.package_id`。**
+那证明的是"这个值被正确持久化并读回"，**不是"从它真的能查回原始 Context"** ——
+我把自己传进去的值当成了验证对象，这属于**自证**。
+
+随后核实的事实（`assembly.py:142` + `information_schema`）：
+
+- `package_id = f"ctx_{request_id.hex[:24]}"` —— 它是**从 `request_id` 派生**的；
+- `context_requests` 表**没有 `package_id` 列**（列为 `request_id, user_ref, intent, spec_version,
+  root_entities, as_of, counts, latency_ms, llm_model, status, created_at, org_id`）；
+- 所以 `input_context_ref` **能**推导回 `request_id`（前 24 位 hex 前缀匹配），
+  但那是**前缀匹配而非等值 join**，且**没有任何代码或测试真的走过这一跳**。
+
+**我没有自行决定怎么补**，因为它涉及规格字段集：给 `evidence_records` 加 `request_id`
+能让这一跳变成等值 join，但会偏离 §7 的字段清单。**列为待裁定的开放项**（见 `S2_REVIEW_BRIEF.md` §4 第 2 处）。
 
 ---
 
