@@ -70,7 +70,7 @@ FastAPI  /demo/*  ←── 新增应用层 src/ece/demo/
    │ 调用（不复制实现）
 六步闭环 ← 泛化: intent / rule / subject / decision_key 全部由 pack 声明
    │
-Domain Packs: procurement ✅ · knowledge ✅(043R) · compliance ⬜(044)
+Domain Packs: procurement ✅ · knowledge ✅(043R) · compliance ✅(044)
    │
 PostgreSQL（合成 fixture，每域可独立重置）
 ```
@@ -108,7 +108,7 @@ PostgreSQL（合成 fixture，每域可独立重置）
 | **cut-043R2** | Codex R6 HOLD 返工：PRD 收敛 + 测试 anchor 锚定 + permission 反差保留 | PRD §5/§9 更新、tests/conftest.py 固化 anchor、smoke 4 项、报告口径核对 *(✅ R6-B1..B4 闭合；后续 R7/R8 cycle 在其基础上派生)* |
 | **cut-043R3** | Codex R7 HOLD 返工：anchor 强制覆盖 + 非法 anchor 422 + PRD 结构/轨迹校正 | conftest 直接赋值、R7-B1/B2 binding test、PRD §8 列对齐、§11 轨迹校正 *(✅ R7-B1..B4 闭合 + R8-B1 进一步收紧)* |
 | **cut-043R4** | Codex R8 HOLD 返工：strict YYYY-MM-DD anchor (canonical round-trip) + closure 报告口径收敛 | `api.py` canonical round-trip + 5 个 binding test (4 parametrize + 1 control); closure 用单一权威 diff stat + 测量时间点注 *(✅ R8-B1 + R8-B2 闭合)* |
-| **cut-044** | 企业合规 pack + 视图 B 架构解释 | scenarios/compliance.yaml、证据归集规则、架构解释内容页 |
+| **cut-044** | 企业合规 pack + 视图 B 架构解释 + 视图 C live | scenarios/compliance.yaml、R-COMP-AUDIT 规则（evidence_count + system_coverage）、9 REQUIRES_SYSTEM 关系、视图 B 五区块（kernel 视角）、视图 C 三域徽章 + cut-045 时间线、视图 A 合规分支 *(✅ R0 PASS; 累计 512 passed; 详见 reports/cut-044-report.md)* |
 | **cut-045** | 视图 C 蓝图 + 私有化一键包 + 整体验收 | 蓝图页（状态徽章）、私有化一键包（API+DB docker compose + SPA nginx 反代）、DoD 全验 |
 
 ## 9. DoD（整体验收，cut-045 后）
@@ -119,7 +119,7 @@ PostgreSQL（合成 fixture，每域可独立重置）
   - **API + DB 阶段**：`docker compose up` 一键起 API + PostgreSQL，断网可演示。
   - **SPA 阶段**：SPA 由用户自有服务器托管（nginx 反代 `/api/` → `http://<api-host>:8765`），详见 [`DEPLOY_USER_PROXY.md`](./DEPLOY_USER_PROXY.md)。SPA 与 API 同源部署，规避 CORS preflight。
   - 推力 = 访谈-001 客户本地化部署约束（已 supersede 早期"单 `docker compose up` 起全栈"方案）。
-- `make test` 全绿（cut-043R4 实跑 `494 passed, 5 skipped, 3 deselected`，含 31 KM tests = 19 boundary [5 truth-table + 3 422 zero-write + 4 R5 binding + 2 R7 binding + 5 R8 binding] + 2 KM discovery + 10 KM unit），ruff / mypy / lint-imports 绿。
+- `make test` 全绿（cut-044 R0 实跑 `512 passed, 5 skipped, 3 deselected`，含 18 compliance tests = 8 boundary [4 truth-table + 4 422 zero-write] + 2 compliance discovery + 8 compliance unit），ruff / mypy 绿；cut-044 mutation runner 3/3 anchors RED→GREEN，same-origin smoke 4/4 PASS。
 - `ECE_SERVER_TODAY_ANCHOR=2026-09-22` 在测试 conftest **强制覆盖**（cut-043R3 R7-B1：直接赋值，非 setdefault；外部 env 无法覆盖）；anchor 必须严格 `YYYY-MM-DD`（cut-043R4 R8-B1：canonical round-trip `parsed.isoformat() == raw_anchor`；basic `20260922` / week-date `2026-W38-2` / datetime / slash 形式均返回 422）。
 - 业务语言检查表通过；权限反差演示三域齐备。
 - quote_count 边界一致性：DB / Context / evidence / reason 四方一致（cut-042R3 R3-B1 黑盒覆盖 -1/0/1/2/3/4/999）。
@@ -157,6 +157,7 @@ PostgreSQL（合成 fixture，每域可独立重置）
 | 2026-09-22 | **cut-043R6** | Codex R10 HOLD 返工（docs-only）：(1) **§8 新增 cut-043R4 行**（cut-043R4 closure 声称做了但实际没做；R6 实际执行 R10-B1） (2) **§8 cut-043R2 状态注** 从"⏳ R6 复审中"更新为"✅ R6-B1..B4 闭合；后续 R7/R8 cycle 在其基础上派生" (3) **§11 新增 cut-043R5 trail 行**（cut-043R5 closure 声称做了但实际没做；R6 实际执行 R10-B3） (4) R10 累计 tracked diff 与 cut-043R5 终态一致 (`+861/-221`), 零业务代码改动 |
 | 2026-09-22 | **cut-043R7** | Codex R11 HOLD 返工（docs-only）：(1) **§11 新增 cut-043R6 trail row**（cut-043R6 closure 声称做了但实际没做；R7 实际执行 R11-B1） (2) **§11 cut-043R4 归因校正注**："已由 cut-043R6 收口"→"已由 cut-043R7 收口"（R6 只改了 §8，§11 归因校正本身由 R7 执行） (3) **cut-043R6 closure §1 R10-B2 false claim 移除**：删除"同步更新 cut-043R5 closure §5.1" bullet，替换为"(注: 已存在, 本刀无需改动)" (4) R11 累计 tracked diff 与 cut-043R6 终态一致 (`+861/-221`), 零业务代码改动 |
 | 2026-09-22 | **cut-043R8** | Codex R12 HOLD 返工（docs-only）：(1) **§11 新增 cut-043R7 trail row**（R7 曾漏留痕；R8 实际执行 R12-B1） (2) **§11 cut-043R4 归因注** 从"已由 cut-043R6 收口"修正为"已由 cut-043R7 收口"（R12-B2） (3) 修正 R7 closure "校truth" 和 R6 closure 两处 "Coex"（R12-B3） (4) R12 累计 ece tracked diff 保持 `+861/-221`，零业务代码改动 |
+| 2026-09-22 | **cut-044** | Codex R0 PASS: 第三域 compliance pack (R-COMP-AUDIT + `evidence_package_sufficient` / `gap_list` English constants + gap_list zero-evidence allowlist per R5-B2 + inverted registration per R5-B3 + route_root_via_params per R5-B4) + 视图 B kernel 架构内容页 (5 区块: 整体架构 / 六层职责 / 权限模型 / 确定性决策 / 域包隔离) + 视图 C live (三域徽章 + cut-042..cut-045 时间线) + 视图 A compliance payload 分支. 累计 512 passed (= 494 baseline + 18 compliance tests = 8 boundary + 2 discovery + 8 unit); 3/3 mutation anchors RED→GREEN; 4/4 same-origin smoke PASS. **PRD §9 DoD 三视图 + 三域 主体闭合**, 仅余 cut-045 收口 (蓝图诚实状态徽章 + 私有化部署包 + 整体验收). 详见 reports/cut-044-report.md. |
 
 **变更验证**:
 ```bash
