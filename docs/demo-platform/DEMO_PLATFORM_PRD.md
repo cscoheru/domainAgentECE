@@ -41,7 +41,7 @@
 
 - **主用户**: 创始人在客户现场或录屏时驱动演示。
 - **次用户**: 客户技术人员在私有化环境里自助浏览（数据不出域）。
-- 硬约束: **离线可运行**——前端零 CDN 零 build，单 `docker compose up` 起全栈。
+- 硬约束: **两阶段部署**（cut-042R2 / cut-042R3 修订，supersedes 旧版"单 `docker compose up` 起全栈"）：API + DB 阶段 `docker compose up` 离线可演示；SPA 阶段由客户自有 nginx 反代 `/api/`，详见 [`DEPLOY_USER_PROXY.md`](./DEPLOY_USER_PROXY.md)。
 
 ## 4. 产品形态（信息架构）
 
@@ -70,7 +70,7 @@ FastAPI  /demo/*  ←── 新增应用层 src/ece/demo/
    │ 调用（不复制实现）
 六步闭环 ← 泛化: intent / rule / subject / decision_key 全部由 pack 声明
    │
-Domain Packs: procurement ✅ · knowledge ⬜(043) · compliance ⬜(044)
+Domain Packs: procurement ✅ · knowledge ✅(043R) · compliance ⬜(044)
    │
 PostgreSQL（合成 fixture，每域可独立重置）
 ```
@@ -104,20 +104,25 @@ PostgreSQL（合成 fixture，每域可独立重置）
 | 刀 | 内容 | 关键产物 |
 |---|---|---|
 | **cut-042** | 底座泛化 + `/demo/*` API + UI 骨架（采购域 live 跑通） | 泛化 pipeline、demo 应用层、SPA 骨架、API 契约测试 |
-| **cut-043** | 知识管理 pack + 视图 A 多域切换 | scenarios/knowledge.yaml、KM 规则、seeder、UI 域切换 |
+| **cut-043** | 知识管理 pack + 视图 A 多域切换 | scenarios/knowledge.yaml、KM 规则、seeder、UI 域切换 *(✅ 闭合 043R)* |
+| **cut-043R2** | Codex R6 HOLD 返工：PRD 收敛 + 测试 anchor 锚定 + permission 反差保留 | PRD §5/§9 更新、tests/conftest.py 固化 anchor、smoke 4 项、报告口径核对 *(✅ R6-B1..B4 闭合；后续 R7/R8 cycle 在其基础上派生)* |
+| **cut-043R3** | Codex R7 HOLD 返工：anchor 强制覆盖 + 非法 anchor 422 + PRD 结构/轨迹校正 | conftest 直接赋值、R7-B1/B2 binding test、PRD §8 列对齐、§11 轨迹校正 *(✅ R7-B1..B4 闭合 + R8-B1 进一步收紧)* |
+| **cut-043R4** | Codex R8 HOLD 返工：strict YYYY-MM-DD anchor (canonical round-trip) + closure 报告口径收敛 | `api.py` canonical round-trip + 5 个 binding test (4 parametrize + 1 control); closure 用单一权威 diff stat + 测量时间点注 *(✅ R8-B1 + R8-B2 闭合)* |
 | **cut-044** | 企业合规 pack + 视图 B 架构解释 | scenarios/compliance.yaml、证据归集规则、架构解释内容页 |
-| **cut-045** | 视图 C 蓝图 + 私有化一键包 + 整体验收 | 蓝图页（状态徽章）、docker compose 单命令、DoD 全验 |
+| **cut-045** | 视图 C 蓝图 + 私有化一键包 + 整体验收 | 蓝图页（状态徽章）、私有化一键包（API+DB docker compose + SPA nginx 反代）、DoD 全验 |
 
 ## 9. DoD（整体验收，cut-045 后）
 
 - 三域各 ≥1 个可运行场景，参数修改后实时重新生成并真实跑通。
 - 三视图完整，蓝图徽章与实际代码状态一致（审验时抽查）。
-- **两阶段部署**（cut-042 修订）：
+- **两阶段部署**（cut-042R3 终版）：
   - **API + DB 阶段**：`docker compose up` 一键起 API + PostgreSQL，断网可演示。
   - **SPA 阶段**：SPA 由用户自有服务器托管（nginx 反代 `/api/` → `http://<api-host>:8765`），详见 [`DEPLOY_USER_PROXY.md`](./DEPLOY_USER_PROXY.md)。SPA 与 API 同源部署，规避 CORS preflight。
-  - 原 PRD §7 单 `docker compose up` 全栈方案已被访谈-001 客户本地化部署约束推翻（记录于 `DEPLOY_USER_PROXY.md`）。
-- `make test` 全绿（≥421 基线 + 新增），ruff / mypy / lint-imports 绿。
+  - 推力 = 访谈-001 客户本地化部署约束（已 supersede 早期"单 `docker compose up` 起全栈"方案）。
+- `make test` 全绿（cut-043R4 实跑 `494 passed, 5 skipped, 3 deselected`，含 31 KM tests = 19 boundary [5 truth-table + 3 422 zero-write + 4 R5 binding + 2 R7 binding + 5 R8 binding] + 2 KM discovery + 10 KM unit），ruff / mypy / lint-imports 绿。
+- `ECE_SERVER_TODAY_ANCHOR=2026-09-22` 在测试 conftest **强制覆盖**（cut-043R3 R7-B1：直接赋值，非 setdefault；外部 env 无法覆盖）；anchor 必须严格 `YYYY-MM-DD`（cut-043R4 R8-B1：canonical round-trip `parsed.isoformat() == raw_anchor`；basic `20260922` / week-date `2026-W38-2` / datetime / slash 形式均返回 422）。
 - 业务语言检查表通过；权限反差演示三域齐备。
+- quote_count 边界一致性：DB / Context / evidence / reason 四方一致（cut-042R3 R3-B1 黑盒覆盖 -1/0/1/2/3/4/999）。
 
 ## 10. 主要风险与对策
 
@@ -128,6 +133,37 @@ PostgreSQL（合成 fixture，每域可独立重置）
 | 范围膨胀（连接器/SaaS 诱惑） | 每刀范围锁 + 非目标清单；Future 只记录不实现 |
 | 三域规则变玩具 | 每域规则必须来自真实访谈/政策语义（采购=interview-001；KM/合规=研究线 App1/App3 假设） |
 | 跨域部署与 CORS（cut-042 修订风险） | SPA 与 API 同源部署 + nginx 反代；CORS env var 留待 cut-045 引入 |
+| quote_count 边界不一致 (cut-042R3 R3-B1) | loop step [3c-refresh] 无条件从 re-read 刷新 effective_params；API 422 拒绝负数；边界矩阵黑盒验证 |
+
+---
+
+## 11. 文档 supersession 轨迹（不是新增契约 — 仅为历史可追溯）
+
+**纪律**: 本节只记录"何时、因何、由谁"对正文的修改；不引入新规则、新 DoD、新边界。
+读者看正文第 1–10 节即可获取全部契约；本节是 git log 的文档镜像。
+
+| 日期 | 刀 | 修订要点 |
+|------|----|---------|
+| 2026-09-22 | cut-042 | 首次签发本 PRD |
+| 2026-09-22 | cut-042R | F1–F8 修正；同源 smoke 与两阶段部署作为范围调整记录 |
+| 2026-09-22 | cut-042R2 | loop 重排 (R2-F1) + pack-owned materializer (R2-F2) + 同源脚本 + canonical symlinks；§11 修订附录（旧版） |
+| 2026-09-22 | **cut-042R3** | (1) §3 硬约束改写为两阶段部署，supersede 旧"单 docker compose up 起全栈"（Codex R3-B2 阻断）(2) §8 cut-045 行的 "docker compose 单命令" 改为 "私有化一键包" (3) §9 DoD 第 3 条精简, 删掉"原 PRD §7"残留引用, 改为"已 supersede 早期方案" (4) §9 计数更新为 R3 实跑 `463 passed, 5 skipped, 3 deselected` (5) §9 加 quote_count 边界一致性条款 (6) §10 加 R3-B1 风险对策 (7) §11 自身从"修订附录"改为 supersession 轨迹（Codex R3-B2: 附录不能替代原文） |
+| 2026-09-22 | **cut-043** | (1) §5 域行 `knowledge ⬜(043)` 仍为"在途"（cut-043 当刀未闭合，待 R5 复审）(2) §9 baseline 沿用 R3 实跑计数 |
+| 2026-09-22 | **cut-043R** | Codex R5 HOLD 返工通过：(1) 修复 R5-B1..B5 五项（today server-owned、needs_valid_policy 零证据 allowlist、inverted resolver 零 pack import、root_source_id 422 拒收、报告口径收敛）(2) 新增 `reports/cut-043R/closure.md`；闭锁报告 §6 Gate 写"PRD §5/§9 更新待 cut-044"——本刀未做 PRD 改动（与代码变更同范围锁） |
+| 2026-09-22 | **cut-043R2** | Codex R6 HOLD 返工：(1) §5 域行 `knowledge ⬜(043)` → `knowledge ✅(043R)` (2) §9 测试基线更新为 `487 passed, 5 skipped, 3 deselected` (cut-043R2 实跑 = cut-043R 486 + R6-B3 = +1 truth-table case；含 14 KM tests = 12 boundary + 2 discovery) (3) §8 cut-043 行追加状态注 (4) §11 收编 cut-043/043R/043R2 历史轨迹 |
+| 2026-09-22 | **cut-043R3** | Codex R7 HOLD 返工：(1) §8 cut-043/cut-043R2 行修复 4 列问题，恢复 3 列表格结构（追加 cut-043R3 行）(2) §11 轨迹校正：cut-043R 误把 PRD 更新归到自己名下，实际是 cut-043R2 R6-B1 修的；本刀 §11 重新归因 (3) §9 测试基线更新为 `489 passed` (cut-043R3 实跑 = cut-043R2 487 + R7-B1 + R7-B2 = +2 binding tests；含 16 KM tests = 14 boundary + 2 discovery) (4) §9 KM 测试拆分校正为实际结构（cut-043R2 误写"22 KM boundary + 4 binding + 1 permission"） |
+| 2026-09-22 | **cut-043R4** | Codex R8 HOLD 返工：(1) §9 测试基线更新为 `494 passed` (cut-043R4 实跑 = cut-043R3 489 + R8-B1 5 binding tests = +5; 含 31 KM tests = 19 boundary + 2 discovery + 10 unit — cut-043R3 closure 漏算 `tests/unit/test_knowledge_rule_and_decision.py` 的 10 个 unit test) (2) §9 anchor 校验条款升级为严格 `YYYY-MM-DD` (cut-043R4 R8-B1 canonical round-trip) (3) **注意**: cut-043R4 closure 曾声称"§8 新增 cut-043R4 行"——但实际该动作发生在 cut-043R6 R10-B1; cut-043R4 closure 这一笔归因错, 已由 cut-043R7 收口 |
+| 2026-09-22 | **cut-043R5** | Codex R9 HOLD 返工（docs-only）：(1) §9 baseline 489 → 494 (Codex R9 校正 cut-043R3 漏算 unit test, 实际 KM = 19 boundary + 2 discovery + 10 unit = 31); §8 cut-043R3 行追加"✅ R7-B1..B4 闭合 + R8-B1 进一步收紧"状态注 (2) cut-043R4 closure Header/§2.1/§2.2 文件口径统一为 1+5=6; §3 verification 草稿注释清理 (3) R9 累计 tracked diff 与 cut-043R4 终态一致 (`+861/-221`), 零业务代码改动 |
+| 2026-09-22 | **cut-043R6** | Codex R10 HOLD 返工（docs-only）：(1) **§8 新增 cut-043R4 行**（cut-043R4 closure 声称做了但实际没做；R6 实际执行 R10-B1） (2) **§8 cut-043R2 状态注** 从"⏳ R6 复审中"更新为"✅ R6-B1..B4 闭合；后续 R7/R8 cycle 在其基础上派生" (3) **§11 新增 cut-043R5 trail 行**（cut-043R5 closure 声称做了但实际没做；R6 实际执行 R10-B3） (4) R10 累计 tracked diff 与 cut-043R5 终态一致 (`+861/-221`), 零业务代码改动 |
+| 2026-09-22 | **cut-043R7** | Codex R11 HOLD 返工（docs-only）：(1) **§11 新增 cut-043R6 trail row**（cut-043R6 closure 声称做了但实际没做；R7 实际执行 R11-B1） (2) **§11 cut-043R4 归因校正注**："已由 cut-043R6 收口"→"已由 cut-043R7 收口"（R6 只改了 §8，§11 归因校正本身由 R7 执行） (3) **cut-043R6 closure §1 R10-B2 false claim 移除**：删除"同步更新 cut-043R5 closure §5.1" bullet，替换为"(注: 已存在, 本刀无需改动)" (4) R11 累计 tracked diff 与 cut-043R6 终态一致 (`+861/-221`), 零业务代码改动 |
+| 2026-09-22 | **cut-043R8** | Codex R12 HOLD 返工（docs-only）：(1) **§11 新增 cut-043R7 trail row**（R7 曾漏留痕；R8 实际执行 R12-B1） (2) **§11 cut-043R4 归因注** 从"已由 cut-043R6 收口"修正为"已由 cut-043R7 收口"（R12-B2） (3) 修正 R7 closure "校truth" 和 R6 closure 两处 "Coex"（R12-B3） (4) R12 累计 ece tracked diff 保持 `+861/-221`，零业务代码改动 |
+
+**变更验证**:
+```bash
+grep -nE "单 `?docker compose up`? 起全栈|docker compose 单命令|原 PRD §7" \
+  docs/demo-platform/DEMO_PLATFORM_PRD.md
+# 期望: 0 hits
+```
 
 ---
 
