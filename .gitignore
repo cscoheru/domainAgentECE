@@ -1,5 +1,7 @@
 # macOS
 .DS_Store
+# macOS AppleDouble（Mac 侧同步残留；会污染 status 并破坏读取文件的测试）
+._*
 
 # editor local prefs
 .vscode/
