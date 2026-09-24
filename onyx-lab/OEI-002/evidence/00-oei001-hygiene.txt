@@ -1,0 +1,35 @@
+# 00-oei001-hygiene.txt
+# purpose: OEI-002 步骤 0.3 — value-level credential scan against OEI-001 cc-produced artifacts
+# scan_time: 2026-09-23T22:25:54+08:00
+# scan_host: lilith
+# scope: ../OEI-001/evidence/ + ../OEI-001/workspace/ + ../OEI-001/REPORT.md
+# pattern set: P1-P6 (see R4 v3 at ../OEI-001/evidence/09b-cc-output-compliance.txt)
+
+# ----- P1 -----
+$ grep -rEn 'connect\.sid=[A-Za-z0-9%._-]{10,}|fastapiusersauth=[A-Za-z0-9%._-]{10,}' ../OEI-001/evidence/ ../OEI-001/workspace/ ../OEI-001/REPORT.md
+(no match)
+
+# ----- P2 -----
+$ grep -rEn '\beyJ[A-Za-z0-9_-]{20,}\.[A-Za-z0-9_-]+' ../OEI-001/evidence/ ../OEI-001/workspace/ ../OEI-001/REPORT.md
+(no match)
+
+# ----- P3 -----
+$ grep -rEn 'password=[A-Za-z0-9_./-]{3,}' ../OEI-001/evidence/ ../OEI-001/workspace/ ../OEI-001/REPORT.md
+(no match)
+
+# ----- P4 -----
+$ grep -rEn 'Authorization:[[:space:]]+Bearer[[:space:]]+[A-Za-z0-9._-]+' ../OEI-001/evidence/ ../OEI-001/workspace/ ../OEI-001/REPORT.md
+(no match)
+
+# ----- P5 -----
+$ grep -rEn 'token=[A-Za-z0-9_./-]{8,}' ../OEI-001/evidence/ ../OEI-001/workspace/ ../OEI-001/REPORT.md
+(no match)
+
+# ----- P6 -----
+$ grep -rEn 'api_key=[A-Za-z0-9_./-]{4,}' ../OEI-001/evidence/ ../OEI-001/workspace/ ../OEI-001/REPORT.md
+(no match)
+
+# ===== summary =====
+scan_time: 2026-09-23T22:25:55+08:00
+TOTAL: 0
+STATUS: PASS

@@ -1,0 +1,8 @@
+# 本地密钥与会话，禁止入库
+.secrets/
+**/.secrets/
+
+# agent 运行残留
+**/DONE
+*.log
+__pycache__/

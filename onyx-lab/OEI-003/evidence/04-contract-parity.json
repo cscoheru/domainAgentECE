@@ -1,0 +1,46 @@
+{
+  "_note": "stripped onyx_runtime_values / mock_runtime_values from final evidence to keep file scope tight; full output above (see codex审验 history). Runtime value samples only.",
+  "test_query": "问题树怎么用",
+  "engine_adapters_under_test": ["OnyxContentEngineAdapter", "MockContentEngineAdapter"],
+  "engine_port_protocol_conformance": {
+    "OnyxContentEngineAdapter": true,
+    "MockContentEngineAdapter": true
+  },
+  "model_validate_round_trip": {
+    "EngineStatus_onyx_rebuilt_ok": true,
+    "EngineStatus_mock_rebuilt_ok": true,
+    "EngineProject_onyx_n": 1,
+    "EngineProject_mock_n": 2,
+    "EngineDocument_onyx_n": 1,
+    "EngineDocument_mock_n": 3
+  },
+  "pydantic_schema_signatures": {
+    "EngineStatus": {
+      "engine_name": "str",
+      "engine_version": "str",
+      "tier": "str",
+      "gpu_enabled": "bool",
+      "provider_name": "Optional[str]",
+      "default_model": "Optional[str]",
+      "project_count": "int",
+      "file_count": "int",
+      "last_search_latency_seconds": "Optional[float]",
+      "raw": "dict[str, Any]"
+    },
+    "EngineProject": {
+      "engine_project_id": "int",
+      "name": "str",
+      "raw": "dict[str, Any]"
+    },
+    "EngineDocument": {
+      "engine_doc_id": "str",
+      "title": "str",
+      "snippet": "str",
+      "source_type": "str",
+      "updated_at": "Optional[datetime]",
+      "raw": "dict[str, Any]"
+    }
+  },
+  "field_signature_per_model_class_is_shared": true,
+  "conclusion": "PASS: both adapters (real Onyx + offline Mock) conform to ContentEnginePort; all Pydantic schemas (EngineStatus / EngineProject / EngineDocument) are SHARED definitions with IDENTICAL field signatures; both adapter outputs round-trip cleanly through model_validate; runtime value types differ only where Mock uses NoneType placeholders (default_model=None, provider_name=None, updated_at=None) — these are valid per the schema, just not populated by Mock. The FIXED contract (port.py:EngineStatus/EngineProject/EngineDocument) is the single source of truth."
+}

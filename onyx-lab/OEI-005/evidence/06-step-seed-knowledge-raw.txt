@@ -1,0 +1,11 @@
+CUT-043 KNOWLEDGE MANAGEMENT DEMO FIXTURE — SYNTHETIC — NOT CUSTOMER-VALIDATED
+------------------------------------------------------------------------
+source_system        : km:v0-knowledge-fixture
+removed (prior rows) : {'relationships': 0, 'entity_aliases': 0, 'entities': 0, 'acl_entries': 0}
+entities created     : 8
+relationships created: 4
+policy display_id    : KM-POL-001  (resolved at runtime)
+today anchor         : 2026-09-22
+------------------------------------------------------------------------
+SELF-CHECK PASSED — all 8 fixture entities present, 2 REQUIRES_ROLE + 2 HAS_ROLE,
+                     KM-POL-001 valid+requires_hr, DENY acl on km-eve.

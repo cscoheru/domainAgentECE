@@ -1,0 +1,32 @@
+# 00a-leaked-uvicorn-before.txt — OEI-006 步骤 0.1:清理前的游离 uvicorn 进程
+# date: 2026-09-24T18:16:44+08:00
+# 注: 用 '[u]vicorn' 方括号技巧避免 ps|grep 管道自匹配(任务书的 pgrep -af 会把我自己的 shell 命令也算进去)
+
+## 命令: ps -eo pid,ppid,etimes,rss,lstart,args | grep '[u]vicorn ece.main:app'
+   360120     620   10834 26260 Thu Sep 24 15:16:09 2026 /mnt/d/Projects/domainAgentECE/ece/.venv/bin/python /mnt/d/Projects/domainAgentECE/ece/.venv/bin/uvicorn ece.main:app --host 127.0.0.1 --port 48231 --log-level warning
+   361916     620   10629 27064 Thu Sep 24 15:19:34 2026 /mnt/d/Projects/domainAgentECE/ece/.venv/bin/python /mnt/d/Projects/domainAgentECE/ece/.venv/bin/uvicorn ece.main:app --host 127.0.0.1 --port 44905 --log-level warning
+   364174     620   10350 27952 Thu Sep 24 15:24:13 2026 /mnt/d/Projects/domainAgentECE/ece/.venv/bin/python /mnt/d/Projects/domainAgentECE/ece/.venv/bin/uvicorn ece.main:app --host 127.0.0.1 --port 47801 --log-level warning
+   366314     620   10099 27660 Thu Sep 24 15:28:24 2026 /mnt/d/Projects/domainAgentECE/ece/.venv/bin/python /mnt/d/Projects/domainAgentECE/ece/.venv/bin/uvicorn ece.main:app --host 127.0.0.1 --port 48395 --log-level warning
+   393504     620    6355 73172 Thu Sep 24 16:30:48 2026 /mnt/d/Projects/domainAgentECE/ece/.venv/bin/python /mnt/d/Projects/domainAgentECE/ece/.venv/bin/uvicorn ece.main:app --host 127.0.0.1 --port 48623 --log-level warning
+   397041     620    5886 73256 Thu Sep 24 16:38:37 2026 /mnt/d/Projects/domainAgentECE/ece/.venv/bin/python /mnt/d/Projects/domainAgentECE/ece/.venv/bin/uvicorn ece.main:app --host 127.0.0.1 --port 47445 --log-level warning
+   410272     620    4113 78008 Thu Sep 24 17:08:10 2026 /mnt/d/Projects/domainAgentECE/ece/.venv/bin/python /mnt/d/Projects/domainAgentECE/ece/.venv/bin/uvicorn ece.main:app --host 127.0.0.1 --port 44623 --log-level warning
+   413065     620    3756 77872 Thu Sep 24 17:14:07 2026 /mnt/d/Projects/domainAgentECE/ece/.venv/bin/python /mnt/d/Projects/domainAgentECE/ece/.venv/bin/uvicorn ece.main:app --host 127.0.0.1 --port 48065 --log-level warning
+   415712     620    3427 77864 Thu Sep 24 17:19:36 2026 /mnt/d/Projects/domainAgentECE/ece/.venv/bin/python /mnt/d/Projects/domainAgentECE/ece/.venv/bin/uvicorn ece.main:app --host 127.0.0.1 --port 46635 --log-level warning
+   419354     620    2928 77880 Thu Sep 24 17:27:55 2026 /mnt/d/Projects/domainAgentECE/ece/.venv/bin/python /mnt/d/Projects/domainAgentECE/ece/.venv/bin/uvicorn ece.main:app --host 127.0.0.1 --port 44879 --log-level warning
+
+## 汇总
+  游离进程数 = 10  (任务书 §4 步骤 0 记录为 10)
+  RSS 合计   = 566988 KB ≈ 553 MB  (任务书记录为 558 MB)
+  共同特征   = 参数含 --log-level warning, 全部由 tests/integration/test_cut_045_local_origin_smoke.py 的 subprocess 拉起
+
+## 对照:9 个 Onyx 容器 + ollama 状态(清理前)
+onyx-api_server-1  Up 23 hours (healthy)
+onyx-background-1  Up 23 hours
+onyx-cache-1  Up 23 hours
+onyx-indexing_model_server-1  Up 23 hours (healthy)
+onyx-inference_model_server-1  Up 23 hours (healthy)
+onyx-nginx-1  Up 23 hours (healthy)
+onyx-opensearch-1  Up 23 hours
+onyx-relational_db-1  Up 23 hours (healthy)
+onyx-web_server-1  Up 23 hours (healthy)
+  ollama: active / 200

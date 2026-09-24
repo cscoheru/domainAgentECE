@@ -1,0 +1,60 @@
+{
+  "engine_status_fields": [
+    "default_model",
+    "engine_name",
+    "engine_version",
+    "file_count",
+    "gpu_enabled",
+    "last_search_latency_seconds",
+    "project_count",
+    "provider_name",
+    "raw",
+    "tier"
+  ],
+  "engine_status_types": {
+    "engine_name": "str",
+    "engine_version": "str",
+    "tier": "str",
+    "gpu_enabled": "bool",
+    "provider_name": "str",
+    "default_model": "str",
+    "project_count": "int",
+    "file_count": "int",
+    "last_search_latency_seconds": "NoneType",
+    "raw": "dict"
+  },
+  "list_projects_count": 1,
+  "project_summary": [
+    {
+      "engine_project_id": 1,
+      "name": "OEI-001 Consulting Lab",
+      "raw_keys": [
+        "chat_sessions",
+        "created_at",
+        "description",
+        "id",
+        "instructions",
+        "name",
+        "user_id"
+      ]
+    }
+  ],
+  "search_result_count": 1,
+  "doc_summary": [
+    {
+      "engine_doc_id": "1",
+      "title": "methodology-framework.md",
+      "source_type": "user_file",
+      "snippet_chars": 801,
+      "has_updated_at": true,
+      "raw_keys": [
+        "citation_id",
+        "content",
+        "link",
+        "source_type",
+        "title",
+        "updated_at"
+      ]
+    }
+  ]
+}

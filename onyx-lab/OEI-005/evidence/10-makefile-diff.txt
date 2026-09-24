@@ -1,0 +1,151 @@
+# 10-makefile-diff.txt — OEI-005 步骤 4 交付物 diff
+# date: 2026-09-24T17:55:05+08:00   HEAD=dd58297
+
+## git show --stat dd58297
+    Co-Authored-By: Claude Code <noreply@anthropic.com>
+
+ Makefile  | 35 ++++++++++++++++++++++++++++++++++-
+ README.md | 38 ++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 72 insertions(+), 1 deletion(-)
+
+## 完整 diff:Makefile
+commit dd58297c3ce0ede3cf72560550b52c051a5471b3
+Author: cscoheru <klyliae@gmail.com>
+Date:   Thu Sep 24 17:53:02 2026 +0800
+
+    chore(OEI-005): make integration test fixture prerequisites discoverable
+    
+    Add `seed-fixtures` (seeds temporal/knowledge/compliance fixtures) and
+    `test-integration` (full local prerequisite chain) Makefile targets, and
+    document the complete chain in README.md.
+    
+    Root cause of the 27 integration test failures: the fixture seeders only
+    existed in deploy/ docs, never in the Makefile, so a local run following
+    the documented prerequisites always missed them. Baseline reproduces at
+    48 failed; after the seeder chain it reaches 1 failed (a deployment smoke
+    test requiring nginx + built SPA, out of scope for unit/integration).
+    
+    No product code or test changed:
+      git diff --stat src/ece/ tests/  ->  empty
+    
+    Co-Authored-By: Claude Code <noreply@anthropic.com>
+
+diff --git a/Makefile b/Makefile
+index 7470a43..e566567 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1,2 +1,2 @@
+-.PHONY: setup up test eval demo rev help check-api-docs db-upgrade schema-check gen-dataset pull-db
++.PHONY: setup up test eval demo rev help check-api-docs db-upgrade schema-check gen-dataset pull-db seed-fixtures test-integration
+ 
+@@ -15,2 +15,5 @@ help:
+ 	@echo "  make rev              - alembic downgrade by 1"
++	@echo "  ----- OEI-005 (2026-09-24): 完整本地集成测试前置链 -----"
++	@echo "  make seed-fixtures    - 跑 3 个集成 fixture seeder(temporal/knowledge/compliance)"
++	@echo "  make test-integration - 完整集成测试前置(make pull-db + make db-upgrade + make gen-dataset + make seed + make seed-fixtures + pytest)。详见 ece/README.md 测试段。"
+ 
+@@ -88 +91,31 @@ pull-db:
+ 	@echo "Tagged pgvector/pgvector:pg16 → postgres:16-pgvector (compose can now find it locally)"
++
++# OEI-005 (2026-09-24): 集成测试 fixture seeder 集合
++# 这三个 seeder 之前只在 deploy/README.md:84-85 与 deploy/SERVER_DEPLOYMENT_CHECKLIST.md 提到,
++# 仓里集成测试默认跑 `make test` 不会自动跑 → 27 个测试因缺 fixture 失败.
++# 用法(在已 `make db-upgrade` + `make seed` 之后):
++#   make seed-fixtures
++# 等价于:
++#   uv run python scripts/seed_temporal_roles.py
++#   uv run python scripts/seed_knowledge_fixture.py
++#   uv run python scripts/seed_compliance_fixture.py
++# 幂等:再跑一次会删除并重建 fixture 行(seed_*.py 内置 self-check + removed prior rows)。
++seed-fixtures:
++	@echo "Seeding integration test fixtures (temporal / knowledge / compliance)..."
++	uv run python scripts/seed_temporal_roles.py
++	uv run python scripts/seed_knowledge_fixture.py
++	uv run python scripts/seed_compliance_fixture.py
++	@echo "All fixtures seeded. Now `make test` should reach baseline (≤1 known cut_045 deployment-smoke failure)."
++
++# OEI-005 (2026-09-24): 集成测试完整前置链(供 CI / 新开发者用)
++# 等价于:
++#   make pull-db && make db-upgrade && make gen-dataset && make seed && make seed-fixtures && make test
++# DATABASE_URL 须指向可达的 PG(本地 compose 或远程)。在 WSL 上若 bind-mount 因 uid 999
++# 失败,临时 PG 跑法见 deploy/README.md 与本仓 OEI-005 evidence/。
++test-integration:
++	make pull-db
++	make db-upgrade
++	make gen-dataset
++	make seed
++	make seed-fixtures
++	make test
+
+## 完整 diff:README.md
+commit dd58297c3ce0ede3cf72560550b52c051a5471b3
+Author: cscoheru <klyliae@gmail.com>
+Date:   Thu Sep 24 17:53:02 2026 +0800
+
+    chore(OEI-005): make integration test fixture prerequisites discoverable
+    
+    Add `seed-fixtures` (seeds temporal/knowledge/compliance fixtures) and
+    `test-integration` (full local prerequisite chain) Makefile targets, and
+    document the complete chain in README.md.
+    
+    Root cause of the 27 integration test failures: the fixture seeders only
+    existed in deploy/ docs, never in the Makefile, so a local run following
+    the documented prerequisites always missed them. Baseline reproduces at
+    48 failed; after the seeder chain it reaches 1 failed (a deployment smoke
+    test requiring nginx + built SPA, out of scope for unit/integration).
+    
+    No product code or test changed:
+      git diff --stat src/ece/ tests/  ->  empty
+    
+    Co-Authored-By: Claude Code <noreply@anthropic.com>
+
+diff --git a/README.md b/README.md
+index 8a4e46f..6c0b6c7 100644
+--- a/README.md
++++ b/README.md
+@@ -58,2 +58,40 @@ uv run python scripts/ingest_demo_docs.py
+ 
++## 集成测试完整前置链（OEI-005，2026-09-24）
++
++> 本段是 **OEI-005 修复的回归**:此前集成测试（`tests/integration/test_compliance_boundary.py`、`test_knowledge_boundary.py`、`test_three_domain_acceptance.py`、`test_s4_5_temporal.py` 等）默认 `make test` 不会自动跑 fixture seeder，导致 **27 个红灯**（baseline 实际为 **48 failed**，因 `make seed` 也会缓解一部分 entity/relationship 集成）。本次把 3 个 fixture seeder 串成一个 Makefile 目标 + 文档段，让前置链**可发现**。
++
++**完整本地集成测试链**（同一 PG、同一环境、单变量累加）：
++
++```bash
++# 1. 镜像准备（如本机未拉过 pgvector）
++make pull-db
++
++# 2. PG + 迁移
++docker run -d --name ece-pg-tmp -e POSTGRES_USER=ece -e POSTGRES_PASSWORD=ece -e POSTGRES_DB=ece -p 55432:5432 postgres:16-pgvector
++export DATABASE_URL='postgresql+psycopg://ece:ece@127.0.0.1:55432/ece'
++make db-upgrade
++
++# 3. demo dataset + seed（canonical chain）
++make gen-dataset
++make seed
++
++# 4. 集成测试 fixture seeder（OEI-005 新增）
++make seed-fixtures   # = seed_temporal_roles + seed_knowledge_fixture + seed_compliance_fixture
++
++# 5. 跑测试
++make test
++```
++
++**或一行**（适用于 CI）：
++
++```bash
++make test-integration
++```
++
++跑完后**期望**:`passed ≈ 680`、`failed = 1`、`errors = 0`——唯一 failed 是 `test_cut_045_local_origin_smoke.py::test_deployment_smoke_passes_against_local_origin`，属**部署 smoke**（依赖 nginx + 静态 SPA + upstream uvicorn），非产品代码缺陷；详见 `onyx-lab/OEI-005/evidence/09-triage-table.md`。
++
++如果 `make test` 跑出**额外** failed/error，是真正的回归信号，按 OEI-005 §1.2 的三类根因分类排查。
++
++
++
+ 空库上 `make seed` 的产出：
+
+## 未改产品代码/测试证明:git diff --stat src/ece/ tests/ (应为空)
+  [above empty = no diff]
+## 且 HEAD commit 未触及 src/ece/ tests/:
+  (none — commit 只含 Makefile + README.md)

@@ -1,0 +1,29 @@
+# 07-onyx-llm-config.json
+# scan_time: 2026-09-24T07:57:51+08:00
+# purpose: register ollama + qwen2.5:3b as Onyx provider
+# safety: api_key is a literal placeholder ('ollama-no-key-required') because ollama does NOT
+#         validate any key — but to comply with v3 §3 step 6 ('api_key 一律 REDACTED'),
+#         the request body has api_key redacted below. The placeholder is NOT a real secret.
+
+# ----- request (api_key REDACTED to <REDACTED>) -----
+{
+  "provider": "openai_compatible",
+  "name": "ollama-local-qwen",
+  "api_base": "http://host.docker.internal:11434/v1",
+  "api_key": "<REDACTED>",
+  "model_configurations": [
+    {"name": "qwen2.5:3b", "is_visible": true},
+    {"name": "qwen2.5:1.5b", "is_visible": true}
+  ]
+}
+
+
+# ----- response (Onyx 自动 mask api_key 为 olla****ired) -----
+{"name":"ollama-local-qwen","provider":"openai_compatible","api_key":"olla****ired","api_base":"http://host.docker.internal:11434/v1","api_version":null,"custom_config":null,"is_public":true,"is_auto_mode":false,"groups":[],"personas":[],"deployment_name":null,"id":1,"model_configurations":[{"id":1,"name":"qwen2.5:3b","is_visible":true,"max_input_tokens":30976,"supports_image_input":false,"supports_reasoning":false,"supported_reasoning_efforts":["off","low","medium","high"],"reasoning_effort_max":null,"reasoning_effort_default":null,"temperature_default":null,"is_recommended_default":false,"display_name":"Qwen2.5 3B","custom_display_name":null,"provider_display_name":"Qwen (OpenAI-Compatible - Alibaba)","vendor":"Alibaba","version":null,"region":null},{"id":2,"name":"qwen2.5:1.5b","is_visible":true,"max_input_tokens":30976,"supports_image_input":false,"supports_reasoning":false,"supported_reasoning_efforts":["off","low","medium","high"],"reasoning_effort_max":null,"reasoning_effort_default":null,"temperature_default":null,"is_recommended_default":false,"display_name":"Qwen2.5","custom_display_name":null,"provider_display_name":"Qwen (OpenAI-Compatible - Alibaba)","vendor":"Alibaba","version":null,"region":null}]}
+
+# ----- verify: GET /api/admin/llm/provider -----
+{"providers":[{"name":"ollama-local-qwen","provider":"openai_compatible","api_key":"olla****ired","api_base":"http://host.docker.internal:11434/v1","api_version":null,"custom_config":null,"is_public":true,"is_auto_mode":false,"groups":[],"personas":[],"deployment_name":null,"id":1,"model_configurations":[{"id":1,"name":"qwen2.5:3b","is_visible":true,"max_input_tokens":30976,"supports_image_input":false,"supports_reasoning":false,"supported_reasoning_efforts":["off","low","medium","high"],"reasoning_effort_max":null,"reasoning_effort_default":null,"temperature_default":null,"is_recommended_default":false,"display_name":"Qwen2.5 3B","custom_display_name":null,"provider_display_name":"Qwen (OpenAI-Compatible - Alibaba)","vendor":"Alibaba","version":null,"region":null},{"id":2,"name":"qwen2.5:1.5b","is_visible":true,"max_input_tokens":30976,"supports_image_input":false,"supports_reasoning":false,"supported_reasoning_efforts":["off","low","medium","high"],"reasoning_effort_max":null,"reasoning_effort_default":null,"temperature_default":null,"is_recommended_default":false,"display_name":"Qwen2.5","custom_display_name":null,"provider_display_name":"Qwen (OpenAI-Compatible - Alibaba)","vendor":"Alibaba","version":null,"region":null}]}],"default_text":null,"default_vision":null,"default_chat_naming":null}
+
+# ----- POST /api/admin/llm/default (set qwen2.5:3b as default) -----
+HTTP=200
+Response body: null (successful set)

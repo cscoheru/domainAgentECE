@@ -1,0 +1,174 @@
+<!-- /engine/status (no query) -->
+<!-- ECE_CONTENT_ENGINE=mock -->
+<!-- HTTP 200 -->
+<!doctype html><html><head><meta charset='utf-8'><title>ECE · Engine Status</title><style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; margin: 2rem auto; max-width: 920px; color: #1a1a1a; }
+    h1 { border-bottom: 2px solid #333; padding-bottom: 0.3rem; }
+    h2 { margin-top: 2rem; color: #444; }
+    .kv { display: grid; grid-template-columns: 200px 1fr; row-gap: 0.4rem; column-gap: 1rem; padding: 1rem; background: #f7f7f7; border-radius: 6px; }
+    .kv .k { color: #666; font-weight: 600; }
+    .doc { padding: 1rem; border: 1px solid #e0e0e0; border-left: 4px solid #4a90e2; border-radius: 4px; margin-bottom: 0.8rem; background: #fafbfc; }
+    .doc h3 { margin: 0 0 0.4rem 0; font-size: 1.05rem; }
+    .doc .meta { color: #777; font-size: 0.85rem; margin-bottom: 0.6rem; }
+    .doc pre { white-space: pre-wrap; font-family: ui-monospace, "JetBrains Mono", Menlo, monospace; font-size: 0.85rem; background: #fff; padding: 0.6rem; border: 1px solid #eee; border-radius: 4px; }
+    .degraded { background: #fff3cd; border: 1px solid #ffe69c; padding: 0.8rem 1rem; border-radius: 6px; color: #664d03; margin: 1rem 0; }
+    form { margin: 1rem 0; padding: 1rem; background: #eef4fb; border-radius: 6px; }
+    input[type=text] { padding: 0.5rem; width: 60%; font-size: 1rem; border: 1px solid #ccc; border-radius: 4px; }
+    button { padding: 0.5rem 1rem; font-size: 1rem; background: #4a90e2; color: white; border: none; border-radius: 4px; cursor: pointer; }
+    .footer { margin-top: 3rem; color: #888; font-size: 0.8rem; border-top: 1px solid #eee; padding-top: 1rem; }
+    </style></head><body><h1>ECE · Engine Status</h1><p>This page renders engine state and (when given a query) ECE-rendered citations. Built per OEI-003 §4 step 4 — the visible deliverable that addresses Onyx UI's no-citation gap.</p><form method='get' action='/engine/status'><label for='q'>Query (renders ECE citations):</label><br><input type='text' id='q' name='q' placeholder='问题树怎么用' /><button type='submit'>Search</button></form><h2>Engine Snapshot</h2><div class='kv'><div class='k'>engine_name</div><div>mock</div><div class='k'>engine_version</div><div>0.1.0</div><div class='k'>tier</div><div>community</div><div class='k'>gpu_enabled</div><div>False</div><div class='k'>provider_name</div><div>None</div><div class='k'>default_model</div><div>None</div><div class='k'>project_count</div><div>2</div><div class='k'>file_count</div><div>3</div><div class='k'>last_search_latency_seconds</div><div>None</div><div class='k'>raw</div><div>{&#x27;mock&#x27;: True}</div></div><div class='footer'>OEI-003 · ECE engine status page · ECE-rendered citations</div></body></html>
+
+<!-- /engine/status?q=问题树怎么用 -->
+<!-- ECE_CONTENT_ENGINE=mock -->
+<!-- HTTP 200 -->
+<!doctype html><html><head><meta charset='utf-8'><title>ECE · Engine Status</title><style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; margin: 2rem auto; max-width: 920px; color: #1a1a1a; }
+    h1 { border-bottom: 2px solid #333; padding-bottom: 0.3rem; }
+    h2 { margin-top: 2rem; color: #444; }
+    .kv { display: grid; grid-template-columns: 200px 1fr; row-gap: 0.4rem; column-gap: 1rem; padding: 1rem; background: #f7f7f7; border-radius: 6px; }
+    .kv .k { color: #666; font-weight: 600; }
+    .doc { padding: 1rem; border: 1px solid #e0e0e0; border-left: 4px solid #4a90e2; border-radius: 4px; margin-bottom: 0.8rem; background: #fafbfc; }
+    .doc h3 { margin: 0 0 0.4rem 0; font-size: 1.05rem; }
+    .doc .meta { color: #777; font-size: 0.85rem; margin-bottom: 0.6rem; }
+    .doc pre { white-space: pre-wrap; font-family: ui-monospace, "JetBrains Mono", Menlo, monospace; font-size: 0.85rem; background: #fff; padding: 0.6rem; border: 1px solid #eee; border-radius: 4px; }
+    .degraded { background: #fff3cd; border: 1px solid #ffe69c; padding: 0.8rem 1rem; border-radius: 6px; color: #664d03; margin: 1rem 0; }
+    form { margin: 1rem 0; padding: 1rem; background: #eef4fb; border-radius: 6px; }
+    input[type=text] { padding: 0.5rem; width: 60%; font-size: 1rem; border: 1px solid #ccc; border-radius: 4px; }
+    button { padding: 0.5rem 1rem; font-size: 1rem; background: #4a90e2; color: white; border: none; border-radius: 4px; cursor: pointer; }
+    .footer { margin-top: 3rem; color: #888; font-size: 0.8rem; border-top: 1px solid #eee; padding-top: 1rem; }
+    </style></head><body><h1>ECE · Engine Status</h1><p>This page renders engine state and (when given a query) ECE-rendered citations. Built per OEI-003 §4 step 4 — the visible deliverable that addresses Onyx UI's no-citation gap.</p><form method='get' action='/engine/status'><label for='q'>Query (renders ECE citations):</label><br><input type='text' id='q' name='q' placeholder='问题树怎么用' value='问题树怎么用' /><button type='submit'>Search</button></form><h2>Engine Snapshot</h2><div class='kv'><div class='k'>engine_name</div><div>mock</div><div class='k'>engine_version</div><div>0.1.0</div><div class='k'>tier</div><div>community</div><div class='k'>gpu_enabled</div><div>False</div><div class='k'>provider_name</div><div>None</div><div class='k'>default_model</div><div>None</div><div class='k'>project_count</div><div>2</div><div class='k'>file_count</div><div>3</div><div class='k'>last_search_latency_seconds</div><div>None</div><div class='k'>raw</div><div>{&#x27;mock&#x27;: True}</div></div><h2>Citations for query: 问题树怎么用</h2><p>3 document(s) recalled.</p><div class='doc'><h3>methodology-framework.md</h3><div class='meta'>source: user_file · id: mock-1-methodology</div><pre>[Mock] 问题树 / 假设驱动 / MECE 的实战组合(Demo Case) — consulting methodology for issue tree, hypothesis-driven, MECE.</pre></div><div class='doc'><h3>case-management-consulting.md</h3><div class='meta'>source: user_file · id: mock-1-case</div><pre>[Mock] 某零售集团供应链降本管理咨询案例 — background / problem / method / delivery / results.</pre></div><div class='doc'><h3>play-sales-delivery.md</h3><div class='meta'>source: user_file · id: mock-1-play</div><pre>[Mock] 销售→交付衔接五阶段 play — stages, actions, deliverables, responsibilities.</pre></div><div class='footer'>OEI-003 · ECE engine status page · ECE-rendered citations</div></body></html>
+===== R3: onyx-mode /engine/status HTML =====
+
+<!-- /engine/status no q, ECE_CONTENT_ENGINE=onyx, base=http://127.0.0.1:8080 -->
+<!-- HTTP 200 -->
+<!doctype html><html><head><meta charset='utf-8'><title>ECE · Engine Status</title><style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; margin: 2rem auto; max-width: 920px; color: #1a1a1a; }
+    h1 { border-bottom: 2px solid #333; padding-bottom: 0.3rem; }
+    h2 { margin-top: 2rem; color: #444; }
+    .kv { display: grid; grid-template-columns: 200px 1fr; row-gap: 0.4rem; column-gap: 1rem; padding: 1rem; background: #f7f7f7; border-radius: 6px; }
+    .kv .k { color: #666; font-weight: 600; }
+    .doc { padding: 1rem; border: 1px solid #e0e0e0; border-left: 4px solid #4a90e2; border-radius: 4px; margin-bottom: 0.8rem; background: #fafbfc; }
+    .doc h3 { margin: 0 0 0.4rem 0; font-size: 1.05rem; }
+    .doc .meta { color: #777; font-size: 0.85rem; margin-bottom: 0.6rem; }
+    .doc pre { white-space: pre-wrap; font-family: ui-monospace, "JetBrains Mono", Menlo, monospace; font-size: 0.85rem; background: #fff; padding: 0.6rem; border: 1px solid #eee; border-radius: 4px; }
+    .degraded { background: #fff3cd; border: 1px solid #ffe69c; padding: 0.8rem 1rem; border-radius: 6px; color: #664d03; margin: 1rem 0; }
+    form { margin: 1rem 0; padding: 1rem; background: #eef4fb; border-radius: 6px; }
+    input[type=text] { padding: 0.5rem; width: 60%; font-size: 1rem; border: 1px solid #ccc; border-radius: 4px; }
+    button { padding: 0.5rem 1rem; font-size: 1rem; background: #4a90e2; color: white; border: none; border-radius: 4px; cursor: pointer; }
+    .footer { margin-top: 3rem; color: #888; font-size: 0.8rem; border-top: 1px solid #eee; padding-top: 1rem; }
+    </style></head><body><h1>ECE · Engine Status</h1><p>This page renders engine state and (when given a query) ECE-rendered citations. Built per OEI-003 §4 step 4 — the visible deliverable that addresses Onyx UI's no-citation gap.</p><form method='get' action='/engine/status'><label for='q'>Query (renders ECE citations):</label><br><input type='text' id='q' name='q' placeholder='问题树怎么用' /><button type='submit'>Search</button></form><h2>Engine Snapshot</h2><div class='kv'><div class='k'>engine_name</div><div>onyx</div><div class='k'>engine_version</div><div>v4.7.8</div><div class='k'>tier</div><div>community</div><div class='k'>gpu_enabled</div><div>True</div><div class='k'>provider_name</div><div>ollama-local-qwen</div><div class='k'>default_model</div><div>qwen2.5:3b</div><div class='k'>project_count</div><div>1</div><div class='k'>file_count</div><div>3</div><div class='k'>last_search_latency_seconds</div><div>None</div><div class='k'>raw</div><div>{&#x27;providers_count&#x27;: 1, &#x27;version_payload&#x27;: {&#x27;backend_version&#x27;: &#x27;v4.7.8&#x27;}}</div></div><div class='footer'>OEI-003 · ECE engine status page · ECE-rendered citations</div></body></html>
+<!-- /engine/status?q=问题树怎么用, ECE_CONTENT_ENGINE=onyx, base=http://127.0.0.1:8080 -->
+<!-- HTTP 200 -->
+<!doctype html><html><head><meta charset='utf-8'><title>ECE · Engine Status</title><style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; margin: 2rem auto; max-width: 920px; color: #1a1a1a; }
+    h1 { border-bottom: 2px solid #333; padding-bottom: 0.3rem; }
+    h2 { margin-top: 2rem; color: #444; }
+    .kv { display: grid; grid-template-columns: 200px 1fr; row-gap: 0.4rem; column-gap: 1rem; padding: 1rem; background: #f7f7f7; border-radius: 6px; }
+    .kv .k { color: #666; font-weight: 600; }
+    .doc { padding: 1rem; border: 1px solid #e0e0e0; border-left: 4px solid #4a90e2; border-radius: 4px; margin-bottom: 0.8rem; background: #fafbfc; }
+    .doc h3 { margin: 0 0 0.4rem 0; font-size: 1.05rem; }
+    .doc .meta { color: #777; font-size: 0.85rem; margin-bottom: 0.6rem; }
+    .doc pre { white-space: pre-wrap; font-family: ui-monospace, "JetBrains Mono", Menlo, monospace; font-size: 0.85rem; background: #fff; padding: 0.6rem; border: 1px solid #eee; border-radius: 4px; }
+    .degraded { background: #fff3cd; border: 1px solid #ffe69c; padding: 0.8rem 1rem; border-radius: 6px; color: #664d03; margin: 1rem 0; }
+    form { margin: 1rem 0; padding: 1rem; background: #eef4fb; border-radius: 6px; }
+    input[type=text] { padding: 0.5rem; width: 60%; font-size: 1rem; border: 1px solid #ccc; border-radius: 4px; }
+    button { padding: 0.5rem 1rem; font-size: 1rem; background: #4a90e2; color: white; border: none; border-radius: 4px; cursor: pointer; }
+    .footer { margin-top: 3rem; color: #888; font-size: 0.8rem; border-top: 1px solid #eee; padding-top: 1rem; }
+    </style></head><body><h1>ECE · Engine Status</h1><p>This page renders engine state and (when given a query) ECE-rendered citations. Built per OEI-003 §4 step 4 — the visible deliverable that addresses Onyx UI's no-citation gap.</p><form method='get' action='/engine/status'><label for='q'>Query (renders ECE citations):</label><br><input type='text' id='q' name='q' placeholder='问题树怎么用' value='问题树怎么用' /><button type='submit'>Search</button></form><h2>Engine Snapshot</h2><div class='kv'><div class='k'>engine_name</div><div>onyx</div><div class='k'>engine_version</div><div>v4.7.8</div><div class='k'>tier</div><div>community</div><div class='k'>gpu_enabled</div><div>True</div><div class='k'>provider_name</div><div>ollama-local-qwen</div><div class='k'>default_model</div><div>qwen2.5:3b</div><div class='k'>project_count</div><div>1</div><div class='k'>file_count</div><div>3</div><div class='k'>last_search_latency_seconds</div><div>None</div><div class='k'>raw</div><div>{&#x27;providers_count&#x27;: 1, &#x27;version_payload&#x27;: {&#x27;backend_version&#x27;: &#x27;v4.7.8&#x27;}}</div></div><h2>Citations for query: 问题树怎么用</h2><p>1 document(s) recalled.</p><div class='doc'><h3>methodology-framework.md</h3><div class='meta'>source: user_file · id: 1 · updated: 2026-09-23T13:06:16+00:00</div><pre># 咨询方法论：问题树、假设驱动与 MECE 的实战组合
+
+&gt; **标注**：本方法论为 **Demo Case** 演示文档，整理自多个内部培训材料与项目复盘，用于评估 Onyx CE 在方法论类内容上的检索召回与引用可追溯性。
+
+## 1. 为什么这三件事必须绑在一起用
+
+咨询行业最容易出现的失败模式，是&quot;问题没拆清楚就急着给答案&quot;或者&quot;方案做了 12 个但互相重叠&quot;。**问题树**负责把模糊的业务问题拆成可分析、可指派的子问题；**假设驱动**强迫团队在动手验证之前先声明&quot;我以为答案是什么&quot;；**MECE（Mutually Exclusive, Collectively Exhaustive）**则保证最终交付的方案彼此独立、合起来覆盖全部情形。三者不是可选配件，而是同一条流水线上的三道工序。
+
+## 2. 问题树（Issue Tree）
+
+### 2.1 定义
+
+问题树是一种自顶向下的演绎结构，根节点是客户提出的原始问题，叶节点是可直接指派给某一数据源或某一分析师回答的子问题。常见结构是 3 层：
+
+- **L1 业务问题**：用客户原话表述，不擅自加工；
+- **L2 拆解维度**：通常是 46 个互不重叠的拆解轴（如收入=价格×数量、价格=产品组合×定价策略）；
+- **L3 可分析子问题**：每个 L2 节点下挂 24 个 L3 子问题，每个 L3 必须能在 13 天内回答。
+
+### 2.2 常见错误
+
+- 在 L1 就替客户改写问题，丢失原始语境；
+- L2 拆解维度重叠（例如同时用&quot;区域&quot;和&quot;渠道&quot;，但二者存在交叉）；
+- L3 子问题颗粒度过粗，需要 2 周才能回答，违背&quot;可执行&quot;。
+
+### 2.3 输出模板
+
+```
+【L1 原始问题】 &lt;客户原话&gt;
+├──【L2.1 维度A】
+│   ├──【L3.1.a】&lt;子问题&gt;｜数据源：&lt;表/系统&gt;｜负责人…</pre></div><div class='footer'>OEI-003 · ECE engine status page · ECE-rendered citations</div></body></html>
+===== R3 ONYX MODE: /engine/status (no q) =====
+
+<!-- ECE_CONTENT_ENGINE=onyx, /engine/status (no query) -->
+<!doctype html><html><head><meta charset='utf-8'><title>ECE · Engine Status</title><style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; margin: 2rem auto; max-width: 920px; color: #1a1a1a; }
+    h1 { border-bottom: 2px solid #333; padding-bottom: 0.3rem; }
+    h2 { margin-top: 2rem; color: #444; }
+    .kv { display: grid; grid-template-columns: 200px 1fr; row-gap: 0.4rem; column-gap: 1rem; padding: 1rem; background: #f7f7f7; border-radius: 6px; }
+    .kv .k { color: #666; font-weight: 600; }
+    .doc { padding: 1rem; border: 1px solid #e0e0e0; border-left: 4px solid #4a90e2; border-radius: 4px; margin-bottom: 0.8rem; background: #fafbfc; }
+    .doc h3 { margin: 0 0 0.4rem 0; font-size: 1.05rem; }
+    .doc .meta { color: #777; font-size: 0.85rem; margin-bottom: 0.6rem; }
+    .doc pre { white-space: pre-wrap; font-family: ui-monospace, "JetBrains Mono", Menlo, monospace; font-size: 0.85rem; background: #fff; padding: 0.6rem; border: 1px solid #eee; border-radius: 4px; }
+    .degraded { background: #fff3cd; border: 1px solid #ffe69c; padding: 0.8rem 1rem; border-radius: 6px; color: #664d03; margin: 1rem 0; }
+    form { margin: 1rem 0; padding: 1rem; background: #eef4fb; border-radius: 6px; }
+    input[type=text] { padding: 0.5rem; width: 60%; font-size: 1rem; border: 1px solid #ccc; border-radius: 4px; }
+    button { padding: 0.5rem 1rem; font-size: 1rem; background: #4a90e2; color: white; border: none; border-radius: 4px; cursor: pointer; }
+    .footer { margin-top: 3rem; color: #888; font-size: 0.8rem; border-top: 1px solid #eee; padding-top: 1rem; }
+    </style></head><body><h1>ECE · Engine Status</h1><p>This page renders engine state and (when given a query) ECE-rendered citations. Built per OEI-003 §4 step 4 — the visible deliverable that addresses Onyx UI's no-citation gap.</p><form method='get' action='/engine/status'><label for='q'>Query (renders ECE citations):</label><br><input type='text' id='q' name='q' placeholder='问题树怎么用' /><button type='submit'>Search</button></form><h2>Engine Snapshot</h2><div class='kv'><div class='k'>engine_name</div><div>onyx</div><div class='k'>engine_version</div><div>v4.7.8</div><div class='k'>tier</div><div>community</div><div class='k'>gpu_enabled</div><div>True</div><div class='k'>provider_name</div><div>ollama-local-qwen</div><div class='k'>default_model</div><div>qwen2.5:3b</div><div class='k'>project_count</div><div>1</div><div class='k'>file_count</div><div>3</div><div class='k'>last_search_latency_seconds</div><div>None</div><div class='k'>raw</div><div>{&#x27;providers_count&#x27;: 1, &#x27;version_payload&#x27;: {&#x27;backend_version&#x27;: &#x27;v4.7.8&#x27;}}</div></div><div class='footer'>OEI-003 · ECE engine status page · ECE-rendered citations</div></body></html>
+
+===== R3 ONYX MODE: /engine/status?q=问题树怎么用 =====
+
+<!-- ECE_CONTENT_ENGINE=onyx, /engine/status?q=问题树怎么用 -->
+<!doctype html><html><head><meta charset='utf-8'><title>ECE · Engine Status</title><style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; margin: 2rem auto; max-width: 920px; color: #1a1a1a; }
+    h1 { border-bottom: 2px solid #333; padding-bottom: 0.3rem; }
+    h2 { margin-top: 2rem; color: #444; }
+    .kv { display: grid; grid-template-columns: 200px 1fr; row-gap: 0.4rem; column-gap: 1rem; padding: 1rem; background: #f7f7f7; border-radius: 6px; }
+    .kv .k { color: #666; font-weight: 600; }
+    .doc { padding: 1rem; border: 1px solid #e0e0e0; border-left: 4px solid #4a90e2; border-radius: 4px; margin-bottom: 0.8rem; background: #fafbfc; }
+    .doc h3 { margin: 0 0 0.4rem 0; font-size: 1.05rem; }
+    .doc .meta { color: #777; font-size: 0.85rem; margin-bottom: 0.6rem; }
+    .doc pre { white-space: pre-wrap; font-family: ui-monospace, "JetBrains Mono", Menlo, monospace; font-size: 0.85rem; background: #fff; padding: 0.6rem; border: 1px solid #eee; border-radius: 4px; }
+    .degraded { background: #fff3cd; border: 1px solid #ffe69c; padding: 0.8rem 1rem; border-radius: 6px; color: #664d03; margin: 1rem 0; }
+    form { margin: 1rem 0; padding: 1rem; background: #eef4fb; border-radius: 6px; }
+    input[type=text] { padding: 0.5rem; width: 60%; font-size: 1rem; border: 1px solid #ccc; border-radius: 4px; }
+    button { padding: 0.5rem 1rem; font-size: 1rem; background: #4a90e2; color: white; border: none; border-radius: 4px; cursor: pointer; }
+    .footer { margin-top: 3rem; color: #888; font-size: 0.8rem; border-top: 1px solid #eee; padding-top: 1rem; }
+    </style></head><body><h1>ECE · Engine Status</h1><p>This page renders engine state and (when given a query) ECE-rendered citations. Built per OEI-003 §4 step 4 — the visible deliverable that addresses Onyx UI's no-citation gap.</p><form method='get' action='/engine/status'><label for='q'>Query (renders ECE citations):</label><br><input type='text' id='q' name='q' placeholder='问题树怎么用' value='问题树怎么用' /><button type='submit'>Search</button></form><h2>Engine Snapshot</h2><div class='kv'><div class='k'>engine_name</div><div>onyx</div><div class='k'>engine_version</div><div>v4.7.8</div><div class='k'>tier</div><div>community</div><div class='k'>gpu_enabled</div><div>True</div><div class='k'>provider_name</div><div>ollama-local-qwen</div><div class='k'>default_model</div><div>qwen2.5:3b</div><div class='k'>project_count</div><div>1</div><div class='k'>file_count</div><div>3</div><div class='k'>last_search_latency_seconds</div><div>None</div><div class='k'>raw</div><div>{&#x27;providers_count&#x27;: 1, &#x27;version_payload&#x27;: {&#x27;backend_version&#x27;: &#x27;v4.7.8&#x27;}}</div></div><h2>Citations for query: 问题树怎么用</h2><p>1 document(s) recalled.</p><div class='doc'><h3>methodology-framework.md</h3><div class='meta'>source: user_file · id: 1 · updated: 2026-09-23T13:06:16+00:00</div><pre># 咨询方法论：问题树、假设驱动与 MECE 的实战组合
+
+&gt; **标注**：本方法论为 **Demo Case** 演示文档，整理自多个内部培训材料与项目复盘，用于评估 Onyx CE 在方法论类内容上的检索召回与引用可追溯性。
+
+## 1. 为什么这三件事必须绑在一起用
+
+咨询行业最容易出现的失败模式，是&quot;问题没拆清楚就急着给答案&quot;或者&quot;方案做了 12 个但互相重叠&quot;。**问题树**负责把模糊的业务问题拆成可分析、可指派的子问题；**假设驱动**强迫团队在动手验证之前先声明&quot;我以为答案是什么&quot;；**MECE（Mutually Exclusive, Collectively Exhaustive）**则保证最终交付的方案彼此独立、合起来覆盖全部情形。三者不是可选配件，而是同一条流水线上的三道工序。
+
+## 2. 问题树（Issue Tree）
+
+### 2.1 定义
+
+问题树是一种自顶向下的演绎结构，根节点是客户提出的原始问题，叶节点是可直接指派给某一数据源或某一分析师回答的子问题。常见结构是 3 层：
+
+- **L1 业务问题**：用客户原话表述，不擅自加工；
+- **L2 拆解维度**：通常是 46 个互不重叠的拆解轴（如收入=价格×数量、价格=产品组合×定价策略）；
+- **L3 可分析子问题**：每个 L2 节点下挂 24 个 L3 子问题，每个 L3 必须能在 13 天内回答。
+
+### 2.2 常见错误
+
+- 在 L1 就替客户改写问题，丢失原始语境；
+- L2 拆解维度重叠（例如同时用&quot;区域&quot;和&quot;渠道&quot;，但二者存在交叉）；
+- L3 子问题颗粒度过粗，需要 2 周才能回答，违背&quot;可执行&quot;。
+
+### 2.3 输出模板
+
+```
+【L1 原始问题】 &lt;客户原话&gt;
+├──【L2.1 维度A】
+│   ├──【L3.1.a】&lt;子问题&gt;｜数据源：&lt;表/系统&gt;｜负责人…</pre></div><div class='footer'>OEI-003 · ECE engine status page · ECE-rendered citations</div></body></html>

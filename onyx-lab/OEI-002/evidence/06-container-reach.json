@@ -1,0 +1,19 @@
+# 06-container-reach.json
+# scan_time: 2026-09-24T07:54:18+08:00
+# purpose: verify Onyx api_server container can reach host.docker.internal:11434
+# safety: 失败即停,记录原始错误 + 排查线索
+
+# ----- step A: resolve host.docker.internal from container -----
+$ docker exec onyx-api_server-1 python -c "import socket; print(socket.gethostbyname('host.docker.internal'))"
+172.17.0.1
+
+# ----- step B: GET /api/tags via host.docker.internal:11434 -----
+$ docker exec onyx-api_server-1 python -c "import urllib.request; r=urllib.request.urlopen('http://host.docker.internal:11434/api/tags', timeout=10); print(r.status); print(r.read().decode()[:500])"
+STATUS: 200
+BODY: {"models":[{"name":"qwen2.5:3b","model":"qwen2.5:3b","modified_at":"2026-09-24T07:53:31.682771481+08:00","size":1929912432,"digest":"357c53fb659c5076de1d65ccb0b397446227b71a42be9d1603d46168015c9e4b","details":{"parent_model":"","format":"gguf","family":"qwen2","families":["qwen2"],"parameter_size":"3.1B","quantization_level":"Q4_K_M","context_length":32768,"embedding_length":2048},"capabilities":["completion","tools"]},{"name":"qwen2.5:1.5b","model":"qwen2.5:1.5b","modified_at":"2026-09-24T07:51
+
+# ----- step C: GET /v1/models via host.docker.internal:11434 -----
+$ docker exec onyx-api_server-1 python -c "import urllib.request; r=urllib.request.urlopen('http://host.docker.internal:11434/v1/models', timeout=10); print(r.status); print(r.read().decode()[:500])"
+STATUS: 200
+BODY: {"object":"list","data":[{"id":"qwen2.5:3b","object":"model","created":1790207611,"owned_by":"library"},{"id":"qwen2.5:1.5b","object":"model","created":1790207510,"owned_by":"library"}]}
+

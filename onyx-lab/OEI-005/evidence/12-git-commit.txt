@@ -1,0 +1,63 @@
+# 12-git-commit.txt — OEI-005 步骤 5:改动已 commit,未 push
+# date: 2026-09-24T17:55:14+08:00
+
+## git show --stat HEAD
+commit dd58297c3ce0ede3cf72560550b52c051a5471b3
+Author: cscoheru <klyliae@gmail.com>
+Date:   Thu Sep 24 17:53:02 2026 +0800
+
+    chore(OEI-005): make integration test fixture prerequisites discoverable
+    
+    Add `seed-fixtures` (seeds temporal/knowledge/compliance fixtures) and
+    `test-integration` (full local prerequisite chain) Makefile targets, and
+    document the complete chain in README.md.
+    
+    Root cause of the 27 integration test failures: the fixture seeders only
+    existed in deploy/ docs, never in the Makefile, so a local run following
+    the documented prerequisites always missed them. Baseline reproduces at
+    48 failed; after the seeder chain it reaches 1 failed (a deployment smoke
+    test requiring nginx + built SPA, out of scope for unit/integration).
+    
+    No product code or test changed:
+      git diff --stat src/ece/ tests/  ->  empty
+    
+    Co-Authored-By: Claude Code <noreply@anthropic.com>
+
+ Makefile  | 35 ++++++++++++++++++++++++++++++++++-
+ README.md | 38 ++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 72 insertions(+), 1 deletion(-)
+
+## git log --oneline -4
+dd58297 chore(OEI-005): make integration test fixture prerequisites discoverable
+5878a26 docs(OEI-004): backfill TASKS.md Appendix K + docs/API.md §6 + ignore _._ files
+03ee377 feat(OEI-003): Content Engine Port + Onyx/Mock adapter + /engine/status
+6dec894 feat(KC-001): Consulting Knowledge Library (view-d, 36 seed objects)
+
+## 未 push 证明:git status -sb
+## main...origin/main [ahead 4]
+ T docs/demo-platform/DEMO_PLATFORM_PRD.md
+ T docs/demo-platform/DEPLOY_USER_PROXY.md
+  -> 'ahead 4' = 本地领先 origin/main 4 个 commit,未 push
+
+## 本刀未改产品代码/测试:git diff --stat src/ece/ tests/ (应为空)
+  [空输出 = 无差异;exit=0]
+
+## 本 commit 只含 2 个文件:
+  Makefile
+  README.md
+
+## 工作区剩余 dirty(均为历史遗留,范围外,未 staged)
+ T docs/demo-platform/DEMO_PLATFORM_PRD.md
+ T docs/demo-platform/DEPLOY_USER_PROXY.md
+ M reports/cut-042R3/mutation-evidence/M1_re_read_through_assembly_skipped.md
+ M reports/cut-042R3/mutation-evidence/M2_apply_context_update_skip_sql.md
+ M reports/cut-042R3/mutation-evidence/M3_permission_acl_check_bypassed.md
+ M reports/cut-042R3/mutation-evidence/M4_evaluated_conditions_inject_nondeterministic_amount.md
+ M reports/cut-042R3/mutation-evidence/M5_jwt_decode_skips_signature_verification.md
+ M reports/cut-042R3/mutation-evidence/M6_materialize_fn_disabled_in_loop.md
+ M reports/cut-043/mutation-evidence/M1_km_validity_invert.md
+ M reports/cut-043/mutation-evidence/M2_km_permission_invert.md
+ M reports/cut-043/mutation-evidence/M3_km_decision_and_to_or.md
+ M reports/cut-044/mutation-evidence/M1_comp_count_condition_invert.md
+ M reports/cut-044/mutation-evidence/M2_comp_coverage_issubset_to_isdisjoint.md
+ M reports/cut-044/mutation-evidence/M3_comp_decision_force_gap_list.md

@@ -1,0 +1,55 @@
+{
+  "tests": {
+    "engine_status_unreachable": {
+      "raised": "EngineError",
+      "msg_class": "EngineError"
+    },
+    "search_unreachable": {
+      "raised": "EngineError",
+      "msg_class": "EngineError"
+    },
+    "list_projects_unreachable": {
+      "raised": "EngineError",
+      "msg_class": "EngineError"
+    }
+  }
+}
+
+===== R6 part 1: page-level degraded HTML =====
+
+<!-- ECE_ONYX_BASE=http://127.0.0.1:9 (unreachable), /engine/status (no q) -->
+<!-- HTTP 200 -->
+<!doctype html><html><head><meta charset='utf-8'><title>ECE · Engine Status</title><style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; margin: 2rem auto; max-width: 920px; color: #1a1a1a; }
+    h1 { border-bottom: 2px solid #333; padding-bottom: 0.3rem; }
+    h2 { margin-top: 2rem; color: #444; }
+    .kv { display: grid; grid-template-columns: 200px 1fr; row-gap: 0.4rem; column-gap: 1rem; padding: 1rem; background: #f7f7f7; border-radius: 6px; }
+    .kv .k { color: #666; font-weight: 600; }
+    .doc { padding: 1rem; border: 1px solid #e0e0e0; border-left: 4px solid #4a90e2; border-radius: 4px; margin-bottom: 0.8rem; background: #fafbfc; }
+    .doc h3 { margin: 0 0 0.4rem 0; font-size: 1.05rem; }
+    .doc .meta { color: #777; font-size: 0.85rem; margin-bottom: 0.6rem; }
+    .doc pre { white-space: pre-wrap; font-family: ui-monospace, "JetBrains Mono", Menlo, monospace; font-size: 0.85rem; background: #fff; padding: 0.6rem; border: 1px solid #eee; border-radius: 4px; }
+    .degraded { background: #fff3cd; border: 1px solid #ffe69c; padding: 0.8rem 1rem; border-radius: 6px; color: #664d03; margin: 1rem 0; }
+    form { margin: 1rem 0; padding: 1rem; background: #eef4fb; border-radius: 6px; }
+    input[type=text] { padding: 0.5rem; width: 60%; font-size: 1rem; border: 1px solid #ccc; border-radius: 4px; }
+    button { padding: 0.5rem 1rem; font-size: 1rem; background: #4a90e2; color: white; border: none; border-radius: 4px; cursor: pointer; }
+    .footer { margin-top: 3rem; color: #888; font-size: 0.8rem; border-top: 1px solid #eee; padding-top: 1rem; }
+    </style></head><body><h1>ECE · Engine Status</h1><p>This page renders engine state and (when given a query) ECE-rendered citations. Built per OEI-003 §4 step 4 — the visible deliverable that addresses Onyx UI's no-citation gap.</p><form method='get' action='/engine/status'><label for='q'>Query (renders ECE citations):</label><br><input type='text' id='q' name='q' placeholder='问题树怎么用' /><button type='submit'>Search</button></form><div class='degraded'><strong>Engine degraded:</strong> engine_status failed: Onyx /api/admin/llm/provider returned 502</div><h2>Engine Snapshot</h2><div class='degraded'>engine_status() returned no data.</div><div class='footer'>OEI-003 · ECE engine status page · ECE-rendered citations</div></body></html>
+<!-- ECE_ONYX_BASE=http://127.0.0.1:9 (unreachable), /engine/status?q=问题树怎么用 -->
+<!-- HTTP 200 -->
+<!doctype html><html><head><meta charset='utf-8'><title>ECE · Engine Status</title><style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; margin: 2rem auto; max-width: 920px; color: #1a1a1a; }
+    h1 { border-bottom: 2px solid #333; padding-bottom: 0.3rem; }
+    h2 { margin-top: 2rem; color: #444; }
+    .kv { display: grid; grid-template-columns: 200px 1fr; row-gap: 0.4rem; column-gap: 1rem; padding: 1rem; background: #f7f7f7; border-radius: 6px; }
+    .kv .k { color: #666; font-weight: 600; }
+    .doc { padding: 1rem; border: 1px solid #e0e0e0; border-left: 4px solid #4a90e2; border-radius: 4px; margin-bottom: 0.8rem; background: #fafbfc; }
+    .doc h3 { margin: 0 0 0.4rem 0; font-size: 1.05rem; }
+    .doc .meta { color: #777; font-size: 0.85rem; margin-bottom: 0.6rem; }
+    .doc pre { white-space: pre-wrap; font-family: ui-monospace, "JetBrains Mono", Menlo, monospace; font-size: 0.85rem; background: #fff; padding: 0.6rem; border: 1px solid #eee; border-radius: 4px; }
+    .degraded { background: #fff3cd; border: 1px solid #ffe69c; padding: 0.8rem 1rem; border-radius: 6px; color: #664d03; margin: 1rem 0; }
+    form { margin: 1rem 0; padding: 1rem; background: #eef4fb; border-radius: 6px; }
+    input[type=text] { padding: 0.5rem; width: 60%; font-size: 1rem; border: 1px solid #ccc; border-radius: 4px; }
+    button { padding: 0.5rem 1rem; font-size: 1rem; background: #4a90e2; color: white; border: none; border-radius: 4px; cursor: pointer; }
+    .footer { margin-top: 3rem; color: #888; font-size: 0.8rem; border-top: 1px solid #eee; padding-top: 1rem; }
+    </style></head><body><h1>ECE · Engine Status</h1><p>This page renders engine state and (when given a query) ECE-rendered citations. Built per OEI-003 §4 step 4 — the visible deliverable that addresses Onyx UI's no-citation gap.</p><form method='get' action='/engine/status'><label for='q'>Query (renders ECE citations):</label><br><input type='text' id='q' name='q' placeholder='问题树怎么用' value='问题树怎么用' /><button type='submit'>Search</button></form><div class='degraded'><strong>Engine degraded:</strong> engine_status failed: Onyx /api/admin/llm/provider returned 502; search also failed: Onyx /api/search returned 502: </div><h2>Engine Snapshot</h2><div class='degraded'>engine_status() returned no data.</div><h2>Citations for query: 问题树怎么用</h2><div class='degraded'>Recall failed (see degraded banner above).</div><div class='footer'>OEI-003 · ECE engine status page · ECE-rendered citations</div></body></html>

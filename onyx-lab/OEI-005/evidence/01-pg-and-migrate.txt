@@ -1,0 +1,3 @@
+INFO  [alembic.runtime.migration] Running upgrade 0005_context_audit -> 0006_pg_trgm, S4.4 — Chinese tokenization via pg_trgm.
+INFO  [alembic.runtime.migration] Running upgrade 0006_pg_trgm -> 0007_user_orgs, 0007 — add org_id column to context_requests (cut-019 multi-tenant).
+INFO  [alembic.runtime.migration] Running upgrade 0007_user_orgs -> 0008_evidence_records, S2 (V0 Technical Spike) — `evidence_records` table.

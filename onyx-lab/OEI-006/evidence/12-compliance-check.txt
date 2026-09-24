@@ -1,0 +1,66 @@
+=== 12 — 清理与合规（OEI-006 步骤 8 / A11）===
+2026-09-24T19:00:12+08:00
+
+## [A] 凭据**值级**扫描（不打印任何秘密内容）
+secret values extracted from $ECE_ONYX_COOKIE_FILE : 1
+positive control (scanner MUST match when value IS present) : 1 line(s)
+  -> 先断言 NVAL>=1 + 正对照命中，扫描结论才可信（空 pattern 会匹配一切）
+files under onyx-lab/OEI-006/ containing a secret value : 0   [expect 0]
+matches inside the committed diff (git show HEAD)       : 0   [expect 0]
+changed files containing a secret value                 : 0   [expect 0]
+generic risky patterns in deliverables                  : Bearer =0 Authorization:=0 session_id==0 Set-Cookie=0 password=0 
+cookie 读取：仅经 ECE_ONYX_COOKIE_FILE / curl -b <file>；未复制、未内联、未入库；临时 pattern 文件用后即删
+
+## [B] 违禁技术词扫描（SPA 护栏）—— 按护栏**实际扫描范围**（view-d 切片）判定
+view-d slice chars: 2219
+view-d slice forbidden-token hits: NONE (all 0)
+whole-file hits (pre-existing): {'embedding': 1, 'decision_id': 2, 'policy_id': 1, 'evidence_id': 1, 'SQL': 2}
+lines carrying them: [67, 125, 172]
+  -> 命中行 67/125/172 均在 view-d（第 173 行起）**之前**；本刀 index.html 的 diff 只改 view-d 内 209-223 行，未新增违禁词
+护栏单测（权威判据）:
+
+## [C] Onyx 容器未被 restart/stop/down/rm
+container count: 9  [expect 9]
+/onyx-nginx-1  restarts=0  started=2026-09-23T11:09:36.584514628Z
+/onyx-web_server-1  restarts=0  started=2026-09-23T11:09:30.295469508Z
+/onyx-background-1  restarts=0  started=2026-09-23T11:07:58.909095595Z
+/onyx-api_server-1  restarts=0  started=2026-09-23T11:07:59.373537899Z
+/onyx-inference_model_server-1  restarts=0  started=2026-09-23T11:07:55.27464981Z
+/onyx-indexing_model_server-1  restarts=0  started=2026-09-23T11:07:57.7546555Z
+/onyx-relational_db-1  restarts=0  started=2026-09-23T11:07:57.334172007Z
+/onyx-cache-1  restarts=0  started=2026-09-23T11:07:58.428367354Z
+/onyx-opensearch-1  restarts=0  started=2026-09-23T11:05:17.712086107Z
+  -> 全部 restarts=0，started 均为 2026-09-23T11:0x；本刀工作时段为 2026-09-24 18:0x-19:0x，容器未被重启
+
+## [D] 未触碰 /mnt/c
+本刀写入路径：/mnt/d/Projects/domainAgentECE/**、/tmp/**、/dev/shm/**（临时 pattern，已删）
+提交内容中 /mnt/c 出现次数: 0   [expect 0]
+证据目录中**除本文件外**含 '/mnt/c' 字样的文件数: 0   [expect 0]
+  （本文件自身出现 2 次，均为本节的叙述文字，非路径写入）
+
+## [E] 未 push
+ahead/behind vs origin/main: 0	5
+local HEAD : 7ab17fc
+origin/main: 08cbeff   <- 未推进
+HEAD 所在远程分支数: 0   [expect 0]
+
+## [F] 未引入新依赖
+本刀提交中 pyproject.toml / uv.lock / requirements* 命中数: 0   [expect 0]
+
+## [G] 36 个静态种子对象 + 三域业务逻辑未改
+本刀提交文件清单（应完全落在 §7 授权范围内）：
+  TASKS.md
+  demos/spa/app.js
+  demos/spa/index.html
+  demos/spa/styles.css
+  docs/API.md
+  src/ece/consulting/engine_merge.py
+  src/ece/consulting/models.py
+  src/ece/consulting/router.py
+  tests/integration/test_cut_045_local_origin_smoke.py
+  tests/unit/test_consulting_engine_merge.py
+其中种子/三域文件命中数: 0   [expect 0]
+
+## [H] 进程清理
+leaked uvicorn: 0   [expect 0]
+leaked origin : 0   [expect 0]

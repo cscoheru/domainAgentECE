@@ -1,0 +1,5 @@
+Seeded 3 role entities; display_ids={'procurement_manager': 'R001', 'finance_manager': 'R002', 'buyer': 'R003'}
+U001 HAS_ROLE procurement_manager (2020-01-01 to 2025-12-31): ok
+U002 HAS_ROLE procurement_manager (2026-01-01 to NULL/current): ok
+U003 HAS_ROLE buyer (no time constraint): ok
+Total temporal relationships in DB: 3

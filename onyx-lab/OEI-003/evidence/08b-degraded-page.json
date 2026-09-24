@@ -1,0 +1,16 @@
+{
+  "test_scenario": "ECE_ONYX_BASE=http://127.0.0.1:9 (unreachable)",
+  "no_q": {
+    "http_status": 200,
+    "html_length": 2358,
+    "has_degraded_banner": true,
+    "no_500": true
+  },
+  "with_q": {
+    "http_status": 200,
+    "html_length": 2532,
+    "has_degraded_banner": true,
+    "no_500": true
+  },
+  "conclusion": "PASS: /engine/status returns HTTP 200 + 'Engine degraded' banner in both no-q and q modes; no 500 naked crash."
+}

@@ -1,0 +1,7 @@
+# 11-compliance-check.txt (FINAL post-REPORT rewrite)
+# scan_time: 2026-09-24T15:38:40+08:00
+# scope: OEI-003/evidence/ + ece/src/ece/connectors/onyx/ + OEI-001/REPORT.md + OEI-002/REPORT.md + OEI-003/REPORT.md
+
+
+TOTAL: 0
+STATUS: PASS

@@ -1,0 +1,56 @@
+{
+  "captured_at": "2026-09-24T18:37:29+08:00",
+  "env": "ECE_CONTENT_ENGINE=onyx, live Onyx at 127.0.0.1:8080 (3 indexed documents)",
+  "cases": [
+    {
+      "id": "A",
+      "what": "random string — nothing should match in either source",
+      "endpoint": "GET /api/v1/consulting/library?q=zzqx-no-such-term-9f3a1b",
+      "http_status": 200,
+      "static_total": 0,
+      "static_items": 0,
+      "engine_status": "ok",
+      "engine_items": [
+        {
+          "engine_doc_id": "1",
+          "title": "methodology-framework.md"
+        },
+        {
+          "engine_doc_id": "2",
+          "title": "play-sales-delivery.md"
+        },
+        {
+          "engine_doc_id": "3",
+          "title": "case-management-consulting.md"
+        }
+      ],
+      "reading": "Static side: true no-hit (total=0) → this is the '目录无命中' empty state. Engine side: NOT a no-hit. Onyx /api/search is a SEMANTIC retriever — it returns the nearest neighbours in the index regardless of literal overlap, so a nonsense query still returned 3 documents. The only reachable 'engine answered with zero documents' case on a populated project is an empty/unindexed project, so that branch is proven deterministically by the DB-free unit tests (tests/unit/test_consulting_engine_merge.py) rather than here."
+    },
+    {
+      "id": "B",
+      "what": "no q at all — the default view when the Library is opened",
+      "endpoint": "GET /api/v1/consulting/library",
+      "http_status": 200,
+      "static_total": 36,
+      "static_items": 24,
+      "engine_status": "skipped",
+      "engine_items": 0,
+      "reading": "engine_status=skipped and engine_items=[] prove the 'do not auto-fire retrieval' rule: opening the Library returns the full 36-object static catalogue and never touches the engine. Static behaviour is unchanged from the pre-OEI-006 baseline."
+    }
+  ],
+  "four_state_matrix": {
+    "ok": [
+      "live engine queried and answered (items may be non-empty or empty)"
+    ],
+    "unavailable": [
+      "engine selected but unreachable/errored → see 04-degraded-engine.json"
+    ],
+    "disabled": [
+      "ECE_CONTENT_ENGINE is not onyx (mock/default/unknown) → see the A1 comparison"
+    ],
+    "skipped": [
+      "no query issued at all (empty q) → case B below"
+    ]
+  },
+  "ux_recommendation": "Because the engine always returns semantic neighbours, the engine group should be presented as '相关文档' rather than '命中', and an empty engine group must not be rendered as an error — it means 'no indexed document was close enough', not 'search failed'."
+}

@@ -1,0 +1,36 @@
+# 02-ollama-install.txt
+# scan_time: 2026-09-24T08:37:57+08:00
+# install method: official ollama.com/install.sh
+# pre-req: zstd (apt install zstd first; default install script fails without it)
+
+# STEP 1: install zstd (system package)
+$ sudo apt install -y zstd
+(user-installed via sudo apt — required before ollama install script can extract tar.zst)
+
+# STEP 2: install ollama via official script
+$ curl -fsSL https://ollama.com/install.sh | sh
+
+Output:
+>>> Installing ollama to /usr/local
+>>> Downloading ollama-linux-amd64.tar.zst
+>>> Installing ollama...
+(download took ~5min at ~14MB/s after zstd installed)
+
+# STEP 3: systemd unit created automatically by install script
+ollama.service enabled and started by install script
+
+# STEP 4: post-install verification
+$ which ollama
+/usr/local/bin/ollama
+
+$ ollama --version
+ollama version is 0.34.3
+
+$ systemctl is-active ollama
+active
+
+$ systemctl is-enabled ollama
+enabled
+
+# NOTE on override:
+# override.conf created in step 5 of TASK.md, NOT here. See 03-ollama-service.txt.

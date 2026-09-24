@@ -1,0 +1,11 @@
+# collected_at: 2026-09-23T21:13:24+08:00
+# container uptime snapshot - proves no restart happened during OEI-001
+onyx-nginx-1	Up 2 hours (healthy)	2 hours ago
+onyx-web_server-1	Up 2 hours (healthy)	2 hours ago
+onyx-background-1	Up 2 hours	2 hours ago
+onyx-api_server-1	Up 2 hours (healthy)	2 hours ago
+onyx-inference_model_server-1	Up 2 hours (healthy)	2 hours ago
+onyx-indexing_model_server-1	Up 2 hours (healthy)	2 hours ago
+onyx-relational_db-1	Up 2 hours (healthy)	2 hours ago
+onyx-cache-1	Up 2 hours	2 hours ago
+onyx-opensearch-1	Up 2 hours	2 hours ago

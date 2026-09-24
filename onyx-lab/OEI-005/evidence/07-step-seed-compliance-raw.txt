@@ -1,0 +1,12 @@
+CUT-044 COMPLIANCE DEMO FIXTURE — SYNTHETIC — NOT CUSTOMER-VALIDATED
+------------------------------------------------------------------------
+source_system        : comp:v0-compliance-fixture
+removed (prior rows) : {'relationships': 0, 'entity_aliases': 0, 'entities': 0, 'acl_entries': 0}
+entities created     : 6
+relationships created: 9
+CTL-001 display_id   : COMP-CTL-001  (resolved at runtime)
+audit period         : 2026-07-01 .. 2026-09-30
+------------------------------------------------------------------------
+SELF-CHECK PASSED — all 6 fixture entities present, 9 REQUIRES_SYSTEM (3 per control),
+                     CTL-001 3 evidence / 3 systems, CTL-002 2 evidence / erp only,
+                     CTL-003 3 evidence / erp+hr, DENY acl on comp-eve → CTL-001.

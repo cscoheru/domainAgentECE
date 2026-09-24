@@ -1,0 +1,75 @@
+# 12-git-commit.txt
+# scan_time: 2026-09-24T16:37:19+08:00
+# purpose: OEI-004 step 7 — show OEI-003 + OEI-004 commits
+
+===== git log --oneline -5 =====
+5878a26 docs(OEI-004): backfill TASKS.md Appendix K + docs/API.md §6 + ignore _._ files
+03ee377 feat(OEI-003): Content Engine Port + Onyx/Mock adapter + /engine/status
+6dec894 feat(KC-001): Consulting Knowledge Library (view-d, 36 seed objects)
+08cbeff docs(cut-045 closure-archive): View C sync + evidence redaction + cert resilience
+3c4c3cb chore(cut-045-ops): operational deployment evidence + nginx HTTPS config
+
+===== HEAD =====
+commit 5878a26ff3248f8466295542ddccdbf60b7392c5
+Author: cscoheru <klyliae@gmail.com>
+Date:   Thu Sep 24 16:36:46 2026 +0800
+
+    docs(OEI-004): backfill TASKS.md Appendix K + docs/API.md §6 + ignore _._ files
+    
+    - TASKS.md Appendix K: register OEI-003 deliverables (ContentEnginePort,
+      adapters, /engine/status) with file paths and verification evidence links
+    - docs/API.md §6: full /engine/status endpoint documentation
+      (path, params, HTML content, degraded behavior, ECE_CONTENT_ENGINE selector,
+      cookie file note, security caveat about no JWT/permission layer)
+    - .gitignore: add '._*' pattern (macOS AppleDouble metadata) — 684 such
+      files deleted in OEI-004 step 2; pattern prevents re-introduction from
+      future Mac sync. Verified baseline pytest redaction errors: 5 → 0.
+
+ .gitignore  |  3 +++
+ TASKS.md    | 30 ++++++++++++++++++++++++++++++
+ docs/API.md | 59 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 92 insertions(+)
+
+===== HEAD~1 (OEI-003) =====
+commit 03ee37743aa13fc67b80265e011e50db05a46f27
+Author: cscoheru <klyliae@gmail.com>
+Date:   Thu Sep 24 16:36:45 2026 +0800
+
+    feat(OEI-003): Content Engine Port + Onyx/Mock adapter + /engine/status
+    
+    - Add src/ece/connectors/onyx/{port,mock_adapter,onyx_adapter,selector}.py:
+      Protocol ContentEnginePort + 3 Pydantic models (EngineStatus/Document/Project)
+      + Mock (offline, default) + Onyx (real HTTP) + env-based selector
+    - Add src/ece/api/engine_status.py: GET /engine/status HTML page
+      (engine snapshot + ECE-rendered citation cards, no Onyx UI dep)
+    - Wire engine_status_router into src/ece/main.py (+4 lines)
+    - Layer discipline: grep 'import onyx' in src/ece/ = 0 hits;
+      Onyx-specific knowledge lives only in src/ece/connectors/onyx/
+    
+    Verified by OEI-003 VERDICT.md §7.3 round 2: A1-A12 PASS.
+    OEI-004 §6 follows with full pytest baseline (see followup commit).
+
+ src/ece/api/engine_status.py            | 157 ++++++++++++++++++
+ src/ece/connectors/onyx/__init__.py     |   6 +
+ src/ece/connectors/onyx/mock_adapter.py | 120 ++++++++++++++
+ src/ece/connectors/onyx/onyx_adapter.py | 282 ++++++++++++++++++++++++++++++++
+ src/ece/connectors/onyx/port.py         |  99 +++++++++++
+ src/ece/connectors/onyx/selector.py     |  28 ++++
+ src/ece/main.py                         |   4 +
+ 7 files changed, 696 insertions(+)
+
+===== diff vs HEAD~1 (full diff of HEAD = OEI-004 commit) =====
+ .gitignore  |  3 +++
+ TASKS.md    | 30 ++++++++++++++++++++++++++++++
+ docs/API.md | 59 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 92 insertions(+)
+
+===== diff vs HEAD~2 (full diff of HEAD~1 = OEI-003 commit) =====
+ src/ece/api/engine_status.py            | 157 ++++++++++++++++++
+ src/ece/connectors/onyx/__init__.py     |   6 +
+ src/ece/connectors/onyx/mock_adapter.py | 120 ++++++++++++++
+ src/ece/connectors/onyx/onyx_adapter.py | 282 ++++++++++++++++++++++++++++++++
+ src/ece/connectors/onyx/port.py         |  99 +++++++++++
+ src/ece/connectors/onyx/selector.py     |  28 ++++
+ src/ece/main.py                         |   4 +
+ 7 files changed, 696 insertions(+)

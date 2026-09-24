@@ -1,0 +1,451 @@
+# 00c-test-leak-fix.txt — OEI-006 步骤 0.2 / 0.3:子进程回收 + 显式 skip 前置
+# date: 2026-09-24T18:2x +08:00
+# 唯一被改的 tests/ 文件: tests/integration/test_cut_045_local_origin_smoke.py(§7 授权)
+# 环境: 临时 PG ece-pg-tmp @127.0.0.1:55432(主树、非 worktree)
+#       DATABASE_URL=postgresql+psycopg://ece:ece@127.0.0.1:55432/ece
+
+================================================================================
+§1 A0.2 —— 泄漏已修,连续两轮完整套件后 pgrep 仍为 0
+================================================================================
+
+--------------------------------------------------------------------
+§1.1 泄漏根因(读代码 + 现场证据双重确认)
+--------------------------------------------------------------------
+旧代码的 try: 块从第 155 行才开始(旧行号),而 **uvicorn 的启动与等待在 try 之外**
+(旧 132-186 行)。因此:
+
+  `_wait_for_http` 旧实现只 catch `urllib.error.URLError`;
+  而 urllib 在 socket 超时抛的是 **`TimeoutError`**,它是 `OSError` 的子类、
+  但**不是** `URLError` 的子类 → 逃逸出 `_wait_for_http` → 在旧 132 行的
+  uvicorn 等待处直接向上抛 → **旧 155 行的 try 从未进入** → finally(旧 201-212)
+  永不执行 → `uvicorn_proc` 成为孤儿进程。
+
+这正是 codex 在 §4 步骤 0 描述的"每次运行泄漏一个 uvicorn",与
+`00a-leaked-uvicorn-before.txt`(10 个游离进程,--log-level warning,
+启动时刻 15:16/15:19/15:24/15:28/16:30/16:38/17:08/17:14/17:19/17:27
+与 10 次 pytest 一一对应)完全吻合。
+
+--------------------------------------------------------------------
+§1.2 修法(3 处,全部在"子进程回收"与"skip 前置"授权范围内)
+--------------------------------------------------------------------
+(a) `_wait_for_http`: `except urllib.error.URLError` → **`except OSError`**
+    (OSError 同时覆盖 URLError 与 TimeoutError → 挂起的上游变成 return False,
+     走调用方既有的显式分支,而不是抛异常逃逸)。同时移除因此不再被引用的
+     `import urllib.error`。
+(b) 新增 `_reclaim(proc)`: terminate → `wait(timeout=5)` → 必要时 `kill()` →
+    `wait`。幂等(已退出则只 wait)。
+(c) 把 uvicorn 启动 / origin 启动 / 冒烟执行**整体**移入 `try:`,并在 `finally:`
+    中**无条件** `_reclaim(origin_proc)` + `_reclaim(uvicorn_proc)`
+    (反序回收)。两条 skip/fail 分支改为"先 `_reclaim`,再读 stdout"——
+    因为子进程持有管道写端,未回收前 `read()` 会一直阻塞到子进程退出。
+
+**断言零改动**:`assert "[PASS] 1." in output`、`assert "FAIL=0" in output`、
+`assert "PASS=10" in output and "SKIP=0" in output`、`assert "[PASS] 10." in output`
+四条逐字保留。未删除任何测试,未把断言改成"永远通过"。
+
+--------------------------------------------------------------------
+§1.3 A0.2 实测:连续两轮完整套件
+--------------------------------------------------------------------
+命令(与 Makefile `test:` 目标逐字一致):
+  DATABASE_URL=$DB uv run pytest -m "not eval and not eval_llm"
+
+$ cat /tmp/oei006-run1.txt          # 同时落盘为 evidence/08-test-baseline-raw.txt
+  === A0.2 run 1 of 2 (pre-consulting-change) ===
+  2026-09-24T18:2?:??+08:00
+  leak_before=0
+  ...(略)...
+  681 passed, 5 skipped, 3 deselected, 5 warnings in 196.16s (0:03:16)
+  leak_after=0
+  2026-09-24T18:25:55+08:00
+
+$ cat /tmp/oei006-run2.txt
+  === A0.2 run 2 of 2 (pre-consulting-change) ===
+  2026-09-24T18:25:59+08:00
+  leak_before=0
+  ...(略)...
+  681 passed, 5 skipped, 3 deselected, 5 warnings in 195.32s (0:03:15)
+  leak_after=0
+  2026-09-24T18:29:20+08:00
+
+判定:A0.2 ✅ —— 两轮之间及第二轮之后
+`pgrep -cf '[u]vicorn ece[.]main:app'` 均为 **0**;Onyx 9 容器与 ollama 未受影响
+(见 00b 与 12-*)。
+
+================================================================================
+§2 A0.3 —— 显式 skip 前置:已实现;但任务书的**归因前提被实测推翻**
+================================================================================
+
+--------------------------------------------------------------------
+§2.1 已实现的部分(按 §4 步骤 0.3 的要求)
+--------------------------------------------------------------------
+新增 `_deployment_stack_gap()` 前置,检查冒烟真正需要的两件本地产物:
+
+  * `demos/spa/index.html`  —— 同源 origin 要服务的 SPA 静态产物
+  * `.venv/bin/uvicorn`     —— 上游 API 二进制
+
+任一缺失即 `pytest.skip(reason=...)`,reason 写明缺哪个绝对路径、为什么需要它,
+**不再先等 15 秒超时再 FAIL**。
+
+  > ⚠️ **偏差(必须记录)**:任务书 §4 步骤 0.3 写的是"该测试需要完整部署栈
+  > (nginx + `web/dist` 静态产物)"。实测:仓库里**没有 `web/` 目录**,
+  > 也不存在 `nginx` 二进制;`scripts/cut_045_local_origin.py` 是**纯 Python
+  > 同源反代**,直接服务 `demos/spa/`。因此前置检查按**实际依赖**写,
+  > 而不是按任务书里并不存在的 `web/dist` / `nginx`。详见 §4 偏差清单。
+
+--------------------------------------------------------------------
+§2.2 实测发现:本机上"部署栈"是**齐的**,该测试的失败另有真因
+--------------------------------------------------------------------
+在**只跑 OEI-005 文档化前置链**(alembic head → gen-dataset → seed →
+3 个 fixture seeder)**、未跑 spike seeder** 的库上跑该测试,结果不是超时,
+而是真的把整套栈拉起来了并跑完了 10 条检查:
+
+  $ DATABASE_URL=$DB uv run pytest tests/integration/test_cut_045_local_origin_smoke.py -x --tb=long
+  E  AssertionError: Expected PASS=10 SKIP=0 against live uvicorn; got:
+  E    [cut-045 deployment smoke] DEMO_BASE_URL=http://127.0.0.1:46503
+  E
+  E    [PASS] 1. SPA index.html reachable from origin (proxy proof)
+  E             origin=http://127.0.0.1:46503 bytes=12135
+  E    [PASS] 2. /api/v1/demo/domains lists procurement + knowledge + compliance
+  E             domains=['compliance', 'knowledge', 'procurement']
+  E    [SKIP] 3. procurement valid (spike-user-procurement → auto_approved|review_required)
+  E             SKIPPED — validation rejected (DB fixture missing)
+  E    [SKIP] 4. procurement denied (spike-user-unrelated → no_permission)
+  E             SKIPPED — validation rejected
+  E    [PASS] 5. knowledge valid (km-alice + KM-POL-001 → answerable) ...
+  E    [PASS] 6. knowledge denied ...  [PASS] 7. compliance valid ...
+  E    [PASS] 8. compliance denied ... [PASS] 9. 422 strict date ...
+  E    [PASS] 10. zero external CDN (SPA serves static only)
+  E             zero external CDN (script/link)
+  E
+  E    PASS=8 SKIP=2 FAIL=0
+
+**结论:该测试不是"部署栈缺失"类失败。** 它 10 条里过了 8 条(含 SPA 相关的
+1 与 10),只有采购域的第 3、4 条 SKIP,原因是缺 `spike-user-procurement` /
+`spike-user-unrelated` 两个**采购域 fixture 主体** —— 属 **(a) 环境/fixture 未 seed**,
+与 OEI-005 已归因的另外 47 条同一类,**不是部署栈问题**。
+
+--------------------------------------------------------------------
+§2.3 真因定位:OI-005 前置链漏了**第 4 个 seeder**
+--------------------------------------------------------------------
+  $ grep -rn 'spike-user' --include='*.py' .
+  scripts/seed_v0_spike_fixture.py:32:  | person | spike-user-procurement | dept=procurement, roles=[buyer]|
+  scripts/seed_v0_spike_fixture.py:33:  | person | spike-user-unrelated    | dept=sales → must be DENIED    |
+
+仓库里**已经存在** `scripts/seed_v0_spike_fixture.py`,它正是为第 3/4 条检查
+准备 fixture 的(7 个实体 + 1 条 SELECTS 关系 + 1 条 DENY ACL)。
+OEI-005 的 `seed-fixtures` 目标只收录了 temporal / knowledge / compliance
+**三个** seeder,**漏了这一个**。
+
+安全性核对(先读后跑,未改其一字):
+  * 删除严格 scope 到 `source_system = 'spike:v0-technical-fixture'` 单一值,
+    **不是 LIKE 扫描**(脚本注释自陈是 FER 教训的产物);
+  * display_id 全部显式 `SPIKE-*`,与共享数字命名空间(PR###/SUP###/POL###/U###)
+    不冲突,不会把 demo 空间整体顶偏;
+  * 幂等(每次 DELETE-then-INSERT 自己的行);
+  * 自带 self_check,失败则 exit 1。
+
+  $ uv run python scripts/seed_v0_spike_fixture.py
+  TECHNICAL SPIKE FIXTURE — NOT CUSTOMER-VALIDATED — NOT PRODUCT REFERENCE WORKFLOW
+  ------------------------------------------------------------------------
+  source_system        : spike:v0-technical-fixture
+  removed (prior rows) : {'relationships': 0, 'entity_aliases': 0, 'entities': 0, 'acl_entries': 0}
+  entities created     : 7
+  relationships created: 1
+  PR display_id        : SPIKE-PR-001  (resolved at runtime)
+  ------------------------------------------------------------------------
+  SELF-CHECK PASSED — all 7 fixture entities present, 1 SELECTS relationship,
+                       PR review_status='pending', DENY acl on current display_id.
+
+--------------------------------------------------------------------
+§2.4 补跑后:该测试**真·通过**(而不是被 skip 掩盖)
+--------------------------------------------------------------------
+  $ DATABASE_URL=$DB uv run pytest tests/integration/test_cut_045_local_origin_smoke.py -v
+  tests/integration/test_cut_045_local_origin_smoke.py ...            [100%]
+  ======================== 3 passed, 1 warning in 13.86s =========================
+  leak_after=0
+
+即 PASS=10 SKIP=0 FAIL=0 真的达成。随后两轮完整套件均为
+**`681 passed, 5 skipped, 3 deselected`(failed = 0)**。
+
+因此 A0.3 的判定是**双向**的,两条都写清楚,不做取舍:
+
+  (i)  **形式项 ✅**:显式 skip 前置已实现且原因文案明确 —— 当
+       `demos/spa/index.html` 或 `.venv/bin/uvicorn` 缺失时会 SKIP,
+       而不是等超时再 FAIL。断言未被削弱。该分支本机未触发(栈是齐的),
+       属"实现了但未走到",不是"没实现"。
+  (ii) **实质项 ✅(优于任务书预期)**:任务书假设"本地无部署栈 → 只能 skip"。
+       实测本机能拉起完整同源栈,补上漏掉的第 4 个 seeder 后该测试
+       **10/10 全绿**。回归信号由此从 `1 failed` 收敛到 **`0 failed`**,
+       比"改成 skip"更强:既没有掩盖任何东西,又消掉了唯一的红灯。
+
+  > **本刀明确没有做的事**:没有加"缺 fixture 就 skip"的旁路。理由:§7 明令
+  > "不得把断言改成'永远通过'",且 A9 只要求 `failed ≤ 1`。把"缺 fixture"
+  > 也变成 skip 会把一个**真实且可修**的环境缺口藏起来(它下次仍会咬人)。
+  > 故选择**修环境、留断言**,并在 §2.5 把缺口上报。
+
+--------------------------------------------------------------------
+§2.5 上报给 codex 的两处任务书事实更正(不改代码,只记录)
+--------------------------------------------------------------------
+1. **§1.4 的基线归因错了**(影响 A9 的对账):任务书写"那 1 条是
+   `test_cut_045_local_origin_smoke`(部署栈缺失,环境类)"。实测它是
+   **(a) 采购域 spike fixture 未 seed**,与部署栈无关。修法不是"改 skip",
+   而是补跑 `scripts/seed_v0_spike_fixture.py`(一行命令)。
+2. **§4 步骤 0.3 的依赖描述错了**:不存在 `nginx` 与 `web/dist`。
+   真实依赖是 `demos/spa/index.html` + `.venv/bin/uvicorn` +
+   `scripts/cut_045_local_origin.py`(纯 Python 同源反代)。
+
+**建议(不实施,超出本刀 §7 授权)**:把 `scripts/seed_v0_spike_fixture.py`
+加进 `ece/Makefile` 的 `seed-fixtures` 目标,使 `make test-integration` 在干净库上
+也能得到 `failed = 0`。`ece/Makefile` **不在** OEI-006 §7 的授权例外清单内
+(该清单只有 `src/ece/consulting/**`、`demos/spa/**`、`src/ece/api/**`、
+`docs/API.md`、`TASKS.md`),故本刀**未动 Makefile 一行**。
+本刀后续所有 08/09 套件运行都建立在"已手工补跑该 seeder"的库上,命令已如实记录。
+
+================================================================================
+§3 完整 diff(唯一被改的 tests/ 文件)
+================================================================================
+$ git diff --stat tests/integration/test_cut_045_local_origin_smoke.py
+ .../integration/test_cut_045_local_origin_smoke.py | 132 +++++++++++++++------
+ 1 file changed, 97 insertions(+), 35 deletions(-)
+
+$ git diff tests/integration/test_cut_045_local_origin_smoke.py
+diff --git a/tests/integration/test_cut_045_local_origin_smoke.py b/tests/integration/test_cut_045_local_origin_smoke.py
+index c1c1c69..6af99ba 100644
+--- a/tests/integration/test_cut_045_local_origin_smoke.py
++++ b/tests/integration/test_cut_045_local_origin_smoke.py
+@@ -19,13 +19,13 @@ in `reports/cut-045/raw/smoke-cut045-localorigin.txt` as evidence.
+ """
+ from __future__ import annotations
+
++import contextlib
+ import os
+ import shutil
+ import socket
+ import subprocess
+ import sys
+ import time
+-import urllib.error
+ import urllib.request
+ from pathlib import Path
+
+@@ -36,6 +36,11 @@ SCRIPTS_DIR = REPO_ROOT / "scripts"
+ SMOKE_SCRIPT = SCRIPTS_DIR / "cut_045_demo_deployment_smoke.py"
+ ORIGIN_SCRIPT = SCRIPTS_DIR / "cut_045_local_origin.py"
+
++# Deployment-stack artifacts (OEI-006 step 0.3): the smoke only means anything
++# when the SPA static files and the uvicorn binary are both present locally.
++SPA_INDEX = REPO_ROOT / "demos" / "spa" / "index.html"
++UVICORN_BIN = REPO_ROOT / ".venv" / "bin" / "uvicorn"
++
+
+ def _free_port() -> int:
+     """Bind to port 0 to let the OS pick a free port."""
+@@ -52,11 +57,52 @@ def _wait_for_http(url: str, timeout: float = 10.0) -> bool:
+             with urllib.request.urlopen(url, timeout=1) as r:
+                 if 200 <= r.status < 500:  # 4xx = reachable, just not found
+                     return True
+-        except urllib.error.URLError:
++        except OSError:
++            # OSError covers urllib.error.URLError *and* TimeoutError (both are
++            # OSError subclasses in py3.10+). A hung/slow upstream must make this
++            # helper return False so the caller's explicit skip branch runs —
++            # previously a bare TimeoutError escaped as an unhandled exception
++            # (OEI-006 step 0: that path also leaked the uvicorn child process).
+             time.sleep(0.1)
+     return False
+
+
++def _reclaim(proc: subprocess.Popen | None) -> None:
++    """Unconditionally reclaim a child process: terminate → wait → kill → wait.
++
++    OEI-006 step 0.2: every child started by this module must be reclaimed on
++    ALL exits (success, assertion failure, skip, timeout). The previous version
++    only reclaimed on the happy path, leaking one uvicorn per run (10 stale
++    processes / ~553 MB RSS were found on 2026-09-24).
++    """
++    if proc is None:
++        return
++    if proc.poll() is None:
++        proc.terminate()
++    try:
++        proc.wait(timeout=5)
++        return
++    except subprocess.TimeoutExpired:
++        proc.kill()
++    with contextlib.suppress(subprocess.TimeoutExpired):  # pragma: no cover
++        proc.wait(timeout=5)
++
++
++def _deployment_stack_gap() -> str | None:
++    """Return a human reason when the local deployment stack is incomplete.
++
++    OEI-006 step 0.3: the same-origin deployment smoke needs the SPA static
++    artifacts (served by scripts/cut_045_local_origin.py) plus a uvicorn
++    upstream. When they are missing the test must SKIP with a clear reason
++    instead of waiting out a timeout and FAILing.
++    """
++    if not SPA_INDEX.exists():
++        return f"SPA static artifacts missing: {SPA_INDEX}"
++    if not UVICORN_BIN.exists():
++        return f"uvicorn binary missing: {UVICORN_BIN}"
++    return None
++
++
+ # ---------------------------------------------------------------------------
+ # File presence
+ # ---------------------------------------------------------------------------
+@@ -98,6 +144,18 @@ def test_deployment_smoke_passes_against_local_origin() -> None:
+     if not ORIGIN_SCRIPT.exists():
+         pytest.fail(f"local origin script missing: {ORIGIN_SCRIPT}")
+
++    # OEI-006 step 0.3: no deployment stack here → explicit SKIP with a reason,
++    # instead of waiting out a 15s timeout and FAILing (which also leaked a
++    # uvicorn child every run).
++    gap = _deployment_stack_gap()
++    if gap is not None:
++        pytest.skip(
++            "local same-origin deployment stack not available in this "
++            f"environment ({gap}); this smoke requires SPA static artifacts "
++            "served by scripts/cut_045_local_origin.py plus a uvicorn upstream "
++            "(see OEI-006/TASK.md step 0)."
++        )
++
+     origin_port = _free_port()
+     upstream_port = _free_port()
+     database_url = os.environ.get(
+@@ -106,11 +164,13 @@ def test_deployment_smoke_passes_against_local_origin() -> None:
+     )
+     today_anchor = os.environ.get("ECE_SERVER_TODAY_ANCHOR", "2026-09-22")
+
+-    # --- 1. start uvicorn (if binary available) --------------------------
+-    venv_dir = REPO_ROOT / ".venv"
+-    uvicorn_bin = venv_dir / "bin" / "uvicorn"
++    # OEI-006 step 0.2: both children below are reclaimed unconditionally in the
++    # finally block — including on the skip/fail/assertion paths.
+     uvicorn_proc: subprocess.Popen | None = None
+-    if uvicorn_bin.exists():
++    origin_proc: subprocess.Popen | None = None
++
++    try:
++        # --- 1. start uvicorn (binary presence already checked above) -----
+         uvicorn_env = {
+             **os.environ,
+             "DATABASE_URL": database_url,
+@@ -118,7 +178,7 @@ def test_deployment_smoke_passes_against_local_origin() -> None:
+         }
+         uvicorn_proc = subprocess.Popen(
+             [
+-                str(uvicorn_bin),
++                str(UVICORN_BIN),
+                 "ece.main:app",
+                 "--host", "127.0.0.1",
+                 "--port", str(upstream_port),
+@@ -130,31 +190,41 @@ def test_deployment_smoke_passes_against_local_origin() -> None:
+             cwd=str(REPO_ROOT),
+         )
+         if not _wait_for_http(f"http://127.0.0.1:{upstream_port}/healthz", timeout=15):
+-            stdout = uvicorn_proc.stdout.read().decode("utf-8", errors="replace") if uvicorn_proc.stdout else ""
+-            uvicorn_proc.terminate()
++            # Read stdout only AFTER reclaiming: the child holds the write end
++            # of the pipe, so an un-terminated read() would block until it exits.
++            _reclaim(uvicorn_proc)
++            stdout = (
++                uvicorn_proc.stdout.read().decode("utf-8", errors="replace")
++                if uvicorn_proc.stdout
++                else ""
++            )
+             pytest.skip(
+                 f"uvicorn did not come up on :{upstream_port} (DB fixtures missing? "
+                 f"Skipping full 10/10 verification; SPA-side checks 1+10 still "
+                 f"verified below).\n--- uvicorn stdout ---\n{stdout}"
+             )
+
+-    # --- 2. start the local origin server --------------------------------
+-    origin_env = {
+-        **os.environ,
+-        "CUT_045_ORIGIN_PORT": str(origin_port),
+-        "API_UPSTREAM": f"http://127.0.0.1:{upstream_port}",
+-    }
+-    origin_proc = subprocess.Popen(
+-        [sys.executable, str(ORIGIN_SCRIPT)],
+-        env=origin_env,
+-        stdout=subprocess.PIPE,
+-        stderr=subprocess.STDOUT,
+-        cwd=str(REPO_ROOT),
+-    )
++        # --- 2. start the local origin server ----------------------------
++        origin_env = {
++            **os.environ,
++            "CUT_045_ORIGIN_PORT": str(origin_port),
++            "API_UPSTREAM": f"http://127.0.0.1:{upstream_port}",
++        }
++        origin_proc = subprocess.Popen(
++            [sys.executable, str(ORIGIN_SCRIPT)],
++            env=origin_env,
++            stdout=subprocess.PIPE,
++            stderr=subprocess.STDOUT,
++            cwd=str(REPO_ROOT),
++        )
+
+-    try:
+         if not _wait_for_http(f"http://127.0.0.1:{origin_port}/index.html", timeout=10):
+-            stdout = origin_proc.stdout.read().decode("utf-8", errors="replace") if origin_proc.stdout else ""
++            _reclaim(origin_proc)
++            stdout = (
++                origin_proc.stdout.read().decode("utf-8", errors="replace")
++                if origin_proc.stdout
++                else ""
++            )
+             pytest.fail(
+                 f"local origin server did not come up on :{origin_port}\n"
+                 f"--- origin stdout ---\n{stdout}"
+@@ -199,14 +269,6 @@ def test_deployment_smoke_passes_against_local_origin() -> None:
+             )
+
+     finally:
+-        origin_proc.terminate()
+-        try:
+-            origin_proc.wait(timeout=5)
+-        except subprocess.TimeoutExpired:
+-            origin_proc.kill()
+-        if uvicorn_proc is not None:
+-            uvicorn_proc.terminate()
+-            try:
+-                uvicorn_proc.wait(timeout=5)
+-            except subprocess.TimeoutExpired:
+-                uvicorn_proc.kill()
+\ No newline at end of file
++        # OEI-006 step 0.2 — unconditional reclamation, in reverse start order.
++        _reclaim(origin_proc)
++        _reclaim(uvicorn_proc)
+\ No newline at end of file
+
+================================================================================
+§4 lint 平价:未新增任何 lint 错误
+================================================================================
+$ git show HEAD:tests/integration/test_cut_045_local_origin_smoke.py | uv run ruff check --stdin-filename <f> -
+  <f>:23:8: F401 [*] `shutil` imported but unused          ← HEAD 已存在
+  <f>:212:36: W292 [*] No newline at end of file           ← HEAD 已存在
+  Found 2 errors.
+
+$ uv run ruff check <工作副本>
+  <f>:24:8: F401 [*] `shutil` imported but unused          ← 同上,行号因 +1 import 位移
+  <f>:274:31: W292 [*] No newline at end of file           ← 同上
+  Found 2 errors.
+
+说明:两条均为 **HEAD 上既有的** 问题(`shutil` 从未被使用、文件末尾无换行),
+本刀**未修**——`shutil` 的移除与文件末尾换行都不属于 §7 授权的
+"子进程回收与 skip 前置",保持原样以免扩大 diff。文件末尾的
+`\ No newline at end of file` 在 diff 两侧都存在,未引入变化。
+`_reclaim` 初版用过 `try/except/pass`,被 ruff 报 SIM105(本刀**新引入**的错误),
+已改为 `contextlib.suppress` 消除;工作副本现与 HEAD 平价。
+
+================================================================================
+§5 未触碰项
+================================================================================
+  * `tests/**` 仅此 1 个文件被改(§7 授权),其余测试断言语义零改动
+  * `src/ece/**` 本步骤零改动(咨询域改动见后续步骤)
+  * `scripts/**` 零改动(只是**运行**了既有的 seed_v0_spike_fixture.py)
+  * `ece/Makefile` 零改动(不在 §7 授权清单内)
+  * Onyx 9 容器 / ollama:未 restart/stop/down/rm(见 12-*)
+  * 未 push;未引入新依赖;未把 cookie/token 写入任何产出物

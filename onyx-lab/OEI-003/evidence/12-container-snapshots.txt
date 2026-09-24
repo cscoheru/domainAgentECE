@@ -1,0 +1,16 @@
+# 12-container-snapshots.txt
+# scan_time: 2026-09-24T11:20:10+08:00
+# purpose: prove no Onyx container was restarted during OEI-003
+
+# ----- Onyx containers (Up time, RunningFor) -----
+onyx-nginx-1	Up 16 hours (healthy)	16 hours ago
+onyx-web_server-1	Up 16 hours (healthy)	16 hours ago
+onyx-background-1	Up 16 hours	16 hours ago
+onyx-api_server-1	Up 16 hours (healthy)	16 hours ago
+onyx-inference_model_server-1	Up 16 hours (healthy)	16 hours ago
+onyx-indexing_model_server-1	Up 16 hours (healthy)	16 hours ago
+onyx-relational_db-1	Up 16 hours (healthy)	16 hours ago
+onyx-cache-1	Up 16 hours	16 hours ago
+onyx-opensearch-1	Up 16 hours	16 hours ago
+
+# ----- ECE containers (if any) -----

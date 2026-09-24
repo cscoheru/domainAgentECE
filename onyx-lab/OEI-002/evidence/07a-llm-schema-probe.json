@@ -1,0 +1,26 @@
+# LLM Admin API Schema Probe (read-only, no mutations)
+# scan_time: 2026-09-23T22:38:10+08:00
+# purpose: discover required body fields for LLM admin endpoints before ollama is installed
+# method: POST/PUT with empty {} body, server returns 422 listing missing fields
+# safety: no providers were created, no defaults changed, no tests run
+
+# ----- POST /api/admin/llm/default -----
+$ curl -sS -X POST -H 'Content-Type: application/json' --data '{}' http://127.0.0.1:8080/api/admin/llm/default
+{"status_code":422,"message":"2 validation errors: {'type': 'missing', 'loc': ('body', 'provider_id'), 'msg': 'Field required', 'input': {}} {'type': 'missing', 'loc': ('body', 'model_name'), 'msg': 'Field required', 'input': {}}  File \"/app/onyx/server/manage/llm/api.py\", line 739, in set_provider_as_default   POST /admin/llm/default","data":null}
+HTTP=422
+
+# ----- POST /api/admin/llm/test -----
+$ curl -sS -X POST -H 'Content-Type: application/json' --data '{}' http://127.0.0.1:8080/api/admin/llm/test
+{"status_code":422,"message":"4 validation errors: {'type': 'missing', 'loc': ('body', 'provider'), 'msg': 'Field required', 'input': {}} {'type': 'missing', 'loc': ('body', 'model'), 'msg': 'Field required', 'input': {}} {'type': 'missing', 'loc': ('body', 'api_key_changed'), 'msg': 'Field required', 'input': {}} {'type': 'missing', 'loc': ('body', 'custom_config_changed'), 'msg': 'Field required', 'input': {}}  File \"/app/onyx/server/manage/llm/api.py\", line 439, in test_llm_configuration   POST /admin/llm/test","data":null}
+HTTP=422
+
+# ----- POST /api/admin/llm/openai-compatible/available-models -----
+$ curl -sS -X POST -H 'Content-Type: application/json' --data '{}' http://127.0.0.1:8080/api/admin/llm/openai-compatible/available-models
+{"status_code":422,"message":"1 validation error: {'type': 'missing', 'loc': ('body', 'api_base'), 'msg': 'Field required', 'input': {}}  File \"/app/onyx/server/manage/llm/api.py\", line 2115, in get_openai_compatible_server_available_models   POST /admin/llm/openai-compatible/available-models","data":null}
+HTTP=422
+
+# ----- PUT /api/admin/llm/provider -----
+$ curl -sS -X PUT -H 'Content-Type: application/json' --data '{}' http://127.0.0.1:8080/api/admin/llm/provider
+{"status_code":422,"message":"1 validation error: {'type': 'missing', 'loc': ('body', 'provider'), 'msg': 'Field required', 'input': {}}  File \"/app/onyx/server/manage/llm/api.py\", line 565, in put_llm_provider   PUT /admin/llm/provider","data":null}
+HTTP=422
+

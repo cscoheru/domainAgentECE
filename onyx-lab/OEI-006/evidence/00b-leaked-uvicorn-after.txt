@@ -1,0 +1,33 @@
+# 00b-leaked-uvicorn-after.txt — OEI-006 步骤 0.1:清理后的游离进程(应为 0)
+# date: 2026-09-24T18:17:04+08:00
+
+## 命令: ps -eo pid,ppid,etimes,rss,args | grep '[u]vicorn ece[.]main:app'
+  [空输出]  匹配数 = 0
+
+## 对照:Onyx 9 容器 + ollama 未受影响
+  running 容器数 = 9 (应为 9)
+onyx-api_server-1  Up 23 hours (healthy)
+onyx-background-1  Up 23 hours
+onyx-cache-1  Up 23 hours
+onyx-indexing_model_server-1  Up 23 hours (healthy)
+onyx-inference_model_server-1  Up 23 hours (healthy)
+onyx-nginx-1  Up 23 hours (healthy)
+onyx-opensearch-1  Up 23 hours
+onyx-relational_db-1  Up 23 hours (healthy)
+onyx-web_server-1  Up 23 hours (healthy)
+  /onyx-api_server-1 restarts=0 running=true
+  /onyx-background-1 restarts=0 running=true
+  /onyx-cache-1 restarts=0 running=true
+  /onyx-indexing_model_server-1 restarts=0 running=true
+  /onyx-inference_model_server-1 restarts=0 running=true
+  /onyx-nginx-1 restarts=0 running=true
+  /onyx-opensearch-1 restarts=0 running=true
+  /onyx-relational_db-1 restarts=0 running=true
+  /onyx-web_server-1 restarts=0 running=true
+  ollama = active / HTTP 200
+
+## 附注(诚实记录):清理命令的自我匹配教训
+  第一次 kill 时,我把命令行的 heredoc 正文里写了该进程名的**明文**,导致 bash 包装进程自身匹配了
+  ps|grep 的 regex,13 个 PID 里混入了 3 个我自己的 shell PID(该次调用 exit code 144 = 自身被 SIGTERM)。
+  10 个目标进程已全部杀死(本文件 count=0 为证),Onyx/ollama 未受影响。后续所有匹配一律使用
+  '[u]vicorn' 方括号写法且命令行内不再出现明文进程名。

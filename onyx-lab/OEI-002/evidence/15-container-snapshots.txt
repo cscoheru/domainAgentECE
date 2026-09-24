@@ -1,0 +1,20 @@
+# ollama resource snapshot
+# scan_time: 2026-09-24T08:36:17+08:00
+
+# ----- ollama process RSS / state -----
+    PID   RSS    VSZ %CPU %MEM     ELAPSED CMD
+ 196522 30528 2476036 0.2  0.2       10:02 /usr/local/bin/ollama serve
+
+# ----- nvidia-smi (best effort) -----
+NVIDIA GeForce RTX 4070 Laptop GPU, 1610 MiB, 8188 MiB, 0 %
+
+# ----- container snapshot (Up time) -----
+onyx-nginx-1	Up 13 hours (healthy)	13 hours ago
+onyx-web_server-1	Up 13 hours (healthy)	13 hours ago
+onyx-background-1	Up 13 hours	13 hours ago
+onyx-api_server-1	Up 13 hours (healthy)	13 hours ago
+onyx-inference_model_server-1	Up 13 hours (healthy)	13 hours ago
+onyx-indexing_model_server-1	Up 13 hours (healthy)	13 hours ago
+onyx-relational_db-1	Up 13 hours (healthy)	13 hours ago
+onyx-cache-1	Up 13 hours	13 hours ago
+onyx-opensearch-1	Up 14 hours	14 hours ago

@@ -1,0 +1,57 @@
+=== 11 — git commit (OEI-006 step 7) ===
+2026-09-24T18:56:36+08:00
+
+--- commit ---
+7ab17fc805c61b4f06952f9a800c83274cfa43c5
+cscoheru <klyliae@gmail.com>
+2026-09-24 18:56:30 +0800
+
+feat(OEI-006): merge content-engine recall into the Consulting Library
+
+Adds a second source to GET /api/v1/consulting/library alongside the 36-object
+static seed catalogue: engine-recalled documents from indexed real files, with
+source labels, detail-drawer reuse, and explicit degradation / empty states.
+
+The static side is untouched — engine results travel in new fields only
+(`engine_items` / `engine_status`), and the router computes the static response
+first and merges with `model_copy(update=...)`, which structurally guarantees
+existing static fields stay byte-identical for current consumers. `engine_status`
+is a four-state policy: ok / unavailable / disabled / skipped, deliberately
+fail-closed so the mock adapter's canned documents are never presented as the
+customer's own uploads.
+
+Also fixes a child-process leak in
+tests/integration/test_cut_045_local_origin_smoke.py: TimeoutError is an OSError
+but not a urllib.error.URLError, so it escaped the readiness helper before the
+try/finally and left uvicorn running. Both children are now reclaimed
+unconditionally, and a missing deployment stack is an explicit skip instead of a
+failure.
+
+Evidence: onyx-lab/OEI-006/evidence/01..12-*
+
+Co-Authored-By: Claude Code <noreply@anthropic.com>
+
+
+ TASKS.md                                           |  40 +++
+ demos/spa/app.js                                   | 124 ++++++++
+ demos/spa/index.html                               |  13 +-
+ demos/spa/styles.css                               |  49 +++
+ docs/API.md                                        | 109 +++++++
+ src/ece/consulting/engine_merge.py                 | 121 ++++++++
+ src/ece/consulting/models.py                       |  53 ++++
+ src/ece/consulting/router.py                       |  13 +-
+ .../integration/test_cut_045_local_origin_smoke.py | 132 +++++---
+ tests/unit/test_consulting_engine_merge.py         | 333 +++++++++++++++++++++
+ 10 files changed, 949 insertions(+), 38 deletions(-)
+--- status -sb ---
+## main...origin/main [ahead 5]
+ T docs/demo-platform/DEMO_PLATFORM_PRD.md
+ T docs/demo-platform/DEPLOY_USER_PROXY.md
+--- remotes ---
+origin	https://github.com/cscoheru/ece.git (fetch)
+origin	https://github.com/cscoheru/ece.git (push)
+--- refs on remotes (must NOT contain HEAD) ---
+refs/remotes/origin/main 08cbeff
+--- ahead/behind if upstream exists ---
+0	5
+--- push check: any remote ref pointing at HEAD? ---

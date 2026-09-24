@@ -1,0 +1,35 @@
+# R4 v3 - Value-level credential scan (summary written without literal patterns)
+# scan_time: 2026-09-23T22:25:42+08:00
+# cwd: /mnt/d/Projects/domainAgentECE/onyx-lab/OEI-001
+# scope: evidence/ workspace/ REPORT.md
+# NOTE: summary section avoids re-stating the grep patterns verbatim to prevent
+#   self-match in the next grep. See the 6 raw command blocks below for actual patterns.
+
+# ----- command-1 (pattern id: P1) -----
+$ grep -rEn 'connect\.sid=[A-Za-z0-9%._-]{10,}|fastapiusersauth=[A-Za-z0-9%._-]{10,}' evidence/ workspace/ REPORT.md
+(no match)
+
+# ----- command-2 (pattern id: P2) -----
+$ grep -rEn '\beyJ[A-Za-z0-9_-]{20,}\.[A-Za-z0-9_-]+' evidence/ workspace/ REPORT.md
+(no match)
+
+# ----- command-3 (pattern id: P3) -----
+$ grep -rEn 'password=[A-Za-z0-9_./-]{3,}' evidence/ workspace/ REPORT.md
+(no match)
+
+# ----- command-4 (pattern id: P4) -----
+$ grep -rEn 'Authorization:[[:space:]]+Bearer[[:space:]]+[A-Za-z0-9._-]+' evidence/ workspace/ REPORT.md
+(no match)
+
+# ----- command-5 (pattern id: P5) -----
+$ grep -rEn 'token=[A-Za-z0-9_./-]{8,}' evidence/ workspace/ REPORT.md
+(no match)
+
+# ----- command-6 (pattern id: P6) -----
+$ grep -rEn 'api_key=[A-Za-z0-9_./-]{4,}' evidence/ workspace/ REPORT.md
+(no match)
+
+# ===== summary =====
+scan_time: 2026-09-23T22:25:42+08:00
+TOTAL value-level credential hits across 6 patterns: 0
+STATUS: PASS — no real credential values found in cc-produced artifacts

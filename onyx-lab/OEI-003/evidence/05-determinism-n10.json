@@ -1,0 +1,101 @@
+run #1: 1 docs, elapsed=4.88s ids=['1']
+run #2: 1 docs, elapsed=3.84s ids=['1']
+run #3: 1 docs, elapsed=3.90s ids=['1']
+run #4: 1 docs, elapsed=3.87s ids=['1']
+run #5: 1 docs, elapsed=4.03s ids=['1']
+run #6: 1 docs, elapsed=4.62s ids=['1']
+run #7: 1 docs, elapsed=4.01s ids=['1']
+run #8: 1 docs, elapsed=3.84s ids=['1']
+run #9: 1 docs, elapsed=3.83s ids=['1']
+run #10: 1 docs, elapsed=3.86s ids=['1']
+{
+  "query": "问题树怎么用",
+  "engine_name": "onyx",
+  "runs": [
+    {
+      "i": 1,
+      "elapsed_s": 4.88,
+      "doc_ids": [
+        "1"
+      ],
+      "count": 1
+    },
+    {
+      "i": 2,
+      "elapsed_s": 3.84,
+      "doc_ids": [
+        "1"
+      ],
+      "count": 1
+    },
+    {
+      "i": 3,
+      "elapsed_s": 3.9,
+      "doc_ids": [
+        "1"
+      ],
+      "count": 1
+    },
+    {
+      "i": 4,
+      "elapsed_s": 3.87,
+      "doc_ids": [
+        "1"
+      ],
+      "count": 1
+    },
+    {
+      "i": 5,
+      "elapsed_s": 4.03,
+      "doc_ids": [
+        "1"
+      ],
+      "count": 1
+    },
+    {
+      "i": 6,
+      "elapsed_s": 4.62,
+      "doc_ids": [
+        "1"
+      ],
+      "count": 1
+    },
+    {
+      "i": 7,
+      "elapsed_s": 4.01,
+      "doc_ids": [
+        "1"
+      ],
+      "count": 1
+    },
+    {
+      "i": 8,
+      "elapsed_s": 3.84,
+      "doc_ids": [
+        "1"
+      ],
+      "count": 1
+    },
+    {
+      "i": 9,
+      "elapsed_s": 3.83,
+      "doc_ids": [
+        "1"
+      ],
+      "count": 1
+    },
+    {
+      "i": 10,
+      "elapsed_s": 3.86,
+      "doc_ids": [
+        "1"
+      ],
+      "count": 1
+    }
+  ],
+  "canonical_doc_id_set": [
+    "1"
+  ],
+  "all_runs_identical": true,
+  "conclusion": "PASS: 10/10 runs returned the identical set of engine_doc_id values; Onyx /api/search is deterministic on this deployment (matches OEI-002 §1.1 note)."
+}

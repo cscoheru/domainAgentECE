@@ -1,0 +1,42 @@
+# collected_at: 2026-09-23T22:27:49+08:00
+
+## uname
+Linux lilith 6.18.33.2-microsoft-standard-WSL2 #1 SMP PREEMPT_DYNAMIC Thu Jun 18 21:54:43 UTC 2026 x86_64 x86_64 x86_64 GNU/Linux
+
+## memory
+               total        used        free      shared  buff/cache   available
+Mem:            11Gi       9.2Gi       205Mi       107Mi       2.3Gi       2.0Gi
+Swap:          8.0Gi       2.4Gi       5.6Gi
+
+## disk
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/sdd       1007G   41G  916G   5% /
+D:\             621G   27G  595G   5% /mnt/d
+
+## containers
+onyx-nginx-1	Up 3 hours (healthy)	nginx:1.25.5-alpine
+onyx-web_server-1	Up 3 hours (healthy)	onyxdotapp/onyx-web-server:latest
+onyx-background-1	Up 3 hours	onyxdotapp/onyx-backend:latest
+onyx-api_server-1	Up 3 hours (healthy)	onyxdotapp/onyx-backend:latest
+onyx-inference_model_server-1	Up 3 hours (healthy)	onyxdotapp/onyx-model-server:latest
+onyx-indexing_model_server-1	Up 3 hours (healthy)	onyxdotapp/onyx-model-server:latest
+onyx-relational_db-1	Up 3 hours (healthy)	postgres:15.2-alpine
+onyx-cache-1	Up 3 hours	redis:7.4-alpine
+onyx-opensearch-1	Up 3 hours	opensearchproject/opensearch:3.6.0
+
+## container stats (no-stream)
+onyx-nginx-1	16.55MiB / 128MiB	0.00%
+onyx-web_server-1	158.6MiB / 512MiB	0.05%
+onyx-background-1	2.318GiB / 3GiB	6.71%
+onyx-api_server-1	945MiB / 1.5GiB	0.30%
+onyx-inference_model_server-1	1.044GiB / 2GiB	0.27%
+onyx-indexing_model_server-1	1.791GiB / 2GiB	0.38%
+onyx-relational_db-1	159MiB / 768MiB	0.99%
+onyx-cache-1	11.76MiB / 128MiB	1.70%
+onyx-opensearch-1	1.982GiB / 2.5GiB	1.58%
+
+## api health
+http_status=200
+
+## gpu (best effort)
+NVIDIA GeForce RTX 4070 Laptop GPU, 1760 MiB, 8188 MiB

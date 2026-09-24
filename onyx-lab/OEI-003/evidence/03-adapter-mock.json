@@ -1,0 +1,54 @@
+{
+  "engine_name": "mock",
+  "list_projects": [
+    {
+      "engine_project_id": 1,
+      "name": "OEI-001 Consulting Lab",
+      "raw": {
+        "source": "mock"
+      }
+    },
+    {
+      "engine_project_id": 2,
+      "name": "Knowledge Management Demo",
+      "raw": {
+        "source": "mock"
+      }
+    }
+  ],
+  "search_results": [
+    {
+      "engine_doc_id": "mock-1-methodology",
+      "title": "methodology-framework.md",
+      "snippet": "[Mock] 问题树 / 假设驱动 / MECE 的实战组合(Demo Case) — consulting methodology for issue tree, hypothesis-driven, MECE.",
+      "source_type": "user_file",
+      "updated_at": null,
+      "raw": {
+        "mock": true,
+        "project_id": 1
+      }
+    },
+    {
+      "engine_doc_id": "mock-1-case",
+      "title": "case-management-consulting.md",
+      "snippet": "[Mock] 某零售集团供应链降本管理咨询案例 — background / problem / method / delivery / results.",
+      "source_type": "user_file",
+      "updated_at": null,
+      "raw": {
+        "mock": true,
+        "project_id": 1
+      }
+    },
+    {
+      "engine_doc_id": "mock-1-play",
+      "title": "play-sales-delivery.md",
+      "snippet": "[Mock] 销售→交付衔接五阶段 play — stages, actions, deliverables, responsibilities.",
+      "source_type": "user_file",
+      "updated_at": null,
+      "raw": {
+        "mock": true,
+        "project_id": 1
+      }
+    }
+  ]
+}

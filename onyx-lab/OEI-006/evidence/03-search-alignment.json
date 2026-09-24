@@ -1,0 +1,58 @@
+{
+  "query": "问题树怎么用",
+  "captured_at": "2026-09-24T18:35:34+08:00",
+  "left": {
+    "what": "ECE Consulting Library engine group",
+    "endpoint": "GET /api/v1/consulting/library?q=问题树怎么用",
+    "env": "ECE_CONTENT_ENGINE=onyx",
+    "engine_status": "ok",
+    "static_total": 0,
+    "row_count": 1
+  },
+  "right": {
+    "what": "engine raw search (the thing the adapter calls)",
+    "endpoint": "POST http://127.0.0.1:8080/api/search",
+    "http_status": 200,
+    "body_sent": {
+      "query": "问题树怎么用"
+    },
+    "row_count": 1,
+    "result_fields": [
+      "citation_id",
+      "content",
+      "link",
+      "source_type",
+      "title",
+      "updated_at"
+    ]
+  },
+  "rows": [
+    {
+      "index": 0,
+      "engine_doc_id_ece": "1",
+      "citation_id_onyx": "1",
+      "doc_id_match": true,
+      "title_match": true,
+      "source_type_match": true,
+      "updated_at_equivalent": true,
+      "snippet_equals_onyx_content_capped_at_800": true,
+      "snippet_len": 801,
+      "onyx_content_len": 2043,
+      "snippet_first_80": "# 咨询方法论：问题树、假设驱动与 MECE 的实战组合\n\n> **标注**：本方法论为 **Demo Case** 演示文档，整理自多个内部培训材料与项目复盘",
+      "onyx_content_first_80": "# 咨询方法论：问题树、假设驱动与 MECE 的实战组合\n\n> **标注**：本方法论为 **Demo Case** 演示文档，整理自多个内部培训材料与项目复盘",
+      "snippet_is_prefix_of_onyx_content": true,
+      "workspace_original": "onyx-lab/OEI-001/workspace/methodology-framework.md",
+      "snippet_first_80_found_in_original": true
+    }
+  ],
+  "verdict": {
+    "row_counts_equal": true,
+    "all_rows_aligned": true,
+    "snippet_rule": "snippet = onyx content, capped at 800 chars + '…' (adapter _MAX_SNIPPET_CHARS)",
+    "ece_drops": [
+      "raw",
+      "link"
+    ],
+    "why_dropped": "EngineItem deliberately does not surface `raw`/`link` — `link` is an engine-internal, session-scoped URL and must not be handed to the SPA."
+  }
+}

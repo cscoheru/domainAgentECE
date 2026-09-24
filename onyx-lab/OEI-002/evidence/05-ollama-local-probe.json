@@ -1,0 +1,13 @@
+# 05-ollama-local-probe.json
+# scan_time: 2026-09-24T07:54:03+08:00
+# model: qwen2.5:3b (main model per TASK v3 §3 步骤 3)
+# elapsed_seconds: 17.712592545
+# http_code: 200
+
+# ----- request -----
+{"model":"qwen2.5:3b","messages":[{"role":"user","content":"用一句话介绍你自己,告诉我你的名字和用途"}],"stream":false}
+
+
+# ----- response -----
+{"id":"chatcmpl-617","object":"chat.completion","created":1790207643,"model":"qwen2.5:3b","system_fingerprint":"fp_ollama","choices":[{"index":0,"message":{"role":"assistant","content":"我是Qwen，一个致力于提供帮助和解答问题的 AI 助手。"},"finish_reason":"stop"}],"usage":{"prompt_tokens":39,"prompt_tokens_details":{"cached_tokens":0},"completion_tokens":18,"total_tokens":57}}
+

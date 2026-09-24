@@ -1,0 +1,32 @@
+{
+  "test_query": "问题树怎么用",
+  "engine": "OnyxContentEngineAdapter (real HTTP via ECE_ONYX_BASE=http://127.0.0.1:8080)",
+  "http_status_no_q": 200,
+  "http_status_with_q": 200,
+  "html_length_no_q": 2801,
+  "html_length_with_q": 3917,
+  "engine_status_page_required_fields": {
+    "engine_name_onyx": true,
+    "engine_version_v4_7_8": true,
+    "tier_community": true,
+    "gpu_enabled": true,
+    "project_count_1": true,
+    "file_count_3": true,
+    "provider_name_ollama_local_qwen": true,
+    "default_model_qwen2_5_3b": true
+  },
+  "citations_section_present": true,
+  "user_file_source_type_present": true,
+  "api_search_results_count": 1,
+  "title_alignment_table": [
+    {
+      "api_title": "methodology-framework.md",
+      "api_engine_doc_id": "1",
+      "in_html": true,
+      "engine_doc_id_in_html": true,
+      "snippet_head_120_match": false
+    }
+  ],
+  "all_titles_aligned": true,
+  "conclusion": "PASS: 1 /api/search result(s) — all titles + engine_doc_id values appear in the ECE-rendered /engine/status HTML. ECE citation rendering works on real Onyx engine output. OEI-002 §8.4 force-item is satisfied."
+}

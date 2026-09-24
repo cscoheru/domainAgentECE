@@ -1,0 +1,861 @@
+....FFFFFFF...............F............................F................ [ 10%]
+.......ss...........FFFFF.F.F..F......F.F............................... [ 20%]
+........................................................................ [ 31%]
+........................................................................ [ 41%]
+......................................................FF................ [ 52%]
+.................sss.................................................... [ 62%]
+............................................FFFF....FF.................. [ 73%]
+........................................................................ [ 83%]
+........................................................................ [ 94%]
+......................................                                   [100%]
+=================================== FAILURES ===================================
+_ test_compliance_boundary_truth_table[ctl001_alice_full_coverage_sufficient] __
+
+client = <starlette.testclient.TestClient object at 0x7597ec52ff50>
+control_id = 'COMP-CTL-001', user_id = 'comp-alice'
+expected_value = 'evidence_package_sufficient', expected_evidence_count = 2
+expected_keyword = '无缺口', request_period = ('2026-07-01', '2026-09-30')
+
+>   ???
+E   AssertionError: control_id=COMP-CTL-001 user_id=comp-alice period=(2026-07-01..2026-09-30): expected 200, got 422; body={"error":"invalid_scenario_spec","detail":"no entity with source_id='COMP-CTL-001' source_system='comp:v0-compliance-fixture'"}
+E   assert 422 == 200
+E    +  where 422 = <Response [422 Unprocessable Content]>.status_code
+
+/Users/kjonekong/projects/domainAgentECE/ece/tests/integration/test_compliance_boundary.py:239: AssertionError
+_ test_compliance_boundary_truth_table[ctl002_alice_count_and_coverage_fail_gap_list] _
+
+client = <starlette.testclient.TestClient object at 0x7597ec5d7320>
+control_id = 'COMP-CTL-002', user_id = 'comp-alice', expected_value = 'gap_list'
+expected_evidence_count = 0, expected_keyword = '存在缺口'
+request_period = ('2026-07-01', '2026-09-30')
+
+>   ???
+E   AssertionError: control_id=COMP-CTL-002 user_id=comp-alice period=(2026-07-01..2026-09-30): expected 200, got 422; body={"error":"invalid_scenario_spec","detail":"no entity with source_id='COMP-CTL-002' source_system='comp:v0-compliance-fixture'"}
+E   assert 422 == 200
+E    +  where 422 = <Response [422 Unprocessable Content]>.status_code
+
+/Users/kjonekong/projects/domainAgentECE/ece/tests/integration/test_compliance_boundary.py:239: AssertionError
+_ test_compliance_boundary_truth_table[ctl003_alice_coverage_only_fails_gap_list] _
+
+client = <starlette.testclient.TestClient object at 0x7597ec578830>
+control_id = 'COMP-CTL-003', user_id = 'comp-alice', expected_value = 'gap_list'
+expected_evidence_count = 1, expected_keyword = '存在缺口'
+request_period = ('2026-07-01', '2026-09-30')
+
+>   ???
+E   AssertionError: control_id=COMP-CTL-003 user_id=comp-alice period=(2026-07-01..2026-09-30): expected 200, got 422; body={"error":"invalid_scenario_spec","detail":"no entity with source_id='COMP-CTL-003' source_system='comp:v0-compliance-fixture'"}
+E   assert 422 == 200
+E    +  where 422 = <Response [422 Unprocessable Content]>.status_code
+
+/Users/kjonekong/projects/domainAgentECE/ece/tests/integration/test_compliance_boundary.py:239: AssertionError
+_ test_compliance_boundary_truth_table[ctl001_eve_denied_pre_rule_no_permission] _
+
+client = <starlette.testclient.TestClient object at 0x7597ec515e20>
+control_id = 'COMP-CTL-001', user_id = 'comp-eve'
+expected_value = 'no_permission', expected_evidence_count = 0
+expected_keyword = '无权访问', request_period = ('2026-07-01', '2026-09-30')
+
+>   ???
+E   AssertionError: control_id=COMP-CTL-001 user_id=comp-eve period=(2026-07-01..2026-09-30): expected 200, got 422; body={"error":"invalid_scenario_spec","detail":"no entity with source_id='COMP-CTL-001' source_system='comp:v0-compliance-fixture'"}
+E   assert 422 == 200
+E    +  where 422 = <Response [422 Unprocessable Content]>.status_code
+
+/Users/kjonekong/projects/domainAgentECE/ece/tests/integration/test_compliance_boundary.py:239: AssertionError
+_ test_compliance_boundary_truth_table[R1_B1_request_before_evidence_gap_list] _
+
+client = <starlette.testclient.TestClient object at 0x7597ec5d7350>
+control_id = 'COMP-CTL-001', user_id = 'comp-alice', expected_value = 'gap_list'
+expected_evidence_count = 0, expected_keyword = '存在缺口'
+request_period = ('2026-01-01', '2026-06-30')
+
+>   ???
+E   AssertionError: control_id=COMP-CTL-001 user_id=comp-alice period=(2026-01-01..2026-06-30): expected 200, got 422; body={"error":"invalid_scenario_spec","detail":"no entity with source_id='COMP-CTL-001' source_system='comp:v0-compliance-fixture'"}
+E   assert 422 == 200
+E    +  where 422 = <Response [422 Unprocessable Content]>.status_code
+
+/Users/kjonekong/projects/domainAgentECE/ece/tests/integration/test_compliance_boundary.py:239: AssertionError
+_ test_compliance_boundary_truth_table[R1_B1_request_after_evidence_gap_list] __
+
+client = <starlette.testclient.TestClient object at 0x7597ec52fd40>
+control_id = 'COMP-CTL-001', user_id = 'comp-alice', expected_value = 'gap_list'
+expected_evidence_count = 0, expected_keyword = '存在缺口'
+request_period = ('2026-10-01', '2026-12-31')
+
+>   ???
+E   AssertionError: control_id=COMP-CTL-001 user_id=comp-alice period=(2026-10-01..2026-12-31): expected 200, got 422; body={"error":"invalid_scenario_spec","detail":"no entity with source_id='COMP-CTL-001' source_system='comp:v0-compliance-fixture'"}
+E   assert 422 == 200
+E    +  where 422 = <Response [422 Unprocessable Content]>.status_code
+
+/Users/kjonekong/projects/domainAgentECE/ece/tests/integration/test_compliance_boundary.py:239: AssertionError
+_ test_compliance_boundary_truth_table[R1_B1_request_partial_intersection_sufficient] _
+
+client = <starlette.testclient.TestClient object at 0x7597ec9faa20>
+control_id = 'COMP-CTL-001', user_id = 'comp-alice'
+expected_value = 'evidence_package_sufficient', expected_evidence_count = 2
+expected_keyword = '无缺口', request_period = ('2026-08-15', '2026-09-15')
+
+>   ???
+E   AssertionError: control_id=COMP-CTL-001 user_id=comp-alice period=(2026-08-15..2026-09-15): expected 200, got 422; body={"error":"invalid_scenario_spec","detail":"no entity with source_id='COMP-CTL-001' source_system='comp:v0-compliance-fixture'"}
+E   assert 422 == 200
+E    +  where 422 = <Response [422 Unprocessable Content]>.status_code
+
+/Users/kjonekong/projects/domainAgentECE/ece/tests/integration/test_compliance_boundary.py:239: AssertionError
+_________ test_compliance_post_route_uses_pack_specific_scenario_spec __________
+
+>   ???
+E   AssertionError: POST scenarios/generate with domain=compliance failed: 422 body={"error":"invalid_scenario_spec","detail":"no entity with source_id='COMP-CTL-001' source_system='comp:v0-compliance-fixture'"}
+E   assert 422 == 200
+E    +  where 422 = <Response [422 Unprocessable Content]>.status_code
+
+/Users/kjonekong/projects/domainAgentECE/ece/tests/integration/test_compliance_domain_discovery.py:74: AssertionError
+______________ test_deployment_smoke_passes_against_local_origin _______________
+
+>   ???
+
+/Users/kjonekong/projects/domainAgentECE/ece/tests/integration/test_cut_045_local_origin_smoke.py:132: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/Users/kjonekong/projects/domainAgentECE/ece/tests/integration/test_cut_045_local_origin_smoke.py:52: in _wait_for_http
+    ???
+/home/fisher/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/urllib/request.py:215: in urlopen
+    return opener.open(url, data, timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/home/fisher/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/urllib/request.py:515: in open
+    response = self._open(req, data)
+               ^^^^^^^^^^^^^^^^^^^^^
+/home/fisher/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/urllib/request.py:532: in _open
+    result = self._call_chain(self.handle_open, protocol, protocol +
+/home/fisher/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/urllib/request.py:492: in _call_chain
+    result = func(*args)
+             ^^^^^^^^^^^
+/home/fisher/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/urllib/request.py:1373: in http_open
+    return self.do_open(http.client.HTTPConnection, req)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/home/fisher/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/urllib/request.py:1348: in do_open
+    r = h.getresponse()
+        ^^^^^^^^^^^^^^^
+/home/fisher/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/http/client.py:1478: in getresponse
+    response.begin()
+/home/fisher/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/http/client.py:343: in begin
+    version, status, reason = self._read_status()
+                              ^^^^^^^^^^^^^^^^^^^
+/home/fisher/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/http/client.py:304: in _read_status
+    line = str(self.fp.readline(_MAXLINE + 1), "iso-8859-1")
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <socket.SocketIO object at 0x7597ebd243a0>
+b = <memory at 0x7597ec176bc0>
+
+    def readinto(self, b):
+        """Read up to len(b) bytes into the writable buffer *b* and return
+        the number of bytes read.  If the socket is non-blocking and no bytes
+        are available, None is returned.
+    
+        If *b* is non-empty, a 0 return value indicates that the connection
+        was shutdown at the other end.
+        """
+        self._checkClosed()
+        self._checkReadable()
+        if self._timeout_occurred:
+            raise OSError("cannot read from timed out object")
+        while True:
+            try:
+>               return self._sock.recv_into(b)
+                       ^^^^^^^^^^^^^^^^^^^^^^^
+E               TimeoutError: timed out
+
+/home/fisher/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/socket.py:720: TimeoutError
+___ test_knowledge_boundary_truth_table[validity_pass_perm_pass_answerable] ____
+
+client = <starlette.testclient.TestClient object at 0x7597ebdfa5a0>
+policy_id = 'KM-POL-001', user_id = 'km-alice', expected_value = 'answerable'
+expected_evidence_count = 2, expected_keyword = '有据可答'
+
+    @pytest.mark.parametrize(
+        (
+            "policy_id",
+            "user_id",
+            "expected_value",
+            "expected_evidence_count",
+            "expected_keyword",
+        ),
+        [
+            # KM-POL-001 + alice: valid + has-hr → answerable, 2 evidence rows
+            ("KM-POL-001", "km-alice", "answerable", 2, "有据可答"),
+            # KM-POL-002 + alice: expired + has-hr → needs_valid_policy, 1 evidence (perm only)
+            ("KM-POL-002", "km-alice", "needs_valid_policy", 1, "请提供当前有效版本"),
+            # KM-POL-003 + alice: valid + missing-finance → needs_valid_policy, 1 (validity only)
+            ("KM-POL-003", "km-alice", "needs_valid_policy", 1, "当前用户无访问权限"),
+            # cut-043 — permission 反差 (PRD §7 纪律 #2): KM-POL-001 + km-eve is denied
+            # by the engine-level ACL DENY row (acl_entries seeded by seed_knowledge_fixture),
+            # so the loop returns the denied branch with conclusion=no_permission and 0
+            # evidence rows. This is the "denied pre-rule" pathway; R5-B2 below is the
+            # "rule double-fail" pathway — both must coexist to demonstrate two distinct
+            # business semantics (engine denial vs rule zero-evidence).
+            ("KM-POL-001", "km-eve", "no_permission", 0, "无权访问"),
+            # R5-B2 — KM-POL-002 + km-eve: BOTH conditions failed, 0 evidence.
+            # Prior bug: this hit RuntimeError (loop only allowed auto_approved
+            # zero-evidence). Now needs_valid_policy is allowlisted.
+            ("KM-POL-002", "km-eve", "needs_valid_policy", 0, "请提供有效版本并确认访问权限"),
+        ],
+        ids=[
+            "validity_pass_perm_pass_answerable",
+            "validity_fail_perm_pass_needs_valid",
+            "validity_pass_perm_fail_needs_valid",
+            "validity_pass_perm_fail_eve_denied_pre_rule",
+            "validity_fail_perm_fail_zero_evidence_r5b2",
+        ],
+    )
+    def test_knowledge_boundary_truth_table(
+        client: TestClient,
+        policy_id: str,
+        user_id: str,
+        expected_value: str,
+        expected_evidence_count: int,
+        expected_keyword: str,
+    ) -> None:
+        """cut-043R binding invariant.
+    
+        Each 200 case asserts:
+          1. `decision_value == expected_value`
+          2. `len(evidence) == expected_evidence_count` (S2 lock-down + R5-B2)
+          3. `reason contains expected_keyword`
+          4. DB relationship counts stable (REQUIRES_ROLE + HAS_ROLE unchanged
+             for the policy in question; KM has no materializer)
+    
+        R5-B1 conformance: NO `today` in params — server injects.
+        R5-B4 conformance: NO `employee_id` in params — X-User-Id is identity.
+        """
+        resp = client.post(
+            "/api/v1/demo/scenarios/generate",
+            headers={"X-User-Id": user_id},
+            json={
+                "domain": "knowledge",
+                "scenario": "default",
+                "params": {"policy_id": policy_id},
+            },
+        )
+>       assert resp.status_code == 200, (
+            f"policy_id={policy_id} user_id={user_id}: expected 200, "
+            f"got {resp.status_code}; body={resp.text[:300]}"
+        )
+E       AssertionError: policy_id=KM-POL-001 user_id=km-alice: expected 200, got 422; body={"error":"invalid_scenario_spec","detail":"no entity with source_id='KM-POL-001' source_system='km:v0-knowledge-fixture'"}
+E       assert 422 == 200
+E        +  where 422 = <Response [422 Unprocessable Content]>.status_code
+
+tests/integration/test_knowledge_boundary.py:246: AssertionError
+___ test_knowledge_boundary_truth_table[validity_fail_perm_pass_needs_valid] ___
+
+client = <starlette.testclient.TestClient object at 0x7597ea0f9370>
+policy_id = 'KM-POL-002', user_id = 'km-alice'
+expected_value = 'needs_valid_policy', expected_evidence_count = 1
+expected_keyword = '请提供当前有效版本'
+
+    @pytest.mark.parametrize(
+        (
+            "policy_id",
+            "user_id",
+            "expected_value",
+            "expected_evidence_count",
+            "expected_keyword",
+        ),
+        [
+            # KM-POL-001 + alice: valid + has-hr → answerable, 2 evidence rows
+            ("KM-POL-001", "km-alice", "answerable", 2, "有据可答"),
+            # KM-POL-002 + alice: expired + has-hr → needs_valid_policy, 1 evidence (perm only)
+            ("KM-POL-002", "km-alice", "needs_valid_policy", 1, "请提供当前有效版本"),
+            # KM-POL-003 + alice: valid + missing-finance → needs_valid_policy, 1 (validity only)
+            ("KM-POL-003", "km-alice", "needs_valid_policy", 1, "当前用户无访问权限"),
+            # cut-043 — permission 反差 (PRD §7 纪律 #2): KM-POL-001 + km-eve is denied
+            # by the engine-level ACL DENY row (acl_entries seeded by seed_knowledge_fixture),
+            # so the loop returns the denied branch with conclusion=no_permission and 0
+            # evidence rows. This is the "denied pre-rule" pathway; R5-B2 below is the
+            # "rule double-fail" pathway — both must coexist to demonstrate two distinct
+            # business semantics (engine denial vs rule zero-evidence).
+            ("KM-POL-001", "km-eve", "no_permission", 0, "无权访问"),
+            # R5-B2 — KM-POL-002 + km-eve: BOTH conditions failed, 0 evidence.
+            # Prior bug: this hit RuntimeError (loop only allowed auto_approved
+            # zero-evidence). Now needs_valid_policy is allowlisted.
+            ("KM-POL-002", "km-eve", "needs_valid_policy", 0, "请提供有效版本并确认访问权限"),
+        ],
+        ids=[
+            "validity_pass_perm_pass_answerable",
+            "validity_fail_perm_pass_needs_valid",
+            "validity_pass_perm_fail_needs_valid",
+            "validity_pass_perm_fail_eve_denied_pre_rule",
+            "validity_fail_perm_fail_zero_evidence_r5b2",
+        ],
+    )
+    def test_knowledge_boundary_truth_table(
+        client: TestClient,
+        policy_id: str,
+        user_id: str,
+        expected_value: str,
+        expected_evidence_count: int,
+        expected_keyword: str,
+    ) -> None:
+        """cut-043R binding invariant.
+    
+        Each 200 case asserts:
+          1. `decision_value == expected_value`
+          2. `len(evidence) == expected_evidence_count` (S2 lock-down + R5-B2)
+          3. `reason contains expected_keyword`
+          4. DB relationship counts stable (REQUIRES_ROLE + HAS_ROLE unchanged
+             for the policy in question; KM has no materializer)
+    
+        R5-B1 conformance: NO `today` in params — server injects.
+        R5-B4 conformance: NO `employee_id` in params — X-User-Id is identity.
+        """
+        resp = client.post(
+            "/api/v1/demo/scenarios/generate",
+            headers={"X-User-Id": user_id},
+            json={
+                "domain": "knowledge",
+                "scenario": "default",
+                "params": {"policy_id": policy_id},
+            },
+        )
+>       assert resp.status_code == 200, (
+            f"policy_id={policy_id} user_id={user_id}: expected 200, "
+            f"got {resp.status_code}; body={resp.text[:300]}"
+        )
+E       AssertionError: policy_id=KM-POL-002 user_id=km-alice: expected 200, got 422; body={"error":"invalid_scenario_spec","detail":"no entity with source_id='KM-POL-002' source_system='km:v0-knowledge-fixture'"}
+E       assert 422 == 200
+E        +  where 422 = <Response [422 Unprocessable Content]>.status_code
+
+tests/integration/test_knowledge_boundary.py:246: AssertionError
+___ test_knowledge_boundary_truth_table[validity_pass_perm_fail_needs_valid] ___
+
+client = <starlette.testclient.TestClient object at 0x7597ebdd4c80>
+policy_id = 'KM-POL-003', user_id = 'km-alice'
+expected_value = 'needs_valid_policy', expected_evidence_count = 1
+expected_keyword = '当前用户无访问权限'
+
+    @pytest.mark.parametrize(
+        (
+            "policy_id",
+            "user_id",
+            "expected_value",
+            "expected_evidence_count",
+            "expected_keyword",
+        ),
+        [
+            # KM-POL-001 + alice: valid + has-hr → answerable, 2 evidence rows
+            ("KM-POL-001", "km-alice", "answerable", 2, "有据可答"),
+            # KM-POL-002 + alice: expired + has-hr → needs_valid_policy, 1 evidence (perm only)
+            ("KM-POL-002", "km-alice", "needs_valid_policy", 1, "请提供当前有效版本"),
+            # KM-POL-003 + alice: valid + missing-finance → needs_valid_policy, 1 (validity only)
+            ("KM-POL-003", "km-alice", "needs_valid_policy", 1, "当前用户无访问权限"),
+            # cut-043 — permission 反差 (PRD §7 纪律 #2): KM-POL-001 + km-eve is denied
+            # by the engine-level ACL DENY row (acl_entries seeded by seed_knowledge_fixture),
+            # so the loop returns the denied branch with conclusion=no_permission and 0
+            # evidence rows. This is the "denied pre-rule" pathway; R5-B2 below is the
+            # "rule double-fail" pathway — both must coexist to demonstrate two distinct
+            # business semantics (engine denial vs rule zero-evidence).
+            ("KM-POL-001", "km-eve", "no_permission", 0, "无权访问"),
+            # R5-B2 — KM-POL-002 + km-eve: BOTH conditions failed, 0 evidence.
+            # Prior bug: this hit RuntimeError (loop only allowed auto_approved
+            # zero-evidence). Now needs_valid_policy is allowlisted.
+            ("KM-POL-002", "km-eve", "needs_valid_policy", 0, "请提供有效版本并确认访问权限"),
+        ],
+        ids=[
+            "validity_pass_perm_pass_answerable",
+            "validity_fail_perm_pass_needs_valid",
+            "validity_pass_perm_fail_needs_valid",
+            "validity_pass_perm_fail_eve_denied_pre_rule",
+            "validity_fail_perm_fail_zero_evidence_r5b2",
+        ],
+    )
+    def test_knowledge_boundary_truth_table(
+        client: TestClient,
+        policy_id: str,
+        user_id: str,
+        expected_value: str,
+        expected_evidence_count: int,
+        expected_keyword: str,
+    ) -> None:
+        """cut-043R binding invariant.
+    
+        Each 200 case asserts:
+          1. `decision_value == expected_value`
+          2. `len(evidence) == expected_evidence_count` (S2 lock-down + R5-B2)
+          3. `reason contains expected_keyword`
+          4. DB relationship counts stable (REQUIRES_ROLE + HAS_ROLE unchanged
+             for the policy in question; KM has no materializer)
+    
+        R5-B1 conformance: NO `today` in params — server injects.
+        R5-B4 conformance: NO `employee_id` in params — X-User-Id is identity.
+        """
+        resp = client.post(
+            "/api/v1/demo/scenarios/generate",
+            headers={"X-User-Id": user_id},
+            json={
+                "domain": "knowledge",
+                "scenario": "default",
+                "params": {"policy_id": policy_id},
+            },
+        )
+>       assert resp.status_code == 200, (
+            f"policy_id={policy_id} user_id={user_id}: expected 200, "
+            f"got {resp.status_code}; body={resp.text[:300]}"
+        )
+E       AssertionError: policy_id=KM-POL-003 user_id=km-alice: expected 200, got 422; body={"error":"invalid_scenario_spec","detail":"no entity with source_id='KM-POL-003' source_system='km:v0-knowledge-fixture'"}
+E       assert 422 == 200
+E        +  where 422 = <Response [422 Unprocessable Content]>.status_code
+
+tests/integration/test_knowledge_boundary.py:246: AssertionError
+_ test_knowledge_boundary_truth_table[validity_pass_perm_fail_eve_denied_pre_rule] _
+
+client = <starlette.testclient.TestClient object at 0x7597ebdd0f80>
+policy_id = 'KM-POL-001', user_id = 'km-eve', expected_value = 'no_permission'
+expected_evidence_count = 0, expected_keyword = '无权访问'
+
+    @pytest.mark.parametrize(
+        (
+            "policy_id",
+            "user_id",
+            "expected_value",
+            "expected_evidence_count",
+            "expected_keyword",
+        ),
+        [
+            # KM-POL-001 + alice: valid + has-hr → answerable, 2 evidence rows
+            ("KM-POL-001", "km-alice", "answerable", 2, "有据可答"),
+            # KM-POL-002 + alice: expired + has-hr → needs_valid_policy, 1 evidence (perm only)
+            ("KM-POL-002", "km-alice", "needs_valid_policy", 1, "请提供当前有效版本"),
+            # KM-POL-003 + alice: valid + missing-finance → needs_valid_policy, 1 (validity only)
+            ("KM-POL-003", "km-alice", "needs_valid_policy", 1, "当前用户无访问权限"),
+            # cut-043 — permission 反差 (PRD §7 纪律 #2): KM-POL-001 + km-eve is denied
+            # by the engine-level ACL DENY row (acl_entries seeded by seed_knowledge_fixture),
+            # so the loop returns the denied branch with conclusion=no_permission and 0
+            # evidence rows. This is the "denied pre-rule" pathway; R5-B2 below is the
+            # "rule double-fail" pathway — both must coexist to demonstrate two distinct
+            # business semantics (engine denial vs rule zero-evidence).
+            ("KM-POL-001", "km-eve", "no_permission", 0, "无权访问"),
+            # R5-B2 — KM-POL-002 + km-eve: BOTH conditions failed, 0 evidence.
+            # Prior bug: this hit RuntimeError (loop only allowed auto_approved
+            # zero-evidence). Now needs_valid_policy is allowlisted.
+            ("KM-POL-002", "km-eve", "needs_valid_policy", 0, "请提供有效版本并确认访问权限"),
+        ],
+        ids=[
+            "validity_pass_perm_pass_answerable",
+            "validity_fail_perm_pass_needs_valid",
+            "validity_pass_perm_fail_needs_valid",
+            "validity_pass_perm_fail_eve_denied_pre_rule",
+            "validity_fail_perm_fail_zero_evidence_r5b2",
+        ],
+    )
+    def test_knowledge_boundary_truth_table(
+        client: TestClient,
+        policy_id: str,
+        user_id: str,
+        expected_value: str,
+        expected_evidence_count: int,
+        expected_keyword: str,
+    ) -> None:
+        """cut-043R binding invariant.
+    
+        Each 200 case asserts:
+          1. `decision_value == expected_value`
+          2. `len(evidence) == expected_evidence_count` (S2 lock-down + R5-B2)
+          3. `reason contains expected_keyword`
+          4. DB relationship counts stable (REQUIRES_ROLE + HAS_ROLE unchanged
+             for the policy in question; KM has no materializer)
+    
+        R5-B1 conformance: NO `today` in params — server injects.
+        R5-B4 conformance: NO `employee_id` in params — X-User-Id is identity.
+        """
+        resp = client.post(
+            "/api/v1/demo/scenarios/generate",
+            headers={"X-User-Id": user_id},
+            json={
+                "domain": "knowledge",
+                "scenario": "default",
+                "params": {"policy_id": policy_id},
+            },
+        )
+>       assert resp.status_code == 200, (
+            f"policy_id={policy_id} user_id={user_id}: expected 200, "
+            f"got {resp.status_code}; body={resp.text[:300]}"
+        )
+E       AssertionError: policy_id=KM-POL-001 user_id=km-eve: expected 200, got 422; body={"error":"invalid_scenario_spec","detail":"no entity with source_id='KM-POL-001' source_system='km:v0-knowledge-fixture'"}
+E       assert 422 == 200
+E        +  where 422 = <Response [422 Unprocessable Content]>.status_code
+
+tests/integration/test_knowledge_boundary.py:246: AssertionError
+_ test_knowledge_boundary_truth_table[validity_fail_perm_fail_zero_evidence_r5b2] _
+
+client = <starlette.testclient.TestClient object at 0x7597ebdd16d0>
+policy_id = 'KM-POL-002', user_id = 'km-eve'
+expected_value = 'needs_valid_policy', expected_evidence_count = 0
+expected_keyword = '请提供有效版本并确认访问权限'
+
+    @pytest.mark.parametrize(
+        (
+            "policy_id",
+            "user_id",
+            "expected_value",
+            "expected_evidence_count",
+            "expected_keyword",
+        ),
+        [
+            # KM-POL-001 + alice: valid + has-hr → answerable, 2 evidence rows
+            ("KM-POL-001", "km-alice", "answerable", 2, "有据可答"),
+            # KM-POL-002 + alice: expired + has-hr → needs_valid_policy, 1 evidence (perm only)
+            ("KM-POL-002", "km-alice", "needs_valid_policy", 1, "请提供当前有效版本"),
+            # KM-POL-003 + alice: valid + missing-finance → needs_valid_policy, 1 (validity only)
+            ("KM-POL-003", "km-alice", "needs_valid_policy", 1, "当前用户无访问权限"),
+            # cut-043 — permission 反差 (PRD §7 纪律 #2): KM-POL-001 + km-eve is denied
+            # by the engine-level ACL DENY row (acl_entries seeded by seed_knowledge_fixture),
+            # so the loop returns the denied branch with conclusion=no_permission and 0
+            # evidence rows. This is the "denied pre-rule" pathway; R5-B2 below is the
+            # "rule double-fail" pathway — both must coexist to demonstrate two distinct
+            # business semantics (engine denial vs rule zero-evidence).
+            ("KM-POL-001", "km-eve", "no_permission", 0, "无权访问"),
+            # R5-B2 — KM-POL-002 + km-eve: BOTH conditions failed, 0 evidence.
+            # Prior bug: this hit RuntimeError (loop only allowed auto_approved
+            # zero-evidence). Now needs_valid_policy is allowlisted.
+            ("KM-POL-002", "km-eve", "needs_valid_policy", 0, "请提供有效版本并确认访问权限"),
+        ],
+        ids=[
+            "validity_pass_perm_pass_answerable",
+            "validity_fail_perm_pass_needs_valid",
+            "validity_pass_perm_fail_needs_valid",
+            "validity_pass_perm_fail_eve_denied_pre_rule",
+            "validity_fail_perm_fail_zero_evidence_r5b2",
+        ],
+    )
+    def test_knowledge_boundary_truth_table(
+        client: TestClient,
+        policy_id: str,
+        user_id: str,
+        expected_value: str,
+        expected_evidence_count: int,
+        expected_keyword: str,
+    ) -> None:
+        """cut-043R binding invariant.
+    
+        Each 200 case asserts:
+          1. `decision_value == expected_value`
+          2. `len(evidence) == expected_evidence_count` (S2 lock-down + R5-B2)
+          3. `reason contains expected_keyword`
+          4. DB relationship counts stable (REQUIRES_ROLE + HAS_ROLE unchanged
+             for the policy in question; KM has no materializer)
+    
+        R5-B1 conformance: NO `today` in params — server injects.
+        R5-B4 conformance: NO `employee_id` in params — X-User-Id is identity.
+        """
+        resp = client.post(
+            "/api/v1/demo/scenarios/generate",
+            headers={"X-User-Id": user_id},
+            json={
+                "domain": "knowledge",
+                "scenario": "default",
+                "params": {"policy_id": policy_id},
+            },
+        )
+>       assert resp.status_code == 200, (
+            f"policy_id={policy_id} user_id={user_id}: expected 200, "
+            f"got {resp.status_code}; body={resp.text[:300]}"
+        )
+E       AssertionError: policy_id=KM-POL-002 user_id=km-eve: expected 200, got 422; body={"error":"invalid_scenario_spec","detail":"no entity with source_id='KM-POL-002' source_system='km:v0-knowledge-fixture'"}
+E       assert 422 == 200
+E        +  where 422 = <Response [422 Unprocessable Content]>.status_code
+
+tests/integration/test_knowledge_boundary.py:246: AssertionError
+______ test_r5b1_expired_policy_unanswerable_regardless_of_client_intent _______
+
+client = <starlette.testclient.TestClient object at 0x7597ea02baa0>
+
+    def test_r5b1_expired_policy_unanswerable_regardless_of_client_intent(client: TestClient) -> None:
+        """R5-B1 / R5-B2 binding: KM-POL-002 always returns needs_valid_policy.
+    
+        Even without a client `today` param, the server's anchored today
+        (2026-09-22 or whatever ECE_SERVER_TODAY_ANCHOR is set to) lands
+        AFTER KM-POL-002's valid_to. The decision MUST be needs_valid_policy.
+        If a future regression lets the rule read client time, this fails.
+        """
+        resp = client.post(
+            "/api/v1/demo/scenarios/generate",
+            headers={"X-User-Id": "km-alice"},
+            json={
+                "domain": "knowledge",
+                "scenario": "default",
+                "params": {"policy_id": "KM-POL-002"},
+            },
+        )
+>       assert resp.status_code == 200, (
+            f"server-anchored today must produce a clean 200; got {resp.status_code}; "
+            f"body={resp.text[:300]}"
+        )
+E       AssertionError: server-anchored today must produce a clean 200; got 422; body={"error":"invalid_scenario_spec","detail":"no entity with source_id='KM-POL-002' source_system='km:v0-knowledge-fixture'"}
+E       assert 422 == 200
+E        +  where 422 = <Response [422 Unprocessable Content]>.status_code
+
+tests/integration/test_knowledge_boundary.py:348: AssertionError
+____________________ test_r5b4_employee_id_param_is_ignored ____________________
+
+client = <starlette.testclient.TestClient object at 0x7597ebdd1400>
+
+    def test_r5b4_employee_id_param_is_ignored(client: TestClient) -> None:
+        """R5-B4: KM no longer accepts `employee_id` in params.
+    
+        The caller's identity is X-User-Id → assemble_context → ctx.user.roles.
+        Passing `employee_id` as a parameter is dead code (silently ignored),
+        but should NOT elevate privileges.
+    
+        Scenario: KM-POL-003 requires role `finance`. km-eve has no roles.
+        If we send X-User-Id=km-eve but params.employee_id=km-bob (who has
+        finance), the result must still be needs_valid_policy (caller is eve,
+        not bob). This proves identity is server-owned, not client-supplied.
+        """
+        resp = client.post(
+            "/api/v1/demo/scenarios/generate",
+            headers={"X-User-Id": "km-eve"},  # no roles
+            json={
+                "domain": "knowledge",
+                "scenario": "default",
+                "params": {
+                    "policy_id": "KM-POL-003",
+                    "employee_id": "km-bob",  # ignored — eve is the caller
+                },
+            },
+        )
+>       assert resp.status_code == 200, (
+            f"identity spoof attempt must be answered (200), not 500; "
+            f"got {resp.status_code}; body={resp.text[:300]}"
+        )
+E       AssertionError: identity spoof attempt must be answered (200), not 500; got 422; body={"error":"invalid_scenario_spec","detail":"no entity with source_id='KM-POL-003' source_system='km:v0-knowledge-fixture'"}
+E       assert 422 == 200
+E        +  where 422 = <Response [422 Unprocessable Content]>.status_code
+
+tests/integration/test_knowledge_boundary.py:425: AssertionError
+_________ test_loop_level_km_rule_uses_anchored_today_not_system_time __________
+
+    def test_loop_level_km_rule_uses_anchored_today_not_system_time() -> None:
+        """cut-043R loop-level: `today` is server-injected (API), with date.today()
+        fallback for direct-loop callers.
+    
+        We pass `today` explicitly via params to prove the rule sees the anchored
+        value, not system-time. (The API path rejects client `today` per R5-B1,
+        but the loop-level test exercises the loop signature directly.)
+        """
+        from ece.demo.api import _resolve_actor  # type: ignore[attr-defined]
+        from ece.demo.spec import load_scenario_spec
+        from ece.v0.loop import run_demo_loop
+    
+        spec = load_scenario_spec("knowledge", "default")
+        engine = get_engine()
+        actor = _resolve_actor("km-alice")
+    
+>       result = run_demo_loop(
+            engine,
+            actor,
+            "KM-POL-001",
+            spec,
+            params={
+                "policy_id": "KM-POL-001",
+                "today": SERVER_TODAY,
+            },
+        )
+
+tests/integration/test_knowledge_boundary.py:534: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+src/ece/v0/loop.py:383: in run_demo_loop
+    return _run_demo_loop_impl(
+src/ece/v0/loop.py:429: in _run_demo_loop_impl
+    display_id = _resolve_display_id(engine, root_source_id, source_system)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+engine = Engine(postgresql+psycopg://ece:***@127.0.0.1:55432/ece)
+source_id = 'KM-POL-001', source_system = 'km:v0-knowledge-fixture'
+
+    def _resolve_display_id(engine: Engine, source_id: str, source_system: str) -> str:
+        """Resolve a fixture-level `source_id` to the entity's `display_id` for
+        `assemble_context`. Refuses to guess if the lookup misses (defensive — the caller
+        should have a clear error, not a silent retry).
+    
+        cut-042R F2: `source_system` is a parameter, NOT a module constant.
+        """
+        with engine.connect() as conn:
+            row = conn.execute(
+                text(
+                    "SELECT display_id FROM entities "
+                    "WHERE source_id = :sid AND source_system = :sys"
+                ),
+                {"sid": source_id, "sys": source_system},
+            ).first()
+        if row is None:
+>           raise ValueError(
+                f"no entity with source_id={source_id!r} source_system={source_system!r}"
+            )
+E           ValueError: no entity with source_id='KM-POL-001' source_system='km:v0-knowledge-fixture'
+
+src/ece/v0/loop.py:244: ValueError
+____________________ test_r8b1_canonical_anchor_still_works ____________________
+
+client = <starlette.testclient.TestClient object at 0x7597ea02ba70>
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7597ea073560>
+
+    def test_r8b1_canonical_anchor_still_works(client, monkeypatch) -> None:
+        """R8-B1 control: canonical `YYYY-MM-DD` must continue to pass after R8-B1 fix.
+    
+        The round-trip check must NOT regress the happy path. With the conftest
+        default (`2026-09-22`) all KM boundary tests already exercise this, but
+        we pin a named control so future refactors of the validator can grep
+        this test to confirm the canonical form is still accepted.
+        """
+        # monkeypatch to a different canonical date to prove it's not conftest-specific
+        monkeypatch.setenv("ECE_SERVER_TODAY_ANCHOR", "2027-01-01")
+        # ...but only after conftest's force-set, so we need to override again here
+        # (monkeypatch runs after conftest so this wins)
+        monkeypatch.setenv("ECE_SERVER_TODAY_ANCHOR", "2027-01-01")
+    
+        resp = client.post(
+            "/api/v1/demo/scenarios/generate",
+            headers={"X-User-Id": "km-alice"},
+            json={
+                "domain": "knowledge",
+                "scenario": "default",
+                "params": {"policy_id": "KM-POL-001"},  # valid_to=2026-12-31, fails at 2027-01-01
+            },
+        )
+>       assert resp.status_code == 200, (
+            f"R8-B1 control: canonical anchor must still produce 200; "
+            f"got {resp.status_code}; body={resp.text[:300]}"
+        )
+E       AssertionError: R8-B1 control: canonical anchor must still produce 200; got 422; body={"error":"invalid_scenario_spec","detail":"no entity with source_id='KM-POL-001' source_system='km:v0-knowledge-fixture'"}
+E       assert 422 == 200
+E        +  where 422 = <Response [422 Unprocessable Content]>.status_code
+
+tests/integration/test_knowledge_boundary.py:751: AssertionError
+__________ test_knowledge_post_route_uses_pack_specific_scenario_spec __________
+
+>   ???
+E   AssertionError: POST scenarios/generate with domain=knowledge failed: 422 body={"error":"invalid_scenario_spec","detail":"no entity with source_id='KM-POL-001' source_system='km:v0-knowledge-fixture'"}
+E   assert 422 == 200
+E    +  where 422 = <Response [422 Unprocessable Content]>.status_code
+
+/Users/kjonekong/projects/domainAgentECE/ece/tests/integration/test_knowledge_domain_discovery.py:69: AssertionError
+______________________ test_seed_temporal_roles_populated ______________________
+
+>   ???
+E   AssertionError: HAS_ROLE relationships: 2
+E   assert 2 >= 3
+
+/Users/kjonekong/projects/domainAgentECE/ece/tests/integration/test_s4_5_temporal.py:113: AssertionError
+____________ test_assemble_context_with_as_of_2025_keeps_u1_active _____________
+
+>   ???
+E   AssertionError: U001 should be active at 2025-06-30: ['U003']
+E   assert 'U001' in ['U003']
+
+/Users/kjonekong/projects/domainAgentECE/ece/tests/integration/test_s4_5_temporal.py:133: AssertionError
+____________________ test_knowledge_valid_alice_answerable _____________________
+
+client = <starlette.testclient.TestClient object at 0x7597ec515010>
+
+>   ???
+E   AssertionError: {'status': 422, 'body': {'error': 'invalid_scenario_spec', 'detail': "no entity with source_id='KM-POL-001' source_system='km:v0-knowledge-fixture'"}}
+E   assert 422 == 200
+
+/Users/kjonekong/projects/domainAgentECE/ece/tests/integration/test_three_domain_acceptance.py:119: AssertionError
+___________________ test_knowledge_denied_eve_no_permission ____________________
+
+client = <starlette.testclient.TestClient object at 0x7597ec52cdd0>
+
+>   ???
+E   AssertionError: {'status': 422, 'body': {'error': 'invalid_scenario_spec', 'detail': "no entity with source_id='KM-POL-001' source_system='km:v0-knowledge-fixture'"}}
+E   assert 422 == 200
+
+/Users/kjonekong/projects/domainAgentECE/ece/tests/integration/test_three_domain_acceptance.py:139: AssertionError
+____________________ test_compliance_valid_alice_sufficient ____________________
+
+client = <starlette.testclient.TestClient object at 0x7597ec52ccb0>
+
+>   ???
+E   AssertionError: {'status': 422, 'body': {'error': 'invalid_scenario_spec', 'detail': "no entity with source_id='COMP-CTL-001' source_system='comp:v0-compliance-fixture'"}}
+E   assert 422 == 200
+
+/Users/kjonekong/projects/domainAgentECE/ece/tests/integration/test_three_domain_acceptance.py:167: AssertionError
+___________________ test_compliance_denied_eve_no_permission ___________________
+
+client = <starlette.testclient.TestClient object at 0x7597ec5505f0>
+
+>   ???
+E   AssertionError: {'status': 422, 'body': {'error': 'invalid_scenario_spec', 'detail': "no entity with source_id='COMP-CTL-001' source_system='comp:v0-compliance-fixture'"}}
+E   assert 422 == 200
+
+/Users/kjonekong/projects/domainAgentECE/ece/tests/integration/test_three_domain_acceptance.py:182: AssertionError
+_________ test_three_domains_denied_contrast[knowledge-km-eve-params1] _________
+
+client = <starlette.testclient.TestClient object at 0x7597ebdd4290>
+domain = 'knowledge', user = 'km-eve', params = {'policy_id': 'KM-POL-001'}
+
+>   ???
+E   AssertionError: {'status': 422, 'body': {'error': 'invalid_scenario_spec', 'detail': "no entity with source_id='KM-POL-001' source_system='km:v0-knowledge-fixture'"}}
+E   assert 422 == 200
+
+/Users/kjonekong/projects/domainAgentECE/ece/tests/integration/test_three_domain_acceptance.py:261: AssertionError
+_______ test_three_domains_denied_contrast[compliance-comp-eve-params2] ________
+
+client = <starlette.testclient.TestClient object at 0x7597ebdd2450>
+domain = 'compliance', user = 'comp-eve'
+params = {'control_id': 'COMP-CTL-001', 'period_start': '2026-07-01', 'period_end': '2026-09-30', 'today': '2026-09-22'}
+
+>   ???
+E   AssertionError: {'status': 422, 'body': {'error': 'invalid_scenario_spec', 'detail': "no entity with source_id='COMP-CTL-001' source_system='comp:v0-compliance-fixture'"}}
+E   assert 422 == 200
+
+/Users/kjonekong/projects/domainAgentECE/ece/tests/integration/test_three_domain_acceptance.py:261: AssertionError
+=============================== warnings summary ===============================
+.venv/lib/python3.12/site-packages/starlette/testclient.py:53
+  /mnt/d/Projects/domainAgentECE/ece/.venv/lib/python3.12/site-packages/starlette/testclient.py:53: DeprecationWarning: The anyio.abc.BlockingPortal alias is deprecated, use anyio.from_thread.BlockingPortal instead.
+    _PortalFactoryType = Callable[[], AbstractContextManager[anyio.abc.BlockingPortal]]
+
+../../../../../Users/kjonekong/projects/domainAgentECE/ece/tests/integration/test_cut_045_local_origin_smoke.py:86
+  /Users/kjonekong/projects/domainAgentECE/ece/tests/integration/test_cut_045_local_origin_smoke.py:86: PytestUnknownMarkWarning: Unknown pytest.mark.timeout - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+
+tests/integration/test_s12_entity_pipeline.py::test_ontology_gate_rejects_bad_triple
+  /mnt/d/Projects/domainAgentECE/ece/src/ece/entities/ontology_resolver.py:106: UserWarning: ontology_resolver: unknown source_system prefix='r4test'; known prefixes=('comp', 'demo', 'km', 'spike'). Relations from this source_system will be REJECTED (fail-closed). If this is a new pack, call register_ontology_for_system(...) in its __init__.py.
+    pair = _lookup(prefix)
+
+tests/integration/test_s13_jwt_auth.py::test_decode_jwt_token_invalid_signature
+  /mnt/d/Projects/domainAgentECE/ece/.venv/lib/python3.12/site-packages/jwt/api_jwt.py:149: InsecureKeyLengthWarning: The HMAC key is 12 bytes long, which is below the minimum recommended length of 32 bytes for SHA256. See RFC 7518 Section 3.2.
+    return self._jws.encode(
+
+tests/integration/test_seed_relationships.py::test_seed_relationship_upsert_idempotent_direct
+  /mnt/d/Projects/domainAgentECE/ece/src/ece/entities/ontology_resolver.py:106: UserWarning: ontology_resolver: unknown source_system prefix='test'; known prefixes=('comp', 'demo', 'km', 'spike'). Relations from this source_system will be REJECTED (fail-closed). If this is a new pack, call register_ontology_for_system(...) in its __init__.py.
+    pair = _lookup(prefix)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/integration/test_compliance_boundary.py::test_compliance_boundary_truth_table[ctl001_alice_full_coverage_sufficient]
+FAILED tests/integration/test_compliance_boundary.py::test_compliance_boundary_truth_table[ctl002_alice_count_and_coverage_fail_gap_list]
+FAILED tests/integration/test_compliance_boundary.py::test_compliance_boundary_truth_table[ctl003_alice_coverage_only_fails_gap_list]
+FAILED tests/integration/test_compliance_boundary.py::test_compliance_boundary_truth_table[ctl001_eve_denied_pre_rule_no_permission]
+FAILED tests/integration/test_compliance_boundary.py::test_compliance_boundary_truth_table[R1_B1_request_before_evidence_gap_list]
+FAILED tests/integration/test_compliance_boundary.py::test_compliance_boundary_truth_table[R1_B1_request_after_evidence_gap_list]
+FAILED tests/integration/test_compliance_boundary.py::test_compliance_boundary_truth_table[R1_B1_request_partial_intersection_sufficient]
+FAILED tests/integration/test_compliance_domain_discovery.py::test_compliance_post_route_uses_pack_specific_scenario_spec
+FAILED tests/integration/test_cut_045_local_origin_smoke.py::test_deployment_smoke_passes_against_local_origin
+FAILED tests/integration/test_knowledge_boundary.py::test_knowledge_boundary_truth_table[validity_pass_perm_pass_answerable]
+FAILED tests/integration/test_knowledge_boundary.py::test_knowledge_boundary_truth_table[validity_fail_perm_pass_needs_valid]
+FAILED tests/integration/test_knowledge_boundary.py::test_knowledge_boundary_truth_table[validity_pass_perm_fail_needs_valid]
+FAILED tests/integration/test_knowledge_boundary.py::test_knowledge_boundary_truth_table[validity_pass_perm_fail_eve_denied_pre_rule]
+FAILED tests/integration/test_knowledge_boundary.py::test_knowledge_boundary_truth_table[validity_fail_perm_fail_zero_evidence_r5b2]
+FAILED tests/integration/test_knowledge_boundary.py::test_r5b1_expired_policy_unanswerable_regardless_of_client_intent
+FAILED tests/integration/test_knowledge_boundary.py::test_r5b4_employee_id_param_is_ignored
+FAILED tests/integration/test_knowledge_boundary.py::test_loop_level_km_rule_uses_anchored_today_not_system_time
+FAILED tests/integration/test_knowledge_boundary.py::test_r8b1_canonical_anchor_still_works
+FAILED tests/integration/test_knowledge_domain_discovery.py::test_knowledge_post_route_uses_pack_specific_scenario_spec
+FAILED tests/integration/test_s4_5_temporal.py::test_seed_temporal_roles_populated
+FAILED tests/integration/test_s4_5_temporal.py::test_assemble_context_with_as_of_2025_keeps_u1_active
+FAILED tests/integration/test_three_domain_acceptance.py::test_knowledge_valid_alice_answerable
+FAILED tests/integration/test_three_domain_acceptance.py::test_knowledge_denied_eve_no_permission
+FAILED tests/integration/test_three_domain_acceptance.py::test_compliance_valid_alice_sufficient
+FAILED tests/integration/test_three_domain_acceptance.py::test_compliance_denied_eve_no_permission
+FAILED tests/integration/test_three_domain_acceptance.py::test_three_domains_denied_contrast[knowledge-km-eve-params1]
+FAILED tests/integration/test_three_domain_acceptance.py::test_three_domains_denied_contrast[compliance-comp-eve-params2]
+27 failed, 654 passed, 5 skipped, 3 deselected, 5 warnings in 194.01s (0:03:14)

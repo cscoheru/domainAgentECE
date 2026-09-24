@@ -1,0 +1,13 @@
+diff --git a/.gitignore b/.gitignore
+old mode 100644
+new mode 100755
+index 028ba1e..82186d8
+--- a/.gitignore
++++ b/.gitignore
+@@ -17,3 +17,6 @@ data/
+ volumes/
+ gstack/
+ .gstack/
++
++# macOS AppleDouble metadata (deleted 684 in OEI-004 step 2; pattern prevents re-introduction)
++._*

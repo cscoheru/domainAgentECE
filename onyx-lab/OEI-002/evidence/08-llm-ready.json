@@ -1,0 +1,16 @@
+# 08-llm-ready.json
+# scan_time: 2026-09-24T08:37:58+08:00
+
+# ----- POST /api/admin/llm/default (set qwen2.5:3b as default) -----
+request: {"provider_id": 1, "model_name": "qwen2.5:3b"}
+http_code: 200
+response_body: null
+
+# ----- GET /api/admin/llm/provider (verify default_text) -----
+{"providers":[{"name":"ollama-local-qwen","provider":"openai_compatible","api_key":"olla****ired","api_base":"http://host.docker.internal:11434/v1","api_version":null,"custom_config":null,"is_public":true,"is_auto_mode":false,"groups":[],"personas":[],"deployment_name":null,"id":1,"model_configurations":[{"id":1,"name":"qwen2.5:3b","is_visible":true,"max_input_tokens":30976,"supports_image_input":false,"supports_reasoning":false,"supported_reasoning_efforts":["off","low","medium","high"],"reasoning_effort_max":null,"reasoning_effort_default":null,"temperature_default":null,"is_recommended_default":false,"display_name":"Qwen2.5 3B","custom_display_name":null,"provider_display_name":"Qwen (OpenAI-Compatible - Alibaba)","vendor":"Alibaba","version":null,"region":null},{"id":2,"name":"qwen2.5:1.5b","is_visible":true,"max_input_tokens":30976,"supports_image_input":false,"supports_reasoning":false,"supported_reasoning_efforts":["off","low","medium","high"],"reasoning_effort_max":null,"reasoning_effort_default":null,"temperature_default":null,"is_recommended_default":false,"display_name":"Qwen2.5","custom_display_name":null,"provider_display_name":"Qwen (OpenAI-Compatible - Alibaba)","vendor":"Alibaba","version":null,"region":null}]}],"default_text":{"provider_id":1,"model_name":"qwen2.5:3b"},"default_vision":null,"default_chat_naming":null}
+
+# ----- functional verification: /api/search returns 200 (was 400 in OEI-001) -----
+Test query: '问题树怎么用'
+http_code: 200
+results count: 1
+  citation_id=1 title=methodology-framework.md

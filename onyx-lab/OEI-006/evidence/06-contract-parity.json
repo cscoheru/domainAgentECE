@@ -1,0 +1,96 @@
+{
+  "evidence": "06-contract-parity.json",
+  "task": "OEI-006 A7 + A8",
+  "generated_at": "2026-09-24T18:50:07+08:00",
+  "A7_note": "DB-free unit tests: mapping / merge policy / four engine_status branches / EngineError path / endpoint-level static isolation. Run with DATABASE_URL unset.",
+  "A8_note": "Contract parity: mock adapter document and a REAL Onyx hit are mapped by the same function and validated by the same Pydantic model (EngineItem).",
+  "A7_db_free_unit_test": {
+    "file": "tests/unit/test_consulting_engine_merge.py",
+    "command": ".venv/bin/python -m pytest tests/unit/test_consulting_engine_merge.py -v        # DATABASE_URL deliberately UNSET",
+    "database_url_env": "<unset — no Postgres container required>",
+    "exit_code": 0,
+    "raw_output_tail": [
+      "rootdir: /mnt/d/Projects/domainAgentECE/ece",
+      "configfile: pyproject.toml",
+      "plugins: anyio-4.15.1, cov-7.1.0",
+      "collected 24 items",
+      "",
+      "tests/unit/test_consulting_engine_merge.py ........................      [100%]",
+      "",
+      "=============================== warnings summary ===============================",
+      ".venv/lib/python3.12/site-packages/starlette/testclient.py:53",
+      "  /mnt/d/Projects/domainAgentECE/ece/.venv/lib/python3.12/site-packages/starlette/testclient.py:53: DeprecationWarning: The anyio.abc.BlockingPortal alias is deprecated, use anyio.from_thread.BlockingPortal instead.",
+      "    _PortalFactoryType = Callable[[], AbstractContextManager[anyio.abc.BlockingPortal]]",
+      "",
+      "-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html",
+      "======================== 24 passed, 1 warning in 4.68s ========================="
+    ]
+  },
+  "engine_switch": "<unset>",
+  "note": "ONYX side is mapped from a REAL Onyx /api/search hit captured in /tmp/oei006-onyx-probe.json; MOCK side from the real MockContentEngineAdapter. Both go through the same EngineItem model.",
+  "A8_contract_parity": {
+    "engine_fields": [
+      "engine_doc_id",
+      "title",
+      "snippet",
+      "source_type",
+      "updated_at",
+      "source"
+    ],
+    "mock_source": "ece.connectors.onyx.mock_adapter.MockContentEngineAdapter.search('问题树')[0]",
+    "onyx_source": "ece.connectors.onyx.onyx_adapter._result_to_engine_document(<real Onyx hit>)",
+    "mock_engine_items_json": {
+      "engine_doc_id": "mock-1-methodology",
+      "title": "methodology-framework.md",
+      "snippet": "[Mock] 问题树 / 假设驱动 / MECE 的实战组合(Demo Case) — consulting methodology for issue tree, hypothesis-driven, MECE.",
+      "source_type": "user_file",
+      "updated_at": null,
+      "source": "engine"
+    },
+    "onyx_engine_items_json": {
+      "engine_doc_id": "1",
+      "title": "methodology-framework.md",
+      "snippet": "# 咨询方法论：问题树、假设驱动与 MECE 的实战组合\n\n> **标注**：本方法论为 **Demo Case** 演示文档，整理自多个内部培训材料与项目复盘，用于评估 Onyx CE 在方法论类内容上的检索召回与引用可追溯性。\n\n## 1. 为什么这三件事必须绑在一起用\n\n咨询行业最容易出现的失败模式，是\"问题没拆清楚就急着给答案\"或者\"方案做了 12 个但互相重叠\"。**问题树**负责把模糊的业务问题拆成可分析、可指派的子问题；**假设驱动**强迫团队在动手验证之前先声明\"我以为答案是什么\"；**MECE（Mutually Exclusive, Collectively Exhaustive）**则保证最终交付的方案彼此独立、合起来覆盖全部情形。三者不是可选配件，而是同一条流水线上的三道工序。\n\n## 2. 问题树（Issue Tree）\n\n### 2.1 定义\n\n问题树是一种自顶向下的演绎结构，根节点是客户提出的原始问题，叶节点是可直接指派给某一数据源或某一分析师回答的子问题。常见结构是 3 层：\n\n- **L1 业务问题**：用客户原话表述，不擅自加工；\n- **L2 拆解维度**：通常是 46 个互不重叠的拆解轴（如收入=价格×数量、价格=产品组合×定价策略）；\n- **L3 可分析子问题**：每个 L2 节点下挂 24 个 L3 子问题，每个 L3 必须能在 13 天内回答。\n\n### 2.2 常见错误\n\n- 在 L1 就替客户改写问题，丢失原始语境；\n- L2 拆解维度重叠（例如同时用\"区域\"和\"渠道\"，但二者存在交叉）；\n- L3 子问题颗粒度过粗，需要 2 周才能回答，违背\"可执行\"。\n\n### 2.3 输出模板\n\n```\n【L1 原始问题】 <客户原话>\n├──【L2.1 维度A】\n│   ├──【L3.1.a】<子问题>｜数据源：<表/系统>｜负责人…",
+      "source_type": "user_file",
+      "updated_at": "2026-09-23T13:06:16Z",
+      "source": "engine"
+    },
+    "checks": {
+      "field_sets_identical": true,
+      "every_value_is_str_or_null": true,
+      "mock_revalidates_through_EngineItem": true,
+      "onyx_revalidates_through_EngineItem": true
+    }
+  },
+  "A8_engine_internal_fields_dropped": {
+    "raw_onyx_hit_keys": [
+      "citation_id",
+      "content",
+      "link",
+      "source_type",
+      "title",
+      "updated_at"
+    ],
+    "keys_in_api_payload": [
+      "engine_doc_id",
+      "snippet",
+      "source",
+      "source_type",
+      "title",
+      "updated_at"
+    ],
+    "dropped": [
+      "citation_id",
+      "content",
+      "link"
+    ],
+    "leaked": []
+  },
+  "real_onyx_hit_preview": {
+    "title": "methodology-framework.md",
+    "source_type": "user_file",
+    "updated_at": "2026-09-23T13:06:16+00:00",
+    "content_chars": 2043,
+    "snippet_chars_after_adapter_cap": 801
+  }
+}

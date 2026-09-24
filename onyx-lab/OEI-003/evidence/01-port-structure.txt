@@ -1,0 +1,33 @@
+# 01-port-structure.txt
+# scan_time: 2026-09-24T11:19:53+08:00
+# purpose: verify Engine Core (ece/) does not import onyx-specific modules
+# check: domain layer isolation per OEI-003 §0 architecture red line
+
+# ----- 1. grep onyx-specific imports in ece/ -----
+$ grep -rEn 'import onyx|from onyx' src/ece/ --include='*.py' 2>/dev/null || echo '(no matches)'
+(no matches)
+
+# ----- 2. grep onyx-specific strings (uppercase, NOT in connectors/onyx/) -----
+$ grep -rEn 'OnyxCE|/api/admin/llm|fastapiusersauth|host\.docker\.internal' src/ece/ --include='*.py' | grep -v 'connectors/onyx/' || echo '(no matches outside connectors/onyx/)'
+(no matches outside connectors/onyx/)
+
+# ----- 3. grep domain_packs/ for any ece.connectors.onyx import -----
+$ grep -rEn 'connectors\.onyx|connectors/onyx' src/ece/domain_packs/ 2>&1 || echo '(no matches in domain_packs/)'
+(no matches in domain_packs/)
+
+# ----- 4. file layout (connectors/onyx/) -----
+total 24
+drwxrwxrwx 1 fisher fisher  4096 Sep 24 11:14 .
+drwxrwxrwx 1 fisher fisher  4096 Sep 24 11:05 ..
+-rwxrwxrwx 1 fisher fisher   374 Sep 24 11:05 __init__.py
+drwxrwxrwx 1 fisher fisher  4096 Sep 24 11:15 __pycache__
+-rwxrwxrwx 1 fisher fisher  3992 Sep 24 11:05 mock_adapter.py
+-rwxrwxrwx 1 fisher fisher 10930 Sep 24 11:14 onyx_adapter.py
+-rwxrwxrwx 1 fisher fisher  3983 Sep 24 11:05 port.py
+-rwxrwxrwx 1 fisher fisher  1091 Sep 24 11:06 selector.py
+
+===== summary =====
+Isolation rules:
+  - ece/domain_packs/ (domain layer) MUST NOT import onyx → grep 1+3 verify
+  - Onyx-specific knowledge lives ONLY in ece/connectors/onyx/ (engine internal)
+  - Port + Pydantic models in ece/connectors/onyx/port.py are engine-agnostic

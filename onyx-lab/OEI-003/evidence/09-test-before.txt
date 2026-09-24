@@ -1,0 +1,39 @@
+=== pytest baseline (BEFORE — pure unmodified ECE) ===
+FAILED tests/integration/test_three_domain_acceptance.py::test_compliance_valid_alice_sufficient
+FAILED tests/integration/test_three_domain_acceptance.py::test_compliance_denied_eve_no_permission
+FAILED tests/integration/test_three_domain_acceptance.py::test_three_domains_denied_contrast[procurement-spike-user-unrelated-params0]
+FAILED tests/integration/test_three_domain_acceptance.py::test_three_domains_denied_contrast[knowledge-km-eve-params1]
+FAILED tests/integration/test_three_domain_acceptance.py::test_three_domains_denied_contrast[compliance-comp-eve-params2]
+ERROR tests/unit/test_ops_evidence_redaction.py::test_no_ipv4_in_ops_evidence
+ERROR tests/unit/test_ops_evidence_redaction.py::test_no_ipv6_in_ops_evidence
+ERROR tests/unit/test_ops_evidence_redaction.py::test_no_root_ssh_user_in_ops_evidence
+ERROR tests/unit/test_ops_evidence_redaction.py::test_no_cf_zone_id_in_ops_evidence
+ERROR tests/unit/test_ops_evidence_redaction.py::test_redacted_placeholders_intact
+
+=== save baseline ===
+ERROR tests/unit/test_ops_evidence_redaction.py::test_no_cf_zone_id_in_ops_evidence
+ERROR tests/unit/test_ops_evidence_redaction.py::test_redacted_placeholders_intact
+28 failed, 634 passed, 19 skipped, 3 deselected, 5 warnings, 5 errors in 185.87s (0:03:05)
+
+[exited with code 0]
+
+===== baseline summary line =====
+28 failed, 634 passed, 19 skipped, 3 deselected, 5 warnings, 5 errors in 185.87s (0:03:05)
+
+===== environment =====
+DATABASE_URL=postgresql+psycopg://ece:ece@127.0.0.1:55432/ece (ece-pg-tmp container)
+alembic upgrade head: 8 migrations applied (0001-0008)
+removed 8 macOS AppleDouble '._*.py' files from versions/ (blockers for alembic)
+uv run pytest -m 'not eval and not eval_llm'
+
+===== pre-existing failures (NOT OEI-003 regression) =====
+The 28 failed + 5 errors are PRE-EXISTING in ECE before OEI-003 changes:
+  - tests/integration/test_three_domain_acceptance.py (3 FAILED): denial contrast tests
+  - tests/unit/test_ops_evidence_redaction.py (5 ERROR): infrastructure tests, not OEI-003 scope
+These need separate investigation (not in OEI-003 scope per task §2 不做范围外功能)
+
+===== baseline ECE state (before OEI-003 changes) =====
+PASSED: 634
+FAILED: 28 (pre-existing, not introduced by OEI-003)
+ERROR:  5  (pre-existing, infrastructure)
+SKIPPED: 19

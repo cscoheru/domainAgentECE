@@ -1,0 +1,5 @@
+同名异人对抗用例: '张三' 出现 2 次 (期望 ≥ 2)
+同名异司对抗用例: '无限极*' 出现 2 次 (期望 ≥ 2)
+高额 PR 对抗用例 (≥100万 触发比价): 54 个 (期望 ≥ 10)
+
+OK — all counts within tolerance, adversarial cases present

@@ -1,0 +1,77 @@
+# 13-compliance-check.txt — OEI-005 步骤 6:清理与合规(value-level 模式扫描)
+# date: 2026-09-24T17:55:43+08:00   HEAD=dd58297
+
+## 1. 临时 PG 已删
+docker rm -f ece-pg-tmp -> 残留 ece-pg-tmp 容器数 = 0 (应为 0)
+残留 ece-* 容器: [](应为空)
+running 容器数 = 9 (应为 9,即 Onyx 全量)
+docker ps -a 总数 = 14 = 9 running Onyx + 5 历史 Exited(非本刀创建,见 1b)
+
+### 1a. running(9,全部 Onyx)
+onyx-api_server-1  Up 23 hours (healthy)
+onyx-background-1  Up 23 hours
+onyx-cache-1  Up 23 hours
+onyx-indexing_model_server-1  Up 23 hours (healthy)
+onyx-inference_model_server-1  Up 23 hours (healthy)
+onyx-nginx-1  Up 23 hours (healthy)
+onyx-opensearch-1  Up 23 hours
+onyx-relational_db-1  Up 23 hours (healthy)
+onyx-web_server-1  Up 23 hours (healthy)
+
+### 1b. exited(5,全部历史遗留 ≥7 天,非 OEI-005 创建)
+laughing_vaughan  Exited (0) 8 days ago  image=hello-world  created=2026-09-16 15:58:03 +0800 CST
+postgres  Exited (255) 7 days ago  image=postgres  created=2026-09-16 16:05:03 +0800 CST
+qdrant  Exited (255) 7 days ago  image=qdrant/qdrant  created=2026-09-16 16:03:25 +0800 CST
+redis  Exited (255) 7 days ago  image=redis  created=2026-09-16 16:04:01 +0800 CST
+tender_hamilton  Exited (0) 8 days ago  image=hello-world  created=2026-09-16 15:57:44 +0800 CST
+  判定: 全部 created 于 7-8 天前(2026-09-16),早于 OEI-005(2026-09-24);
+        其中 postgres/qdrant/redis 属 video-factory 项目痕迹,与 ece/onyx 无关。本刀只创建并已删除 ece-pg-tmp。
+
+### 1c. Onyx 未被动过(restarts=0 + running=true)
+  /onyx-api_server-1 restarts=0 running=true
+  /onyx-background-1 restarts=0 running=true
+  /onyx-cache-1 restarts=0 running=true
+  /onyx-indexing_model_server-1 restarts=0 running=true
+  /onyx-inference_model_server-1 restarts=0 running=true
+  /onyx-nginx-1 restarts=0 running=true
+  /onyx-opensearch-1 restarts=0 running=true
+  /onyx-relational_db-1 restarts=0 running=true
+  /onyx-web_server-1 restarts=0 running=true
+
+## 2. value-level 凭据模式扫描(只打印 文件:行号,不打印匹配值)
+scan_root: onyx-lab/OEI-005/ + ece/Makefile + ece/README.md
+说明: pattern 串本身是正则常量,不是凭据值。
+
+[jwt] pattern=eyJ[A-Za-z0-9_-]{10,}\.  matches=0
+[onyx_session] pattern=connect\.sid=  matches=1
+    onyx-lab/OEI-005/REPORT.md:105
+[fastapi_auth] pattern=fastapiusersauth=  matches=1
+    onyx-lab/OEI-005/REPORT.md:105
+[api_key_sk] pattern=sk-[A-Za-z0-9]{20,}  matches=0
+[bearer] pattern=[Bb]earer [A-Za-z0-9._-]{20,}  matches=0
+[password_assign] pattern=(password|passwd|secret)[[:space:]]*=[[:space:]]*.[^[:space:]]{6,}  matches=0
+
+## 3. 本刀 commit (dd58297) added lines 扫描
+  (无输出 = commit 中无凭据模式)
+
+## 4. 未触碰项核对
+  Onyx 容器: 9/9 running, restarts 全 0(见 1c) —— 未 restart/stop/down/rm
+  onyx 上游源码 / docker-compose.yml / .env: 本刀无任何写操作
+  /mnt/c 写操作: 0 —— 本刀零写入
+  /mnt/c 读操作: 仅一次只读探测 'ls -la /mnt/c/Users/*/.wslconfig 2>/dev/null'(在 13 号证据的早期草稿中,用于确认 .wslconfig 未被修改;最终版已删除该行)。
+                     该探测无输出、未复制任何 C 盘文件到 /mnt/d;未读取任何凭据文件。
+  swap / .wslconfig: 未修改(未执行任何 swapon/swapoff,未写入 .wslconfig)
+  git push: 未执行(git status -sb 显示 ahead 4)
+
+## 5. 结论
+  合规: PASS —— 无凭据值落盘;未碰 Onyx/compose/.env/swap/.wslconfig;临时 PG 已删。
+
+## 6. 收口自检:把 evidence/ 自身也纳入扫描
+## (解释:§2 的扫描在本文件生成"之前"跑,故本文件不参与;此处补一次含自身的全量扫描,避免审验时看到数字不一致)
+$ grep -rlE '<6 个 pattern 的并集>' onyx-lab/OEI-005/
+  - REPORT.md:112
+  - evidence/13-compliance-check.txt:48
+判定: 以上命中均为 **模式常量自匹配**(pattern literal 出现在"描述 pattern"的文本里),**不是凭据值**。
+      除此之外无任何命中。value-level 判定 = PASS。
+      注: 本次为 R1–R3 返工后的重扫。REPORT.md 的行号由返工前的 105 变为 112(§A2/§2/§5 增补文字后下移),
+          命中性质不变;13 号证据自身命中行号 48 不变。

@@ -1,0 +1,92 @@
+.......................................................F................ [ 10%]
+.......ss............................................................... [ 20%]
+........................................................................ [ 31%]
+........................................................................ [ 41%]
+........................................................................ [ 52%]
+.................sss.................................................... [ 62%]
+........................................................................ [ 73%]
+........................................................................ [ 83%]
+........................................................................ [ 94%]
+......................................                                   [100%]
+=================================== FAILURES ===================================
+______________ test_deployment_smoke_passes_against_local_origin _______________
+
+>   ???
+
+/Users/kjonekong/projects/domainAgentECE/ece/tests/integration/test_cut_045_local_origin_smoke.py:132: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/Users/kjonekong/projects/domainAgentECE/ece/tests/integration/test_cut_045_local_origin_smoke.py:52: in _wait_for_http
+    ???
+/home/fisher/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/urllib/request.py:215: in urlopen
+    return opener.open(url, data, timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/home/fisher/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/urllib/request.py:515: in open
+    response = self._open(req, data)
+               ^^^^^^^^^^^^^^^^^^^^^
+/home/fisher/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/urllib/request.py:532: in _open
+    result = self._call_chain(self.handle_open, protocol, protocol +
+/home/fisher/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/urllib/request.py:492: in _call_chain
+    result = func(*args)
+             ^^^^^^^^^^^
+/home/fisher/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/urllib/request.py:1373: in http_open
+    return self.do_open(http.client.HTTPConnection, req)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/home/fisher/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/urllib/request.py:1348: in do_open
+    r = h.getresponse()
+        ^^^^^^^^^^^^^^^
+/home/fisher/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/http/client.py:1478: in getresponse
+    response.begin()
+/home/fisher/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/http/client.py:343: in begin
+    version, status, reason = self._read_status()
+                              ^^^^^^^^^^^^^^^^^^^
+/home/fisher/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/http/client.py:304: in _read_status
+    line = str(self.fp.readline(_MAXLINE + 1), "iso-8859-1")
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <socket.SocketIO object at 0x74fdb57d2e90>
+b = <memory at 0x74fdb5f9f280>
+
+    def readinto(self, b):
+        """Read up to len(b) bytes into the writable buffer *b* and return
+        the number of bytes read.  If the socket is non-blocking and no bytes
+        are available, None is returned.
+    
+        If *b* is non-empty, a 0 return value indicates that the connection
+        was shutdown at the other end.
+        """
+        self._checkClosed()
+        self._checkReadable()
+        if self._timeout_occurred:
+            raise OSError("cannot read from timed out object")
+        while True:
+            try:
+>               return self._sock.recv_into(b)
+                       ^^^^^^^^^^^^^^^^^^^^^^^
+E               TimeoutError: timed out
+
+/home/fisher/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/socket.py:720: TimeoutError
+=============================== warnings summary ===============================
+.venv/lib/python3.12/site-packages/starlette/testclient.py:53
+  /mnt/d/Projects/domainAgentECE/ece/.venv/lib/python3.12/site-packages/starlette/testclient.py:53: DeprecationWarning: The anyio.abc.BlockingPortal alias is deprecated, use anyio.from_thread.BlockingPortal instead.
+    _PortalFactoryType = Callable[[], AbstractContextManager[anyio.abc.BlockingPortal]]
+
+../../../../../Users/kjonekong/projects/domainAgentECE/ece/tests/integration/test_cut_045_local_origin_smoke.py:86
+  /Users/kjonekong/projects/domainAgentECE/ece/tests/integration/test_cut_045_local_origin_smoke.py:86: PytestUnknownMarkWarning: Unknown pytest.mark.timeout - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+
+tests/integration/test_s12_entity_pipeline.py::test_ontology_gate_rejects_bad_triple
+  /mnt/d/Projects/domainAgentECE/ece/src/ece/entities/ontology_resolver.py:106: UserWarning: ontology_resolver: unknown source_system prefix='r4test'; known prefixes=('comp', 'demo', 'km', 'spike'). Relations from this source_system will be REJECTED (fail-closed). If this is a new pack, call register_ontology_for_system(...) in its __init__.py.
+    pair = _lookup(prefix)
+
+tests/integration/test_s13_jwt_auth.py::test_decode_jwt_token_invalid_signature
+  /mnt/d/Projects/domainAgentECE/ece/.venv/lib/python3.12/site-packages/jwt/api_jwt.py:149: InsecureKeyLengthWarning: The HMAC key is 12 bytes long, which is below the minimum recommended length of 32 bytes for SHA256. See RFC 7518 Section 3.2.
+    return self._jws.encode(
+
+tests/integration/test_seed_relationships.py::test_seed_relationship_upsert_idempotent_direct
+  /mnt/d/Projects/domainAgentECE/ece/src/ece/entities/ontology_resolver.py:106: UserWarning: ontology_resolver: unknown source_system prefix='test'; known prefixes=('comp', 'demo', 'km', 'spike'). Relations from this source_system will be REJECTED (fail-closed). If this is a new pack, call register_ontology_for_system(...) in its __init__.py.
+    pair = _lookup(prefix)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/integration/test_cut_045_local_origin_smoke.py::test_deployment_smoke_passes_against_local_origin
+1 failed, 680 passed, 5 skipped, 3 deselected, 5 warnings in 192.65s (0:03:12)

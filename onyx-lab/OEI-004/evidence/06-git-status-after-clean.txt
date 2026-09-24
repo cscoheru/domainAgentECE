@@ -1,0 +1,54 @@
+# 06-git-status-after-clean.txt
+# scan_time: 2026-09-24T16:17:02+08:00
+# purpose: git status after AppleDouble cleanup + mode fix (git config core.fileMode false)
+# total entries: 18
+
+# ----- full git status --short -----
+ M .gitignore
+ T docs/demo-platform/DEMO_PLATFORM_PRD.md
+ T docs/demo-platform/DEPLOY_USER_PROXY.md
+ M reports/cut-042R3/mutation-evidence/M1_re_read_through_assembly_skipped.md
+ M reports/cut-042R3/mutation-evidence/M2_apply_context_update_skip_sql.md
+ M reports/cut-042R3/mutation-evidence/M3_permission_acl_check_bypassed.md
+ M reports/cut-042R3/mutation-evidence/M4_evaluated_conditions_inject_nondeterministic_amount.md
+ M reports/cut-042R3/mutation-evidence/M5_jwt_decode_skips_signature_verification.md
+ M reports/cut-042R3/mutation-evidence/M6_materialize_fn_disabled_in_loop.md
+ M reports/cut-043/mutation-evidence/M1_km_validity_invert.md
+ M reports/cut-043/mutation-evidence/M2_km_permission_invert.md
+ M reports/cut-043/mutation-evidence/M3_km_decision_and_to_or.md
+ M reports/cut-044/mutation-evidence/M1_comp_count_condition_invert.md
+ M reports/cut-044/mutation-evidence/M2_comp_coverage_issubset_to_isdisjoint.md
+ M reports/cut-044/mutation-evidence/M3_comp_decision_force_gap_list.md
+ M src/ece/main.py
+?? src/ece/api/engine_status.py
+?? src/ece/connectors/onyx/
+
+# ----- summary by type -----
+M (modified, content):  14
+ M (modified, type change): mixed
+  (actually):
+      2 ??
+     14 M
+      2 T
+
+# ----- changed files (only M with content, not type change) -----
+M + M (real content changes):
+ M .gitignore
+ M reports/cut-042R3/mutation-evidence/M1_re_read_through_assembly_skipped.md
+ M reports/cut-042R3/mutation-evidence/M2_apply_context_update_skip_sql.md
+ M reports/cut-042R3/mutation-evidence/M3_permission_acl_check_bypassed.md
+ M reports/cut-042R3/mutation-evidence/M4_evaluated_conditions_inject_nondeterministic_amount.md
+ M reports/cut-042R3/mutation-evidence/M5_jwt_decode_skips_signature_verification.md
+ M reports/cut-042R3/mutation-evidence/M6_materialize_fn_disabled_in_loop.md
+ M reports/cut-043/mutation-evidence/M1_km_validity_invert.md
+ M reports/cut-043/mutation-evidence/M2_km_permission_invert.md
+ M reports/cut-043/mutation-evidence/M3_km_decision_and_to_or.md
+
+?? (untracked):
+?? src/ece/api/engine_status.py
+?? src/ece/connectors/onyx/
+
+T (type changed only — left untouched per OEI-004 scope):
+ T docs/demo-platform/DEMO_PLATFORM_PRD.md
+ T docs/demo-platform/DEPLOY_USER_PROXY.md
+(count): 2
