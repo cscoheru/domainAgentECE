@@ -1,0 +1,101 @@
+=== 01 — Port write path (OEI-007 step 1, onyx mode) ===
+2026-09-24T22:25:34+08:00
+
+--- Mock roundtrip ---
+{
+  "is_protocol": true,
+  "uploaded": {
+    "document_id": "mock-000001",
+    "name": "case-x.md",
+    "status": "COMPLETED",
+    "chunk_count": 1,
+    "project_id": 1,
+    "failure_reason": null,
+    "raw": {
+      "mock": true,
+      "bytes": 5,
+      "ece_title": "X",
+      "ece_metadata": {
+        "a": 1
+      }
+    }
+  }
+}
+{
+  "status": {
+    "document_id": "mock-000001",
+    "name": "case-x.md",
+    "status": "COMPLETED",
+    "chunk_count": 1,
+    "project_id": 1,
+    "failure_reason": null,
+    "raw": {
+      "mock": true,
+      "bytes": 5,
+      "ece_title": "X",
+      "ece_metadata": {
+        "a": 1
+      }
+    }
+  }
+}
+
+--- Onyx live roundtrip ---
+{
+  "is_protocol": true,
+  "uploaded": {
+    "document_id": "ecf2bf42-810b-4037-a759-4397c386d273",
+    "name": "oei007-port-probe.txt",
+    "status": "PROCESSING",
+    "chunk_count": null,
+    "project_id": null,
+    "failure_reason": null,
+    "raw": {
+      "id": "ecf2bf42-810b-4037-a759-4397c386d273",
+      "temp_id": null,
+      "name": "oei007-port-probe.txt",
+      "project_id": null,
+      "user_id": "c7483a82-9008-41f0-88f7-b8b9dba6d78e",
+      "file_id": "434df373-4c02-4b8c-a109-7f58c2cca310",
+      "created_at": "2026-09-24T14:25:37.897516Z",
+      "status": "PROCESSING",
+      "last_accessed_at": "2026-09-24T14:25:37.897021Z",
+      "file_type": "text/plain",
+      "chat_file_type": "plain_text",
+      "token_count": 104,
+      "chunk_count": null,
+      "_ece_consulting_metadata": {
+        "_probe": "01-port-write-path"
+      },
+      "_ece_consulting_title": "OEI-007 Port write path probe"
+    }
+  },
+  "consulting_metadata_preserved": true,
+  "consulting_title_preserved": "OEI-007 Port write path probe"
+}
+{
+  "polled": {
+    "document_id": "ecf2bf42-810b-4037-a759-4397c386d273",
+    "name": "oei007-port-probe.txt",
+    "status": "PROCESSING",
+    "chunk_count": null,
+    "project_id": null,
+    "failure_reason": null,
+    "raw": {
+      "id": "ecf2bf42-810b-4037-a759-4397c386d273",
+      "temp_id": null,
+      "name": "oei007-port-probe.txt",
+      "project_id": null,
+      "user_id": "c7483a82-9008-41f0-88f7-b8b9dba6d78e",
+      "file_id": "434df373-4c02-4b8c-a109-7f58c2cca310",
+      "created_at": "2026-09-24T14:25:37.897516",
+      "status": "PROCESSING",
+      "last_accessed_at": "2026-09-24T14:25:37.897021Z",
+      "file_type": "text/plain",
+      "chat_file_type": "plain_text",
+      "token_count": 104,
+      "chunk_count": null
+    }
+  },
+  "lifecycle_advanced": "PROCESSING"
+}

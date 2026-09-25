@@ -1,0 +1,38 @@
+{
+  "library_anon": {
+    "status": 200,
+    "engine_status": "ok"
+  },
+  "library_x_user_id": {
+    "status": 200,
+    "engine_status": "ok"
+  },
+  "library_bearer": {
+    "status": 200,
+    "engine_status": "ok"
+  },
+  "upload_anon": {
+    "status": 403,
+    "detail": "identity-required (upload endpoints require an authenticated caller)"
+  },
+  "upload_x_user_id": {
+    "status": 200,
+    "accepted": true,
+    "document_id": "71f56441-a0c0-4eec-98e3-c3cd376f9501"
+  },
+  "upload_bearer": {
+    "status": 403
+  },
+  "status_anon": {
+    "status": 200
+  },
+  "status_x_user_id": {
+    "status": 200
+  },
+  "engine_status_anon": {
+    "status": 200
+  },
+  "engine_status_x_user_id": {
+    "status": 200
+  }
+}

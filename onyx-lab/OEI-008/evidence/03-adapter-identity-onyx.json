@@ -1,0 +1,47 @@
+{
+  "engine_name": "onyx",
+  "Protocol_conformance": true,
+  "caller_param_on_all_methods": true,
+  "live_call_results": {
+    "engine_name": "onyx",
+    "project_count": 1,
+    "results": 5,
+    "first_doc_title": "o7-en.txt"
+  },
+  "audit_log_rows": [
+    {
+      "when": 1790298942.3325696,
+      "what": "engine_status",
+      "caller": "alice[jwt,dept=finance,mgmt=False]",
+      "caller_user_ref": "alice",
+      "caller_source": "jwt",
+      "result": "ok",
+      "project_count": 1,
+      "file_count": 18
+    },
+    {
+      "when": 1790298942.4936967,
+      "what": "list_projects",
+      "caller": "alice[jwt,dept=finance,mgmt=False]",
+      "caller_user_ref": "alice",
+      "caller_source": "jwt",
+      "result": "ok",
+      "project_count": 1
+    },
+    {
+      "when": 1790298996.782564,
+      "what": "search",
+      "caller": "alice[jwt,dept=finance,mgmt=False]",
+      "caller_user_ref": "alice",
+      "caller_source": "jwt",
+      "result": "ok",
+      "hits": 5,
+      "query": "问题树",
+      "top_k": null
+    }
+  ],
+  "audit_log_total": 3,
+  "anonymous_upload_refused": true,
+  "anonymous_upload_refusal_detail": "EngineError: identity-required (Onyx upload refuses explicitly-anonymous callers; see OEI-008 §A5)",
+  "anonymous_upload_refusal_is_offline": "guard raises before httpx.Client is constructed — see onyx_adapter.py upload_document, first statement"
+}

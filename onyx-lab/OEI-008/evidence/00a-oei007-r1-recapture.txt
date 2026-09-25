@@ -1,0 +1,81 @@
+# 00a — OEI-007 R1 证据重取确认（OEI-008 step 0.1 收口）
+
+> OEI-007 R1 由 codex VERDICT.md §5 触发（"⑦ 中 ④ + status-502 两条记录与标签/正文不符"）。
+> 上一轮已处置完毕（详见 `/tmp/oei007-r1.out` 与 `/tmp/claude-1000/.../tasks/baghdaimg.output`）。
+> 本文件是 OEI-008 步骤 0.1 的**收口证据**，证明 OEI-007 已回到干净状态、可以被 OEI-008 直接覆盖在它之上。
+
+---
+
+## 1. OEI-007 DONE 内容（已重建）
+
+```
+$ cat /mnt/d/Projects/domainAgentECE/onyx-lab/OEI-007/DONE
+2026-09-25T00:01:32+08:00 OEI-007 R1 complete
+```
+
+## 2. OEI-007 evidence/07-failure-paths.json —— 两条记录核对
+
+### 2.1 ④ engine unreachable（R1 重取后）
+
+```
+name: ④ engine unreachable
+http_status: 200
+documents[0]:
+  name        : o7-r1-down.md
+  accepted    : False
+  reason      : "engine rejected: Onyx upload transport failure: timed out"
+```
+
+**对照 codex §2 期望**：`accepted=false` + `reason` 含 `transport failure` ✓
+**环境**：`ECE_CONTENT_ENGINE=onyx` + `ECE_ONYX_BASE=http://127.0.0.1:9`（`port 9 confirmed closed: TimeoutError`）
+
+### 2.2 status_502_engine_down（R1 重取后）
+
+```
+http_status: 502
+body:
+  detail: "engine status unavailable: Onyx status transport failure: timed out"
+```
+
+**对照 codex §2 期望**：HTTP 502 + `engine status unavailable` ✓
+**环境**：同上
+
+### 2.3 旁证（与端点无关）
+
+`adapter_level_proof` 节同时落盘：
+
+```
+OnyxContentEngineAdapter.upload_document() raises:  Onyx upload transport failure: timed out
+OnyxContentEngineAdapter.document_status() raises: Onyx status transport failure: timed out
+```
+
+证明**绕过 HTTP 路由直接调 Port** 也得到同一行为 —— 端点不是观测这一行为的唯一入口。
+
+## 3. OEI-007 REPORT.md §A6 —— 已标"已于 R1 重取"
+
+```
+### A6 — 失败路径 ✅ **(④ 与 status-502 已于 R1 重取；见下)**
+
+> **R1 修订记录（2026-09-24 23:59，OEI-007 R1）**：codex VERDICT.md §2 指出
+> `07-failure-paths.json` 里 ④ "engine unreachable" 与 `status_502_engine_down`
+> 两条记录与标签不符（实际是 mock 模式 happy path 与 404 查询的响应被填错位置）。
+> **OEI-007 R1 仅做证据重取，代码一行未改** —— 用 §2 给的命令在
+> `ECE_CONTENT_ENGINE=onyx` + `ECE_ONYX_BASE=http://127.0.0.1:9` 下重采：
+> - ④ 实际响应：`accepted=false`, reason `"engine rejected: Onyx upload transport failure: timed out"`
+> - status 实际响应：HTTP **502**, `"engine status unavailable: Onyx status transport failure: timed out"`
+```
+
+## 4. 与 OEI-008 step 0.1 验收的对照
+
+| TASK §0.1 验收项 | 状态 |
+|---|---|
+| ④ 与 status-502 已被真实 onyx 模式响应替换 | ✓ 见 §2.1 + §2.2 |
+| `OEI-007/DONE` 重建 | ✓ 见 §1 |
+| 仅重取证据，代码零改 | ✓ `/tmp/oei007-r1.py` 只读写 JSON 与 .md |
+| `no_proxy` 防护 | ✓ 脚本内 `os.environ["no_proxy"] = "127.0.0.1,localhost"`（避免 OEI-006/007 都踩过的 loopback proxy 坑） |
+
+## 5. 一处环境观察（写进 07 后续可能有用）
+
+本机 loopback 拒接握手不返 RST、只返 timeout —— 端口 1/5/9/22/12345/65530 都得吃满 socket default timeout，不是 ConnectionRefused 而是 TimeoutError。Onyx 适配器 `_TIMEOUT_SECONDS = 60.0` 因此 `ECE_ONYX_BASE=http://127.0.0.1:9` 单次 upload 真的等了 ~60s。R1 一次完整 capture ~3 分钟。
+
+**这是 WSL 环境特性，非本刀代码缺陷**（OEI-006 §3-8 / OEI-007 §3-1 都记录过同类现象）。生产环境上 Onyx 不可达时表现为瞬时连接拒绝（端口无监听），不会拖到 60s。

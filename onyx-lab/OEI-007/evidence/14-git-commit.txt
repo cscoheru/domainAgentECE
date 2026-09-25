@@ -1,0 +1,96 @@
+=== 14 — git commit (OEI-007 step 10) ===
+2026-09-24T23:16:16+08:00
+
+--- commit ---
+caa69e88ef363cda1d2391941d2df85436b05910
+cscoheru <klyliae@gmail.com>
+2026-09-24 23:15:58 +0800
+
+feat(OEI-007): consulting document upload + status (closed-loop recall)
+
+Adds the second end of the consulting-library story: a real document dropped
+into ECE is extracted + indexed by the engine, then immediately appears in the
+"engine recall" group of the Library view alongside the 36-object static seed
+catalogue. Both the static side and the existing search/recall path are
+preserved unchanged; new functionality rides on two new endpoints and the
+two new Port methods.
+
+Port extension (`src/ece/connectors/onyx/port.py` + `*_adapter.py`):
+  - `upload_document(filename, content, *, project_id, title=None, metadata=None)`
+    → EngineDocumentStatus. Onyx side hits real `/api/user/projects/file/upload`;
+    mock side persists in a module-level store (so a poll-after-upload
+    round-trip works across fresh adapter instances, matching the live
+    adapter's process-wide data semantics).
+  - `document_status(document_id)` → EngineDocumentStatus. Polls
+    `/api/user/projects/file/statuses`. "Empty list" → EngineError("not found").
+  - New Pydantic model `EngineDocumentStatus` (document_id = user_file.id;
+    deliberately a different namespace from `EngineDocument.engine_doc_id`).
+
+ECE endpoints (`src/ece/consulting/router.py` + `metadata.py`):
+  - POST /api/v1/consulting/documents (multipart, multi-file, per-file
+    accept/reject) — whitelist (.md/.txt/.docx/.pdf) + 4 MiB single / 16 MiB
+    aggregate + per-file empty rejection + structured `reason` strings.
+  - GET  /api/v1/consulting/documents/{id} — 200 / 404 (id unknown) / 502
+    (engine unreachable) mapping.
+  - Metadata suggester is pure-function + deterministic (N=5 byte-identical)
+    and uses ONLY the values from the 36-object seed vocab (TASK §2.2). Caller
+    overrides suggestion; out-of-vocab caller values are silently dropped and
+    surfaced via `metadata_vocabulary_check="dropped"`.
+
+SPA (demos/spa/index.html + app.js + styles.css): new `#consulting-upload`
++ `#consulting-upload-list` region inside view-d, same-origin lifecycle with
+the existing engine group. No change to the 36-object seed rendering or to
+the existing engine group; new <div>s (not nested <section>s) preserve the
+view-d slice used by the SPA guardrail test.
+
+Step 0 cleanup (transferred from OEI-006 §6):
+  - Makefile: seed-fixtures now includes `scripts/seed_v0_spike_fixture.py`
+    so a clean `make test` no longer fails with the 4th-fixture gap.
+  - tests/integration/test_cut_045_local_origin_smoke.py: skip guard now
+    also trips on missing DATABASE_URL (was failing in DB-less envs).
+
+Tests: new DB-free file `tests/unit/test_consulting_documents.py` (32 tests,
+<10 s, no Postgres) covers metadata/whitelist/size/vocab determinism,
+Port contract for both adapters, mock write-path semantics, and full
+endpoint-level failure-mode matrix.
+
+Constraint discipline: no new pyproject/uv.lock dependencies (A8 — docx
+sample built entirely with stdlib zipfile + XML); no change to the 36 seed
+objects or three-domain business logic; Onyx containers `restarts=0`;
+no push.
+
+Evidence: onyx-lab/OEI-007/evidence/01..15-* (15 files). Suite: 737 passed /
+0 failed (baseline 705 + 32 new tests).
+
+Co-Authored-By: Claude Code <noreply@anthropic.com>
+
+
+ Makefile                                           |   6 +-
+ TASKS.md                                           |  42 +++
+ demos/spa/app.js                                   | 128 +++++++
+ demos/spa/index.html                               |  26 ++
+ demos/spa/styles.css                               | 109 ++++++
+ docs/API.md                                        | 120 +++++++
+ src/ece/connectors/onyx/mock_adapter.py            |  80 ++++-
+ src/ece/connectors/onyx/onyx_adapter.py            | 162 ++++++++-
+ src/ece/connectors/onyx/port.py                    |  74 +++-
+ src/ece/consulting/metadata.py                     | 396 +++++++++++++++++++++
+ src/ece/consulting/models.py                       |  77 ++++
+ src/ece/consulting/router.py                       | 233 +++++++++++-
+ .../integration/test_cut_045_local_origin_smoke.py |  12 +
+ tests/unit/test_consulting_documents.py            | 384 ++++++++++++++++++++
+ 14 files changed, 1836 insertions(+), 13 deletions(-)
+
+--- status -sb ---
+## main...origin/main [ahead 1]
+ T docs/demo-platform/DEMO_PLATFORM_PRD.md
+ T docs/demo-platform/DEPLOY_USER_PROXY.md
+--- remotes ---
+origin	https://github.com/cscoheru/ece.git (fetch)
+origin	https://github.com/cscoheru/ece.git (push)
+--- refs on remotes ---
+refs/remotes/origin/main 7ab17fc
+--- ahead/behind vs origin/main ---
+0	1
+--- HEAD on remote branches? ---
+  count: 0

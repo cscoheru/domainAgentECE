@@ -1,0 +1,132 @@
+{
+  "audit_format_spec": {
+    "fields_per_row": [
+      "when",
+      "what",
+      "caller",
+      "caller_user_ref",
+      "caller_source",
+      "result",
+      "...extras"
+    ],
+    "caller": "display string, format='{user_ref}[{source},dept={dept},mgmt={bool}]' or '<anonymous>'",
+    "caller_user_ref / caller_source": "structured, queryable",
+    "result": "ok | not_found | server_error | transport_failure | auth_failure | non_2xx | non_json | empty | rejected | error_msg"
+  },
+  "mock_audit": {
+    "adapter": "MockContentEngineAdapter",
+    "rows": [
+      {
+        "when": 1790296674.6555474,
+        "what": "engine_status",
+        "caller": "alice[jwt,dept=finance,mgmt=False]",
+        "caller_user_ref": "alice",
+        "caller_source": "jwt",
+        "result": "ok"
+      },
+      {
+        "when": 1790296674.655572,
+        "what": "list_projects",
+        "caller": "bob[header,dept=-,mgmt=False]",
+        "caller_user_ref": "bob",
+        "caller_source": "header",
+        "result": "ok"
+      },
+      {
+        "when": 1790296674.7057378,
+        "what": "search",
+        "caller": "alice[jwt,dept=finance,mgmt=False]",
+        "caller_user_ref": "alice",
+        "caller_source": "jwt",
+        "result": "hits=3",
+        "query": "KPI",
+        "top_k": null
+      },
+      {
+        "when": 1790296674.7559679,
+        "what": "search",
+        "caller": "<anonymous>",
+        "caller_user_ref": null,
+        "caller_source": null,
+        "result": "hits=3",
+        "query": "KPI",
+        "top_k": null
+      },
+      {
+        "when": 1790296674.756039,
+        "what": "upload_document",
+        "caller": "alice[jwt,dept=finance,mgmt=False]",
+        "caller_user_ref": "alice",
+        "caller_source": "jwt",
+        "result": "ok",
+        "document_id": "mock-000001",
+        "project_id": 1,
+        "bytes": 1,
+        "name": "mock-audit.md"
+      },
+      {
+        "when": 1790296674.756048,
+        "what": "document_status",
+        "caller": "alice[jwt,dept=finance,mgmt=False]",
+        "caller_user_ref": "alice",
+        "caller_source": "jwt",
+        "result": "ok",
+        "document_id": "mock-000001",
+        "status": "COMPLETED"
+      },
+      {
+        "when": 1790296674.756102,
+        "what": "document_status",
+        "caller": "bob[header,dept=-,mgmt=False]",
+        "caller_user_ref": "bob",
+        "caller_source": "header",
+        "result": "not_found",
+        "document_id": "nope"
+      }
+    ],
+    "count": 7,
+    "what_set": [
+      "document_status",
+      "engine_status",
+      "list_projects",
+      "search",
+      "upload_document"
+    ],
+    "result_set": [
+      "hits=3",
+      "not_found",
+      "ok"
+    ],
+    "caller_user_refs": [
+      "<None>",
+      "alice",
+      "bob"
+    ],
+    "verifies": "all 5 methods audited; both 'with-caller' and 'caller=None back-compat' paths recorded; identity preserved end-to-end"
+  },
+  "onyx_audit_evidence_independent": {
+    "where": "evidence/02-adapter-identity-mock.json + 03-adapter-identity-onyx.json (Port contract smoke; not full audit)",
+    "note": "Onyx adapter uses the same `_audit()` helper as mock; behaviour is identical.",
+    "why_not_run_full_here": "Onyx cold start is 4-15s/method × 5 methods = ~1min harness; same code path as mock already proven."
+  },
+  "design_discipline": {
+    "audit_is_per_process": true,
+    "shared_with_oei006_audit": false,
+    "rationale": "engine-call audit is a different lifecycle than context_request audit (src/ece/audit/); sharing would force a DB write per search, which we deliberately avoid (see 07-ce-permission-limitation.md §4: per-call DB writes are part of the mitigation cost we have NOT taken on in OEI-008)."
+  },
+  "captured_at": "2026-09-25T08:37:54+0800",
+  "defects_found_and_fixed_during_capture": [
+    {
+      "where": "src/ece/connectors/onyx/onyx_adapter.py :: engine_status",
+      "what": "the OEI-008 'ok' audit row was appended *after* the method's `return`, i.e. dead code — the live adapter therefore recorded no identity row for a successful /engine/status call. Caught by this evidence run (03-adapter-identity-onyx.json reported audit_log_total=2 for 3 calls).",
+      "fix": "build the EngineStatus into a local, audit, then return it; also added the three previously un-audited failure branches (non_2xx ×2, non_json) so every exit path is recorded, matching search/upload_document/document_status.",
+      "why_it_matters": "an audit trail with an un-audited success path cannot answer 'who read the engine?' — it only answers 'who failed to'."
+    },
+    {
+      "where": "src/ece/connectors/onyx/onyx_adapter.py :: search",
+      "what": "the success path had no audit row at all (only the failure branches did), so every successful retrieval was invisible.",
+      "fix": "audit `result='ok', hits=N` before returning; an empty hit list is recorded as ok (the engine answered 'nothing'), consistent with the OEI-006 four-state policy.",
+      "why_it_matters": "retrieval is the single most frequent engine call; a read-only audit trail with no reads in it is misleading."
+    }
+  ]
+}

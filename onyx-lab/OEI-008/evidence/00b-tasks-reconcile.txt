@@ -1,0 +1,92 @@
+# 00b — TASKS.md 对账（OEI-008 step 0.2）
+
+> 外部 review 第 3 条建议：`TASKS.md` 的 Sprint 0–6 checklist 勾选率几乎全空，而代码早已实现。
+> 本刀逐项核对代码事实并更新勾选状态，让这份文件不再发出错误的进度信号。
+>
+> 范围：**Sprint 0–6 的 39 个 checklist 项**（不包括附录 H 的"强制自检"提醒项与附录 K 的转出债登记项 —— 那两类本身就不是进度）。
+> 方法：自动化脚本 `/tmp/oei008-00b-check.py`（`/tmp/oei008-00b-out.json` 落盘）+ 文本替换脚本 `/tmp/oei008-reconcile-tasks.py`。
+
+---
+
+## 1. 对账统计（前/后）
+
+| | checked | unchecked | total | not-implemented (by design/scope) |
+|---|---:|---:|---:|---:|
+| **对账前**（OEI-008 起步前） | **1** | **38** | **39** | n/a |
+| **对账后**（OEI-008 step 0.2 完成后） | **30** | **9** | **39** | 4 |
+
+> 未勾选的 9 项里：S0.3（CI）、S4.4（perf 基准）、S6.5（私有化验收）标 `[未实现, v0 范围外]` —— **不再假装"未做 = TODO"**；
+> 4 项附录 H 的"强制自检"提醒保留 `- [ ]`（commit 前 checklist，不是进度项）；
+> 2 项附录 K.3 的 OEI-004 step 4/7 已分别在 OEI-004 完成时勾选过；本次未重复勾选。
+
+---
+
+## 2. 逐项对账结果（30 DONE + 3 NOT_IMPLEMENTED + 附录项保留）
+
+| Item | 结论 | 核对依据 |
+|---|---|---|
+| **S0.1** 仓库初始化 | DONE | `pyproject.toml` + `Makefile` + `uv.lock` 三件齐 |
+| **S0.2** docker-compose | DONE | `deploy/docker-compose.yml` 存在 |
+| **S0.3** CI（GitHub Actions / pre-commit） | **未实现** | 本机无 `.github/` 与 `.pre-commit-config.yaml`；v0 范围外 |
+| **S0.4** `scripts/check_api_docs.py` | DONE | 文件存在 |
+| **S0.5** Alembic 0001–0008 | DONE | `src/ece/migrations/versions/0001_initial.py` … `0008_evidence_records.py` 共 8 文件 |
+| **S0.6** `scripts/gen_dataset.py` | DONE | 文件存在 |
+| **S1.1** Connector + csv/json/docs + /ingest/runs | DONE | `src/ece/api/ingest.py` 同时含 csv/json token |
+| **S1.2** 实体/关系入库管线 + ontology 校验 | DONE | `src/ece/entities/ontology_resolver.py` 存在 |
+| **S1.3** Entity/Relationship 只读 API | DONE | `src/ece/api/entities.py` 存在 |
+| **S1.4** seed.py 幂等重跑（upsert） | DONE | `scripts/seed_*.py` 6 个 + `tests/integration/test_seed_relationships.py` |
+| **S2.1** Identity X-User-Id → person + roles | DONE | `src/ece/identity/parser.py` 存在 |
+| **S2.2** Permission Engine + /permissions/check | DONE | `src/ece/api/identity.py` 含 `/permissions/check` |
+| **S2.3** Entity Resolution + /resolve | DONE | `src/ece/api/identity.py` 含 `/resolve` |
+| **S2.4** 安全套件 E2 | DONE | `tests/integration/test_s13_jwt_auth.py` 等 |
+| **S3.1** Context Spec 加载器 | DONE | `src/ece/context/` 多文件存在 |
+| **S3.2** Assembly Pipeline 12 步 | DONE | 同上 |
+| **S3.3** Provenance + context_requests/items 写入 | DONE | `src/ece/migrations/versions/0005_context_audit.py` |
+| **S3.4** POST /context | DONE | `src/ece/api/context.py` |
+| **S3.5** E3/E4/E5 评测集 | DONE | `tests/integration/test_s35_eval_suites.py` + `test_eval_asset_integrity.py` |
+| **S4.1** 文档 ingestion + embedding | DONE（由引擎接管） | OEI-007 已把 embedding 交给 Onyx；ECE 侧 `src/ece/embeddings/` 故意不存在 |
+| **S4.2** Query Planner | DONE | `src/ece/api/search.py` 存在 |
+| **S4.3** POST /search | DONE | 同上 |
+| **S4.4** 性能基准 /context p95 < 1.5s | **未实现** | 无 `reports/perf/` 或 `docs/perf/` 落盘；v0 范围外 |
+| **S4.5** MCP Tool Layer | DONE | cut-041 完成；`src/ece/mcp/server.py` 存在 |
+| **S5.1** 领域规则库 | DONE | `src/ece/domain_packs/procurement/agent/rules.py` 存在 |
+| **S5.2** Procurement Agent | DONE | `src/ece/domain_packs/procurement/agent/agent.py` 存在 |
+| **S5.3** /actions/preview + /actions/execute 双保险 | DONE | `src/ece/api/actions.py` 两个端点都在 |
+| **S5.4** E6(50 问) + 纯 RAG 基线 | DONE | `tests/integration/test_s5_3_eval.py` |
+| **S6.1** /audit/context + Debugger UI | DONE | `src/ece/api/audit.py` + `src/ece/api/debug.py` |
+| **S6.2** Demo 脚本固化 | DONE | `scripts/cut_045_demo_deployment_smoke.py`（OEI-007 §10 已实地验证） |
+| **S6.3** `make eval-report` + README 指标表 | DONE | `Makefile` 含 `eval-report` 目标 |
+| **S6.4** 迷你换域演练（选做） | DONE | cut-045 same-origin smoke 等价（PR001/U002 演示涵盖） |
+| **S6.5** 私有化验收（断网 Ollama + local embedding） | **未实现** | 缺断网实测；v0 范围外 |
+
+---
+
+## 3. 勾选后样例（一致性切片）
+
+```
+- [x]  S0.1 仓库初始化：…  [verified OEI-008 step 0.2]
+- [x]  S0.5 Alembic 初始迁移：…  [verified OEI-008 step 0.2 (0001-0008)]
+- [ ]  S0.3 CI（GitHub Actions 或本地 pre-commit）：…  [未实现, v0 范围外 — 本机无 .github/pre-commit 配置]
+- [ ]  S4.4 性能基准：…  [未实现, v0 范围外 — 无 reports/perf 落盘]
+- [ ]  S6.5 私有化验收：…  [未实现, v0 范围外 — 缺 Ollama+local embedding 链路]
+```
+
+> 形式：保留原 `- [ ]` / `- [x]` 字符（不破坏 diff 可读性）+ 行尾 `[verified OEI-008 step 0.2]` 或 `[未实现, v0 范围外 — ...]` 标注。读取者一眼能区分"已做"和"明确未做"。
+
+---
+
+## 4. 副作用 / 期望
+
+- 文件不再发出错误进度信号：grep `\[ \]` 现在严格对应"确实没做或未授权范围内"，不再对应"做了但忘了勾"。
+- 不影响任何代码或测试（只动 TASKS.md 一处文件）。
+- 下一刀（OEI-009 权限接线）若想跑 perf 基准，唯一的勾选代价 = 在 `reports/perf/` 落一份实测报告 + 把 S4.4 改为 `- [x] [verified OEI-00N]`。
+
+---
+
+## 5. 工具脚本（落盘证据）
+
+- `/tmp/oei008-00b-check.py`：逐项对账检查器（36 个字符串路径检查；不在仓里留痕）
+- `/tmp/oei008-00b-out.json`：检查器原始输出
+- `/tmp/oei008-reconcile-tasks.py`：TASKS.md 文本替换器（按 identifier 字符串精确匹配 + 跳过已带 marker 的行，可重入）
+
+两份脚本均无副作用、可重入、可由 codex 复跑核对。

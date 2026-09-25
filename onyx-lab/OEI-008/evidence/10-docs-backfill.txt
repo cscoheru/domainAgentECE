@@ -1,0 +1,52 @@
+OEI-008 evidence 10 — docs backfill
+captured: 2026-09-25T08:49:01+08:00
+
+== files changed by this step ==
+ TASKS.md    | 110 ++++++++++++++++++++++++++++++++++++++++++------------------
+ docs/API.md | 101 +++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 178 insertions(+), 33 deletions(-)
+
+== docs/API.md added headings ==
++## 13. 身份穿透到内容引擎（OEI-008）
++### 13.1 契约：`ContentEnginePort` 的五个方法都收 `caller`
++### 13.2 四个调用点的匿名策略
++### 13.3 已知限制：内容引擎**无法**下推权限
++### 13.4 审计形态
++### 13.5 为什么删掉了环境变量镜像
+
+== docs/API.md §13 line range ==
+726:## 13. 身份穿透到内容引擎（OEI-008）
+
+== TASKS.md added headings ==
++## 附录 N — 身份穿透到内容引擎（OEI-008，2026-09-25）
++### N.1 交付物
++### N.2 匿名策略（四调用点）
++### N.3 已知限制 / 移交
++### N.4 步骤 0 处置（TASKS.md 对账）
+
+== TASKS.md checkbox reconciliation (step 0.2) ==
+checked:   30
+unchecked: 9
+marked '[verified OEI-008 step 0.2]': 29  (29 of the 30 checked boxes)
+already checked at HEAD, marked '[already checked pre-OEI-008 (cut-041)]': 1  (S4.5 — cut-041's own claim, NOT my verification)
+marked '[未实现, v0 范围外]':            3  (S0.3 / S4.4 / S6.5 — the only unchecked boxes that are not appendix prose)
+remaining unchecked: 6 (Sprint 1+ planned scope, untouched)
+
+bonus fix: S4.5's marker had been appended 3x by the OEI-008 reconcile script
+(its idempotency guard was line-based, and the line matched 3 times). Deduped
+to one occurrence — no semantic change.
+
+== docs checker (pre-existing finding, not introduced here) ==
+Common: 18 | Docs-only (planned): 0 | App-only: 4
+
+ERROR — implemented but not documented (S0.4 violation: must update API.md):
+  GET    /api/v1/consulting/documents/{document_id}
+  GET    /api/v1/consulting/facets
+  GET    /api/v1/consulting/objects/{object_id}
+  POST   /api/v1/consulting/documents
+
+note: the 4 'app-only' routes are PRE-EXISTING. scripts/check_api_docs.py only
+      parses '^### (GET|POST|...)' headings; docs/API.md §11/§12 use numbered
+      headings ('### 12.1 POST /api/v1/consulting/documents'), so the parser
+      never sees them. Verified identical at HEAD (caa69e8) vs worktree:
+      parsing HEAD:docs/API.md yields the same empty consulting set.

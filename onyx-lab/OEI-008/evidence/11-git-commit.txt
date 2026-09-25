@@ -1,0 +1,103 @@
+OEI-008 evidence 11 — git commit
+captured: 2026-09-25T09:06:28+08:00
+
+== commit ==
+3fb0723 feat(OEI-008): thread caller identity through ContentEnginePort
+3fb0723 feat(OEI-008): thread caller identity through ContentEnginePort
+ TASKS.md                                   | 110 +++++++----
+ docs/API.md                                | 101 ++++++++++
+ src/ece/api/engine_status.py               |  18 +-
+ src/ece/connectors/onyx/caller.py          | 110 +++++++++++
+ src/ece/connectors/onyx/mock_adapter.py    |  75 +++++++-
+ src/ece/connectors/onyx/onyx_adapter.py    | 140 +++++++++++++-
+ src/ece/connectors/onyx/port.py            | 160 +++++++++++++---
+ src/ece/consulting/engine_merge.py         |  76 ++++----
+ src/ece/consulting/router.py               |  40 +++-
+ tests/unit/test_consulting_documents.py    |  16 +-
+ tests/unit/test_consulting_engine_merge.py |  22 ++-
+ tests/unit/test_content_engine_identity.py | 298 +++++++++++++++++++++++++++++
+ 12 files changed, 1054 insertions(+), 112 deletions(-)
+
+== full message ==
+feat(OEI-008): thread caller identity through ContentEnginePort
+
+Give every engine call a record of *who* asked, and stop mirroring the
+engine selector by hand.
+
+- port.py: EngineCallerContext (frozen; user_ref/roles/department/
+  is_management/org_id/source) + `caller` on all five Port methods +
+  an `engine_name` Protocol property. port.py still imports nothing
+  from Onyx/JWT/DB.
+- caller.py (new): caller_from_request_headers() — cheap, header/JWT
+  only, for read paths; caller_from_db_identity() — resolves the full
+  Identity through ece.identity.parser, for the write path.
+- adapters: `engine_name`, and one `_audit(what, *, caller, result)`
+  row per call on every exit path. Uploads refuse explicitly-anonymous
+  callers before any HTTP leaves the box.
+- engine_merge.py: drop `_engine_switch_is_onyx()` and the
+  `os.environ.get("ECE_CONTENT_ENGINE")` mirror; dispatch on
+  `engine.engine_name` instead.
+- 4 call sites wired: /library, /engine/status, POST /documents (403
+  for anonymous), GET /documents/{id}.
+- docs/API.md §13: the contract, the per-endpoint anonymous policy,
+  and the known limitation that the CE cannot enforce permissions
+  (retrieval is not filtered by caller — that is OEI-009).
+
+Two real defects surfaced while capturing evidence, both in the live
+adapter's audit trail: `engine_status`'s ok-row was appended after its
+`return` (dead code, so a successful status call left no identity
+record), and `search`'s success path had no audit row at all. Both
+fixed; failure branches that were missing rows were filled in to match.
+
+Suite: 757 passed / 0 failed (was 737; +20 new identity tests).
+pyproject.toml and uv.lock unchanged.
+
+Co-Authored-By: Claude Code <noreply@anthropic.com>
+
+== no push (authorised boundary) ==
+local HEAD : 3fb0723
+origin/main: 7ab17fc
+ahead of origin/main by: 2 commit(s)
+
+== dependency files unchanged in this commit ==
+absent (ok)
+
+== files in the commit ==
+TASKS.md
+docs/API.md
+src/ece/api/engine_status.py
+src/ece/connectors/onyx/caller.py
+src/ece/connectors/onyx/mock_adapter.py
+src/ece/connectors/onyx/onyx_adapter.py
+src/ece/connectors/onyx/port.py
+src/ece/consulting/engine_merge.py
+src/ece/consulting/router.py
+tests/unit/test_consulting_documents.py
+tests/unit/test_consulting_engine_merge.py
+tests/unit/test_content_engine_identity.py
+
+== leftover unstaged/untracked (NOT mine, deliberately left alone) ==
+   rationale: pre-existing worktree dirt that OEI-008 did not create and must
+   not sweep into its commit. Listed verbatim so codex can see exactly what was
+   left untouched. Inspected, not assumed:
+     - the 15 reports/** files differ only by ANSI colour escapes being absent
+       from the recorded pytest output ('-\x1b[1m=== test session starts ==='
+       vs '+=== test session starts ==='), 18 del / 18 ins per file. Nothing in
+       OEI-008 writes to reports/, so this is an environment/hook artifact.
+     - the 2 docs/demo-platform entries show as 'T' (typechange, symlink<->file),
+       a Windows/WSL checkout artifact.
+
+ T docs/demo-platform/DEMO_PLATFORM_PRD.md
+ T docs/demo-platform/DEPLOY_USER_PROXY.md
+ M reports/cut-042R3/mutation-evidence/M1_re_read_through_assembly_skipped.md
+ M reports/cut-042R3/mutation-evidence/M2_apply_context_update_skip_sql.md
+ M reports/cut-042R3/mutation-evidence/M3_permission_acl_check_bypassed.md
+ M reports/cut-042R3/mutation-evidence/M4_evaluated_conditions_inject_nondeterministic_amount.md
+ M reports/cut-042R3/mutation-evidence/M5_jwt_decode_skips_signature_verification.md
+ M reports/cut-042R3/mutation-evidence/M6_materialize_fn_disabled_in_loop.md
+ M reports/cut-043/mutation-evidence/M1_km_validity_invert.md
+ M reports/cut-043/mutation-evidence/M2_km_permission_invert.md
+ M reports/cut-043/mutation-evidence/M3_km_decision_and_to_or.md
+ M reports/cut-044/mutation-evidence/M1_comp_count_condition_invert.md
+ M reports/cut-044/mutation-evidence/M2_comp_coverage_issubset_to_isdisjoint.md
+ M reports/cut-044/mutation-evidence/M3_comp_decision_force_gap_list.md

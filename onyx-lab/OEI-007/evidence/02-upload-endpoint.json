@@ -1,0 +1,25 @@
+--- single upload (mock) ---
+status: 200
+{
+  "documents": [
+    {
+      "name": "oei007-02-retail-case.md",
+      "accepted": true,
+      "document_id": "mock-000001",
+      "status": "COMPLETED",
+      "chunk_count": 1,
+      "reason": null,
+      "suggested_metadata": {
+        "type": [],
+        "engagement_phase": [],
+        "client_industry": [
+          "retail"
+        ],
+        "problem_types": [],
+        "methods": []
+      }
+    }
+  ],
+  "static_catalog_size": 36,
+  "metadata_vocabulary_check": "ok"
+}

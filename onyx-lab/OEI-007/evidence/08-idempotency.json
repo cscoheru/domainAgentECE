@@ -1,0 +1,22 @@
+{
+  "strategy": "Each upload is a separate ingestion (engine has no content-hash dedup). The Library dedup is the SPA's: one card per engine_doc_id. We deliberately do NOT silently collapse repeats because that would hide 'I really want a new copy'.",
+  "evidence": [
+    {
+      "adapter": "MockContentEngineAdapter",
+      "r1_doc_id": "mock-000001",
+      "r2_doc_id": "mock-000002",
+      "distinct_doc_ids": true,
+      "both_status_pollable": true,
+      "r1_status": "COMPLETED",
+      "r2_status": "COMPLETED"
+    },
+    {
+      "adapter": "OnyxContentEngineAdapter",
+      "r1_doc_id": "93d20813-dc57-4c58-9bdf-691de526a623",
+      "r2_doc_id": "6386d66a-8284-4261-9fb3-10e51950e94a",
+      "distinct_doc_ids": true,
+      "r1_status": "PROCESSING",
+      "r2_status": "PROCESSING"
+    }
+  ]
+}

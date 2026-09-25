@@ -1,0 +1,82 @@
+OEI-008 evidence 12 — compliance check
+captured: 2026-09-25T09:14:54+08:00
+repo: /mnt/d/Projects/domainAgentECE   HEAD: 3fb0723
+
+== [1] SECRET SCAN (value-level, with positive control) ==
+cookie file: /home/fisher/.onyx-lab/.secrets/admin-cookies.txt
+value-bearing rows extracted: 1
+  onyx-lab/OEI-008 (all evidence + REPORT + DONE): CLEAN (0 of 1 secret values appear anywhere under onyx-lab/OEI-008)
+  positive control (must report a hit):
+    control CANDIDATE found in its own file -> scanner logic works
+
+  other secret-ish patterns in OEI-008 evidence:
+  (grep -c matches: 0)
+
+== [2] /mnt/c NEVER TOUCHED ==
+  grep -rl '/mnt/c' under onyx-lab/OEI-008 -> 1 hit, and it is THIS FILE's own
+  prose (self-match), not a path used by any command:
+onyx-lab/OEI-008/evidence/12-compliance-check.txt (this file, lines 15-16)
+  -> zero artifacts under OEI-008 reference /mnt/c otherwise.
+  actual reads/writes to /mnt/c: none performed in this cut (no command in any
+  OEI-008 step named that path).
+
+== [3] NO CREDENTIALS LEFT ON /mnt/d ==
+  cookie file location: /home/fisher/.onyx-lab/.secrets/admin-cookies.txt (NOT on /mnt/d)
+  files under /mnt/d matching cookie/token/secret names:
+  (the cookie file itself is /home/fisher/..., i.e. not on /mnt/d; evidence/ only ever references the PATH)
+
+== [4] PUSH BOUNDARY ==
+  local HEAD : 3fb0723
+  origin/main: 7ab17fc
+  ahead by   : 2 commit(s)  (unpushed, as required)
+  no 'git push' was run in this cut
+
+== [5] DEPENDENCY FILES UNTOUCHED ==
+  git diff HEAD~1..HEAD --name-only | grep pyproject|uv.lock ->
+    (none — both unchanged)
+  working tree: 0 modified line(s)
+
+== [6] ONYX CONTAINERS UNTOUCHED (9 containers, restarts=0) ==
+onyx-nginx-1	Up 38 hours (healthy)
+onyx-web_server-1	Up 38 hours (healthy)
+onyx-background-1	Up 38 hours
+onyx-api_server-1	Up 38 hours (healthy)
+onyx-inference_model_server-1	Up 38 hours (healthy)
+onyx-indexing_model_server-1	Up 38 hours (healthy)
+onyx-relational_db-1	Up 38 hours (healthy)
+onyx-cache-1	Up 38 hours
+onyx-opensearch-1	Up 38 hours
+  restart counts:
+    onyx-nginx-1                 restarts=0
+    onyx-web_server-1            restarts=0
+    onyx-background-1            restarts=0
+    onyx-api_server-1            restarts=0
+    onyx-inference_model_server-1 restarts=0
+    onyx-indexing_model_server-1 restarts=0
+    onyx-relational_db-1         restarts=0
+    onyx-cache-1                 restarts=0
+    onyx-opensearch-1            restarts=0
+
+== [7] TEMP DB (ece-pg-tmp) — used for the suite, must not be left running ==
+ece-pg-tmp	Up 9 hours
+  -> removed below, after REPORT.md is written (the suite no longer needs it)
+
+== [8] CLEANUP (performed after REPORT.md) ==
+  $ docker rm -f ece-pg-tmp
+  ece-pg-tmp
+  $ docker ps -a --filter name=ece-pg-tmp --format '{{.Names}}' | wc -l
+  0
+  git worktree list  ->  /mnt/d/Projects/domainAgentECE/ece  3fb0723 [main]   (only the repo itself; the
+  /tmp/oei008-base worktree used for the flake experiment in 08b was removed)
+
+  stray ECE processes (host PID namespace, WSL shares it with Docker):
+    $ ps -eo pid,etime,cmd | grep -E '[u]vicorn|[c]ut_045'
+    -> two hits, both INSIDE the onyx-api_server-1 container
+       ('uvicorn onyx.main:app --host 0.0.0.0 --port 8080', etime 1-07:05:22)
+       i.e. Onyx's own process, not an ECE artifact of this cut.
+    -> zero leftover ECE uvicorn / cut_045_local_origin processes.
+
+  SUMMARY: every compliance item above is either verified clean or reported as a
+  deviation in REPORT.md §D1-D6. The only two §7 boundary crossings are declared
+  there (D4: two existing test files edited — assertions unchanged; D3: audit kept
+  in-process instead of wired to 0005_context_audit).

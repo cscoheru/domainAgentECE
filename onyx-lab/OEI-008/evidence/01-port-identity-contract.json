@@ -1,0 +1,31 @@
+{
+  "engine_name_is_protocol_property": true,
+  "all_five_methods_accept_caller": true,
+  "method_signatures": {
+    "search": true,
+    "engine_status": true,
+    "list_projects": true,
+    "upload_document": true,
+    "document_status": true
+  },
+  "EngineCallerContext_dataclass": {
+    "fields": [
+      "user_ref",
+      "roles",
+      "department",
+      "is_management",
+      "org_id",
+      "source"
+    ],
+    "frozen": true,
+    "source_options": [
+      "jwt",
+      "header",
+      "anonymous",
+      "test"
+    ]
+  },
+  "anonymous_helper": "EngineCallerContext.anonymous() — user_ref=None, source='anonymous'",
+  "from_identity_helper": "EngineCallerContext.from_identity(identity, source=...) — for boundary code",
+  "design_notes": "EngineCallerContext imports nothing from Onyx; port.py stays free of identity/JWT/DB imports. caller_from_request_headers() / caller_from_db_identity() live in caller.py."
+}

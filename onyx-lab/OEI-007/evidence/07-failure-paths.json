@@ -1,0 +1,210 @@
+{
+  "scenarios": [
+    {
+      "name": "① unsupported extension",
+      "http_status": 200,
+      "body": {
+        "documents": [
+          {
+            "name": "bad.exe",
+            "accepted": false,
+            "document_id": null,
+            "status": null,
+            "chunk_count": null,
+            "reason": "extension '.exe' not allowed; accepted: ['.docx', '.md', '.pdf', '.txt']",
+            "suggested_metadata": {
+              "type": [],
+              "engagement_phase": [],
+              "client_industry": [],
+              "problem_types": [],
+              "methods": []
+            }
+          }
+        ],
+        "static_catalog_size": 36,
+        "metadata_vocabulary_check": "ok"
+      }
+    },
+    {
+      "name": "② empty file",
+      "http_status": 200,
+      "body": {
+        "documents": [
+          {
+            "name": "empty.md",
+            "accepted": false,
+            "document_id": null,
+            "status": null,
+            "chunk_count": null,
+            "reason": "empty file rejected (0 bytes)",
+            "suggested_metadata": {
+              "type": [],
+              "engagement_phase": [],
+              "client_industry": [],
+              "problem_types": [],
+              "methods": []
+            }
+          }
+        ],
+        "static_catalog_size": 36,
+        "metadata_vocabulary_check": "ok"
+      }
+    },
+    {
+      "name": "③ oversize single file",
+      "http_status": 200,
+      "body": {
+        "documents": [
+          {
+            "name": "big.md",
+            "accepted": false,
+            "document_id": null,
+            "status": null,
+            "chunk_count": null,
+            "reason": "file too large: 5242880 > MAX_SINGLE_FILE_BYTES (4194304)",
+            "suggested_metadata": {
+              "type": [],
+              "engagement_phase": [],
+              "client_industry": [],
+              "problem_types": [],
+              "methods": []
+            }
+          }
+        ],
+        "static_catalog_size": 36,
+        "metadata_vocabulary_check": "ok"
+      }
+    },
+    {
+      "name": "④ engine unreachable",
+      "http_status": 200,
+      "body": {
+        "documents": [
+          {
+            "name": "o7-r1-down.md",
+            "accepted": false,
+            "document_id": null,
+            "status": null,
+            "chunk_count": null,
+            "reason": "engine rejected: Onyx upload transport failure: timed out",
+            "suggested_metadata": {
+              "type": [],
+              "engagement_phase": [],
+              "client_industry": [],
+              "problem_types": [],
+              "methods": []
+            }
+          }
+        ],
+        "static_catalog_size": 36,
+        "metadata_vocabulary_check": "ok"
+      },
+      "_r1_note": "R1 re-captured under ECE_CONTENT_ENGINE=onyx + ECE_ONYX_BASE=http://127.0.0.1:9. Previous record was mock-mode happy path (mock-000001 / COMPLETED) — wrong scenario."
+    },
+    {
+      "name": "⑤ partial multi-file",
+      "http_status": 200,
+      "body": {
+        "documents": [
+          {
+            "name": "good.md",
+            "accepted": true,
+            "document_id": "mock-000001",
+            "status": "COMPLETED",
+            "chunk_count": 1,
+            "reason": null,
+            "suggested_metadata": {
+              "type": [],
+              "engagement_phase": [],
+              "client_industry": [],
+              "problem_types": [],
+              "methods": []
+            }
+          },
+          {
+            "name": "bad.exe",
+            "accepted": false,
+            "document_id": null,
+            "status": null,
+            "chunk_count": null,
+            "reason": "extension '.exe' not allowed; accepted: ['.docx', '.md', '.pdf', '.txt']",
+            "suggested_metadata": {
+              "type": [],
+              "engagement_phase": [],
+              "client_industry": [],
+              "problem_types": [],
+              "methods": []
+            }
+          },
+          {
+            "name": "empty2.md",
+            "accepted": false,
+            "document_id": null,
+            "status": null,
+            "chunk_count": null,
+            "reason": "empty file rejected (0 bytes)",
+            "suggested_metadata": {
+              "type": [],
+              "engagement_phase": [],
+              "client_industry": [],
+              "problem_types": [],
+              "methods": []
+            }
+          }
+        ],
+        "static_catalog_size": 36,
+        "metadata_vocabulary_check": "ok"
+      }
+    },
+    {
+      "name": "request-level: zero files",
+      "http_status": 422,
+      "body": {
+        "detail": [
+          {
+            "type": "missing",
+            "loc": [
+              "body",
+              "file"
+            ],
+            "msg": "Field required",
+            "input": null
+          }
+        ]
+      }
+    },
+    {
+      "name": "request-level: aggregate oversize",
+      "http_status": 413,
+      "body": {
+        "detail": "aggregate too large: 17825792 > MAX_TOTAL_BYTES (16777216)"
+      }
+    }
+  ],
+  "status_404": {
+    "http_status": 404,
+    "body": {
+      "detail": "document_id='does-not-exist' not found"
+    }
+  },
+  "status_502_engine_down": {
+    "http_status": 502,
+    "body": {
+      "detail": "engine status unavailable: Onyx status transport failure: timed out"
+    },
+    "_r1_note": "R1 re-captured under ECE_CONTENT_ENGINE=onyx + ECE_ONYX_BASE=http://127.0.0.1:9. Previous record was a 404 from mock 'not found' — wrong scenario."
+  },
+  "adapter_level_proof": {
+    "engine": "OnyxContentEngineAdapter",
+    "engine_base": "http://127.0.0.1:9",
+    "no_proxy": "127.0.0.1,localhost",
+    "upload_document_error": "Onyx upload transport failure: timed out",
+    "document_status_error": "Onyx status transport failure: timed out",
+    "verifies": "Both Port methods raise EngineError on transport failure to a closed port."
+  },
+  "_r1_summary": {
+    "replaced_up": true,
+    "replaced_st": true,
+    "captured_at": "2026-09-24T23:59:39+08:00"
+  }
+}

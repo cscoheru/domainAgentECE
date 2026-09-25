@@ -1,0 +1,65 @@
+OEI-008 R1 — restore DB-free attribute of tests/unit/test_consulting_documents.py
+====================================================================================
+
+VERDICT §5 R1 (A8) said: "DB 无关单测通过 + 无回归" → FAIL. The fixture had
+grown an `os.environ.setdefault("DATABASE_URL", "postgresql+psycopg://…:55432/ece")`
+line, which made the 32 tests require a reachable Postgres (and hang on TCP
+retry when the env is unset).
+
+Fix applied (per VERDICT §5 recommended option 1 — dependency_overrides):
+
+  src/ece/consulting/router.py
+    - new FastAPI dependency `get_upload_caller(authorization, x_user_id) -> EngineCallerContext`
+      that calls `caller_from_db_identity(get_engine(), authorization, x_user_id)`
+      and maps `EngineError` → `HTTPException(403, detail=str(exc))`.
+    - `upload_documents` signature: `authorization` + `x_user_id` headers
+      replaced by `caller: EngineCallerContext = Depends(get_upload_caller)`.
+    - inline `caller_from_db_identity(...)` try/except block removed from the
+      endpoint body (was at lines ~222–232).
+    - status endpoint untouched (still uses cheap `caller_from_request_headers`,
+      which is non-DB by design — see caller.py module docstring).
+
+  tests/unit/test_consulting_documents.py
+    - `import os` removed (no longer used).
+    - `DATABASE_URL` setdefault removed.
+    - fixture is now a yield-fixture:
+        app.dependency_overrides[get_upload_caller] = lambda: stub_caller
+        yield TestClient(app, headers={"X-User-Id": "test-user"})
+        app.dependency_overrides.pop(get_upload_caller, None)
+    - new imports: `EngineCallerContext` (from ece.connectors.onyx.port),
+      `get_upload_caller` (from ece.consulting.router).
+    - assertions: **none changed**, tests: **none deleted**.
+
+Mandatory re-verification per VERDICT §5:
+  $ env -u DATABASE_URL .venv/bin/python -m pytest tests/unit/test_consulting_documents.py
+  ============================= test session starts ==============================
+  platform linux -- Python 3.12.14, pytest-9.1.1, pluggy-1.6.0
+  rootdir: /mnt/d/Projects/domainAgentECE/ece
+  configfile: pyproject.toml
+  plugins: anyio-4.15.1, cov-7.1.0
+  collected 32 items
+
+  tests/unit/test_consulting_documents.py ................................ [100%]
+
+  =============================== warnings summary ===============================
+  .venv/lib/python3.12/site-packages/starlette/testclient.py:53
+    /mnt/d/Projects/domainAgentECE/ece/.venv/lib/python3.12/site-packages/starlette/testclient.py:53: DeprecationWarning: The anyio.abc.BlockingPortal alias is deprecated, use anyio.from_thread.BlockingPortal instead.
+      _PortalType = Callable[[], AbstractContextManager[anyio.abc.BlockingPortal]]
+
+  -- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+  ======================== 32 passed, 1 warning in 5.58s =========================
+
+OEI-007 baseline for the same command: 32 passed in 5.50s.
+OEI-008 R1 result:                       32 passed in 5.58s.   ✓ matches.
+
+Declared consequence of moving the resolver into the FastAPI dependency:
+  - FastAPI resolves dependencies *before* the endpoint body runs, so an
+    anonymous request with **zero files** now returns 403 (from
+    `get_upload_caller`) instead of 422 (from the `if not file:` check).
+  - No test in the file asserts the precedence order; `test_upload_zero_files_is_422`
+    sends its request through the fixture, which injects the stub caller, so
+    it still passes. Declared for honesty; not a behavioural break in the
+    sense VERDICT §5 cares about (the 403 detail text is unchanged and the
+    route remains auth-required).
+
+Full suite re-verification: 757 / 0 (run in background; recorded in 09b-test-after-r1.txt).

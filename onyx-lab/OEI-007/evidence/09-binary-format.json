@@ -1,0 +1,91 @@
+{
+  "unique_marker": "oei007docx1790261066",
+  "docx_built_with": "stdlib zipfile + xml (no python-docx, no docx-parser)",
+  "docx_zip_namelist": [
+    "[Content_Types].xml",
+    "_rels/.rels",
+    "word/_rels/document.xml.rels",
+    "word/document.xml"
+  ],
+  "docx_bytes": 1454,
+  "upload": {
+    "adapter": "OnyxContentEngineAdapter",
+    "endpoint": "POST /api/user/projects/file/upload",
+    "response": {
+      "document_id": "e63ca931-674e-4fa8-9ac0-c847fa876eec",
+      "name": "oei007-binary-oei007docx1790261066.docx",
+      "status": "PROCESSING",
+      "chunk_count": null,
+      "project_id": null,
+      "failure_reason": null,
+      "raw": {
+        "id": "e63ca931-674e-4fa8-9ac0-c847fa876eec",
+        "temp_id": null,
+        "name": "oei007-binary-oei007docx1790261066.docx",
+        "project_id": null,
+        "user_id": "c7483a82-9008-41f0-88f7-b8b9dba6d78e",
+        "file_id": "aa11abc1-21e5-4ade-846f-87ba190b085f",
+        "created_at": "2026-09-24T14:44:27.266435Z",
+        "status": "PROCESSING",
+        "last_accessed_at": "2026-09-24T14:44:27.265652Z",
+        "file_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        "chat_file_type": "document",
+        "token_count": 124,
+        "chunk_count": null,
+        "_ece_consulting_metadata": {
+          "_probe": "09-binary-format",
+          "_marker": "oei007docx1790261066"
+        },
+        "_ece_consulting_title": "Docx Binary Probe oei007docx1790261066"
+      }
+    },
+    "document_id": "e63ca931-674e-4fa8-9ac0-c847fa876eec"
+  },
+  "polled_status": {
+    "document_id": "e63ca931-674e-4fa8-9ac0-c847fa876eec",
+    "name": "oei007-binary-oei007docx1790261066.docx",
+    "status": "COMPLETED",
+    "chunk_count": 1,
+    "project_id": null,
+    "failure_reason": null,
+    "raw": {
+      "id": "e63ca931-674e-4fa8-9ac0-c847fa876eec",
+      "temp_id": null,
+      "name": "oei007-binary-oei007docx1790261066.docx",
+      "project_id": null,
+      "user_id": "c7483a82-9008-41f0-88f7-b8b9dba6d78e",
+      "file_id": "aa11abc1-21e5-4ade-846f-87ba190b085f",
+      "created_at": "2026-09-24T14:44:27.266435",
+      "status": "COMPLETED",
+      "last_accessed_at": "2026-09-24T14:44:27.265652Z",
+      "file_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+      "chat_file_type": "document",
+      "token_count": 122,
+      "chunk_count": 1
+    }
+  },
+  "raw_search": {
+    "endpoint": "POST /api/search",
+    "results_count": 2,
+    "titles": [
+      "oei007-closed-loop-probe.txt",
+      "oei007-closed-loop-probe.txt"
+    ]
+  },
+  "library_recall": {
+    "endpoint": "GET /api/v1/consulting/library",
+    "engine_status": "ok",
+    "engine_items_count": 2,
+    "titles": [
+      "oei007-binary-oei007docx1790261066.docx",
+      "oei007-closed-loop-probe.txt"
+    ]
+  },
+  "doc_id_in_library": true,
+  "dep_check": {
+    "pyproject_diff_lines": [],
+    "uv_lock_diff_lines": [],
+    "no_new_dep": true
+  },
+  "verdict": "PASS"
+}

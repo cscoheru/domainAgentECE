@@ -1,0 +1,406 @@
+{
+  "cases": [
+    {
+      "input": {
+        "filename": "retail-case.md",
+        "title": "零售门店坪效诊断"
+      },
+      "runs": [
+        {
+          "type": [],
+          "engagement_phase": [],
+          "client_industry": [
+            "retail"
+          ],
+          "problem_types": [],
+          "methods": []
+        },
+        {
+          "type": [],
+          "engagement_phase": [],
+          "client_industry": [
+            "retail"
+          ],
+          "problem_types": [],
+          "methods": []
+        },
+        {
+          "type": [],
+          "engagement_phase": [],
+          "client_industry": [
+            "retail"
+          ],
+          "problem_types": [],
+          "methods": []
+        },
+        {
+          "type": [],
+          "engagement_phase": [],
+          "client_industry": [
+            "retail"
+          ],
+          "problem_types": [],
+          "methods": []
+        },
+        {
+          "type": [],
+          "engagement_phase": [],
+          "client_industry": [
+            "retail"
+          ],
+          "problem_types": [],
+          "methods": []
+        }
+      ],
+      "deep_equal_across_5_runs": true,
+      "vocab_ok": true
+    },
+    {
+      "input": {
+        "filename": "bank-pricing-case.md",
+        "title": null
+      },
+      "runs": [
+        {
+          "type": [],
+          "engagement_phase": [],
+          "client_industry": [],
+          "problem_types": [],
+          "methods": []
+        },
+        {
+          "type": [],
+          "engagement_phase": [],
+          "client_industry": [],
+          "problem_types": [],
+          "methods": []
+        },
+        {
+          "type": [],
+          "engagement_phase": [],
+          "client_industry": [],
+          "problem_types": [],
+          "methods": []
+        },
+        {
+          "type": [],
+          "engagement_phase": [],
+          "client_industry": [],
+          "problem_types": [],
+          "methods": []
+        },
+        {
+          "type": [],
+          "engagement_phase": [],
+          "client_industry": [],
+          "problem_types": [],
+          "methods": []
+        }
+      ],
+      "deep_equal_across_5_runs": true,
+      "vocab_ok": true
+    },
+    {
+      "input": {
+        "filename": "零售 - 案例.md",
+        "title": "区域零售集团采购成本诊断"
+      },
+      "runs": [
+        {
+          "type": [],
+          "engagement_phase": [],
+          "client_industry": [],
+          "problem_types": [],
+          "methods": []
+        },
+        {
+          "type": [],
+          "engagement_phase": [],
+          "client_industry": [],
+          "problem_types": [],
+          "methods": []
+        },
+        {
+          "type": [],
+          "engagement_phase": [],
+          "client_industry": [],
+          "problem_types": [],
+          "methods": []
+        },
+        {
+          "type": [],
+          "engagement_phase": [],
+          "client_industry": [],
+          "problem_types": [],
+          "methods": []
+        },
+        {
+          "type": [],
+          "engagement_phase": [],
+          "client_industry": [],
+          "problem_types": [],
+          "methods": []
+        }
+      ],
+      "deep_equal_across_5_runs": true,
+      "vocab_ok": true
+    },
+    {
+      "input": {
+        "filename": "methodology.md",
+        "title": "MECE 实战方法论"
+      },
+      "runs": [
+        {
+          "type": [],
+          "engagement_phase": [],
+          "client_industry": [],
+          "problem_types": [],
+          "methods": []
+        },
+        {
+          "type": [],
+          "engagement_phase": [],
+          "client_industry": [],
+          "problem_types": [],
+          "methods": []
+        },
+        {
+          "type": [],
+          "engagement_phase": [],
+          "client_industry": [],
+          "problem_types": [],
+          "methods": []
+        },
+        {
+          "type": [],
+          "engagement_phase": [],
+          "client_industry": [],
+          "problem_types": [],
+          "methods": []
+        },
+        {
+          "type": [],
+          "engagement_phase": [],
+          "client_industry": [],
+          "problem_types": [],
+          "methods": []
+        }
+      ],
+      "deep_equal_across_5_runs": true,
+      "vocab_ok": true
+    },
+    {
+      "input": {
+        "filename": "play-proposal.md",
+        "title": "销售→交付衔接五阶段 play"
+      },
+      "runs": [
+        {
+          "type": [],
+          "engagement_phase": [],
+          "client_industry": [],
+          "problem_types": [],
+          "methods": []
+        },
+        {
+          "type": [],
+          "engagement_phase": [],
+          "client_industry": [],
+          "problem_types": [],
+          "methods": []
+        },
+        {
+          "type": [],
+          "engagement_phase": [],
+          "client_industry": [],
+          "problem_types": [],
+          "methods": []
+        },
+        {
+          "type": [],
+          "engagement_phase": [],
+          "client_industry": [],
+          "problem_types": [],
+          "methods": []
+        },
+        {
+          "type": [],
+          "engagement_phase": [],
+          "client_industry": [],
+          "problem_types": [],
+          "methods": []
+        }
+      ],
+      "deep_equal_across_5_runs": true,
+      "vocab_ok": true
+    },
+    {
+      "input": {
+        "filename": "docx-proposal-template.docx",
+        "title": "提案模板"
+      },
+      "runs": [
+        {
+          "type": [],
+          "engagement_phase": [],
+          "client_industry": [],
+          "problem_types": [],
+          "methods": []
+        },
+        {
+          "type": [],
+          "engagement_phase": [],
+          "client_industry": [],
+          "problem_types": [],
+          "methods": []
+        },
+        {
+          "type": [],
+          "engagement_phase": [],
+          "client_industry": [],
+          "problem_types": [],
+          "methods": []
+        },
+        {
+          "type": [],
+          "engagement_phase": [],
+          "client_industry": [],
+          "problem_types": [],
+          "methods": []
+        },
+        {
+          "type": [],
+          "engagement_phase": [],
+          "client_industry": [],
+          "problem_types": [],
+          "methods": []
+        }
+      ],
+      "deep_equal_across_5_runs": true,
+      "vocab_ok": true
+    },
+    {
+      "input": {
+        "filename": "empty-title.md",
+        "title": null
+      },
+      "runs": [
+        {
+          "type": [],
+          "engagement_phase": [],
+          "client_industry": [],
+          "problem_types": [],
+          "methods": []
+        },
+        {
+          "type": [],
+          "engagement_phase": [],
+          "client_industry": [],
+          "problem_types": [],
+          "methods": []
+        },
+        {
+          "type": [],
+          "engagement_phase": [],
+          "client_industry": [],
+          "problem_types": [],
+          "methods": []
+        },
+        {
+          "type": [],
+          "engagement_phase": [],
+          "client_industry": [],
+          "problem_types": [],
+          "methods": []
+        },
+        {
+          "type": [],
+          "engagement_phase": [],
+          "client_industry": [],
+          "problem_types": [],
+          "methods": []
+        }
+      ],
+      "deep_equal_across_5_runs": true,
+      "vocab_ok": true
+    },
+    {
+      "input": {
+        "filename": "unknown-name.bin",
+        "title": "随便一个标题"
+      },
+      "runs": [
+        {
+          "type": [],
+          "engagement_phase": [],
+          "client_industry": [],
+          "problem_types": [],
+          "methods": []
+        },
+        {
+          "type": [],
+          "engagement_phase": [],
+          "client_industry": [],
+          "problem_types": [],
+          "methods": []
+        },
+        {
+          "type": [],
+          "engagement_phase": [],
+          "client_industry": [],
+          "problem_types": [],
+          "methods": []
+        },
+        {
+          "type": [],
+          "engagement_phase": [],
+          "client_industry": [],
+          "problem_types": [],
+          "methods": []
+        },
+        {
+          "type": [],
+          "engagement_phase": [],
+          "client_industry": [],
+          "problem_types": [],
+          "methods": []
+        }
+      ],
+      "deep_equal_across_5_runs": true,
+      "vocab_ok": true
+    }
+  ],
+  "all_deterministic": true,
+  "vocab_sizes": {
+    "types": 6,
+    "phases": 5,
+    "industries": 10
+  },
+  "caller_overrides_suggestion": {
+    "suggestion": {
+      "type": [],
+      "engagement_phase": [],
+      "client_industry": [],
+      "problem_types": [],
+      "methods": []
+    },
+    "caller_meta": {
+      "client_industry": [
+        "energy"
+      ],
+      "type": "proposal_play",
+      "garbage_value": "should-be-dropped"
+    },
+    "merged": {
+      "type": [
+        "proposal_play"
+      ],
+      "client_industry": [
+        "energy"
+      ]
+    },
+    "caller_won_for_client_industry": true,
+    "garbage_dropped": true
+  }
+}

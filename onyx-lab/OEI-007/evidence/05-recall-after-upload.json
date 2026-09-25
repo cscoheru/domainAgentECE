@@ -1,0 +1,140 @@
+{
+  "unique_marker": "oei007uniq1790260712",
+  "upload": {
+    "adapter": "OnyxContentEngineAdapter",
+    "endpoint": "POST /api/user/projects/file/upload",
+    "response": {
+      "document_id": "9717510e-4295-41d0-9f95-955cae470e76",
+      "name": "oei007-closed-loop-probe.txt",
+      "status": "PROCESSING",
+      "chunk_count": null,
+      "project_id": null,
+      "failure_reason": null,
+      "raw": {
+        "id": "9717510e-4295-41d0-9f95-955cae470e76",
+        "temp_id": null,
+        "name": "oei007-closed-loop-probe.txt",
+        "project_id": null,
+        "user_id": "c7483a82-9008-41f0-88f7-b8b9dba6d78e",
+        "file_id": "e6126f8a-18ce-4beb-8f1a-f1fd7710c93c",
+        "created_at": "2026-09-24T14:38:38.100410Z",
+        "status": "PROCESSING",
+        "last_accessed_at": "2026-09-24T14:38:38.096176Z",
+        "file_type": "text/plain",
+        "chat_file_type": "plain_text",
+        "token_count": 248,
+        "chunk_count": null,
+        "_ece_consulting_metadata": {
+          "_probe": "05-closed-loop",
+          "_marker": "oei007uniq1790260712"
+        },
+        "_ece_consulting_title": "Closed-Loop Probe oei007uniq1790260712"
+      }
+    },
+    "document_id": "9717510e-4295-41d0-9f95-955cae470e76"
+  },
+  "polled_status": {
+    "endpoint": "POST /api/user/projects/file/statuses",
+    "final": {
+      "document_id": "9717510e-4295-41d0-9f95-955cae470e76",
+      "name": "oei007-closed-loop-probe.txt",
+      "status": "COMPLETED",
+      "chunk_count": 1,
+      "project_id": null,
+      "failure_reason": null,
+      "raw": {
+        "id": "9717510e-4295-41d0-9f95-955cae470e76",
+        "temp_id": null,
+        "name": "oei007-closed-loop-probe.txt",
+        "project_id": null,
+        "user_id": "c7483a82-9008-41f0-88f7-b8b9dba6d78e",
+        "file_id": "e6126f8a-18ce-4beb-8f1a-f1fd7710c93c",
+        "created_at": "2026-09-24T14:38:38.100410",
+        "status": "COMPLETED",
+        "last_accessed_at": "2026-09-24T14:38:38.096176Z",
+        "file_type": "text/plain",
+        "chat_file_type": "plain_text",
+        "token_count": 245,
+        "chunk_count": 1
+      }
+    },
+    "poll_iterations": 2
+  },
+  "recall_attempts": [
+    {
+      "query": "OEI-007",
+      "wait_s": 5,
+      "http_status": 200,
+      "engine_status": "ok",
+      "engine_items_count": 2,
+      "titles": [
+        "oei007-closed-loop-probe.txt",
+        "oei007-port-probe.txt"
+      ],
+      "our_probe_present": true
+    }
+  ],
+  "succeeded": true,
+  "successful_attempt": {
+    "query": "OEI-007",
+    "wait_s": 5,
+    "http_status": 200,
+    "engine_status": "ok",
+    "engine_items_count": 2,
+    "titles": [
+      "oei007-closed-loop-probe.txt",
+      "oei007-port-probe.txt"
+    ],
+    "our_probe_present": true
+  },
+  "library_recall_chosen": {
+    "engine_items_count": 2,
+    "titles": [
+      "oei007-closed-loop-probe.txt",
+      "oei007-port-probe.txt"
+    ],
+    "our_uploaded_doc_present": true
+  },
+  "raw_search_at_same_query": {
+    "results_count": 2,
+    "titles": [
+      "oei007-closed-loop-probe.txt",
+      "oei007-port-probe.txt"
+    ]
+  },
+  "alignment_table": [
+    {
+      "index": 0,
+      "ece_title": "oei007-closed-loop-probe.txt",
+      "ece_engine_doc_id": "1",
+      "ece_source_type": "user_file",
+      "ece_snippet_head": "# OEI-007 Closed-Loop Probe\n\nThis is a transient probe uploaded to verify the OE",
+      "raw_match": {
+        "found": true,
+        "raw_citation_id": "1",
+        "raw_source_type": "user_file",
+        "raw_snippet_head": "# OEI-007 Closed-Loop Probe\n\nThis is a transient probe uploaded to verify the OE",
+        "title_equal": true,
+        "source_type_equal": true,
+        "snippet_head_present_in_raw": true
+      }
+    },
+    {
+      "index": 1,
+      "ece_title": "oei007-port-probe.txt",
+      "ece_engine_doc_id": "2",
+      "ece_source_type": "user_file",
+      "ece_snippet_head": "# Industry Insight Probe\n\nThis is a transient probe upload used to verify the OE",
+      "raw_match": {
+        "found": true,
+        "raw_citation_id": "2",
+        "raw_source_type": "user_file",
+        "raw_snippet_head": "# Industry Insight Probe\n\nThis is a transient probe upload used to verify the OE",
+        "title_equal": true,
+        "source_type_equal": true,
+        "snippet_head_present_in_raw": true
+      }
+    }
+  ],
+  "verdict": "PASS"
+}

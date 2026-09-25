@@ -1,0 +1,155 @@
+# 04 — Port 引擎描述符 + 消除手抄 selector 逻辑（OEI-008 步骤 2）
+
+> 本文件给出"删除的镜像代码 vs 替换后的实现"对照，并以端口属性 + 单元测试共同证明
+> **`engine_merge.py` 不再依赖 selector 的 switch**。
+
+---
+
+## 1. 删除的代码（OEI-006 → OEI-007 旧实现）
+
+`src/ece/consulting/engine_merge.py`：
+
+```python
+def _engine_switch_is_onyx() -> bool:
+    """True only when the selector would build the live Onyx adapter.
+
+    This mirrors the switch in `connectors/onyx/selector.get_content_engine()`
+    *verbatim* (including "unknown value falls back to mock"), because OEI-006
+    §7's write-permission whitelist does not include `src/ece/connectors/onyx/**`
+    — so we cannot add an `engine_name` descriptor to the port and ask the
+    adapter what it is. Duplicating one env read is the price; the divergence
+    risk is bounded by mirroring the expression exactly rather than
+    "improving" it (no `.strip()`, no case folding beyond what the selector
+    does), and by failing CLOSED: any value that is not exactly `onyx` is
+    treated as mock, which hides the engine group rather than showing the mock
+    adapter's canned documents as if they were the customer's own uploads.
+    """
+    return (os.environ.get("ECE_CONTENT_ENGINE") or "mock").lower() == "onyx"
+```
+
+并在 `merge_engine` 里硬调：
+
+```python
+if not _engine_switch_is_onyx():
+    return [], "disabled"
+```
+
+## 2. 替换后的实现（OEI-008 新实现）
+
+`src/ece/connectors/onyx/port.py`（在 Protocol 里加了描述符 + 5 方法全部带 caller）：
+
+```python
+@runtime_checkable
+class ContentEnginePort(Protocol):
+    @property
+    def engine_name(self) -> str:
+        """A stable string identifying the engine kind.
+
+        Lets the consulting layer describe the live engine without
+        re-implementing the selector switch (eliminates the debt
+        documented in OEI-007 §R1). MUST be lowercase, no spaces.
+        """
+        ...
+```
+
+`src/ece/connectors/onyx/mock_adapter.py` 与 `onyx_adapter.py` 各加一行：
+
+```python
+class MockContentEngineAdapter:
+    engine_name = "mock"   # ← 新加
+    ...
+class OnyxContentEngineAdapter:
+    engine_name = "onyx"   # ← 新加
+    ...
+```
+
+`src/ece/consulting/engine_merge.py` 用 Port 描述符：
+
+```python
+LIVE_ENGINE_NAME = "onyx"   # 单一来源：Port 描述符
+
+async def merge_engine(
+    q: str | None,
+    *,
+    engine: ContentEnginePort | None = None,
+    caller: EngineCallerContext | None = None,
+    top_k: int = DEFAULT_TOP_K,
+) -> tuple[list[EngineItem], EngineMergeStatus]:
+    ...
+    if engine is None:
+        engine = get_content_engine()
+
+    # OEI-008: read the engine's own descriptor instead of mirroring the
+    # selector switch. The previous `_engine_switch_is_onyx()` lived here as
+    # a documented debt ("cannot add an engine_name descriptor to the port");
+    # OEI-008 made the descriptor a first-class Port member.
+    if getattr(engine, "engine_name", "unknown") != LIVE_ENGINE_NAME:
+        return [], "disabled"
+    ...
+```
+
+**对比**：
+
+| | 旧（OEI-006/007） | 新（OEI-008） |
+|---|---|---|
+| 镜像 selector 逻辑 | 有（`_engine_switch_is_onyx`） | **无** |
+| 描述符来源 | 环境变量直读 | `Port.engine_name` 属性 |
+| 接入第三方引擎 | 必须同时改 selector + consulting/engine_merge.py | **只改新引擎的 `engine_name`** |
+| 单元测试 | 必须测镜像逻辑的精确语义 | 测描述符 + `getattr` 默认值即可 |
+
+## 3. 验证
+
+### 3.1 Port 描述符存在
+
+```python
+from ece.connectors.onyx.mock_adapter import MockContentEngineAdapter
+from ece.connectors.onyx.onyx_adapter import OnyxContentEngineAdapter
+
+assert MockContentEngineAdapter().engine_name == "mock"
+assert OnyxContentEngineAdapter().engine_name == "onyx"
+```
+
+### 3.2 单元测试断言（写入 `tests/unit/test_content_engine_identity.py`）：
+
+```python
+def test_engine_name_descriptor_consistent_across_adapters() -> None:
+    """Both adapters expose the same descriptor; values are stable strings."""
+    assert MockContentEngineAdapter().engine_name == "mock"
+    assert OnyxContentEngineAdapter().engine_name == "onyx"
+
+def test_engine_merge_no_longer_references_the_selector_switch() -> None:
+    """OEI-008 — the hand-rolled mirror is gone.
+
+    We assert two complementary things:
+      1. The selector helper module is NOT imported by engine_merge.
+         (If a future refactor re-introduces the mirror, this fails.)
+      2. The selector helper symbol that USED to be mirrored is NOT
+         present in engine_merge's namespace.
+    """
+    import ece.consulting.engine_merge as em
+    assert "get_content_engine" not in dir(em)  # only a side import; the call itself is fine
+    src = Path(em.__file__).read_text(encoding="utf-8")
+    assert "_engine_switch_is_onyx" not in src
+    assert "ECE_CONTENT_ENGINE" not in src
+```
+
+### 3.3 行为等价性（policy unchanged）
+
+| 输入 | 旧（OEI-007） | 新（OEI-008） |
+|---|---|---|
+| `q=""` | `[], skipped` | `[], skipped` |
+| `ECE_CONTENT_ENGINE=mock`（默认）| `[], disabled` | `[], disabled`（engine_name="mock" ≠ "onyx"）|
+| `ECE_CONTENT_ENGINE=onyx`，引擎健康 | `(items, ok)` | `(items, ok)` |
+| `ECE_CONTENT_ENGINE=onyx`，引擎不可达 | `[], unavailable` | `[], unavailable` |
+
+策略输出完全一致；唯一变化是判定来源（环境变量 → Port 描述符）。
+
+---
+
+## 4. 涉及文件
+
+- **删除**：`_engine_switch_is_onyx` 函数与 `os.environ.get(...)` 直读（`engine_merge.py`）
+- **新增**：`engine_name` 描述符（`port.py`）、`engine_name = "mock"` / `"onyx"`（两个 adapter）、`LIVE_ENGINE_NAME = "onyx"`（`engine_merge.py` 单一来源）
+- **新增测试**：`tests/unit/test_content_engine_identity.py::test_engine_name_descriptor_consistent_across_adapters` + `::test_engine_merge_no_longer_references_the_selector_switch`
+
+代码零删除到 36 个种子对象、`ConsultingCatalog`、三域业务逻辑。

@@ -1,0 +1,81 @@
+OEI-008 evidence 08b — test_s20_audit_webhook flake analysis
+captured: 2026-09-25T08:57:46+08:00
+
+WHY THIS FILE EXISTS
+  The pre-commit full-suite run (08-test-before-raw.txt) failed exactly one test:
+    tests/integration/test_s20_audit_webhook.py::test_webhook_receives_event
+      assert 0 >= 1   where 0 = len([])
+  One failure in an otherwise green suite is either a regression from this cut or
+  a pre-existing flake. This is the experiment that decides which.
+
+MECHANISM (read off the test, tests/integration/test_s20_audit_webhook.py:96-111)
+  send_audit_event() delivers on a background thread; the test then does
+      time.sleep(0.5)
+  and asserts the event arrived. It is a fixed-sleep race: under load 0.5s is
+  not always enough. Nothing in OEI-008 touches this path.
+
+METHOD
+  Same .venv, same temp DB (127.0.0.1:55432), same env, -p no:randomly.
+  HEAD side = 'git worktree add /tmp/oei008-base HEAD' (caa69e8) run with
+  PYTHONPATH=/tmp/oei008-base/src. Redirect verified, not assumed:
+    PYTHONPATH=/tmp/oei008-base/src python -c 'import ece.audit.webhook as w; print(w.__file__)'
+    -> /tmp/oei008-base/src/ece/audit/webhook.py
+  Command (both sides):
+    DATABASE_URL=... ECE_SERVER_TODAY_ANCHOR=2026-09-22 no_proxy=127.0.0.1,localhost \
+    python -m pytest tests/integration/test_s20_audit_webhook.py -p no:randomly
+
+== BATCH A: HEAD source (caa69e8, WITHOUT any OEI-008 change) — 12 runs ==
+  run 1: 8 passed in 7.86s
+  run 2: 8 passed in 7.40s
+  run 3: 1 failed, 7 passed in 8.93s
+  run 4: 8 passed in 7.24s
+  run 5: 8 passed in 7.84s
+  run 6: 8 passed in 7.40s
+  run 7: 8 passed in 7.66s
+  run 8: 8 passed in 7.12s
+  run 9: 8 passed in 8.61s
+  run 10: 8 passed in 7.39s
+  run 11: 8 passed in 7.56s
+  run 12: 8 passed in 7.53s
+  -> batch A failures: 1 / 12
+
+== BATCH B: worktree (OEI-008 changes applied) — 12 runs ==
+  run 1: 8 passed in 8.04s
+  run 2: 8 passed in 8.06s
+  run 3: 8 passed in 8.11s
+  run 4: 8 passed in 8.30s
+  run 5: 8 passed in 8.34s
+  run 6: 8 passed in 8.23s
+  run 7: 8 passed in 7.95s
+  run 8: 8 passed in 9.11s
+  run 9: 8 passed in 7.90s
+  run 10: 8 passed in 8.10s
+  run 11: 8 passed in 8.17s
+  run 12: 1 failed, 7 passed in 9.96s
+  -> batch B failures: 1 / 12
+
+FINDING
+  Batch A (HEAD source, zero OEI-008 code): 1 failure / 12 runs.
+  Batch B (OEI-008 changes applied):         1 failure / 12 runs.
+  Same rate, same symptom. The failure therefore happens with OEI-008
+  completely absent from the process, which rules this cut out as the cause.
+
+  Corroborating, independently of the experiment:
+    - the full-suite pre-commit run hit it once (08-test-before-raw.txt);
+    - 'git diff --name-only HEAD' lists no file under src/ece/audit/** — this cut
+      has no code path into the webhook delivery mechanism;
+    - the test's own body is a fixed 0.5s sleep after a background-thread POST
+      (test_s20_audit_webhook.py:96-111), i.e. it asserts "delivered within 0.5s
+      of wall clock" under whatever load the machine happens to have.
+
+  Honest statement of the result: this is a pre-existing, load-sensitive flake at
+  roughly 1-in-12 when run in isolation, which becomes observable more often when
+  it runs inside the full suite. It is NOT caused by OEI-008. Fixing it (widen the
+  sleep, or poll-until-timeout) is out of scope here — TASK §7 does not authorise
+  src/ece/audit/** or that test file, and 'tests/**' is new-files-only.
+
+NOT FIXED (deliberate)
+  TASK §7 does not authorise src/ece/audit/** edits, so relaxing the 0.5s sleep
+  is out of scope. Reported to codex in REPORT.md deviations instead.
+
+CLEANUP: git worktree remove /tmp/oei008-base  (done after this capture)

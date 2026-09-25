@@ -1,0 +1,265 @@
+{
+  "engine_name": "mock",
+  "Protocol_conformance": true,
+  "caller_param_on_all_methods": true,
+  "audit_log_initial_empty": true,
+  "audit_log_after": [
+    {
+      "when": 1790298940.97425,
+      "what": "engine_status",
+      "caller": "alice[jwt,dept=finance,mgmt=False]",
+      "caller_user_ref": "alice",
+      "caller_source": "jwt",
+      "result": "ok"
+    },
+    {
+      "when": 1790298940.9742756,
+      "what": "list_projects",
+      "caller": "bob[header,dept=-,mgmt=False]",
+      "caller_user_ref": "bob",
+      "caller_source": "header",
+      "result": "ok"
+    },
+    {
+      "when": 1790298941.0246925,
+      "what": "search",
+      "caller": "alice[jwt,dept=finance,mgmt=False]",
+      "caller_user_ref": "alice",
+      "caller_source": "jwt",
+      "result": "hits=3",
+      "query": "KPI",
+      "top_k": null
+    },
+    {
+      "when": 1790298941.0751407,
+      "what": "search",
+      "caller": "<anonymous>[anonymous,dept=-,mgmt=False]",
+      "caller_user_ref": null,
+      "caller_source": "anonymous",
+      "result": "hits=3",
+      "query": "KPI",
+      "top_k": null
+    },
+    {
+      "when": 1790298941.126479,
+      "what": "search",
+      "caller": "<anonymous>",
+      "caller_user_ref": null,
+      "caller_source": null,
+      "result": "hits=3",
+      "query": "KPI",
+      "top_k": null
+    },
+    {
+      "when": 1790298941.126606,
+      "what": "upload_document",
+      "caller": "alice[jwt,dept=finance,mgmt=False]",
+      "caller_user_ref": "alice",
+      "caller_source": "jwt",
+      "result": "ok",
+      "document_id": "mock-000001",
+      "project_id": 1,
+      "bytes": 1,
+      "name": "a.md"
+    },
+    {
+      "when": 1790298941.1266246,
+      "what": "document_status",
+      "caller": "alice[jwt,dept=finance,mgmt=False]",
+      "caller_user_ref": "alice",
+      "caller_source": "jwt",
+      "result": "ok",
+      "document_id": "mock-000001",
+      "status": "COMPLETED"
+    },
+    {
+      "when": 1790298941.1785104,
+      "what": "search",
+      "caller": "<anonymous>",
+      "caller_user_ref": null,
+      "caller_source": null,
+      "result": "hits=3",
+      "query": "KPI",
+      "top_k": null
+    },
+    {
+      "when": 1790298941.2303767,
+      "what": "search",
+      "caller": "<anonymous>",
+      "caller_user_ref": null,
+      "caller_source": null,
+      "result": "hits=3",
+      "query": "KPI",
+      "top_k": null
+    },
+    {
+      "when": 1790298941.280707,
+      "what": "search",
+      "caller": "<anonymous>",
+      "caller_user_ref": null,
+      "caller_source": null,
+      "result": "hits=3",
+      "query": "KPI",
+      "top_k": null
+    },
+    {
+      "when": 1790298941.3313396,
+      "what": "search",
+      "caller": "<anonymous>",
+      "caller_user_ref": null,
+      "caller_source": null,
+      "result": "hits=3",
+      "query": "KPI",
+      "top_k": null
+    },
+    {
+      "when": 1790298941.381571,
+      "what": "search",
+      "caller": "<anonymous>",
+      "caller_user_ref": null,
+      "caller_source": null,
+      "result": "hits=3",
+      "query": "KPI",
+      "top_k": null
+    },
+    {
+      "when": 1790298941.3816595,
+      "what": "engine_status",
+      "caller": "<anonymous>",
+      "caller_user_ref": null,
+      "caller_source": null,
+      "result": "ok"
+    },
+    {
+      "when": 1790298941.3817163,
+      "what": "engine_status",
+      "caller": "<anonymous>",
+      "caller_user_ref": null,
+      "caller_source": null,
+      "result": "ok"
+    },
+    {
+      "when": 1790298941.3817303,
+      "what": "engine_status",
+      "caller": "<anonymous>",
+      "caller_user_ref": null,
+      "caller_source": null,
+      "result": "ok"
+    },
+    {
+      "when": 1790298941.3817399,
+      "what": "engine_status",
+      "caller": "<anonymous>",
+      "caller_user_ref": null,
+      "caller_source": null,
+      "result": "ok"
+    },
+    {
+      "when": 1790298941.3817487,
+      "what": "engine_status",
+      "caller": "<anonymous>",
+      "caller_user_ref": null,
+      "caller_source": null,
+      "result": "ok"
+    },
+    {
+      "when": 1790298941.3825607,
+      "what": "upload_document",
+      "caller": "alice[jwt,dept=-,mgmt=False]",
+      "caller_user_ref": "alice",
+      "caller_source": "jwt",
+      "result": "ok",
+      "document_id": "mock-000002",
+      "project_id": 1,
+      "bytes": 10,
+      "name": "same.md"
+    },
+    {
+      "when": 1790298941.38258,
+      "what": "upload_document",
+      "caller": "alice[jwt,dept=-,mgmt=False]",
+      "caller_user_ref": "alice",
+      "caller_source": "jwt",
+      "result": "ok",
+      "document_id": "mock-000003",
+      "project_id": 1,
+      "bytes": 10,
+      "name": "same.md"
+    }
+  ],
+  "audit_log_summary": {
+    "rows": 7,
+    "what_set": [
+      "document_status",
+      "engine_status",
+      "list_projects",
+      "search",
+      "upload_document"
+    ],
+    "caller_user_refs": [
+      "<None>",
+      "alice",
+      "bob"
+    ]
+  },
+  "anonymous_upload_refused": true,
+  "anonymous_upload_refusal_detail": "EngineError: identity-required (mock upload refuses explicitly-anonymous callers)",
+  "A3_determinism": {
+    "search_same_input_N5_identical": true,
+    "search_first_run": [
+      {
+        "engine_doc_id": "mock-1-methodology",
+        "title": "methodology-framework.md",
+        "snippet": "[Mock] 问题树 / 假设驱动 / MECE 的实战组合(Demo Case) — consulting methodology for issue tree, hypothesis-driven, MECE.",
+        "source_type": "user_file",
+        "updated_at": null,
+        "raw": {
+          "mock": true,
+          "project_id": 1
+        }
+      },
+      {
+        "engine_doc_id": "mock-1-case",
+        "title": "case-management-consulting.md",
+        "snippet": "[Mock] 某零售集团供应链降本管理咨询案例 — background / problem / method / delivery / results.",
+        "source_type": "user_file",
+        "updated_at": null,
+        "raw": {
+          "mock": true,
+          "project_id": 1
+        }
+      },
+      {
+        "engine_doc_id": "mock-1-play",
+        "title": "play-sales-delivery.md",
+        "snippet": "[Mock] 销售→交付衔接五阶段 play — stages, actions, deliverables, responsibilities.",
+        "source_type": "user_file",
+        "updated_at": null,
+        "raw": {
+          "mock": true,
+          "project_id": 1
+        }
+      }
+    ],
+    "search_distinct_outputs_in_5_runs": 1,
+    "engine_status_N5_identical_except_latency_field": true,
+    "latency_field_name": "last_search_latency_seconds",
+    "latency_field_is_by_design_variable": "it is the measured wall-clock latency of the most recent search(); excluding it is the honest comparison, not a way to force a pass",
+    "identity_observability": {
+      "where": [
+        "self.audit_log rows (who/what/when/result)",
+        "EngineDocumentStatus.raw for uploads"
+      ],
+      "deliberately_NOT_partitioned_by_user": "the mock returns the same 3 canned docs to every caller. Partitioning them per user_ref would fabricate a per-user dataset that does not exist, and a Library that showed different canned docs per caller would be a lie of the same species as the `disabled` fail-closed rule (OEI-006 §4 step 2). Identity is therefore *recorded*, not *enforced*, on the mock — same posture as the live adapter (07-*)."
+    },
+    "upload_determinism": {
+      "identical_input_fields": "all fields except document_id are identical for identical input (verified below by two uploads)",
+      "two_uploads_identical_except_id": true,
+      "document_ids": [
+        "mock-000002",
+        "mock-000003"
+      ],
+      "note": "document_id is a monotonic mock-NNNNNN counter, i.e. NOT stable across runs. That mirrors the live adapter, where Onyx mints a fresh UUID per upload — same upload twice yields two ids there too. Idempotency is explicitly out of scope (see OEI-007 TASKS.md §M.3)."
+    }
+  }
+}
