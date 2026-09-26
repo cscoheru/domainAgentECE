@@ -1,0 +1,46 @@
+== OEI-011 步骤 5.2 — 改完后重跑盘点命令，证明没有第七处（A9 ②） ==
+date: 2026-09-25T21:25:23+08:00
+与 00b-assertion-inventory.txt 的三条命令逐条对照：改后是否出现新的耦合点。
+
+############ $ grep -rn '\b36\b' tests/ ############
+  tests/integration/test_consulting_api_contract.py:55:    assert body["total"] >= 36, f"expected ≥ 36 library records, got {body['total']}"
+  tests/unit/test_consulting_engine_merge.py:339:    # `>= 36`: the static side must still show the WHOLE catalogue (this is the
+  tests/unit/test_consulting_engine_merge.py:341:    # static side). 36 is the KC-001 floor; OEI-011 raised the catalogue to 45.
+  tests/unit/test_consulting_engine_merge.py:342:    assert body["total"] >= 36
+  tests/unit/test_consulting_documents.py:263:    # `>= 36`, not `== 36`: KC-001's 36 is a FLOOR ("the bundled catalogue is at
+  tests/unit/test_consulting_documents.py:265:    # actual value is 45; pinning it to 36 would make every future content cut
+  tests/unit/test_consulting_documents.py:267:    assert body["static_catalog_size"] >= 36  # KC-001 baseline is a floor
+  tests/unit/test_consulting_documents.py:320:    assert r.json()["static_catalog_size"] >= 36
+  tests/unit/test_consulting_seed_count.py:3:Per Task §4.2 the bundled seed must contain at least 36 knowledge objects
+  tests/unit/test_consulting_seed_count.py:28:    """Task §4.2: ≥ 36 knowledge objects. Anything less is a content shortfall."""
+  tests/unit/test_consulting_seed_count.py:29:    assert len(catalog.objects) >= 36, (
+  tests/unit/test_consulting_seed_count.py:30:        f"need ≥ 36 seed objects; got {len(catalog.objects)}"
+  tests/unit/test_consulting_seed_count.py:39:    distribution of a 36-object corpus. Those numbers are a FLOOR here: the
+  tests/unit/test_consulting_seed_count.py:41:    (`sum(expected) == 36`), which is not what this test is for. Its real
+  tests/unit/test_server_deployment_checklist.py:255:        (r"\bghp_[A-Za-z0-9]{36}\b", "GitHub personal access token"),
+
+############ $ grep -rn '== *[0-9]*' tests/ | 只看语料相关的 ############
+$ grep -rn 'Counter(' tests/ --include=*.py
+  tests/integration/test_v0_specialized.py:121:        f"decision_value must be byte-equal across N={N} runs; got {Counter(decision_values)}"
+  tests/unit/test_consulting_seed_count.py:55:    actual = Counter(o.type for o in catalog.objects)
+  tests/unit/test_consulting_seed_count.py:81:    counts = Counter(ids)
+
+$ grep -rn 'client_industries' tests/ --include=*.py
+  tests/integration/test_consulting_api_contract.py:59:        "client_industries", "problem_types", "source_origins",
+  tests/integration/test_consulting_api_contract.py:73:        "client_industries", "problem_types", "source_origins",
+  tests/unit/test_consulting_service.py:110:        "client_industries", "problem_types", "source_origins",
+
+############ 与改前清单对照 ############
+  改前（00b-assertion-inventory.txt）六处：
+    [1] test_consulting_documents.py:263    == 36     -> 本刀已改为 >= 36
+    [2] test_consulting_documents.py:315    == 36     -> 本刀已改为 >= 36
+    [3] test_consulting_engine_merge.py:339 == 36     -> 本刀已改为 >= 36
+    [4] test_consulting_seed_count.py:29    >= 36     -> 未动（本来就加法式）
+    [5] test_consulting_api_contract.py:55  >= 36     -> 未动
+    [6] test_consulting_seed_count.py:34-50 六个 ==   -> 本刀已改为 >=（v1.1 新增授权）
+
+  改后：'36' 的出现只剩三处 —— [1]/[2]/[3] 改后的 `>= 36` 与 [4]/[5] 原本的 `>= 36`，
+  外加 test_consulting_seed_count.py 的 docstring/注释文字。
+  没有出现第七处耦合点（上面三条 grep 的原始输出即为证据）。
+
+---- done ----

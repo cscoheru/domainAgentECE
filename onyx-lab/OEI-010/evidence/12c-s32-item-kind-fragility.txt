@@ -1,0 +1,63 @@
+== OEI-010 — latent fragility in test_s32_assembly.py:92 (TRANSFER-OUT) ==
+
+Assertion under discussion:
+  tests/integration/test_s32_assembly.py:92
+      assert r[0] in ("entity", "relationship")
+
+fixture: created a live user-scope memory for demo-user-procurement (id=65, HTTP 200)
+
+--- PART 1: run with the PRE-CUT assertion (== what is committed) ---
+valid_decisions ____________
+
+engine = Engine(postgresql+psycopg://ece:***@127.0.0.1:55432/ece)
+
+    def test_assemble_writes_context_items_with_valid_decisions(engine) -> None:
+        pkg = assemble_context(
+            engine=engine,
+            user_ref="demo-user-procurement",
+            intent="evaluate_purchase_request",
+            entities=[{"type": "purchase_request", "id": "PR0001"}],
+        )
+        with engine.connect() as conn:
+            rows = conn.execute(
+                text("""
+                    SELECT item_kind, decision, reason FROM context_items
+                    WHERE request_id = :r ORDER BY seq
+                """),
+                {"r": pkg.request_id},
+            ).fetchall()
+        assert len(rows) >= 1
+        # Each item has a decision ∈ {allowed, denied}
+        for r in rows:
+>           assert r[0] in ("entity", "relationship")
+E           AssertionError: assert 'memory' in ('entity', 'relationship')
+
+tests/integration/test_s32_assembly.py:92: AssertionError
+=========================== short test summary info ============================
+FAILED tests/integration/test_s32_assembly.py::test_assemble_writes_context_items_with_valid_decisions
+exit status: 1
+=> FAILS (as predicted)
+
+fixture removed (memory + its ACL row)
+
+--- PART 2: why the committed suite is nonetheless green ---
+The full suite was run twice on this commit (see 12b-test-suite-raw.txt):
+  847 passed, 0 failed  — with memories present (owned by demo-user-finance)
+  847 passed, 0 failed  — with an empty memories table
+The test assembles for 'demo-user-procurement'. Memories owned by
+'demo-user-finance' are neither user-scope visible to procurement nor
+in procurement's org scope, so no memory row appears in ITS request and the
+closed-set assertion never sees kind='memory'.
+
+=> The suite passes today by fixture luck, not because the assertion is
+   still correct. Any future cut that gives demo-user-procurement (or its
+   org) a memory will turn it red with no code defect behind it.
+
+--- recommendation for the next cut ---
+  widen tests/integration/test_s32_assembly.py:92 to a set that includes "memory", or assert the
+  invariant it is actually about (every audit row has a decision in
+  {allowed, denied} and a non-empty reason) without enumerating kinds.
+  This cut did NOT do so: TASK §8 forbids changing assertions.
+
+--- verdict ---
+REPORTED as a transfer-out item; NOT patched by OEI-010.

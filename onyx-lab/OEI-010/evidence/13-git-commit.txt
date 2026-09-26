@@ -1,0 +1,85 @@
+== OEI-010 step 8.3 — git commit (A12) ==
+repo: /mnt/d/Projects/domainAgentECE/ece   (ece/ is an INDEPENDENT git repo; the outer
+      project root ignores it via /ece/ in .gitignore, so the commit happens here)
+date: 2026-09-25T20:42:17+08:00
+
+--- commit ---
+short hash: a463658
+full hash : a46365817afc132282ce20cbe3e7ad3f3b5ae032
+subject   : feat(OEI-010): persistent context memory, permission-gated on both write and read
+parent    : a884d41  (feat(OEI-009): engine-document registry + per-result permission filter + ACL time-box)
+author    : cc <cc@onyx-lab.local>
+committed : 2026-09-25T20:42:10+08:00
+
+--- files in this commit ---
+M	TASKS.md
+M	docs/API.md
+M	docs/DATA_MODEL.md
+A	src/ece/api/memory.py
+M	src/ece/context/assembly.py
+A	src/ece/context/memory.py
+M	src/ece/identity/parser.py
+M	src/ece/main.py
+A	src/ece/migrations/versions/0010_memories.py
+M	src/ece/permissions/engine.py
+M	src/ece/seed.py
+A	tests/unit/test_check_permission_org.py
+A	tests/unit/test_memory_policy.py
+
+--- diffstat ---
+ TASKS.md                                     | 137 ++++++
+ docs/API.md                                  | 118 ++++-
+ docs/DATA_MODEL.md                           |  86 ++++
+ src/ece/api/memory.py                        | 652 +++++++++++++++++++++++++++
+ src/ece/context/assembly.py                  |  60 ++-
+ src/ece/context/memory.py                    | 413 +++++++++++++++++
+ src/ece/identity/parser.py                   |  78 +++-
+ src/ece/main.py                              |   4 +
+ src/ece/migrations/versions/0010_memories.py |  98 ++++
+ src/ece/permissions/engine.py                |  33 ++
+ src/ece/seed.py                              | 158 ++++++-
+ tests/unit/test_check_permission_org.py      | 191 ++++++++
+ tests/unit/test_memory_policy.py             | 441 ++++++++++++++++++
+ 13 files changed, 2457 insertions(+), 12 deletions(-)
+
+--- existing tests: ZERO changes (TASK §8 '断言不得改动') ---
+  (empty above = both files byte-identical to the pre-cut commit a884d41)
+  An earlier revision of this cut widened test_s32_assembly.py:92 and renamed a
+  test in test_org_scope.py. Both edits were REVERTED after re-reading §8, which
+  permits changes to existing test files only in their fixture / stub /
+  dependency-injection / import parts. The fragility that motivated the edit is
+  reported instead of patched — see 12c-s32-item-kind-fragility.txt.
+
+--- PUSH STATUS (must be UNPUSHED) ---
+## main...origin/main [ahead 2]
+  'ahead 2' = this commit + the previous cut's commit (a884d41, OEI-009).
+  Both are local only. Per TASK §8: commit yes, push NO.
+
+--- remotes (for the record; nothing was sent) ---
+  origin	https://github.com/cscoheru/ece.git (fetch)
+  origin	https://github.com/cscoheru/ece.git (push)
+
+--- reviewed and deliberately NOT included (pre-existing, not this cut) ---
+   T docs/demo-platform/DEMO_PLATFORM_PRD.md
+   T docs/demo-platform/DEPLOY_USER_PROXY.md
+   M reports/cut-042R3/mutation-evidence/M1_re_read_through_assembly_skipped.md
+   M reports/cut-042R3/mutation-evidence/M2_apply_context_update_skip_sql.md
+   M reports/cut-042R3/mutation-evidence/M3_permission_acl_check_bypassed.md
+   M reports/cut-042R3/mutation-evidence/M4_evaluated_conditions_inject_nondeterministic_amount.md
+   M reports/cut-042R3/mutation-evidence/M5_jwt_decode_skips_signature_verification.md
+   M reports/cut-042R3/mutation-evidence/M6_materialize_fn_disabled_in_loop.md
+   M reports/cut-043/mutation-evidence/M1_km_validity_invert.md
+   M reports/cut-043/mutation-evidence/M2_km_permission_invert.md
+   M reports/cut-043/mutation-evidence/M3_km_decision_and_to_or.md
+   M reports/cut-044/mutation-evidence/M1_comp_count_condition_invert.md
+   M reports/cut-044/mutation-evidence/M2_comp_coverage_issubset_to_isdisjoint.md
+   M reports/cut-044/mutation-evidence/M3_comp_decision_force_gap_list.md
+  mtimes 2026-09-22/23 — three days before this session began, and none mention
+  memory. docs/demo-platform/*.md are symlinks (mode 120000) materialized into
+  regular files (100644) by a Windows/WSL checkout; reports/cut-04{2R3,3,4}/ are
+  mutation-evidence captures re-written with ANSI colour stripped by
+  scripts/cut_*_mutation_runner.py. Excluded so the commit is exactly this cut.
+
+--- the outer repo was NOT committed to ---
+onyx-lab/ (this cut's TASK/evidence/workspace) was left uncommitted, matching how
+the previous cuts were handled. A12 asks for the ECE commit only.

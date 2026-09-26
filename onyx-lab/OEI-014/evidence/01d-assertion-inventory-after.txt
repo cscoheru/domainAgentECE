@@ -1,0 +1,83 @@
+== OEI-014 步骤 6 — 断言重盘【交付后】(A6) ==
+date: 2026-09-26T08:50:05+08:00
+commit: a3d61cd  (feat(OEI-014): deepen the consulting library - every industry >=4, ind)
+对照文件: evidence/01-assertion-inventory-c30e50e.txt （同样三条命令，跑在 c30e50e 上）
+目的：证明交付态下**没有任何断言与语料规模/分布精确耦合**，且本刀一条断言都没改。
+
+############ 命令 0（A6 的硬判据）：git diff --stat -- tests/ ############
+$ git diff --stat c30e50e HEAD -- tests/
+  (无输出 = tests/ 零 diff = **一条既有断言都没改**，也没有新增测试文件。)
+  diff 行数: 0
+  tests/ 下改动文件数: 0   -> 必须为 0
+
+############ 命令 1：grep -rn "\b36\b" tests/ ############
+tests/integration/test_consulting_api_contract.py:55:    assert body["total"] >= 36, f"expected ≥ 36 library records, got {body['total']}"
+tests/unit/test_consulting_engine_merge.py:339:    # `>= 36`: the static side must still show the WHOLE catalogue (this is the
+tests/unit/test_consulting_engine_merge.py:341:    # static side). 36 is the KC-001 floor; OEI-011 raised the catalogue to 45.
+tests/unit/test_consulting_engine_merge.py:342:    assert body["total"] >= 36
+tests/unit/test_consulting_seed_count.py:3:Per Task §4.2 the bundled seed must contain at least 36 knowledge objects
+tests/unit/test_consulting_seed_count.py:28:    """Task §4.2: ≥ 36 knowledge objects. Anything less is a content shortfall."""
+tests/unit/test_consulting_seed_count.py:29:    assert len(catalog.objects) >= 36, (
+tests/unit/test_consulting_seed_count.py:30:        f"need ≥ 36 seed objects; got {len(catalog.objects)}"
+tests/unit/test_consulting_seed_count.py:39:    distribution of a 36-object corpus. Those numbers are a FLOOR here: the
+tests/unit/test_consulting_seed_count.py:41:    (`sum(expected) == 36`), which is not what this test is for. Its real
+tests/unit/test_server_deployment_checklist.py:255:        (r"\bghp_[A-Za-z0-9]{36}\b", "GitHub personal access token"),
+tests/unit/test_consulting_documents.py:263:    # `>= 36`, not `== 36`: KC-001's 36 is a FLOOR ("the bundled catalogue is at
+tests/unit/test_consulting_documents.py:265:    # actual value is 45; pinning it to 36 would make every future content cut
+tests/unit/test_consulting_documents.py:267:    assert body["static_catalog_size"] >= 36  # KC-001 baseline is a floor
+tests/unit/test_consulting_documents.py:320:    assert r.json()["static_catalog_size"] >= 36
+
+############ 命令 2：grep -rn "Counter(" tests/ ############
+tests/integration/test_v0_specialized.py:121:        f"decision_value must be byte-equal across N={N} runs; got {Counter(decision_values)}"
+tests/unit/test_consulting_seed_count.py:55:    actual = Counter(o.type for o in catalog.objects)
+tests/unit/test_consulting_seed_count.py:81:    counts = Counter(ids)
+
+############ 命令 3：grep -rn "client_industries" tests/ ############
+tests/integration/test_consulting_api_contract.py:59:        "client_industries", "problem_types", "source_origins",
+tests/integration/test_consulting_api_contract.py:73:        "client_industries", "problem_types", "source_origins",
+tests/unit/test_consulting_service.py:110:        "client_industries", "problem_types", "source_origins",
+
+############ 结论 ############
+  1) tests/ 零 diff —— 本刀**没有改任何断言**（§8 / A6）。这是硬判据，
+     不是'我看了没改'。
+  2) 命中的 \b36\b 全部是 **>= 36** 形式的下限（或注释/文档字符串文字）。
+
+     ⚠️ 下面这一行我最初写成了一句**会骗人的检查**，必须点出来：
+        起初我打算用 `grep -rn '== *36' tests/` 判断"有没有 ==36 的断言"，
+        它返回 3 条，于是打印出"必须为 0"却显示 3 —— 看上去像本刀违规了。
+        实际上这 3 条**没有一条是断言**，逐条看：
+          tests/integration/test_s10_rate_limit.py:59   `assert _period_to_seconds("h") == 3600.0`
+                                                         —— 是被 '== 36' 当子串命中的 3600.0，无关
+          tests/unit/test_consulting_documents.py:263    `# ... >= 36, not == 36 ...`  —— 注释
+          tests/unit/test_consulting_seed_count.py:41    docstring 里在**引用**被删掉的旧写法
+        文本 grep 分不清"代码"和"讲代码的话"。
+
+     所以改用 AST 判据（只看真正的 `==` 比较，且操作数是常量 36）：
+
+        复现命令（在 ece/ 根目录跑，完整可粘贴）：
+
+          $ cd /mnt/d/Projects/domainAgentECE/ece && python3 - <<'PY'
+          import ast, pathlib
+          hits = []
+          for p in sorted(pathlib.Path("tests").rglob("*.py")):
+              tree = ast.parse(p.read_text(encoding="utf-8"))
+              for node in ast.walk(tree):
+                  if isinstance(node, ast.Compare) and any(
+                          isinstance(op, ast.Eq) for op in node.ops):
+                      for c in [node.left, *node.comparators]:
+                          if isinstance(c, ast.Constant) and c.value == 36:
+                              hits.append(f"{p}:{node.lineno}")
+          print("CODE-level `== 36`:", hits or "(none)")
+          PY
+          CODE-level `== 36`: (none)
+        --- CODE-level `== 36` comparisons ---
+          (none)
+
+     结论：**代码层面 `== 36` 的出现次数是 0**。命中数从文本层的 3 降到代码层的 0，
+     这个下降本身就是上面那句注释在解释的东西（OEI-011 把 == 改成了 >=）。
+     教训依旧：**看起来像检查的 grep，可能是假的**；能匹配注释的判据不算判据。
+  3) 类型分布断言（命令 2 的 test_consulting_seed_count.py:55）在 OEI-011 已从
+     六个 == 改为六个 >= （下限），所以新增到 65 条不会撞。
+  4) 命令 3 只命中 facets 的**键集合**断言，没有任何测试钉住行业取值或每行业条数。
+
+  ⇒ 本刀新增 20 条（45 → 65）**没有撞到、也不需要改任何断言**。故无 BLOCKED。

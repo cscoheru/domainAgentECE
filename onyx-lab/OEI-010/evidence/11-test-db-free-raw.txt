@@ -1,0 +1,25 @@
+== OEI-010 step 8.1 — DB-free unit tier (A10/A14) ==
+date: 2026-09-25T20:13:46+08:00
+
+DATABASE_URL is deliberately pointed at a DEAD port (127.0.0.1:1) for this run.
+If any of these tests opened a connection they would error, not pass — so
+the green result IS the proof that the tier is database-independent.
+
+--- command ---
+DATABASE_URL=postgresql+psycopg://nobody:nobody@127.0.0.1:1/nope uv run pytest \
+    tests/unit/test_memory_policy.py tests/unit/test_check_permission_org.py \
+    tests/unit/test_org_scope.py -v
+
+--- raw output ---
+============================= test session starts ==============================
+platform linux -- Python 3.12.14, pytest-9.1.1, pluggy-1.6.0
+rootdir: /mnt/d/Projects/domainAgentECE/ece
+configfile: pyproject.toml
+plugins: anyio-4.15.1, cov-7.1.0
+collected 50 items
+
+tests/unit/test_memory_policy.py ..............................          [ 60%]
+tests/unit/test_check_permission_org.py ...........                      [ 82%]
+tests/unit/test_org_scope.py .........                                   [100%]
+
+============================== 50 passed in 4.05s ==============================

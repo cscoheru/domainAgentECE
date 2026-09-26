@@ -1,0 +1,356 @@
+{
+  "setup": {
+    "live_user_memory": {
+      "status": 200,
+      "body": {
+        "created": true,
+        "memory": {
+          "id": 26,
+          "ref": "memory:26",
+          "scope": "user",
+          "owner_ref": "demo-user-finance",
+          "statement": "oei010 step6 probe live user memory",
+          "classification": "restricted",
+          "source": "explicit:api",
+          "source_ref": null,
+          "confidence": null,
+          "created_at": "2026-09-25T12:08:00.903632+00:00",
+          "updated_at": "2026-09-25T12:08:00.903632+00:00",
+          "expires_at": null,
+          "deleted_at": null
+        }
+      }
+    },
+    "already_expired_memory": {
+      "status": 200,
+      "body": {
+        "created": true,
+        "memory": {
+          "id": 27,
+          "ref": "memory:27",
+          "scope": "user",
+          "owner_ref": "demo-user-finance",
+          "statement": "oei010 step6 probe expired user memory",
+          "classification": "restricted",
+          "source": "explicit:api",
+          "source_ref": null,
+          "confidence": null,
+          "created_at": "2026-09-25T12:08:00.931034+00:00",
+          "updated_at": "2026-09-25T12:08:00.931034+00:00",
+          "expires_at": "2026-09-24T12:08:00.918741+00:00",
+          "deleted_at": null
+        }
+      }
+    },
+    "to_be_deleted_memory": {
+      "status": 200,
+      "body": {
+        "created": true,
+        "memory": {
+          "id": 28,
+          "ref": "memory:28",
+          "scope": "user",
+          "owner_ref": "demo-user-finance",
+          "statement": "oei010 step6 probe soon-to-be-deleted user memory",
+          "classification": "restricted",
+          "source": "explicit:api",
+          "source_ref": null,
+          "confidence": null,
+          "created_at": "2026-09-25T12:08:00.951661+00:00",
+          "updated_at": "2026-09-25T12:08:00.951661+00:00",
+          "expires_at": null,
+          "deleted_at": null
+        }
+      }
+    },
+    "org_memory_for_acl_timebox": {
+      "status": 200,
+      "body": {
+        "created": true,
+        "memory": {
+          "id": 29,
+          "ref": "memory:29",
+          "scope": "org",
+          "owner_ref": "org:consulting-a",
+          "statement": "oei010 step6 probe org-a memory under an ACL time box",
+          "classification": "restricted",
+          "source": "explicit:api",
+          "source_ref": null,
+          "confidence": null,
+          "created_at": "2026-09-25T12:08:00.964318+00:00",
+          "updated_at": "2026-09-25T12:08:00.964318+00:00",
+          "expires_at": null,
+          "deleted_at": null
+        }
+      }
+    },
+    "expired_row": {
+      "id": 27,
+      "expires_at_in_db": "2026-09-24 12:08:00.918741+00:00",
+      "deleted_at_in_db": null
+    },
+    "org_memory_acl_row_id": 92
+  },
+  "states": {
+    "s1_control": {
+      "state": "before any expiry/delete/timebox",
+      "status": 200,
+      "memory_count": 7,
+      "metadata_memory_count": 7,
+      "metadata_memory_dropped": 0,
+      "memory": [
+        {
+          "ref": "memory:29",
+          "scope": "org",
+          "statement": "oei010 step6 probe org-a memory under an ACL time box"
+        },
+        {
+          "ref": "memory:20",
+          "scope": "org",
+          "statement": "oei010 step5 probe org-a canonical terminology"
+        },
+        {
+          "ref": "memory:16",
+          "scope": "org",
+          "statement": "oei010 step4 probe canonical org stance (written by admin)"
+        },
+        {
+          "ref": "memory:28",
+          "scope": "user",
+          "statement": "oei010 step6 probe soon-to-be-deleted user memory"
+        },
+        {
+          "ref": "memory:26",
+          "scope": "user",
+          "statement": "oei010 step6 probe live user memory"
+        },
+        {
+          "ref": "memory:18",
+          "scope": "user",
+          "statement": "oei010 step5 probe finance-only preference"
+        },
+        {
+          "ref": "memory:15",
+          "scope": "user",
+          "statement": "oei010 step4 probe finance own preference"
+        }
+      ],
+      "our_statements_anywhere": [
+        "oei010 step6 probe live user memory",
+        "oei010 step6 probe org-a memory under an ACL time box",
+        "oei010 step6 probe soon-to-be-deleted user memory"
+      ],
+      "our_statements_in_memory_array": [
+        "oei010 step6 probe live user memory",
+        "oei010 step6 probe org-a memory under an ACL time box",
+        "oei010 step6 probe soon-to-be-deleted user memory"
+      ],
+      "raw_response_file": "evidence/raw/06-s1-control.json",
+      "raw_response_sha256": "c0eb80adc6fd9e441c5f20a489ae67c5679524adc43d79fed2458930d6aa8d9f"
+    },
+    "s2_delete_call": {
+      "status": 200,
+      "body": {
+        "memory": {
+          "id": 28,
+          "ref": "memory:28",
+          "scope": "user",
+          "owner_ref": "demo-user-finance",
+          "statement": "oei010 step6 probe soon-to-be-deleted user memory",
+          "classification": "restricted",
+          "source": "explicit:api",
+          "source_ref": null,
+          "confidence": null,
+          "created_at": "2026-09-25T12:08:00.951661+00:00",
+          "updated_at": "2026-09-25T12:08:01.142700+00:00",
+          "expires_at": null,
+          "deleted_at": "2026-09-25T12:08:01.142700+00:00"
+        },
+        "already_deleted": false
+      }
+    },
+    "s2_after_delete": {
+      "state": "after DELETE /memory/{id} (deleted_at set)",
+      "status": 200,
+      "memory_count": 6,
+      "metadata_memory_count": 6,
+      "metadata_memory_dropped": 0,
+      "memory": [
+        {
+          "ref": "memory:29",
+          "scope": "org",
+          "statement": "oei010 step6 probe org-a memory under an ACL time box"
+        },
+        {
+          "ref": "memory:20",
+          "scope": "org",
+          "statement": "oei010 step5 probe org-a canonical terminology"
+        },
+        {
+          "ref": "memory:16",
+          "scope": "org",
+          "statement": "oei010 step4 probe canonical org stance (written by admin)"
+        },
+        {
+          "ref": "memory:26",
+          "scope": "user",
+          "statement": "oei010 step6 probe live user memory"
+        },
+        {
+          "ref": "memory:18",
+          "scope": "user",
+          "statement": "oei010 step5 probe finance-only preference"
+        },
+        {
+          "ref": "memory:15",
+          "scope": "user",
+          "statement": "oei010 step4 probe finance own preference"
+        }
+      ],
+      "our_statements_anywhere": [
+        "oei010 step6 probe live user memory",
+        "oei010 step6 probe org-a memory under an ACL time box"
+      ],
+      "our_statements_in_memory_array": [
+        "oei010 step6 probe live user memory",
+        "oei010 step6 probe org-a memory under an ACL time box"
+      ],
+      "raw_response_file": "evidence/raw/06-s2-after-delete.json",
+      "raw_response_sha256": "2f29640d3667ec3bd7bcc0a89323eddd0e65750125e8f65fc50e337e7c360567",
+      "deleted_row": {
+        "id": 28,
+        "row_still_exists": 1,
+        "deleted_at_in_db": "2026-09-25 12:08:01.142700+00:00"
+      }
+    },
+    "s3_acl_timebox": {
+      "state": "org memory's allow-ACL valid_to = yesterday",
+      "status": 200,
+      "memory_count": 5,
+      "metadata_memory_count": 5,
+      "metadata_memory_dropped": 0,
+      "memory": [
+        {
+          "ref": "memory:20",
+          "scope": "org",
+          "statement": "oei010 step5 probe org-a canonical terminology"
+        },
+        {
+          "ref": "memory:16",
+          "scope": "org",
+          "statement": "oei010 step4 probe canonical org stance (written by admin)"
+        },
+        {
+          "ref": "memory:26",
+          "scope": "user",
+          "statement": "oei010 step6 probe live user memory"
+        },
+        {
+          "ref": "memory:18",
+          "scope": "user",
+          "statement": "oei010 step5 probe finance-only preference"
+        },
+        {
+          "ref": "memory:15",
+          "scope": "user",
+          "statement": "oei010 step4 probe finance own preference"
+        }
+      ],
+      "our_statements_anywhere": [
+        "oei010 step6 probe live user memory"
+      ],
+      "our_statements_in_memory_array": [
+        "oei010 step6 probe live user memory"
+      ],
+      "raw_response_file": "evidence/raw/06-s3-acl-valid-to-yesterday.json",
+      "raw_response_sha256": "789725aa4db61bb297c6ee9688308849f84cce5f699cada66e15e65f8d07745f",
+      "org_row_is_still_alive": {
+        "id": 29,
+        "deleted_at": null,
+        "expires_at": null,
+        "still_a_candidate_for_this_caller": null
+      }
+    },
+    "s4_acl_restored": {
+      "state": "ACL valid_to restored to NULL (open-ended)",
+      "status": 200,
+      "memory_count": 6,
+      "metadata_memory_count": 6,
+      "metadata_memory_dropped": 0,
+      "memory": [
+        {
+          "ref": "memory:29",
+          "scope": "org",
+          "statement": "oei010 step6 probe org-a memory under an ACL time box"
+        },
+        {
+          "ref": "memory:20",
+          "scope": "org",
+          "statement": "oei010 step5 probe org-a canonical terminology"
+        },
+        {
+          "ref": "memory:16",
+          "scope": "org",
+          "statement": "oei010 step4 probe canonical org stance (written by admin)"
+        },
+        {
+          "ref": "memory:26",
+          "scope": "user",
+          "statement": "oei010 step6 probe live user memory"
+        },
+        {
+          "ref": "memory:18",
+          "scope": "user",
+          "statement": "oei010 step5 probe finance-only preference"
+        },
+        {
+          "ref": "memory:15",
+          "scope": "user",
+          "statement": "oei010 step4 probe finance own preference"
+        }
+      ],
+      "our_statements_anywhere": [
+        "oei010 step6 probe live user memory",
+        "oei010 step6 probe org-a memory under an ACL time box"
+      ],
+      "our_statements_in_memory_array": [
+        "oei010 step6 probe live user memory",
+        "oei010 step6 probe org-a memory under an ACL time box"
+      ],
+      "raw_response_file": "evidence/raw/06-s4-acl-restored.json",
+      "raw_response_sha256": "8f84d1d0d40b518084be2b109bab762de85c2f0de7988bdfacb058d6adaac8fb"
+    }
+  },
+  "raw_response_files": {
+    "s1-control": "evidence/raw/06-s1-control.json",
+    "s2-after-delete": "evidence/raw/06-s2-after-delete.json",
+    "s3-acl-valid-to-yesterday": "evidence/raw/06-s3-acl-valid-to-yesterday.json",
+    "s4-acl-restored": "evidence/raw/06-s4-acl-restored.json"
+  },
+  "authorization_step_isolation": {
+    "acl_open": {
+      "candidates_that_passed_scope_and_activity": 6,
+      "items_that_passed_authorization": 6,
+      "org_memory_present": true,
+      "audit_entries": 6
+    },
+    "acl_closed": {
+      "candidates_that_passed_scope_and_activity": 6,
+      "items_that_passed_authorization": 5,
+      "org_memory_present": false,
+      "audit_entries": 5
+    }
+  },
+  "assertions_checked": [
+    "an active user memory and an active org memory are injected (control)",
+    "an already-expired memory is never injected",
+    "a soft-deleted memory is not injected, and its ROW still exists (deleted_at set)",
+    "closing the org memory's allow-ACL window withholds it",
+    "...while the row stays alive (deleted_at NULL, expires_at NULL)",
+    "...with an UNCHANGED candidate count — so the denial is at authorization",
+    "restoring the ACL window restores exactly the control state",
+    "metadata.memory_count agrees with memory[] in every state"
+  ],
+  "failures": [],
+  "verdict": "PASS"
+}

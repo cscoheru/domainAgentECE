@@ -1,0 +1,59 @@
+{
+  "scanner": "/mnt/d/Projects/domainAgentECE/onyx-lab/OEI-014/workspace/anchor_scan.py",
+  "seed": "/mnt/d/Projects/domainAgentECE/ece/src/ece/consulting/seed/consulting_objects.json",
+  "object_count": 45,
+  "teeth_self_test_passed": true,
+  "regression_samples": {
+    "methodology-value-chain-003": {
+      "strict_anchors": [],
+      "loose_hits": [
+        "technology<-ai"
+      ],
+      "strict_says_no_anchor": true
+    },
+    "methodology-lean-waste-walk-005": {
+      "strict_anchors": [],
+      "loose_hits": [
+        "manufacturing<-制造"
+      ],
+      "strict_says_no_anchor": true
+    },
+    "methodology-benchmarking-public-010": {
+      "strict_anchors": [],
+      "loose_hits": [
+        "public_sector<-public"
+      ],
+      "strict_says_no_anchor": true
+    },
+    "risk-check-data-availability-001": {
+      "strict_anchors": [],
+      "loose_hits": [
+        "technology<-ai"
+      ],
+      "strict_says_no_anchor": true
+    }
+  },
+  "objects_with_strict_anchor": [
+    "case-bank-retail-channel-002",
+    "case-consumer-goods-channel-006",
+    "case-energy-procurement-009",
+    "case-healthcare-service-blueprint-010",
+    "case-insurance-claim-flow-008",
+    "case-insurance-underwriting-013",
+    "case-logistics-network-007",
+    "case-public-sector-service-window-012",
+    "case-retail-procurement-diagnosis-001",
+    "case-saas-pricing-restructure-004",
+    "case-technology-data-platform-011",
+    "industry-note-cn-banking-2026-001",
+    "industry-note-cn-consumer-2026-002",
+    "industry-note-cn-energy-2026-006",
+    "industry-note-cn-healthcare-2026-005",
+    "industry-note-cn-logistics-2026-004",
+    "industry-note-cn-manufacturing-2026-003"
+  ],
+  "concrete_but_no_strict_anchor": [
+    "case-manufacturing-supply-resilience-003",
+    "case-public-sector-org-redesign-005"
+  ]
+}

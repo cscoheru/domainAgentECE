@@ -1,0 +1,103 @@
+OEI-009 — teardown & compliance snapshot (R1–R4 rework round)
+captured: 2026-09-25T19:31:14+08:00
+
+--- 1) stray probe processes (pgrep) ---
+$ pgrep -af 'step2[0-9]_|step33|r3_evidence|rebuild_demo'
+(none)
+
+--- 2) containers ---
+$ docker ps -a --format '{{.Names}}\t{{.Status}}' | grep ece-
+(none — temp PG ece-pg-oei009r1 stopped and removed)
+
+running containers:
+onyx-nginx-1	Up 6 hours (healthy)
+onyx-web_server-1	Up 6 hours (healthy)
+onyx-background-1	Up 6 hours
+onyx-api_server-1	Up 6 hours (healthy)
+onyx-inference_model_server-1	Up 6 hours (healthy)
+onyx-indexing_model_server-1	Up 6 hours (healthy)
+onyx-relational_db-1	Up 6 hours (healthy)
+onyx-cache-1	Up 6 hours
+onyx-opensearch-1	Up 6 hours
+
+onyx restart counts (must all be 0 — no container was restarted):
+  onyx-api_server-1 = 0
+  onyx-background-1 = 0
+  onyx-cache-1 = 0
+  onyx-indexing_model_server-1 = 0
+  onyx-inference_model_server-1 = 0
+  onyx-nginx-1 = 0
+  onyx-opensearch-1 = 0
+  onyx-relational_db-1 = 0
+  onyx-web_server-1 = 0
+
+--- 3) memory / swap ---
+               total        used        free      shared  buff/cache   available
+Mem:            13Gi        11Gi       131Mi       181Mi       1.7Gi       1.3Gi
+Swap:          8.0Gi       6.5Gi       1.5Gi
+
+--- 4) credentials (status codes + jar mtimes; NO cookie values) ---
+  /api/health -> 200
+  /api/me -> 200
+  /api/user/projects -> 200
+  /home/fisher/.onyx-lab/.secrets/admin-cookies.txt mtime=2026-09-25 15:20:16.550917567 +0800 mode=600
+  /srv/onyx-lab/.secrets/admin-cookies.txt mtime=2026-09-25 15:20:16.555445605 +0800 mode=600
+
+--- 5) git (no push, no product-code drift) ---
+  $ git rev-parse origin/main   -> a9cee3177b92ff4ef8fc3fcfc1bdb0ccb3581157
+  $ git status -sb | head -1     -> ## main...origin/main [ahead 1]
+  $ git diff --stat a884d41 HEAD -- src tests docs scripts TASKS.md
+    (empty above = ECE product code unchanged since the reviewed commit)
+
+--- 6) secret scan (scoped to THIS cut's artifacts) ---
+  $ grep -rIl -E 'fastapiusersauth|Bearer [A-Za-z0-9]|password=' /mnt/d/Projects/domainAgentECE/onyx-lab/OEI-009/evidence /mnt/d/Projects/domainAgentECE/onyx-lab/OEI-009/REPORT.md /mnt/d/Projects/domainAgentECE/onyx-lab/OEI-009/workspace
+    /mnt/d/Projects/domainAgentECE/onyx-lab/OEI-009/evidence/18-teardown-and-compliance.txt
+  (the sole match is THIS file, which quotes the patterns; the only
+   credential-shaped literal in a script is rebuild_demo_state.sh's
+   throwaway temp-PG password)
+
+  $ grep -rIn 'fastapiusersauth' /mnt/d/Projects/domainAgentECE/onyx-lab/OEI-009/evidence /mnt/d/Projects/domainAgentECE/onyx-lab/OEI-009/REPORT.md /mnt/d/Projects/domainAgentECE/onyx-lab/OEI-009/workspace
+    /mnt/d/Projects/domainAgentECE/onyx-lab/OEI-009/evidence/18-teardown-and-compliance.txt:53:  $ grep -rIl -E 'fastapiusersauth|Bearer <token>|password=' evidence/ REPORT.md workspace/*
+
+  NOTE: the only credential-shaped literal is the THROWAWAY local temp-PG
+        password ('ece'), created by rebuild_demo_state.sh for a container bound
+        to 127.0.0.1 and removed at the end of this round. No Onyx cookie /
+        token / admin password value appears in any evidence or document.
+
+--- 7) evidence inventory ---
+  total 80
+  drwxrwxrwx 1 fisher fisher  4096 Sep 25 19:31 .
+  drwxrwxrwx 1 fisher fisher  4096 Sep 25 19:30 ..
+  -rwxrwxrwx 1 fisher fisher   932 Sep 25 15:57 00-credentials.txt
+  -rwxrwxrwx 1 fisher fisher   780 Sep 25 15:45 00a-webhook-flake-fix.txt
+  -rwxrwxrwx 1 fisher fisher   788 Sep 25 15:29 00b-api-docs-parser.txt
+  -rwxrwxrwx 1 fisher fisher  2828 Sep 25 18:39 00c-scratch-project.txt
+  -rwxrwxrwx 1 fisher fisher  5795 Sep 25 15:46 01-engine-doc-key-mapping.json
+  -rwxrwxrwx 1 fisher fisher  1317 Sep 25 17:03 02-registry-migration.txt
+  -rwxrwxrwx 1 fisher fisher  1209 Sep 25 19:16 04-backfill-demo-docs.json
+  -rwxrwxrwx 1 fisher fisher  6774 Sep 25 19:18 05-per-result-filter-matrix.json
+  -rwxrwxrwx 1 fisher fisher   802 Sep 25 19:26 06-fail-closed.json
+  -rwxrwxrwx 1 fisher fisher  1910 Sep 25 19:26 07-side-channel.txt
+  -rwxrwxrwx 1 fisher fisher  1295 Sep 25 19:19 08-timebox-acl.json
+  -rwxrwxrwx 1 fisher fisher  1971 Sep 25 18:39 12-test-db-free-raw.txt
+  -rwxrwxrwx 1 fisher fisher   150 Sep 25 16:48 13-test-suite-raw.txt
+  -rwxrwxrwx 1 fisher fisher  2833 Sep 25 18:34 15-git-commit.txt
+  -rwxrwxrwx 1 fisher fisher  2191 Sep 25 16:50 16-compliance-check.txt
+  -rwxrwxrwx 1 fisher fisher 11644 Sep 25 19:24 17-rebuild-demo-state.txt
+  -rwxrwxrwx 1 fisher fisher  2834 Sep 25 19:31 18-teardown-and-compliance.txt
+
+--- 8) workspace inventory ---
+  total 108
+  drwxrwxrwx 1 fisher fisher  4096 Sep 25 19:16 .
+  drwxrwxrwx 1 fisher fisher  4096 Sep 25 19:30 ..
+  -rwxrwxrwx 1 fisher fisher  8565 Sep 25 16:27 09-design-engine-audit.md
+  -rwxrwxrwx 1 fisher fisher  6391 Sep 25 16:27 10-design-org-scope.md
+  -rwxrwxrwx 1 fisher fisher  7237 Sep 25 16:27 11-design-assembly-step6.md
+  drwxrwxrwx 1 fisher fisher  4096 Sep 25 19:00 __pycache__
+  -rwxrwxrwx 1 fisher fisher  6565 Sep 25 17:50 backfill_demo_docs.py
+  -rwxrwxrwx 1 fisher fisher 13204 Sep 25 18:38 r3_evidence.py
+  -rwxrwxrwx 1 fisher fisher  3907 Sep 25 19:16 rebuild_demo_state.sh
+  -rwxrwxrwx 1 fisher fisher  5769 Sep 25 16:11 step22_fail_closed.py
+  -rwxrwxrwx 1 fisher fisher  8314 Sep 25 18:27 step25_engine_status_branches.py
+  -rwxrwxrwx 1 fisher fisher 24379 Sep 25 18:58 step26_demo_falsifiable.py
+  -rwxrwxrwx 1 fisher fisher  6298 Sep 25 18:49 step33_timebox_e2e.py

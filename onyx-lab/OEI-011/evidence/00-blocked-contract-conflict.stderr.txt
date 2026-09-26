@@ -1,0 +1,1 @@
+BLOCKED — TASK A4 vs frozen exact-distribution assertion; see stdout JSON for the reproduction

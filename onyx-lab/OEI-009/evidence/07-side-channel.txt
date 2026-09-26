@@ -1,0 +1,51 @@
+{
+  "controlled_filename": "ece-df16d19c9e7b-oei009-comparison-restricted.md",
+  "branch_static_baseline": {
+    "query": "问题树",
+    "status": 200,
+    "engine_status": "ok",
+    "engine_items_count": 2,
+    "engine_items_titles": [
+      "case-management-consulting.md",
+      "play-sales-delivery.md"
+    ],
+    "static_sha256": "677538eaf60813fe1476c112e7aff9b3a9e44331b7d3e736cb84c028d3ac7b4d"
+  },
+  "branch_ok": {
+    "query": "oei009step26comparisonmarker",
+    "status": 200,
+    "engine_status": "ok",
+    "engine_items_count": 3,
+    "engine_items_titles": [
+      "case-management-consulting.md",
+      "methodology-framework.md",
+      "play-sales-delivery.md"
+    ],
+    "static_sha256": "677538eaf60813fe1476c112e7aff9b3a9e44331b7d3e736cb84c028d3ac7b4d"
+  },
+  "branch_unavailable": {
+    "query": "oei009step26comparisonmarker",
+    "status": 200,
+    "engine_status": "unavailable",
+    "engine_items_count": 0,
+    "engine_items_titles": [],
+    "static_sha256": "677538eaf60813fe1476c112e7aff9b3a9e44331b7d3e736cb84c028d3ac7b4d"
+  },
+  "branch_no_hit": {
+    "query": "员工报销政策与发票审核流程",
+    "status": 200,
+    "engine_status": "ok",
+    "engine_items_count": 0,
+    "engine_items_titles": [],
+    "static_sha256": "677538eaf60813fe1476c112e7aff9b3a9e44331b7d3e736cb84c028d3ac7b4d"
+  },
+  "static_determinism": {
+    "sha_ok": "677538eaf60813fe1476c112e7aff9b3a9e44331b7d3e736cb84c028d3ac7b4d",
+    "sha_unavailable": "677538eaf60813fe1476c112e7aff9b3a9e44331b7d3e736cb84c028d3ac7b4d",
+    "equal": true,
+    "historical_sha": "677538eaf60813fe1476c112e7aff9b3a9e44331b7d3e736cb84c028d3ac7b4d",
+    "baseline_matches_historical": true
+  }
+}
+
+PASS — A7: static side byte-stable (baseline matches historical sha, ok==unavailable); engine_status ok/unavailable/no-hit all as specified; no-hit is a REAL zero-result state (engine_items == [], engine_status == ok).

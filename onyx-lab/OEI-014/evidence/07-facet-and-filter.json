@@ -1,0 +1,303 @@
+{
+  "endpoint_facets": "GET /api/v1/consulting/facets",
+  "endpoint_filter": "GET /api/v1/consulting/library?client_industry=<v>&limit=100",
+  "facet_total": 65,
+  "library_total": 65,
+  "client_industries": [
+    "banking",
+    "consumer_goods",
+    "cross_industry",
+    "energy",
+    "healthcare",
+    "insurance",
+    "logistics",
+    "manufacturing",
+    "public_sector",
+    "retail",
+    "technology"
+  ],
+  "value_to_match_count": {
+    "banking": 4,
+    "consumer_goods": 4,
+    "cross_industry": 26,
+    "energy": 4,
+    "healthcare": 4,
+    "insurance": 4,
+    "logistics": 4,
+    "manufacturing": 4,
+    "public_sector": 4,
+    "retail": 4,
+    "technology": 4
+  },
+  "no_zero_match_value": true,
+  "every_concrete_industry_at_least_4": true,
+  "concrete_min": 4,
+  "every_concrete_industry_has_note": true,
+  "every_note_id_list_agrees_with_seed": true,
+  "cross_industry": {
+    "value": "cross_industry",
+    "http_status": 200,
+    "total": 26,
+    "returned_on_this_page": 26,
+    "limit_used": 100,
+    "first_ids": [
+      "deliverable-template-diagnostic-report-001",
+      "deliverable-template-exec-summary-004",
+      "deliverable-template-roadmap-deck-002"
+    ],
+    "meets_min_4": true,
+    "industry_note_total": 0,
+    "industry_note_ids_via_api": [],
+    "industry_note_ids_from_seed": [],
+    "note_ids_agree": true,
+    "has_min_1_note": false
+  },
+  "per_industry": [
+    {
+      "value": "banking",
+      "http_status": 200,
+      "total": 4,
+      "returned_on_this_page": 4,
+      "limit_used": 100,
+      "first_ids": [
+        "case-bank-retail-channel-002",
+        "case-banking-credit-approval-014",
+        "industry-note-cn-banking-2026-001"
+      ],
+      "meets_min_4": true,
+      "industry_note_total": 1,
+      "industry_note_ids_via_api": [
+        "industry-note-cn-banking-2026-001"
+      ],
+      "industry_note_ids_from_seed": [
+        "industry-note-cn-banking-2026-001"
+      ],
+      "note_ids_agree": true,
+      "has_min_1_note": true
+    },
+    {
+      "value": "consumer_goods",
+      "http_status": 200,
+      "total": 4,
+      "returned_on_this_page": 4,
+      "limit_used": 100,
+      "first_ids": [
+        "case-consumer-goods-channel-006",
+        "case-consumer-goods-distributor-015",
+        "industry-note-cn-consumer-2026-002"
+      ],
+      "meets_min_4": true,
+      "industry_note_total": 1,
+      "industry_note_ids_via_api": [
+        "industry-note-cn-consumer-2026-002"
+      ],
+      "industry_note_ids_from_seed": [
+        "industry-note-cn-consumer-2026-002"
+      ],
+      "note_ids_agree": true,
+      "has_min_1_note": true
+    },
+    {
+      "value": "cross_industry",
+      "http_status": 200,
+      "total": 26,
+      "returned_on_this_page": 26,
+      "limit_used": 100,
+      "first_ids": [
+        "deliverable-template-diagnostic-report-001",
+        "deliverable-template-exec-summary-004",
+        "deliverable-template-roadmap-deck-002"
+      ],
+      "meets_min_4": true,
+      "industry_note_total": 0,
+      "industry_note_ids_via_api": [],
+      "industry_note_ids_from_seed": [],
+      "note_ids_agree": true,
+      "has_min_1_note": false
+    },
+    {
+      "value": "energy",
+      "http_status": 200,
+      "total": 4,
+      "returned_on_this_page": 4,
+      "limit_used": 100,
+      "first_ids": [
+        "case-energy-grid-load-016",
+        "case-energy-procurement-009",
+        "industry-note-cn-energy-2026-006"
+      ],
+      "meets_min_4": true,
+      "industry_note_total": 1,
+      "industry_note_ids_via_api": [
+        "industry-note-cn-energy-2026-006"
+      ],
+      "industry_note_ids_from_seed": [
+        "industry-note-cn-energy-2026-006"
+      ],
+      "note_ids_agree": true,
+      "has_min_1_note": true
+    },
+    {
+      "value": "healthcare",
+      "http_status": 200,
+      "total": 4,
+      "returned_on_this_page": 4,
+      "limit_used": 100,
+      "first_ids": [
+        "case-healthcare-outpatient-017",
+        "case-healthcare-service-blueprint-010",
+        "deliverable-template-healthcare-005"
+      ],
+      "meets_min_4": true,
+      "industry_note_total": 1,
+      "industry_note_ids_via_api": [
+        "industry-note-cn-healthcare-2026-005"
+      ],
+      "industry_note_ids_from_seed": [
+        "industry-note-cn-healthcare-2026-005"
+      ],
+      "note_ids_agree": true,
+      "has_min_1_note": true
+    },
+    {
+      "value": "insurance",
+      "http_status": 200,
+      "total": 4,
+      "returned_on_this_page": 4,
+      "limit_used": 100,
+      "first_ids": [
+        "case-insurance-claim-flow-008",
+        "case-insurance-underwriting-013",
+        "industry-note-cn-insurance-2026-007"
+      ],
+      "meets_min_4": true,
+      "industry_note_total": 1,
+      "industry_note_ids_via_api": [
+        "industry-note-cn-insurance-2026-007"
+      ],
+      "industry_note_ids_from_seed": [
+        "industry-note-cn-insurance-2026-007"
+      ],
+      "note_ids_agree": true,
+      "has_min_1_note": true
+    },
+    {
+      "value": "logistics",
+      "http_status": 200,
+      "total": 4,
+      "returned_on_this_page": 4,
+      "limit_used": 100,
+      "first_ids": [
+        "case-logistics-network-007",
+        "case-logistics-warehouse-018",
+        "industry-note-cn-logistics-2026-004"
+      ],
+      "meets_min_4": true,
+      "industry_note_total": 1,
+      "industry_note_ids_via_api": [
+        "industry-note-cn-logistics-2026-004"
+      ],
+      "industry_note_ids_from_seed": [
+        "industry-note-cn-logistics-2026-004"
+      ],
+      "note_ids_agree": true,
+      "has_min_1_note": true
+    },
+    {
+      "value": "manufacturing",
+      "http_status": 200,
+      "total": 4,
+      "returned_on_this_page": 4,
+      "limit_used": 100,
+      "first_ids": [
+        "case-manufacturing-supply-resilience-003",
+        "deliverable-template-manufacturing-006",
+        "industry-note-cn-manufacturing-2026-003"
+      ],
+      "meets_min_4": true,
+      "industry_note_total": 1,
+      "industry_note_ids_via_api": [
+        "industry-note-cn-manufacturing-2026-003"
+      ],
+      "industry_note_ids_from_seed": [
+        "industry-note-cn-manufacturing-2026-003"
+      ],
+      "note_ids_agree": true,
+      "has_min_1_note": true
+    },
+    {
+      "value": "public_sector",
+      "http_status": 200,
+      "total": 4,
+      "returned_on_this_page": 4,
+      "limit_used": 100,
+      "first_ids": [
+        "case-public-sector-org-redesign-005",
+        "case-public-sector-permit-cycle-019",
+        "case-public-sector-service-window-012"
+      ],
+      "meets_min_4": true,
+      "industry_note_total": 1,
+      "industry_note_ids_via_api": [
+        "industry-note-cn-public-sector-2026-008"
+      ],
+      "industry_note_ids_from_seed": [
+        "industry-note-cn-public-sector-2026-008"
+      ],
+      "note_ids_agree": true,
+      "has_min_1_note": true
+    },
+    {
+      "value": "retail",
+      "http_status": 200,
+      "total": 4,
+      "returned_on_this_page": 4,
+      "limit_used": 100,
+      "first_ids": [
+        "case-retail-procurement-diagnosis-001",
+        "deliverable-template-retail-007",
+        "industry-note-cn-consumer-2026-002"
+      ],
+      "meets_min_4": true,
+      "industry_note_total": 1,
+      "industry_note_ids_via_api": [
+        "industry-note-cn-consumer-2026-002"
+      ],
+      "industry_note_ids_from_seed": [
+        "industry-note-cn-consumer-2026-002"
+      ],
+      "note_ids_agree": true,
+      "has_min_1_note": true
+    },
+    {
+      "value": "technology",
+      "http_status": 200,
+      "total": 4,
+      "returned_on_this_page": 4,
+      "limit_used": 100,
+      "first_ids": [
+        "case-saas-pricing-restructure-004",
+        "case-technology-data-platform-011",
+        "case-technology-rd-delivery-020"
+      ],
+      "meets_min_4": true,
+      "industry_note_total": 1,
+      "industry_note_ids_via_api": [
+        "industry-note-cn-technology-2026-009"
+      ],
+      "industry_note_ids_from_seed": [
+        "industry-note-cn-technology-2026-009"
+      ],
+      "note_ids_agree": true,
+      "has_min_1_note": true
+    }
+  ],
+  "sampled_new_object_detail": {
+    "id": "industry-note-cn-insurance-2026-007",
+    "http_status": 200,
+    "client_industry": [
+      "insurance"
+    ],
+    "type": "industry_note"
+  }
+}

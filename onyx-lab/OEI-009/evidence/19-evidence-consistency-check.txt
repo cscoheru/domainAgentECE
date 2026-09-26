@@ -1,0 +1,26 @@
+=== R1 follow-through — evidence ↔ REPORT consistency guard ===
+$ uv run --project <ece> python check_evidence_consistency.py
+  [OK ] 05 demo/anonymous == 3
+  [OK ] 05 demo/demo_user == 4
+  [OK ] 05 demo/other_user == 3
+  [OK ] 05 isolation/anonymous == 0
+  [OK ] 05 isolation/demo_user == 1
+  [OK ] 05 isolation/other_user == 0
+  [OK ] 05 raw demo: count == distinct == 4 (no chunk duplicates)
+  [OK ] 05 raw isolation: count == distinct == 1
+  [OK ] 05 cleanup: zero delete failures
+  [OK ] 05 stale index cleared before probing
+  [OK ] 05 no restricted title leaks to anonymous/other_user
+  [OK ] 05 script's PASS line present and matches the data it printed
+  [OK ] 07 no-hit is a REAL zero-result state (0 items, status ok)
+  [OK ] 07 unavailable branch reports unavailable
+  [OK ] 07 static baseline sha still equals the historical (pre-rework) value
+  [OK ] 07 all four branches share one static sha256 (engine-orthogonal)
+  [OK ] 08 stages are A=4 / B=3 (expired) / C=4 (restored)
+  [OK ] REPORT quotes 'alice 4' and 'bob 3'
+  [OK ] REPORT quotes the no-hit 0-item state
+  [OK ] REPORT quotes A=4 / B=3 / C=4
+  [OK ] REPORT carries the real commit hash
+
+ALL CONSISTENT (21 checks) — evidence, script summaries and REPORT agree.
+exit=0

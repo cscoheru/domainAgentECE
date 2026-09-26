@@ -1,0 +1,189 @@
+== OEI-012 — compliance & resource checks ==
+date: 2026-09-26T10:08:10+08:00
+NOTE: one temporary Postgres container (ece-pg-oei012, port 55432) was used for
+      the full-suite run and has ALREADY been removed before this check, so
+      CHECK 1/2 ask the question they are meant to ask: is anything left?
+      The REAL content engine WAS exercised in this cut (unlike OEI-014) —
+      but only via read-only /api/search; no document was uploaded or deleted.
+
+############ CHECK 1/3 — no leftover processes ############
+
+--- host processes NOT inside a container cgroup, matching this cut's work ---
+  (none — no uvicorn, no reverse proxy, no alembic/seed/dataset run,
+   no retrieval_runner left running)
+
+--- anything listening on the temp PG port 55432? ---
+  (not listening)
+
+--- pytest / uv processes this cut left behind ---
+  (none)
+
+--- the driver that can look like a stray: pgrep self-match ---
+  `pgrep -f retrieval_runner.py` matches the grader's OWN command line, so it
+  reports a false positive. Attribution below is by /proc cgroup + cmdline,
+  which is why the check above can be trusted over a bare pgrep.
+
+############ CHECK 2/3 — no leftover containers ############
+$ docker ps -a
+onyx-nginx-1	Up 20 hours (healthy)	nginx:1.25.5-alpine
+onyx-web_server-1	Up 20 hours (healthy)	onyxdotapp/onyx-web-server:latest
+onyx-background-1	Up 20 hours	onyxdotapp/onyx-backend:latest
+onyx-api_server-1	Up 20 hours (healthy)	onyxdotapp/onyx-backend:latest
+onyx-inference_model_server-1	Up 20 hours (healthy)	onyxdotapp/onyx-model-server:latest
+onyx-indexing_model_server-1	Up 20 hours (healthy)	onyxdotapp/onyx-model-server:latest
+onyx-relational_db-1	Up 20 hours (healthy)	postgres:15.2-alpine
+onyx-cache-1	Up 20 hours	redis:7.4-alpine
+onyx-opensearch-1	Up 20 hours	opensearchproject/opensearch:3.6.0
+postgres	Exited (255) 8 days ago	postgres
+redis	Exited (255) 8 days ago	redis
+qdrant	Exited (255) 8 days ago	qdrant/qdrant
+laughing_vaughan	Exited (0) 9 days ago	hello-world
+tender_hamilton	Exited (0) 9 days ago	hello-world
+
+  containers named ece-* (this cut's temp PG would be one): 0   -> must be 0
+  Onyx containers still running:                            9   -> must still be 9
+
+--- volumes left behind? ---
+  (none)
+
+--- Onyx containers: RestartCount must be 0 (A11) ---
+  onyx-api_server-1                RestartCount=0  StartedAt=2026-09-25T05:57:06.314989818Z
+  onyx-background-1                RestartCount=0  StartedAt=2026-09-25T05:57:06.327787153Z
+  onyx-cache-1                     RestartCount=0  StartedAt=2026-09-25T05:57:06.334430632Z
+  onyx-indexing_model_server-1     RestartCount=0  StartedAt=2026-09-25T05:57:06.277813833Z
+  onyx-inference_model_server-1    RestartCount=0  StartedAt=2026-09-25T05:57:06.284783026Z
+  onyx-nginx-1                     RestartCount=0  StartedAt=2026-09-25T05:57:06.323873434Z
+  onyx-opensearch-1                RestartCount=0  StartedAt=2026-09-25T05:57:06.337797519Z
+  onyx-relational_db-1             RestartCount=0  StartedAt=2026-09-25T05:57:06.340298188Z
+  onyx-web_server-1                RestartCount=0  StartedAt=2026-09-25T05:57:06.330693118Z
+  -> no restart/stop/down/rm was issued against any onyx-* container.
+
+############ CHECK 3/3 — memory / swap snapshot ############
+$ free -h
+                 total        used        free      shared  buff/cache   available
+  Mem:            13Gi        12Gi       151Mi       183Mi       1.4Gi       1.0Gi
+  Swap:          8.0Gi       8.0Gi       0.0Ki
+
+  MemTotal:       14311060 kB
+  MemAvailable:    1058828 kB
+  SwapTotal:       8388608 kB
+  SwapFree:            672 kB
+
+--- matrix-run memory snapshots (inside evidence 04, taken by the runner) ---
+  wall_seconds: 465.4
+  mem before: {"MemTotal": "14311060 kB", "MemAvailable": "1256960 kB", "SwapTotal": "8388608 kB", "SwapFree": "167084 kB"}
+  mem after: {"MemTotal": "14311060 kB", "MemAvailable": "873308 kB", "SwapTotal": "8388608 kB", "SwapFree": "0 kB"}
+
+  ⚠️  REPORTED AS IT IS, not as 'fine': during the 72-call matrix run swap
+      reached SwapFree=0 kB (fully exhausted) and MemAvailable fell to ~873 MB.
+      This is the pre-existing Onyx-stack pressure OEI-009 already warned about,
+      amplified by ~8 minutes of continuous agentic search. It is NOT attributed
+      to a leak in this cut: the runner is a one-shot CLI (exited), no container
+      was added beyond the temp PG (removed), and the snapshot above is taken
+      after teardown. Recovery was not forced by stopping any Onyx container.
+
+############ the cut's footprint on the repository ############
+NOTE: the cut is COMMITTED by this point, so `git diff` (worktree vs index) is
+      trivially empty and would prove nothing. The question 'did the cut touch
+      anything it was not authorised to touch?' is put to the BASELINE instead.
+
+$ git diff --stat a3d61cd HEAD
+   TASKS.md                                 | 102 ++++++++++++++++
+   data/eval/retrieval/consulting-demo.json | 107 +++++++++++++++++
+   docs/API.md                              |  37 ++++++
+   src/ece/connectors/onyx/mock_adapter.py  |  11 +-
+   src/ece/connectors/onyx/onyx_adapter.py  |  10 +-
+   src/ece/connectors/onyx/port.py          |   8 ++
+   tests/unit/test_skip_query_expansion.py  | 193 +++++++++++++++++++++++++++++++
+   7 files changed, 466 insertions(+), 2 deletions(-)
+  files changed vs baseline: 7   -> must be 7
+
+  $ git diff --name-only a3d61cd HEAD | while read f; do case ... # authorisation map
+    [authorised] TASKS.md  (§6 文档 / 附录 S)
+    [authorised] data/eval/retrieval/consulting-demo.json  (§8 新增评测集)
+    [authorised] docs/API.md  (§6 文档 / 附录 S)
+    [authorised] src/ece/connectors/onyx/mock_adapter.py  (§8 只允许加 skip_query_expansion 形参)
+    [authorised] src/ece/connectors/onyx/onyx_adapter.py  (§8 只允许加 skip_query_expansion 形参)
+    [authorised] src/ece/connectors/onyx/port.py  (§8 只允许加 skip_query_expansion 形参)
+    [authorised] tests/unit/test_skip_query_expansion.py  (§8 允许新增测试文件；既有断言未改，见下)
+
+--- 本刀明令冻结的面（应全部零 diff）---
+$ git diff --stat a3d61cd HEAD -- pyproject.toml uv.lock demos/ src/ece/migrations/ \
+                                    src/ece/consulting/ src/ece/db.py
+  (no output above = zero diff: no new dependency, no SPA byte changed, no
+   migration, consulting library untouched, engine selector untouched.)
+
+  pyproject.toml                           diff lines: 0
+  uv.lock                                  diff lines: 0
+  demos/                                   diff lines: 0
+  src/ece/migrations/                      diff lines: 0
+  src/ece/consulting/                      diff lines: 0
+
+--- 既有测试断言未改（只允许新增文件）---
+  在 tests/ 下，除新文件外任何改动都会出现在下面（应为空）：
+  tests/ 下改动文件总数: 1  -> 必须为 1（仅新文件）
+  既有测试文件里的删除行数（必须为 0）:
+    0
+
+--- Onyx 上游 / compose / .env 一律未碰 ---
+  docker-compose.yml                       zero diff
+  deploy/docker-compose.demo.yml           zero diff
+  .env                                     zero diff
+    /home/codex  mode=750  owner=codex:codex
+  running as fisher (uid 1000): readable=NO writable=NO
+
+$ git -C /mnt/d/Projects/domainAgentECE/ece status -sb | head -1
+  ## main...origin/main [ahead 5]
+  -> local commits only; nothing pushed (TASK §8).
+$ git log --oneline @{u}..HEAD
+    4a67c28 feat(OEI-012): expose skip_query_expansion + a reproducible retrieval eval set
+    a3d61cd feat(OEI-014): deepen the consulting library - every industry >=4, industry notes filled
+    c30e50e feat(OEI-011): fill the consulting industry axis, bounded increment, usable facets
+    a463658 feat(OEI-010): persistent context memory, permission-gated on both write and read
+    a884d41 feat(OEI-009): engine-document registry + per-result permission filter + ACL time-box
+  HEAD = 4a67c28  (feat(OEI-012): expose skip_query_expansion + a reproducible retr)
+
+--- credentials: the cookie WAS read this cut; no VALUE may appear in artifacts ---
+  /home/fisher/.onyx-lab/.secrets/admin-cookies.txt EXISTS (mode 600)
+  mtime unchanged by this cut? 2026-09-25 15:20:16.550917567 +0800
+  NOTE: read-only use for /api/search. This cut did NOT refresh, rewrite, or
+  request the cookie. No value is printed here or anywhere below.
+  distinct cookie value tokens found in jar: 1
+  -> searched 1 distinct cookie tokens across evidence/ + workspace/: 0 hits.
+     (The scan is not vacuous: it greps the real jar values with -F.)
+
+  --- 扫描器有牙？（合成 canary，绝不落真实 cookie 值）---
+    [1] canary 在场 → 检出。检测机制有效。
+    [2] canary 移除 → 安静（无假阳性）。canary 已删除。
+    [3] 旧过滤器盲区对照（只报个数，不打印值）：
+        old 'grep -vE ^#'               -> 0 token(s)  ← 0 = 盲
+        new 'grep -vE ^#([^H]|H[^t])'   -> 1 token(s)
+        （Netscape jar 的真实 cookie 行以 #HttpOnly_ 开头，被 ^# 一并滤掉 —— 这正是本刀
+          第一版扫描报 '0 tokens' 却看起来像通过的原因。）
+
+  --- keyword scan (password / token / secret / private key) ---
+  REVIEW (classified) /mnt/d/Projects/domainAgentECE/onyx-lab/OEI-012/workspace/fresh_db_chain.sh:52:docker run -d --name "$PG_NAME" -e POSTGRES_USER=ece -e POSTGRES_PASSWORD=<REDACTED-THROWAWAY> \
+  ^ classification: the only hits are the throwaway local-container password in
+    workspace/fresh_db_chain.sh (ece-pg-oei012, 127.0.0.1:55432, now removed).
+    No project secret, no cookie, no token, no private key.
+
+  --- second pattern: credentials embedded in a URL (scheme://user:pass@host) ---
+    REVIEW (masked) /mnt/d/Projects/domainAgentECE/onyx-lab/OEI-012/evidence/00b-baseline.txt:<REDACTED-THROWAWAY>@1
+    REVIEW (masked) /mnt/d/Projects/domainAgentECE/onyx-lab/OEI-012/evidence/03-unit-test-raw.txt:<REDACTED-THROWAWAY>@1
+    REVIEW (masked) /mnt/d/Projects/domainAgentECE/onyx-lab/OEI-012/workspace/fresh_db_chain.sh:<REDACTED-THROWAWAY>@1
+    ^ occurrence count: 3
+      All are the local temp-DB DSN for a container that no longer exists.
+
+############ verdict ############
+CHECK 1 (processes): clean — no uvicorn, no reverse proxy, no leftover pytest/uv,
+  nothing listening on the temp PG port. The temp PG container is gone.
+CHECK 2 (containers): clean — 0 ece-* containers after explicit teardown; 9 Onyx
+  containers running with RestartCount=0.
+CHECK 3 (memory/swap): REPORTED AS IT IS — swap hit SwapFree=0 kB during the
+  matrix run. Pre-existing Onyx-stack pressure amplified by continuous agentic
+  search; no leak attributed to this cut, and nothing was stopped to recover it.
+Repository: 7 files changed vs the a3d61cd baseline, all authorised; zero diff on
+  pyproject.toml / uv.lock / demos/ / src/ece/migrations/ / src/ece/consulting/.
+  Existing test assertions unchanged (0 deleted lines in tests/). Nothing pushed.
+Secrets: cookie read read-only; 0 cookie tokens appear in any artifact.
+---- done ----

@@ -1,0 +1,70 @@
+assembled package request_id=26c91b8c-fa34-4aa4-a510-7ff75817d5a9 user payload keys=['department', 'display_id', 'id', 'is_management', 'name', 'roles']
+injected memories in this package: 10
+
+== OEI-010 step 9 (A10) — ContextPackage.to_dict() key contract ==
+source: src/ece/context/assembly.py
+pre-cut revision: a884d41
+
+pre-cut keys (11):
+   1. package_id
+   2. request_id
+   3. task
+   4. user
+   5. entities
+   6. relationships
+   7. documents
+   8. business_data
+   9. denied
+  10. sources
+  11. metadata
+
+current keys (12):
+   1. package_id
+   2. request_id
+   3. task
+   4. user
+   5. entities
+   6. relationships
+   7. documents
+   8. business_data
+   9. denied
+  10. sources
+  11. metadata
+  12. memory  <-- NEW (appended)
+
+runtime keys from to_dict() (12):
+   1. package_id
+   2. request_id
+   3. task
+   4. user
+   5. entities
+   6. relationships
+   7. documents
+   8. business_data
+   9. denied
+  10. sources
+  11. metadata
+  12. memory
+
+metadata.counts keys, pre-cut (5): ['entities', 'relationships', 'documents', 'rows', 'denied']
+metadata.counts keys, runtime (5): ['entities', 'relationships', 'documents', 'rows', 'denied']
+
+metadata top-level keys:
+   1. generated_at
+   2. as_of
+   3. counts
+   4. insufficient_context
+   5. memory_count
+   6. memory_dropped
+
+== diff ==
+  pre-cut : 11 keys
+  current : 12 keys
+  added   : ['memory']
+  removed : []
+  reordered: False
+
+PASS — Step 9 (A10): the existing 11 keys are unchanged and in the same
+order; exactly one key (`memory`) is appended at the end; runtime matches
+the source; metadata.counts keeps its original 5 keys and memory is
+reported as metadata.memory_count / memory_dropped instead.

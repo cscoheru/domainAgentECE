@@ -1,0 +1,82 @@
+== OEI-010 step 3 (A3) — memories migration 0010 ==
+date: 2026-09-25T20:02:32+08:00
+DATABASE_URL: postgresql+psycopg://ece:ece@127.0.0.1:55432/ece
+
+---- 1. current revision BEFORE ----
+0010_memories (head)
+
+---- 2. upgrade head (idempotent when already at 0010) ----
+INFO  [alembic.runtime.migration] Context impl PostgresqlImpl.
+INFO  [alembic.runtime.migration] Will assume transactional DDL.
+
+---- 3. live schema + constraint probes ----
+== columns of `memories` (12) ==
+  id               bigint                     nullable=NO  default=nextval('memories_id_seq'::regclass)
+  scope            text                       nullable=NO  default=None
+  owner_ref        text                       nullable=NO  default=None
+  statement        text                       nullable=NO  default=None
+  classification   text                       nullable=NO  default='restricted'::text
+  source           text                       nullable=NO  default=None
+  source_ref       text                       nullable=YES default=None
+  confidence       numeric                    nullable=YES default=None
+  created_at       timestamp with time zone   nullable=NO  default=now()
+  updated_at       timestamp with time zone   nullable=NO  default=now()
+  expires_at       timestamp with time zone   nullable=YES default=None
+  deleted_at       timestamp with time zone   nullable=YES default=None
+
+== constraints on `memories` (4) ==
+  ck_memories_confidence                     type=c  CHECK (((confidence IS NULL) OR ((confidence >= (0)::numeric) AND (confidence <= (1)::numeric))))
+  ck_memories_scope                          type=c  CHECK ((scope = ANY (ARRAY['user'::text, 'org'::text])))
+  memories_pkey                              type=p  PRIMARY KEY (id)
+  uq_memories_scope_owner_ref_statement      type=u  UNIQUE (scope, owner_ref, statement)
+
+== indexes on `memories` (5) ==
+  idx_memories_deleted_at                    CREATE INDEX idx_memories_deleted_at ON public.memories USING btree (deleted_at)
+  idx_memories_expires_at                    CREATE INDEX idx_memories_expires_at ON public.memories USING btree (expires_at)
+  idx_memories_scope_owner                   CREATE INDEX idx_memories_scope_owner ON public.memories USING btree (scope, owner_ref)
+  memories_pkey                              CREATE UNIQUE INDEX memories_pkey ON public.memories USING btree (id)
+  uq_memories_scope_owner_ref_statement      CREATE UNIQUE INDEX uq_memories_scope_owner_ref_statement ON public.memories USING btree (scope, owner_ref, statement)
+
+== constraint probes (each rolled back) ==
+  [ok]   duplicate (scope, owner_ref, statement)
+         expected : UniqueViolation on uq_memories_scope_owner_ref_statement
+         db says  : duplicate key value violates unique constraint "uq_memories_scope_owner_ref_statement"
+         constraint: uq_memories_scope_owner_ref_statement
+  [ok]   scope outside the vocabulary ('team')
+         expected : CheckViolation on ck_memories_scope
+         db says  : new row for relation "memories" violates check constraint "ck_memories_scope"
+         constraint: ck_memories_scope
+  [ok]   confidence outside 0..1 (1.50)
+         expected : CheckViolation on ck_memories_confidence
+         db says  : new row for relation "memories" violates check constraint "ck_memories_confidence"
+         constraint: ck_memories_confidence
+
+  probe residue after cleanup: 0 row(s)
+
+PASS — Step 3 (A3): schema present; all three constraints fire by name.
+
+---- 4. downgrade -1 (must DROP the table) ----
+INFO  [alembic.runtime.migration] Context impl PostgresqlImpl.
+INFO  [alembic.runtime.migration] Will assume transactional DDL.
+INFO  [alembic.runtime.migration] Running downgrade 0010_memories -> 0009_engine_documents, S2.10 (OEI-010) — `memories` table: persistent context memory.
+-- table present after downgrade? (expect 0) --
+0
+
+---- 5. upgrade head again (round trip) ----
+INFO  [alembic.runtime.migration] Context impl PostgresqlImpl.
+INFO  [alembic.runtime.migration] Will assume transactional DDL.
+INFO  [alembic.runtime.migration] Running upgrade 0009_engine_documents -> 0010_memories, S2.10 (OEI-010) — `memories` table: persistent context memory.
+-- table present after re-upgrade? (expect 1) --
+1
+-- constraints intact after the round trip --
+ck_memories_confidence
+ck_memories_scope
+memories_pkey
+uq_memories_scope_owner_ref_statement
+-- index count after the round trip --
+5
+
+---- 6. current revision AFTER ----
+0010_memories (head)
+
+---- done ----

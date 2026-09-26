@@ -1,0 +1,469 @@
+=== OEI-013 步骤 4a — 契约不回归（A8）===
+date: 2026-09-26T13:36:19+08:00
+DATABASE_URL=postgresql+psycopg://ece:ece@127.0.0.1:55432/ece   (评测库 55432, 非演示库 55433)
+注意：本刀尚未 commit，所以下面一律用 `git diff 4a67c28`（比工作区），
+      不用 `git diff 4a67c28 HEAD`（两个相同的 commit，什么都证不了）。
+
+############ 0. 改动面（工作区 vs 4a67c28）############
+$ git diff 4a67c28 --stat -- src/ demos/ docs/ Makefile TASKS.md tests/
+ Makefile                                |  20 ++-
+ TASKS.md                                | 172 +++++++++++++++++++++++++
+ demos/spa/app.js                        | 215 ++++++++++++++++++++++++++++++--
+ demos/spa/index.html                    | 107 ++++++++++++----
+ demos/spa/styles.css                    |  90 +++++++++++++
+ docs/API.md                             |  29 +++++
+ docs/demo-platform/DEMO_PLATFORM_PRD.md | Bin 51 -> 1067 bytes
+ docs/demo-platform/DEPLOY_USER_PROXY.md | Bin 51 -> 1067 bytes
+ src/ece/connectors/onyx/mock_adapter.py |   3 +
+ src/ece/connectors/onyx/onyx_adapter.py |   2 +
+ src/ece/connectors/onyx/port.py         |  16 +++
+ src/ece/consulting/engine_merge.py      |  55 +++++++-
+ 12 files changed, 667 insertions(+), 42 deletions(-)
+
+### 0a. 本刀对该面造成的改动 = 除 docs/demo-platform/ 之外的那些
+$ git status --porcelain -- src/ demos/ docs/ Makefile TASKS.md tests/
+ M Makefile
+ M TASKS.md
+ M demos/spa/app.js
+ M demos/spa/index.html
+ M demos/spa/styles.css
+ M docs/API.md
+ T docs/demo-platform/DEMO_PLATFORM_PRD.md
+ T docs/demo-platform/DEPLOY_USER_PROXY.md
+ M src/ece/connectors/onyx/mock_adapter.py
+ M src/ece/connectors/onyx/onyx_adapter.py
+ M src/ece/connectors/onyx/port.py
+ M src/ece/consulting/engine_merge.py
+?? tests/unit/test_consulting_demo_rewrite.py
+?? tests/unit/test_library_recall_mode.py
+
+### 0b. 预先存在的环境工件（**不是本刀造成的**，如实披露）
+$ git status --porcelain -Terminated
+-platform/
+ T docs/demo-platform/DEMO_PLATFORM_PRD.md
+ T docs/demo-platform/DEPLOY_USER_PROXY.md
+
+这两个文件在 /mnt/d (WSL2 DrvFs) 上被存成 "XSym" 重解析点，git 因此看到的是
+1067 字节常规文件，而 tree 里是 51 字节符号链接 → typechange。
+文件 mtime 是 2026-09-22 13:47；该目录最后一次提交是 03662da (cut-042R)，
+都远早于 OEI-013。本刀**没有**碰 docs/demo-platform/，也不改它（§8 未授权）。
+$ head -c 40 docs/demo-platform/DEMO_PLATFORM_PRD.md | od -c | head -3
+0000000   X   S   y   m  \n   0   0   5   1  \0   6   3   a   9   9   b
+0000020   b   8   c   b   e   f   7   9   1   9   3   d   b   4   9   c
+0000040   d   0   5   1   6   f   c   e
+$ stat -c "%y  %n" docs/demo-platform/*.md
+2026-09-22 13:47:56.000000000 +0800  docs/demo-platform/DEMO_PLATFORM_PRD.md
+2026-09-22 13:47:56.000000000 +0800  docs/demo-platform/DEPLOY_USER_PROXY.md
+
+断言：`src/ece/consulting/models.py` 不在改动列表里（响应模型零 diff）。
+$ git diff 4a67c28 --stat -- src/ece/consulting/models.py
+(空 — 零 diff ✅)
+
+断言：`tests/` 只有新增文件 — 既有断言不得改（删掉的行数必须为 0）。
+$ git diff 4a67c28 -- tests/ | grep -c '^-[^-]'   # 被删的既有测试行数
+0
+   ✓ 既有断言零删除
+$ git diff 4a67c28 --stat -- tests/
+
+断言：无新依赖 — pyproject.toml / uv.lock 零 diff。
+$ git diff 4a67c28 --stat -- pyproject.toml uv.lock
+(空 — 零 diff ✅)
+
+############ 1. 键集合：结构性 + 线上 + 目录 ############
+$ ECE_CONTENT_ENGINE=mock python -m uvicorn ece.main:app --port 8766   (评测库实例)
+   ✓ 评测 API 就绪于 :8766 (pid 341251)
+
+wrote /mnt/d/Projects/domainAgentECE/onyx-lab/OEI-013/evidence/07-contract-regression.txt.part1  (50 lines)
+FAILURES: none
+# OEI-013 step 4a — 契约不回归（A8）
+
+## 1. 结构性：`src/ece/consulting/models.py` 在 `4a67c28` 与工作区之间
+
+```
+$ git diff 4a67c28 -- src/ece/consulting/models.py      # 工作区，不是 HEAD —— 本刀尚未 commit
+(空 — 文件逐字节未改)
+```
+
+- ✅ `src/ece/consulting/models.py` 相对 4a67c28 零 diff → 字段集合不可能变
+### 逐模型核对（AST，不 import、不建 venv）
+
+| 模型 | 4a67c28 | 工作区 | 集合相同 |
+|---|---|---|---|
+| `LibraryResponse` | 7 | 7 | ✅ |
+| `KnowledgeObject` | 14 | 14 | ✅ |
+| `EngineItem` | 6 | 6 | ✅ |
+| `FacetsResponse` | 2 | 2 | ✅ |
+
+- ✅ `_FACET_KEYS` 六个 slug 未变 — ['types', 'practices', 'engagement_phases', 'client_industries', 'problem_types', 'source_origins']
+
+## 2. 线上：运行中的 API 实际吐出的键
+
+- base: `http://127.0.0.1:8766`   （评测库实例，非演示实例）
+
+- ✅ `GET /api/v1/consulting/library` → 200 — HTTP 200
+```
+GET /api/v1/consulting/library?limit=2
+{
+  "items": "<2 items>",
+  "total": 65,
+  "limit": 2,
+  "offset": 0,
+  "facets": {
+    "types": [
+      "case",
+      "deliverable_template",
+      "industry_note",
+      "methodology",
+      "proposal_play",
+      "risk_check"
+    ],
+    "practices": [
+      "change_management",
+      "consulting_delivery",
+      "governance",
+      "growth",
+      "industry_analysis",
+      "operations",
+      "organization_design",
+      "performance_management",
+      "pricing",
+      "process_redesign",
+      "procurement",
+      "risk_management",
+      "sales",
+      "sales_effectiveness",
+      "service_design",
+      "strategy",
+      "supply_chain"
+    ],
+    "engagement_phases": [
+      "delivery",
+      "diagnosis",
+      "implementation",
+      "proposal",
+      "qualification"
+    ],
+    "client_industries": [
+      "banking",
+      "consumer_goods",
+      "cross_industry",
+      "energy",
+      "healthcare",
+      "insurance",
+      "logistics",
+      "manufacturing",
+      "public_sector",
+      "retail",
+      "technology"
+    ],
+    "problem_types": [
+      "approval_breakdown",
+      "capacity_planning",
+      "channel_efficiency",
+      "competitive_landscape",
+      "compliance_gap",
+      "cost_reduction",
+      "customer_experience",
+      "data_availability",
+      "data_confidentiality",
+      "decision_latency",
+      "deliverable_structure",
+      "engagement_setup",
+      "industry_context",
+      "inventory_imbalance",
+      "kpi_alignment",
+      "lead_qualification",
+      "network_efficiency",
+      "organization_alignment",
+      "patient_journey",
+      "performance_gap",
+      "pricing_conversation",
+      "pricing_optimization",
+      "process_breakdown",
+      "proposal_setup",
+      "retention",
+      "risk_disclosure",
+      "role_clarity",
+      "scope_creep",
+      "service_consistency",
+      "situation_overview",
+      "stakeholder_alignment",
+      "supplier_consolidation",
+      "supply_resilience",
+      "team_setup",
+      "turnaround_time",
+      "value_chain_breakdown",
+      "waste_identification"
+    ],
+    "source_origins": [
+      "founder_case",
+      "licensed_public",
+      "methodology_note",
+      "synthetic_variant"
+    ]
+  },
+  "engine_items": "<0 items>",
+  "engine_status": "skipped"
+}
+```
+
+- ✅ `/library` 顶层键集合与 baseline 模型一致 — ['engine_items', 'engine_status', 'facets', 'items', 'limit', 'offset', 'total']
+- ✅ `items[]` 键集合（14 键 × 2 行）与 baseline 一致
+- ✅ `engine_items[]` 键集合与 baseline 一致（本次 engine_items 0 行） — （空 — mock 引擎，无行可核）
+
+- ✅ `GET /api/v1/consulting/facets` → 200 — HTTP 200
+- ✅ `/facets` 顶层键集合与 baseline 模型一致 — ['facets', 'total']
+
+```
+GET /api/v1/consulting/facets
+{
+  "types": "<6 values>",
+  "practices": "<17 values>",
+  "engagement_phases": "<5 values>",
+  "client_industries": "<11 values>",
+  "problem_types": "<37 values>",
+  "source_origins": "<4 values>"
+}
+```
+
+- ✅ `/facets.facets` 键集合 == `_FACET_KEYS`（6 个 slug） — ['client_industries', 'engagement_phases', 'practices', 'problem_types', 'source_origins', 'types']
+- ✅ 每个 facet 列表非空（既有断言 `test_facets_have_six_documented_keys` 不变） — 空的: []
+- `total = 65`
+
+## 3. 结论
+
+**PASS** — 响应模型相对 `4a67c28` 零 diff；`/library` 与 `/facets` 的各级键集合（顶层 / 数组元素 / facets dict）均未变。
+
+停止评测 API (pid 341251)
+   ✓ 已停（演示实例 :8765 未受影响）
+
+############ 2. 既有契约测试全绿（不是本刀新写的测试）############
+$ ECE_CONTENT_ENGINE=mock pytest <consulting/demo/onyx/SPA 既有子集> -v --tb=short -o addopts=''
+============================= test session starts ==============================
+platform linux -- Python 3.12.14, pytest-9.1.1, pluggy-1.6.0 -- /mnt/d/Projects/domainAgentECE/ece/.venv/bin/python
+cachedir: .pytest_cache
+rootdir: /mnt/d/Projects/domainAgentECE/ece
+configfile: pyproject.toml
+plugins: anyio-4.15.1, cov-7.1.0
+collecting ... collected 204 items
+
+tests/unit/test_consulting_documents.py::test_whitelist_accepts_documented_extensions PASSED [  0%]
+tests/unit/test_consulting_documents.py::test_whitelist_rejects_with_clear_reason[bad.exe-not allowed] PASSED [  0%]
+tests/unit/test_consulting_documents.py::test_whitelist_rejects_with_clear_reason[image.png-not allowed] PASSED [  1%]
+tests/unit/test_consulting_documents.py::test_whitelist_rejects_with_clear_reason[archive.zip-not allowed] PASSED [  1%]
+tests/unit/test_consulting_documents.py::test_whitelist_rejects_with_clear_reason[noext-no extension] PASSED [  2%]
+tests/unit/test_consulting_documents.py::test_whitelist_rejects_with_clear_reason[-empty] PASSED [  2%]
+tests/unit/test_consulting_documents.py::test_check_single_size_rejects_empty_and_oversize PASSED [  3%]
+tests/unit/test_consulting_documents.py::test_check_aggregate_size_rejects_oversize_only PASSED [  3%]
+tests/unit/test_consulting_documents.py::test_suggest_metadata_is_deterministic_across_n_runs PASSED [  4%]
+tests/unit/test_consulting_documents.py::test_suggest_metadata_emits_no_vocab_violations PASSED [  4%]
+tests/unit/test_consulting_documents.py::test_resolve_metadata_caller_wins_and_garbage_dropped PASSED [  5%]
+tests/unit/test_consulting_documents.py::test_validate_metadata_drops_unknown_keys_silently PASSED [  5%]
+tests/unit/test_consulting_documents.py::test_adapters_satisfy_port_protocol PASSED [  6%]
+tests/unit/test_consulting_documents.py::test_engine_document_status_shape_is_stable PASSED [  6%]
+tests/unit/test_consulting_documents.py::test_mock_upload_then_status_roundtrip PASSED [  7%]
+tests/unit/test_consulting_documents.py::test_mock_status_unknown_raises_engine_error PASSED [  7%]
+tests/unit/test_consulting_documents.py::test_mock_store_persists_across_instances PASSED [  8%]
+tests/unit/test_consulting_documents.py::test_mock_doc_ids_are_unique_within_process PASSED [  8%]
+tests/unit/test_consulting_documents.py::test_reset_mock_engine_store_clears_state PASSED [  9%]
+tests/unit/test_consulting_documents.py::test_upload_happy PASSED        [  9%]
+tests/unit/test_consulting_documents.py::test_upload_bad_extension_rejected PASSED [ 10%]
+tests/unit/test_consulting_documents.py::test_upload_empty_rejected_per_file PASSED [ 10%]
+tests/unit/test_consulting_documents.py::test_upload_oversize_single_rejected_per_file PASSED [ 11%]
+tests/unit/test_consulting_documents.py::test_upload_aggregate_oversize_is_413 PASSED [ 11%]
+tests/unit/test_consulting_documents.py::test_upload_zero_files_is_422 PASSED [ 12%]
+tests/unit/test_consulting_documents.py::test_upload_multi_file_partial_success PASSED [ 12%]
+tests/unit/test_consulting_documents.py::test_upload_metadata_vocab_check_field PASSED [ 13%]
+tests/unit/test_consulting_documents.py::test_get_status_happy PASSED    [ 13%]
+tests/unit/test_consulting_documents.py::test_get_status_unknown_returns_404 PASSED [ 14%]
+tests/unit/test_consulting_documents.py::test_get_status_engine_down_returns_502 PASSED [ 14%]
+tests/unit/test_consulting_documents.py::test_get_status_engine_not_found_returns_404 PASSED [ 15%]
+tests/unit/test_consulting_documents.py::test_static_side_byte_identical_with_or_without_uploads PASSED [ 15%]
+tests/unit/test_consulting_service.py::test_search_returns_library_response_with_full_corpus_facets PASSED [ 16%]
+tests/unit/test_consulting_service.py::test_search_filters_by_type PASSED [ 16%]
+tests/unit/test_consulting_service.py::test_search_filters_by_source_origin PASSED [ 17%]
+tests/unit/test_consulting_service.py::test_multi_value_filter_is_any_match PASSED [ 17%]
+tests/unit/test_consulting_service.py::test_keyword_search_matches_across_text_fields PASSED [ 18%]
+tests/unit/test_consulting_service.py::test_sort_title_orders_by_id PASSED [ 18%]
+tests/unit/test_consulting_service.py::test_limit_and_offset_paginate PASSED [ 19%]
+tests/unit/test_consulting_service.py::test_get_returns_object_or_none PASSED [ 19%]
+tests/unit/test_consulting_service.py::test_facets_have_six_documented_keys PASSED [ 20%]
+tests/unit/test_consulting_seed_schema.py::test_seed_bundle_is_valid_json PASSED [ 20%]
+tests/unit/test_consulting_seed_schema.py::test_every_seed_record_passes_pydantic_schema PASSED [ 21%]
+tests/unit/test_consulting_seed_schema.py::test_type_enum_is_exactly_one_of_six PASSED [ 21%]
+tests/unit/test_consulting_seed_schema.py::test_source_origin_enum_is_exactly_one_of_four PASSED [ 22%]
+tests/unit/test_consulting_seed_schema.py::test_required_text_fields_are_nonempty PASSED [ 22%]
+tests/unit/test_consulting_seed_schema.py::test_catalog_can_load_seed_without_error PASSED [ 23%]
+tests/unit/test_consulting_seed_count.py::test_total_object_count_meets_minimum PASSED [ 23%]
+tests/unit/test_consulting_seed_count.py::test_type_distribution_matches_documented_targets PASSED [ 24%]
+tests/unit/test_consulting_seed_count.py::test_source_origin_covers_at_least_three_distinct_values PASSED [ 24%]
+tests/unit/test_consulting_seed_count.py::test_no_duplicate_object_ids PASSED [ 25%]
+tests/unit/test_consulting_seed_discipline.py::test_summary_and_title_are_chinese PASSED [ 25%]
+tests/unit/test_consulting_seed_discipline.py::test_no_real_or_competitor_org_names PASSED [ 25%]
+tests/unit/test_consulting_seed_discipline.py::test_synthetic_confidence_requires_synthetic_variant PASSED [ 26%]
+tests/unit/test_consulting_seed_discipline.py::test_founder_case_records_are_marked_as_such PASSED [ 26%]
+tests/unit/test_consulting_seed_discipline.py::test_no_precision_numeric_outcome_claims PASSED [ 27%]
+tests/unit/test_consulting_engine_merge.py::test_to_engine_items_maps_every_documented_field PASSED [ 27%]
+tests/unit/test_consulting_engine_merge.py::test_to_engine_items_sets_the_source_discriminator PASSED [ 28%]
+tests/unit/test_consulting_engine_merge.py::test_to_engine_items_of_empty_input_is_empty PASSED [ 28%]
+tests/unit/test_consulting_engine_merge.py::test_to_engine_items_does_not_truncate_the_snippet PASSED [ 29%]
+tests/unit/test_consulting_engine_merge.py::test_updated_at_accepts_a_real_datetime_from_the_live_mapping PASSED [ 29%]
+tests/unit/test_consulting_engine_merge.py::test_engine_item_does_not_leak_engine_internal_fields PASSED [ 30%]
+tests/unit/test_consulting_engine_merge.py::test_empty_query_is_skipped_and_never_touches_the_engine PASSED [ 30%]
+tests/unit/test_consulting_engine_merge.py::test_blank_query_is_skipped[None] PASSED [ 31%]
+tests/unit/test_consulting_engine_merge.py::test_blank_query_is_skipped[] PASSED [ 31%]
+tests/unit/test_consulting_engine_merge.py::test_blank_query_is_skipped[   ] PASSED [ 32%]
+tests/unit/test_consulting_engine_merge.py::test_blank_query_is_skipped[\t\n] PASSED [ 32%]
+tests/unit/test_consulting_engine_merge.py::test_non_onyx_switch_is_disabled[None] PASSED [ 33%]
+tests/unit/test_consulting_engine_merge.py::test_non_onyx_switch_is_disabled[mock] PASSED [ 33%]
+tests/unit/test_consulting_engine_merge.py::test_non_onyx_switch_is_disabled[MOCK] PASSED [ 34%]
+tests/unit/test_consulting_engine_merge.py::test_non_onyx_switch_is_disabled[something-else] PASSED [ 34%]
+tests/unit/test_consulting_engine_merge.py::test_onyx_with_hits_is_ok PASSED [ 35%]
+tests/unit/test_consulting_engine_merge.py::test_onyx_with_no_hits_is_ok_not_skipped PASSED [ 35%]
+tests/unit/test_consulting_engine_merge.py::test_engine_error_degrades_to_unavailable_without_raising PASSED [ 36%]
+tests/unit/test_consulting_engine_merge.py::test_top_k_is_passed_through PASSED [ 36%]
+tests/unit/test_consulting_engine_merge.py::test_library_exposes_the_engine_group_in_onyx_mode PASSED [ 37%]
+tests/unit/test_consulting_engine_merge.py::test_library_static_fields_are_identical_when_the_engine_dies PASSED [ 37%]
+tests/unit/test_consulting_engine_merge.py::test_library_defaults_to_disabled_without_a_live_engine PASSED [ 38%]
+tests/unit/test_consulting_engine_merge.py::test_library_empty_query_is_skipped PASSED [ 38%]
+tests/unit/test_consulting_engine_merge.py::test_mock_and_onyx_documents_map_to_the_same_shape PASSED [ 39%]
+tests/unit/test_consulting_spa_view.py::test_view_d_section_present_in_index_html PASSED [ 39%]
+tests/unit/test_consulting_spa_view.py::test_nav_button_for_view_d_exists PASSED [ 40%]
+tests/unit/test_consulting_spa_view.py::test_view_d_has_search_input PASSED [ 40%]
+tests/unit/test_consulting_spa_view.py::test_view_d_has_six_filter_selects PASSED [ 41%]
+tests/unit/test_consulting_spa_view.py::test_view_d_has_reset_and_total_and_cards PASSED [ 41%]
+tests/unit/test_consulting_spa_view.py::test_view_d_no_cdn_external_assets PASSED [ 42%]
+tests/unit/test_consulting_spa_view.py::test_view_d_no_forbidden_tech_words PASSED [ 42%]
+tests/unit/test_consulting_spa_view.py::test_app_js_no_forbidden_tech_words PASSED [ 43%]
+tests/unit/test_consulting_spa_view.py::test_app_js_defines_required_consulting_entrypoints PASSED [ 43%]
+tests/unit/test_engine_merge_filter.py::test_anonymous_public_allowed PASSED [ 44%]
+tests/unit/test_engine_merge_filter.py::test_anonymous_internal_denied PASSED [ 44%]
+tests/unit/test_engine_merge_filter.py::test_anonymous_restricted_denied PASSED [ 45%]
+tests/unit/test_engine_merge_filter.py::test_unregistered_fail_closed PASSED [ 45%]
+tests/unit/test_engine_merge_filter.py::test_identified_with_allow_acl_allowed PASSED [ 46%]
+tests/unit/test_engine_merge_filter.py::test_other_user_without_acl_denied PASSED [ 46%]
+tests/unit/test_engine_merge_filter.py::test_dedup_same_filename PASSED  [ 47%]
+tests/unit/test_engine_merge_filter.py::test_non_user_file_dropped PASSED [ 47%]
+tests/unit/test_engine_merge_filter.py::test_allow_expires_falls_through_to_classification PASSED [ 48%]
+tests/unit/test_engine_merge_filter.py::test_org_id_carried_not_used PASSED [ 48%]
+tests/unit/test_engine_merge_filter.py::test_hidden_breakdown PASSED     [ 49%]
+tests/unit/test_engine_documents_registry.py::test_slugify_for_filename[case-management-consulting-case-management-consulting] PASSED [ 49%]
+tests/unit/test_engine_documents_registry.py::test_slugify_for_filename[Case_Management Consulting!-case-management-consulting] PASSED [ 50%]
+tests/unit/test_engine_documents_registry.py::test_slugify_for_filename[\u4e2d\u6587\u65b9\u6cd5\u8bba-doc] PASSED [ 50%]
+tests/unit/test_engine_documents_registry.py::test_slugify_for_filename[   -doc] PASSED [ 50%]
+tests/unit/test_engine_documents_registry.py::test_slugify_for_filename[-doc] PASSED [ 51%]
+tests/unit/test_engine_documents_registry.py::test_slugify_for_filename[...$$$...-doc] PASSED [ 51%]
+tests/unit/test_engine_documents_registry.py::test_slugify_for_filename[aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa] PASSED [ 52%]
+tests/unit/test_engine_documents_registry.py::test_slugify_collapse_runs PASSED [ 52%]
+tests/unit/test_engine_documents_registry.py::test_deterministic_n5 PASSED [ 53%]
+tests/unit/test_engine_documents_registry.py::test_format_ece_docref_slug_ext PASSED [ 53%]
+tests/unit/test_engine_documents_registry.py::test_different_users_get_different_docref PASSED [ 54%]
+tests/unit/test_engine_documents_registry.py::test_same_user_same_file_stable_across_calls PASSED [ 54%]
+tests/unit/test_engine_documents_registry.py::test_extension_lowercased PASSED [ 55%]
+tests/unit/test_engine_documents_registry.py::test_unknown_user_substituted_anon PASSED [ 55%]
+tests/unit/test_engine_documents_registry.py::test_empty_user_ref_substituted_anon PASSED [ 56%]
+tests/unit/test_engine_documents_registry.py::test_missing_extension_rejected PASSED [ 56%]
+tests/unit/test_engine_documents_registry.py::test_empty_filename_rejected PASSED [ 57%]
+tests/unit/test_engine_documents_registry.py::test_unicode_filename_handled PASSED [ 57%]
+tests/unit/test_content_engine_identity.py::test_engine_caller_context_anonymous_is_stable PASSED [ 58%]
+tests/unit/test_content_engine_identity.py::test_engine_caller_context_is_frozen PASSED [ 58%]
+tests/unit/test_content_engine_identity.py::test_engine_caller_context_display_is_stable_and_pii_bounded PASSED [ 59%]
+tests/unit/test_content_engine_identity.py::test_engine_caller_context_from_identity_passthrough PASSED [ 59%]
+tests/unit/test_content_engine_identity.py::test_engine_caller_context_from_identity_none_is_anonymous PASSED [ 60%]
+tests/unit/test_content_engine_identity.py::test_engine_name_descriptor_consistent_across_adapters PASSED [ 60%]
+tests/unit/test_content_engine_identity.py::test_adapters_satisfy_port_protocol_with_caller_param PASSED [ 61%]
+tests/unit/test_content_engine_identity.py::test_mock_engine_search_records_caller_in_audit_log PASSED [ 61%]
+tests/unit/test_content_engine_identity.py::test_mock_engine_anonymous_caller_records_in_audit_log PASSED [ 62%]
+tests/unit/test_content_engine_identity.py::test_mock_engine_engine_status_audit PASSED [ 62%]
+tests/unit/test_content_engine_identity.py::test_mock_engine_list_projects_audit PASSED [ 63%]
+tests/unit/test_content_engine_identity.py::test_mock_engine_document_status_audit_ok_and_not_found PASSED [ 63%]
+tests/unit/test_content_engine_identity.py::test_mock_engine_upload_refuses_explicitly_anonymous_caller PASSED [ 64%]
+tests/unit/test_content_engine_identity.py::test_mock_engine_upload_accepts_authenticated_caller_and_records_in_raw PASSED [ 64%]
+tests/unit/test_content_engine_identity.py::test_caller_from_request_headers_with_no_auth_is_anonymous PASSED [ 65%]
+tests/unit/test_content_engine_identity.py::test_caller_from_request_headers_with_x_user_id_is_header PASSED [ 65%]
+tests/unit/test_content_engine_identity.py::test_caller_from_request_headers_with_bearer_is_jwt PASSED [ 66%]
+tests/unit/test_content_engine_identity.py::test_engine_merge_no_longer_references_the_selector_switch PASSED [ 66%]
+tests/unit/test_content_engine_identity.py::test_engine_merge_uses_port_engine_name_not_env PASSED [ 67%]
+tests/unit/test_content_engine_identity.py::test_engine_merge_passes_caller_through_to_engine PASSED [ 67%]
+tests/unit/test_skip_query_expansion.py::test_flag_true_is_put_on_the_request_body PASSED [ 68%]
+tests/unit/test_skip_query_expansion.py::test_flag_false_omits_the_field_entirely PASSED [ 68%]
+tests/unit/test_skip_query_expansion.py::test_flag_recorded_in_audit_log_both_ways PASSED [ 69%]
+tests/unit/test_skip_query_expansion.py::test_mock_and_onyx_search_signatures_are_isomorphic PASSED [ 69%]
+tests/unit/test_skip_query_expansion.py::test_both_adapters_default_the_flag_to_false PASSED [ 70%]
+tests/unit/test_skip_query_expansion.py::test_port_protocol_declares_flag_defaulting_to_false PASSED [ 70%]
+tests/unit/test_skip_query_expansion.py::test_mock_records_flag_and_keeps_fixture_results_stable PASSED [ 71%]
+tests/unit/test_skip_query_expansion.py::test_empty_results_still_return_empty_list_not_raise PASSED [ 71%]
+tests/unit/test_skip_query_expansion.py::test_server_error_still_raises_engine_error_with_flag_on[500] PASSED [ 72%]
+tests/unit/test_skip_query_expansion.py::test_server_error_still_raises_engine_error_with_flag_on[503] PASSED [ 72%]
+tests/unit/test_skip_query_expansion.py::test_transport_failure_still_raises_engine_error_with_flag_on PASSED [ 73%]
+tests/unit/test_skip_query_expansion.py::test_auth_failure_still_raises_engine_error_with_flag_on PASSED [ 73%]
+tests/unit/test_demo_smoke_script.py::test_smoke_script_exists PASSED    [ 74%]
+tests/unit/test_demo_smoke_script.py::test_smoke_script_is_valid_python PASSED [ 74%]
+tests/unit/test_demo_smoke_script.py::test_smoke_script_uses_demo_base_url_env PASSED [ 75%]
+tests/unit/test_demo_smoke_script.py::test_smoke_script_has_hardcoded_localhost_fallback PASSED [ 75%]
+tests/unit/test_demo_smoke_script.py::test_smoke_script_does_not_hardcode_api_upstream PASSED [ 75%]
+tests/unit/test_demo_smoke_script.py::test_smoke_script_has_at_least_10_check_functions PASSED [ 76%]
+tests/unit/test_demo_smoke_script.py::test_smoke_script_has_main_entry PASSED [ 76%]
+tests/unit/test_demo_smoke_script.py::test_smoke_script_has_zero_cdn_check PASSED [ 77%]
+tests/unit/test_demo_smoke_script.py::test_smoke_script_outputs_pass_skip_fail PASSED [ 77%]
+tests/unit/test_demo_smoke_script.py::test_smoke_script_is_executable PASSED [ 78%]
+tests/unit/test_no_procurement_literal_in_engine.py::test_v0_loop_module_has_no_procurement_literal PASSED [ 78%]
+tests/unit/test_no_procurement_literal_in_engine.py::test_demo_api_module_has_no_procurement_literal_in_labels PASSED [ 79%]
+tests/unit/test_no_procurement_literal_in_engine.py::test_evidence_store_production_call_site_passes_subject_explicitly PASSED [ 79%]
+tests/unit/test_no_procurement_literal_in_engine.py::test_v0_loop_module_has_no_purchase_request_string_literal PASSED [ 80%]
+tests/unit/test_no_procurement_literal_in_engine.py::test_demo_spec_load_validates_identifier_safety PASSED [ 80%]
+tests/unit/test_no_procurement_literal_in_engine.py::test_demo_spec_does_not_hardcode_root_source_id_in_loader PASSED [ 81%]
+tests/unit/test_no_procurement_literal_in_engine.py::test_demo_spec_does_not_hardcode_source_system_in_loader PASSED [ 81%]
+tests/unit/test_no_procurement_literal_in_engine.py::test_api_module_does_not_define_domain_labels_constant PASSED [ 82%]
+tests/integration/test_consulting_api_contract.py::test_get_library_returns_200_with_expected_top_level_keys PASSED [ 82%]
+tests/integration/test_consulting_api_contract.py::test_get_facets_returns_200_with_six_keys PASSED [ 83%]
+tests/integration/test_consulting_api_contract.py::test_get_object_returns_200_for_known_id PASSED [ 83%]
+tests/integration/test_consulting_api_contract.py::test_get_object_returns_404_for_unknown_id PASSED [ 84%]
+tests/integration/test_consulting_api_contract.py::test_library_response_has_no_forbidden_technical_substrings PASSED [ 84%]
+tests/integration/test_consulting_api_contract.py::test_object_detail_response_has_no_forbidden_technical_substrings PASSED [ 85%]
+tests/integration/test_consulting_api_contract.py::test_library_endpoint_via_query_paging PASSED [ 85%]
+tests/integration/test_consulting_api_contract.py::test_library_endpoint_with_type_filter_returns_only_that_type PASSED [ 86%]
+tests/integration/test_consulting_filters_search.py::test_keyword_search_hits_expected_objects PASSED [ 86%]
+tests/integration/test_consulting_filters_search.py::test_type_filter_methodology PASSED [ 87%]
+tests/integration/test_consulting_filters_search.py::test_source_origin_filter_synthetic_variant PASSED [ 87%]
+tests/integration/test_consulting_filters_search.py::test_multi_value_practice_filter_is_any_match PASSED [ 88%]
+tests/integration/test_consulting_filters_search.py::test_combined_filters_narrow_results PASSED [ 88%]
+tests/integration/test_consulting_filters_search.py::test_sort_title_returns_stable_id_order PASSED [ 89%]
+tests/integration/test_consulting_filters_search.py::test_empty_filter_result_is_200_with_total_zero PASSED [ 89%]
+tests/integration/test_demo_api_contract.py::test_get_demo_domains_lists_procurement_with_default_scenario PASSED [ 90%]
+tests/integration/test_demo_api_contract.py::test_post_generate_returns_business_named_fields_only PASSED [ 90%]
+tests/integration/test_demo_api_contract.py::test_post_generate_with_default_params_is_deterministic_across_calls PASSED [ 91%]
+tests/integration/test_demo_api_contract.py::test_post_generate_denied_user_returns_no_permission_conclusion PASSED [ 91%]
+tests/integration/test_demo_api_contract.py::test_response_must_not_leak_internal_ids PASSED [ 92%]
+tests/integration/test_demo_api_contract.py::test_response_includes_generated_at_and_elapsed_ms PASSED [ 92%]
+tests/integration/test_demo_api_contract.py::test_denied_user_with_body_actor_override_returns_no_permission PASSED [ 93%]
+tests/integration/test_demo_api_contract.py::test_auto_approved_clean_path_returns_200_and_no_indexerror PASSED [ 93%]
+tests/integration/test_demo_api_contract.py::test_top_level_reason_is_business_language_not_loop_state PASSED [ 94%]
+tests/integration/test_demo_api_contract.py::test_top_level_reason_for_denied_user_is_business_language PASSED [ 94%]
+tests/integration/test_demo_api_contract.py::test_unknown_domain_returns_422_not_500 PASSED [ 95%]
+tests/integration/test_demo_api_contract.py::test_unknown_scenario_returns_422_not_500 PASSED [ 95%]
+tests/integration/test_demo_api_contract.py::test_path_traversal_in_domain_returns_422 PASSED [ 96%]
+tests/integration/test_demo_api_contract.py::test_path_traversal_in_scenario_returns_422 PASSED [ 96%]
+tests/integration/test_spa_smoke.py::test_spa_directory_exists PASSED    [ 97%]
+tests/integration/test_spa_smoke.py::test_spa_index_html_exists_and_calls_demo_api PASSED [ 97%]
+tests/integration/test_spa_smoke.py::test_spa_has_three_views PASSED     [ 98%]
+tests/integration/test_spa_smoke.py::test_spa_has_zero_external_cdn PASSED [ 98%]
+tests/integration/test_spa_smoke.py::test_spa_uses_real_fetch_not_mock PASSED [ 99%]
+tests/integration/test_spa_smoke.py::test_spa_zero_build_artifact PASSED [ 99%]
+tests/integration/test_spa_smoke.py::test_spa_does_not_break_existing_static_demo PASSED [100%]
+
+=============================== warnings summary ===============================
+.venv/lib/python3.12/site-packages/starlette/testclient.py:53
+  /mnt/d/Projects/domainAgentECE/ece/.venv/lib/python3.12/site-packages/starlette/testclient.py:53: DeprecationWarning: The anyio.abc.BlockingPortal alias is deprecated, use anyio.from_thread.BlockingPortal instead.
+    _PortalFactoryType = Callable[[], AbstractContextManager[anyio.abc.BlockingPortal]]
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+======================= 204 passed, 1 warning in 11.80s ========================
+
+############ 3. 三域业务断言与 65 个种子对象未被本刀触碰 ############
+  ✓ tests/integration/test_three_domain_acceptance.py  零 diff
+  ✓ tests/integration/test_canonical_seed_completeness.py  零 diff
+  ✓ src/ece/consulting/seed/consulting_objects.json  零 diff
+  ✓ data/eval/retrieval/consulting-demo.json  零 diff
+
+=== END 07 ===

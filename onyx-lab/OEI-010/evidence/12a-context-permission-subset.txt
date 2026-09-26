@@ -1,0 +1,36 @@
+== OEI-010 step 8.3 — context / permission SUBSET ==
+date: 2026-09-25T20:17:12+08:00
+DB: temp PG ece-pg-oei010 @127.0.0.1:55432, migrated to 0010_memories, canonical seed applied
+Engine: ECE_CONTENT_ENGINE=mock
+
+Run with 13 live memory fixtures present — the HARDER case, because the new
+read step executes on every context assembly in this subset.
+
+--- command ---
+uv run pytest tests/integration/test_s32_assembly.py tests/integration/test_s34_context_api.py tests/integration/test_s22_permissions.py tests/integration/test_e2_permission.py tests/integration/test_s19_items_csv.py tests/integration/test_s16_export_audit.py tests/integration/test_s6_audit.py tests/unit/test_check_permission_timebox.py -v
+--- exit status: 0 ---
+
+--- raw output ---
+============================= test session starts ==============================
+platform linux -- Python 3.12.14, pytest-9.1.1, pluggy-1.6.0
+rootdir: /mnt/d/Projects/domainAgentECE/ece
+configfile: pyproject.toml
+plugins: anyio-4.15.1, cov-7.1.0
+collected 55 items
+
+tests/integration/test_s32_assembly.py ......                            [ 10%]
+tests/integration/test_s34_context_api.py ........                       [ 25%]
+tests/integration/test_s22_permissions.py ....                           [ 32%]
+tests/integration/test_e2_permission.py .ss                              [ 38%]
+tests/integration/test_s19_items_csv.py ......                           [ 49%]
+tests/integration/test_s16_export_audit.py .........                     [ 65%]
+tests/integration/test_s6_audit.py ........                              [ 80%]
+tests/unit/test_check_permission_timebox.py ...........                  [100%]
+
+=============================== warnings summary ===============================
+.venv/lib/python3.12/site-packages/starlette/testclient.py:53
+  /mnt/d/Projects/domainAgentECE/ece/.venv/lib/python3.12/site-packages/starlette/testclient.py:53: DeprecationWarning: The anyio.abc.BlockingPortal alias is deprecated, use anyio.from_thread.BlockingPortal instead.
+    _PortalFactoryType = Callable[[], AbstractContextManager[anyio.abc.BlockingPortal]]
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+================== 53 passed, 2 skipped, 1 warning in 47.75s ===================

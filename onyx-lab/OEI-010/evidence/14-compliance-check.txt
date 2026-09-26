@@ -1,0 +1,160 @@
+== OEI-010 — compliance & resource checks (A13 / A14) ==
+date: 2026-09-25T20:44:00+08:00
+
+############ CHECK 1/3 — no leftover processes ############
+
+--- host processes NOT inside a container cgroup ---
+(a process is 'external' iff /proc/<pid>/cgroup is NOT a docker scope;
+ this attributes the two 'python -m model_server' processes to Onyx's
+ containers even though their cmdline never contains the word 'onyx')
+  (none — no stray uvicorn, no reverse proxy, no seed/dataset/alembic run)
+
+--- the two model_server processes, attributed ---
+  pid 1134  python -m model_server
+      cgroup: 0::/system.slice/docker-444b3cc5c70b541f75e69ad99e7508445f19e8fd330bab0eb578d0d028427345.scope
+  pid 1146  python -m model_server
+      cgroup: 0::/system.slice/docker-6170f7e20eda688331e0d228701e5b8311afd0a2ae6f7fe23f959688e756de3f.scope
+  -> both are inside docker-*.scope cgroups, i.e. Onyx's model servers.
+
+--- is anything still listening on the temp PG port 55432? ---
+  (not listening — the temp PG is gone)
+
+############ CHECK 2/3 — no leftover containers ############
+$ docker ps -a
+onyx-nginx-1	Up 7 hours (healthy)	nginx:1.25.5-alpine
+onyx-web_server-1	Up 7 hours (healthy)	onyxdotapp/onyx-web-server:latest
+onyx-background-1	Up 7 hours	onyxdotapp/onyx-backend:latest
+onyx-api_server-1	Up 7 hours (healthy)	onyxdotapp/onyx-backend:latest
+onyx-inference_model_server-1	Up 7 hours (healthy)	onyxdotapp/onyx-model-server:latest
+onyx-indexing_model_server-1	Up 7 hours (healthy)	onyxdotapp/onyx-model-server:latest
+onyx-relational_db-1	Up 7 hours (healthy)	postgres:15.2-alpine
+onyx-cache-1	Up 7 hours	redis:7.4-alpine
+onyx-opensearch-1	Up 7 hours	opensearchproject/opensearch:3.6.0
+postgres	Exited (255) 8 days ago	postgres
+redis	Exited (255) 8 days ago	redis
+qdrant	Exited (255) 8 days ago	qdrant/qdrant
+laughing_vaughan	Exited (0) 9 days ago	hello-world
+tender_hamilton	Exited (0) 9 days ago	hello-world
+
+  this cut's temp PG (ece-pg-oei010) present: 0   -> must be 0
+  Onyx containers still running:              9   -> must still be 9
+  (the 5 Exited containers — postgres / redis / qdrant / 2x hello-world —
+   pre-date this session by 8-9 days and were never touched.)
+
+--- docker volumes left behind? ---
+  (no volume named *oei010* — the container used no named volume)
+
+############ CHECK 3/3 — memory / swap snapshot ############
+$ free -h
+                 total        used        free      shared  buff/cache   available
+  Mem:            13Gi        11Gi       308Mi       181Mi       1.7Gi       1.4Gi
+  Swap:          8.0Gi       6.8Gi       1.2Gi
+
+$ grep -E 'MemTotal|MemAvailable|SwapTotal|SwapFree' /proc/meminfo
+  MemTotal:       14311060 kB
+  MemAvailable:    1459624 kB
+  SwapTotal:       8388608 kB
+  SwapFree:        1276780 kB
+
+############ no secrets / credential values on disk ############
+--- credential locations this cut might have used ---
+  /home/fisher/.onyx-lab/.secrets EXISTS (mode 700)
+  /home/fisher/.onyx-lab/.secrets/admin-cookies.txt EXISTS (mode 600)
+  /mnt/d/Projects/domainAgentECE/onyx-lab/OEI-010/.secrets  (absent)
+  NOTE: this cut never needed a credential. It ran entirely on
+  ECE_CONTENT_ENGINE=mock and never called the real engine, so no cookie or
+  token was read, written, refreshed or requested from the user.
+  Nothing was written under /mnt/d except the OEI-010 evidence/workspace.
+
+--- scan this cut's own evidence + workspace for credential-shaped VALUES ---
+  (no matches — no credential value anywhere in this cut's artifacts)
+
+--- the only DSN used, and how it appears ---
+  postgresql+psycopg://ece:***@...)."
+  postgresql+psycopg://ece:***@127.0.0.1:55432/ece)
+  postgresql+psycopg://ece:ece@127.0.0.1:55432/ece
+  postgresql+psycopg://nobody:nobody@127.0.0.1:1/nope
+  -> a throwaway local dev DSN; pytest masks the password in its own output
+     (the captured suite log shows postgresql+psycopg://ece:***@...).
+
+############ Onyx upstream / compose / .env untouched ############
+--- TASK §8 names /home/codex/onyx-lab/src as the read-only Onyx upstream ---
+It is NOT reachable from this session, which is the strongest form of the
+guarantee: no write was possible, independently of what was intended.
+$ stat -c '%n mode=%a owner=%U:%G mtime=%y' /home/codex
+    /home/codex  mode=750  owner=codex:codex  mtime=2026-09-23 18:21:26.526116982 +0800
+  running as: fisher (uid 1000) — mode 750, owned by another user, so:
+    readable: NO
+    writable: NO
+  and there is no passwordless sudo, so the permission cannot be bypassed.
+
+--- the Onyx containers run from IMAGES, with no source bind-mount ---
+$ docker inspect onyx-api_server-1 --format '{{range .Mounts}}...'
+  /var/lib/docker/volumes/onyx_file-system/_data -> /app/file-system
+/var/lib/docker/volumes/onyx_api_server_logs/_data -> /var/log/onyx
+
+  -> only data/log volumes; no source tree is bind-mounted from this host.
+
+--- no container was restarted/stopped: uptime unchanged ---
+  all 9 report 'Up 7 hours' — the same uptime as before this session started.
+
+--- compose files / .env within the project tree this session CAN reach ---
+  /mnt/d/Projects/domainAgentECE/ece/deploy/docker-compose.demo.yml  mtime=2026-09-23 06:10:18
+  /mnt/d/Projects/domainAgentECE/ece/docker-compose.yml  mtime=2026-09-14 06:13:36
+  (this cut created none and modified none: the temp PG was started with a bare
+   `docker run`, not via a compose file; no .env was read or written.)
+
+############ git push status ############
+$ git -C /mnt/d/Projects/domainAgentECE/ece status -sb
+  ## main...origin/main [ahead 2]
+  -> local commits only; nothing was pushed (TASK §8).
+
+--- and the outer repo was not committed to ---
+  onyx-lab/OEI-010/** left uncommitted, as in previous cuts.
+
+############ who is actually using the memory ############
+$ ps -eo rss,pid,args --sort=-rss | head
+    3894 MB  pid 38292   /usr/local/lib/ollama/llama-server --model /usr/share/ollama/.ollama/models/blob
+    2062 MB  pid 1308    /usr/share/opensearch/jdk/bin/java -Xshare:auto -Dopensearch.networkaddress.cach
+    1710 MB  pid 1134    python -m model_server
+    1705 MB  pid 1146    python -m model_server
+     394 MB  pid 97975   claude
+     388 MB  pid 2837    /usr/local/bin/python /usr/local/bin/celery -A onyx.background.celery.versioned_
+     358 MB  pid 3316    /usr/local/bin/python /usr/local/bin/uvicorn onyx.main:app --host 0.0.0.0 --port
+     184 MB  pid 61044   /home/fisher/.nvm/versions/node/v24.21.0/lib/node_modules/@openai/codex/node_mod
+     145 MB  pid 2835    /usr/local/bin/python /usr/local/bin/celery -A onyx.background.celery.versioned_
+     139 MB  pid 2832    /usr/local/bin/python /usr/local/bin/celery -A onyx.background.celery.versioned_
+     131 MB  pid 1227    next-server (v
+     129 MB  pid 93941   /usr/lib/x86_64-linux-gnu/webkit2gtk-4.1/WebKitWebProcess 4 21 25
+
+  Attribution: every large consumer is a PRE-EXISTING workload — a host-level
+  Ollama llama-server, OpenSearch, Onyx's two model servers, celery workers and
+  Onyx's own uvicorn. This cut's temp PG is gone, so its contribution is now 0.
+  The ~400 MB 'claude' entry is this agent session itself.
+
+--- docker stats snapshot ---
+onyx-nginx-1	17MiB / 128MiB
+onyx-web_server-1	158.9MiB / 512MiB
+onyx-background-1	935.7MiB / 3GiB
+onyx-api_server-1	385.8MiB / 1.5GiB
+onyx-inference_model_server-1	1.727GiB / 2GiB
+onyx-indexing_model_server-1	1.704GiB / 2GiB
+onyx-relational_db-1	153MiB / 768MiB
+onyx-cache-1	11.23MiB / 128MiB
+onyx-opensearch-1	2.037GiB / 2.5GiB
+
+############ verdict ############
+CHECK 1 (processes): clean — no stray server processes; the only host-visible
+  python processes are Onyx's model servers, confirmed by container cgroup.
+CHECK 2 (containers): clean — temp PG removed; all 9 Onyx containers still up at
+  unchanged uptime; no orphan volume.
+CHECK 3 (memory/swap): the snapshot above is REPORTED AS IT IS, not as 'fine'.
+  Swap is heavily used (6.8 of 8.0 GiB) and MemAvailable is ~1.4 GiB. That is
+  pre-existing pressure from the Onyx stack + a host-level Ollama model, all at
+  7h uptime; this cut's temp PG has been removed and contributes nothing now.
+  Stated plainly because a teardown check that reports 'clean' while the numbers
+  say otherwise is worse than no check.
+No credential value on disk. Onyx upstream is unreachable (mode 750, another
+  user) and its containers mount no source; compose and .env untouched.
+Nothing pushed.
+---- done ----

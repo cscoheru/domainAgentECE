@@ -1,0 +1,50 @@
+=== R3.3 — DB-free unit test raw output (4 files, 49 tests) ===
+
+--- tests/unit/test_engine_documents_registry.py ---
+============================= test session starts ==============================
+platform linux -- Python 3.12.14, pytest-9.1.1, pluggy-1.6.0
+rootdir: /mnt/d/Projects/domainAgentECE/ece
+configfile: pyproject.toml
+plugins: anyio-4.15.1, cov-7.1.0
+collected 18 items
+
+tests/unit/test_engine_documents_registry.py ..................          [100%]
+
+============================== 18 passed in 2.87s ==============================
+
+--- tests/unit/test_check_permission_timebox.py ---
+============================= test session starts ==============================
+platform linux -- Python 3.12.14, pytest-9.1.1, pluggy-1.6.0
+rootdir: /mnt/d/Projects/domainAgentECE/ece
+configfile: pyproject.toml
+plugins: anyio-4.15.1, cov-7.1.0
+collected 11 items
+
+tests/unit/test_check_permission_timebox.py ...........                  [100%]
+
+============================== 11 passed in 0.48s ==============================
+
+--- tests/unit/test_engine_merge_filter.py ---
+============================= test session starts ==============================
+platform linux -- Python 3.12.14, pytest-9.1.1, pluggy-1.6.0
+rootdir: /mnt/d/Projects/domainAgentECE/ece
+configfile: pyproject.toml
+plugins: anyio-4.15.1, cov-7.1.0
+collected 11 items
+
+tests/unit/test_engine_merge_filter.py ...........                       [100%]
+
+============================== 11 passed in 2.89s ==============================
+
+--- tests/unit/test_org_scope.py ---
+============================= test session starts ==============================
+platform linux -- Python 3.12.14, pytest-9.1.1, pluggy-1.6.0
+rootdir: /mnt/d/Projects/domainAgentECE/ece
+configfile: pyproject.toml
+plugins: anyio-4.15.1, cov-7.1.0
+collected 9 items
+
+tests/unit/test_org_scope.py .........                                   [100%]
+
+============================== 9 passed in 2.66s ===============================
+

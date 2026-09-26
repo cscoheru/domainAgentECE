@@ -1,0 +1,38 @@
+== OEI-011 步骤 2.2 + A5 — §1.6 两个闸门在【真实 seed 文件】上的原始输出 ==
+date: 2026-09-25T21:25:34+08:00
+seed: src/ece/consulting/seed/consulting_objects.json (45 objects, OEI-011 后的真实文件)
+
+############ 逐条闸门记录：9 个新增对象 ############
+  id                                           schema  cn    firms  num%   vocab  origin 
+  industry-note-cn-manufacturing-2026-003      PASS    PASS  PASS   PASS   PASS   PASS   
+  industry-note-cn-logistics-2026-004          PASS    PASS  PASS   PASS   PASS   PASS   
+  industry-note-cn-healthcare-2026-005         PASS    PASS  PASS   PASS   PASS   PASS   
+  industry-note-cn-energy-2026-006             PASS    PASS  PASS   PASS   PASS   PASS   
+  case-technology-data-platform-011            PASS    PASS  PASS   PASS   PASS   PASS   
+  case-public-sector-service-window-012        PASS    PASS  PASS   PASS   PASS   PASS   
+  case-insurance-underwriting-013              PASS    PASS  PASS   PASS   PASS   PASS   
+  risk-check-timeline-slippage-005             PASS    PASS  PASS   PASS   PASS   PASS   
+  risk-check-benefit-realization-006           PASS    PASS  PASS   PASS   PASS   PASS   
+
+  -> 9/9 新增对象逐条过闸门：YES
+
+############ 两个闸门测试文件 + 数量测试的完整原始输出 ############
+$ uv run pytest tests/unit/test_consulting_seed_schema.py tests/unit/test_consulting_seed_discipline.py \
+                 tests/unit/test_consulting_seed_count.py tests/unit/test_consulting_service.py -v
+============================= test session starts ==============================
+platform linux -- Python 3.12.14, pytest-9.1.1, pluggy-1.6.0
+rootdir: /mnt/d/Projects/domainAgentECE/ece
+configfile: pyproject.toml
+plugins: anyio-4.15.1, cov-7.1.0
+collected 24 items
+
+tests/unit/test_consulting_seed_schema.py ......                         [ 25%]
+tests/unit/test_consulting_seed_discipline.py .....                      [ 45%]
+tests/unit/test_consulting_seed_count.py ....                            [ 62%]
+tests/unit/test_consulting_service.py .........                          [100%]
+
+============================== 24 passed in 3.34s ==============================
+
+（上面是 -v 的尾部；完整汇总行见下方 -q 复跑）
+........................                                                 [100%]
+---- done ----

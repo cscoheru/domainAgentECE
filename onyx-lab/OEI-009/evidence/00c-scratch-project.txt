@@ -1,0 +1,53 @@
+=== R3.1 — scratch project: before / RUN TESTS / after ===
+
+scratch project creation (15:5x, idempotent):
+  POST /api/user/projects/create?name=OEI-009%20Scratch
+  -> {id: 2, name: 'OEI-009 Scratch'}
+
+demo project id=1 : before=4 files (HTTP 200), after=4 files (HTTP 200)
+scratch project 2 : before=0 files
+
+--- work actually run in between ---
+
+2a. DB-free unit tests (do not touch the engine):
+    tests/unit/test_engine_documents_registry.py: ..................                                                       [100%]
+    tests/unit/test_check_permission_timebox.py: ...........                                                              [100%]
+    tests/unit/test_engine_merge_filter.py: ...........                                                              [100%]
+    tests/unit/test_org_scope.py: .........                                                                [100%]
+
+2b. step22_fail_closed.py (TASK §4 step 2.2 sanctioned project-1 probe):
+          "methodology-framework.md"
+        ],
+        "probe_visible": false
+      }
+    }
+    PASS — fail-closed: probe (no engine_documents row) invisible to all identities.
+    verdict: PASS
+
+2c. scratch-project round-trip (upload -> list -> two-step delete):
+    upload -> 200
+    scratch now has 1 file(s): ['oei009-scratch-roundtrip-probe.txt']
+    demo project 1 during probe: 4 files (must be unchanged)
+    two-step delete -> unlink=204 delete=200
+    scratch after cleanup: 0 files
+
+--- BEFORE: project 1 ---
+    ece-df16d19c9e7b-oei009-comparison-restricted.md                  status=COMPLETED  id=5ed2b9dc-20e1-49d9-9722-5a53b091e736
+    play-sales-delivery.md                                            status=COMPLETED  id=3b14b918-cea2-4df7-9edb-4375a9b171ab
+    methodology-framework.md                                          status=COMPLETED  id=1457df88-02cc-473a-aacc-16dbaba0e332
+    case-management-consulting.md                                     status=COMPLETED  id=7bb48d46-f7e4-4e20-b178-9791fea73334
+
+--- AFTER: project 1 ---
+    ece-df16d19c9e7b-oei009-comparison-restricted.md                  status=COMPLETED  id=5ed2b9dc-20e1-49d9-9722-5a53b091e736
+    play-sales-delivery.md                                            status=COMPLETED  id=3b14b918-cea2-4df7-9edb-4375a9b171ab
+    methodology-framework.md                                          status=COMPLETED  id=1457df88-02cc-473a-aacc-16dbaba0e332
+    case-management-consulting.md                                     status=COMPLETED  id=7bb48d46-f7e4-4e20-b178-9791fea73334
+
+all projects:
+  id=1 name='OEI-001 Consulting Lab'
+  id=2 name='OEI-009 Scratch'
+
+ACCEPTANCE:
+  project 1 unchanged by the test run: True (4 -> 4; expected 4 = 3 real + 1 sanctioned comparison doc)
+  no test/probe artifact left in project 1: True
+  scratch project empty again: True

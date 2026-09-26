@@ -1,0 +1,14 @@
+== OEI-011 — draft plan (steps 1-4) verified IN MEMORY, no repo writes ==
+date: 2026-09-25T21:13:16+08:00
+$ uv run python draft_plan.py
+  annotations=24 new_objects=9 total_after=45
+  A1 other-fields-identical: True (36/36)
+  A2 violations: 0
+  A4: {'total>=44': True, 'every_concrete_industry>=2': True, 'industry_note>=6': True, 'risk_check>=6': True, 'cross_industry>=10': True}
+  A7 no zero-match value: True
+  A5 gate failures: 2 ['kc001_schema::test_catalog_can_load_seed_without_error', 'kc001_schema::test_seed_bundle_is_valid_json']
+
+Artifacts: workspace/draft-industry-annotations.json (24 rows, basis column),
+           workspace/draft-new-objects.json (9 objects),
+           workspace/draft-coverage-targets.json (A1/A2/A5/targets).
+---- done ----

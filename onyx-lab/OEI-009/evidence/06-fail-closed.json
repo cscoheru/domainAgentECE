@@ -1,0 +1,32 @@
+{
+  "marker": "oei009step22_17b6b9134b",
+  "probe_filename": "oei009-step22-probe-4494cd0c386f.md",
+  "upload_status": 200,
+  "user_file_id": "b79b08a2-2972-4929-9461-74f81f443afe",
+  "indexed": true,
+  "library_anonymous": {
+    "status": 200,
+    "engine_status": "ok",
+    "engine_items_titles": [
+      "methodology-framework.md"
+    ],
+    "probe_visible": false
+  },
+  "library_demo_user": {
+    "status": 200,
+    "engine_status": "ok",
+    "engine_items_titles": [
+      "methodology-framework.md"
+    ],
+    "probe_visible": false
+  },
+  "library_other_user": {
+    "status": 200,
+    "engine_status": "ok",
+    "engine_items_titles": [
+      "methodology-framework.md"
+    ],
+    "probe_visible": false
+  }
+}
+PASS — fail-closed: probe (no engine_documents row) invisible to all identities.

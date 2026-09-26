@@ -1,0 +1,63 @@
+== OEI-011 步骤 7.2 — 提交（不 push）(A12) ==
+date: 2026-09-25T22:12:03+08:00
+
+短 hash : c30e50e
+全长    : c30e50ee675fde4e88c15283d38cd007f7820bcf
+父提交  : a46365817afc132282ce20cbe3e7ad3f3b5ae032  (feat(OEI-010): persistent context memory, permissi)  ← OEI-010 的 HEAD a463658
+subject : feat(OEI-011): fill the consulting industry axis, bounded increment, usable facets
+
+--- 本次提交的文件清单（正好 9 个，全部在 §8 授权范围内）---
+ TASKS.md                                        | 127 ++++++++
+ docs/API.md                                     |  43 ++-
+ docs/DATA_MODEL.md                              |   4 +-
+ src/ece/consulting/metadata.py                  |   7 +
+ src/ece/consulting/seed/consulting_objects.json | 403 ++++++++++++++++++++++--
+ tests/integration/test_s32_assembly.py          |  12 +-
+ tests/unit/test_consulting_documents.py         |   9 +-
+ tests/unit/test_consulting_engine_merge.py      |   5 +-
+ tests/unit/test_consulting_seed_count.py        |  24 +-
+ 9 files changed, 593 insertions(+), 41 deletions(-)
+
+--- 逐文件确认：是否属于任务书授权的可改文件 ---
+  [授权] TASKS.md  ← §8 文档
+  [授权] docs/API.md  ← §8 文档
+  [授权] docs/DATA_MODEL.md  ← §8 文档
+  [授权] src/ece/consulting/metadata.py  ← §8 只加 cross_industry 一项
+  [授权] src/ece/consulting/seed/consulting_objects.json  ← §8 补标注 + 新增对象
+  [授权] tests/integration/test_s32_assembly.py  ← §8 tests/** 的四处点名 + 步骤 0.1 一处
+  [授权] tests/unit/test_consulting_documents.py  ← §8 tests/** 的四处点名 + 步骤 0.1 一处
+  [授权] tests/unit/test_consulting_engine_merge.py  ← §8 tests/** 的四处点名 + 步骤 0.1 一处
+  [授权] tests/unit/test_consulting_seed_count.py  ← §8 tests/** 的四处点名 + 步骤 0.1 一处
+
+--- 零 diff 声明（A13）---
+  pyproject.toml diff 行数: 0
+  uv.lock        diff 行数: 0
+  demos/spa/**   diff 行数: 0
+
+--- 未被本次提交卷入的既有脏文件（提交前就脏，本刀一律不碰）---
+   T docs/demo-platform/DEMO_PLATFORM_PRD.md
+   T docs/demo-platform/DEPLOY_USER_PROXY.md
+   M reports/cut-042R3/mutation-evidence/M1_re_read_through_assembly_skipped.md
+   M reports/cut-042R3/mutation-evidence/M2_apply_context_update_skip_sql.md
+   M reports/cut-042R3/mutation-evidence/M3_permission_acl_check_bypassed.md
+   M reports/cut-042R3/mutation-evidence/M4_evaluated_conditions_inject_nondeterministic_amount.md
+   M reports/cut-042R3/mutation-evidence/M5_jwt_decode_skips_signature_verification.md
+   M reports/cut-042R3/mutation-evidence/M6_materialize_fn_disabled_in_loop.md
+   M reports/cut-043/mutation-evidence/M1_km_validity_invert.md
+   M reports/cut-043/mutation-evidence/M2_km_permission_invert.md
+   M reports/cut-043/mutation-evidence/M3_km_decision_and_to_or.md
+   M reports/cut-044/mutation-evidence/M1_comp_count_condition_invert.md
+   M reports/cut-044/mutation-evidence/M2_comp_coverage_issubset_to_isdisjoint.md
+   M reports/cut-044/mutation-evidence/M3_comp_decision_force_gap_list.md
+  以上 14 项是工作区在 OEI-011 开始前就存在的改动（2 个符号链接类型变更 +
+  12 个 reports/cut-04*/mutation-evidence/*.md），与本刀无关，已刻意排除在提交外。
+
+--- 未 push（A12/A13）---
+  git log origin/main..HEAD  (或对应的 upstream) :
+    c30e50e feat(OEI-011): fill the consulting industry axis, bounded increment, usable facets
+    a463658 feat(OEI-010): persistent context memory, permission-gated on both write and read
+    a884d41 feat(OEI-009): engine-document registry + per-result permission filter + ACL time-box
+  本地 branch: main
+  remote 列表: 2 行
+  确认：本刀只做 git commit，**没有执行任何 git push**。
+---- done ----

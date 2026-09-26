@@ -1,0 +1,84 @@
+{
+  "oei009_step": "1.1",
+  "claim": "Onyx v4.7.8 /api/search response does NOT include a `document_id` field — only `citation_id`.",
+  "implication": "The TASK §1.2 premise ('/api/search 原始结果里同时带 document_id 与 citation_id') is FALSE for this deployment. The mapping key the whole OEI-009 architecture (registry + per-result auth + timebox) depends on does not exist.",
+  "stop_trigger": "TASK §1.2 step 1.1 verbatim: '若不可映射：立即停手，把结论与候选替代键 (semantic_identifier / 文件名 / 内容 sha256) 写进 REPORT 并等 codex 对齐，不要自行改设计'",
+  "evidence_sources_scanned": 11,
+  "files_with_results_key_present": 3,
+  "files_with_document_id_in_any_result": 0,
+  "union_of_result_keys": [
+    "citation_id",
+    "content",
+    "link",
+    "source_type",
+    "title",
+    "updated_at"
+  ],
+  "per_file_scan": [
+    {"file": "OEI-002/evidence/09-search-q1.json", "n_results": 1, "has_document_id": false, "keys": ["citation_id", "content", "link", "source_type", "title", "updated_at"]},
+    {"file": "OEI-002/evidence/09-search-q2.json", "n_results": 1, "has_document_id": false, "keys": ["citation_id", "content", "link", "source_type", "title", "updated_at"]},
+    {"file": "OEI-002/evidence/09-search-q3.json", "n_results": 2, "has_document_id": false, "keys": ["citation_id", "content", "link", "source_type", "title", "updated_at"]},
+    {"file": "OEI-002/evidence/11-repeat-1.json", "n_results": 1, "has_document_id": false},
+    {"file": "OEI-002/evidence/11-repeat-2.json", "n_results": 1, "has_document_id": false},
+    {"file": "OEI-002/evidence/11-repeat-3.json", "n_results": 1, "has_document_id": false},
+    {"file": "OEI-003/evidence/02-adapter-onyx.json", "n_results": 0, "has_document_id": false, "note": "engine was unavailable at this run, results empty"},
+    {"file": "OEI-007/evidence/05-recall-after-upload.json", "n_results": 2, "has_document_id": false, "note": "alignment_table shows ece_engine_doc_id == raw_citation_id (both '1', '2' for the two uploaded probes)"}
+  ],
+  "upload_response_id_fields": {
+    "public_id": "id (user_file.id, UUID) — returned by POST /api/user/projects/file/upload as `document_id`",
+    "internal_id": "file_id (UUID) — engine-internal, returns [] from /file/statuses",
+    "note": "Neither id appears in the /api/search response at all"
+  },
+  "candidate_replacement_keys": [
+    {
+      "key": "raw[\"citation_id\"]",
+      "stability_evidence": "OEI-007 alignment_table shows same citation_id per doc across repeated searches; Onyx seems to assign per-source-document stable ids within a session",
+      "issues": [
+        "NOT documented as a stable identifier by Onyx (might be rank-position not stable across queries — needs verification)",
+        "Same source doc can return MULTIPLE results (different chunks) → multiple citation_ids for one upload document_id → not a 1:1 mapping",
+        "Risk: a doc indexed into N chunks yields N citation_ids, but only ONE upload document_id → can't tell 'this chunk came from doc X'"
+      ],
+      "verdict": "BROKEN for OEI-009 architecture (1:1 mapping required for per-result auth)"
+    },
+    {
+      "key": "title (filename)",
+      "stability_evidence": "Each Onyx result carries `title` which is the source filename",
+      "issues": [
+        "Two uploads with same filename (e.g. 'report.md' twice) collide",
+        "Indexing may produce chunks of same doc under same title — fine, but multiple DOCS sharing filename are indistinguishable"
+      ],
+      "verdict": "Weak. Sufficient for the 3 demo docs (unique filenames) but not for a general registry. Would require filename uniqueness enforcement at upload time."
+    },
+    {
+      "key": "content_sha256 (of chunk content)",
+      "stability_evidence": "Each result carries `content` (full chunk text); sha256 of first N chars could be a stable chunk hash",
+      "issues": [
+        "Hashes the CHUNK, not the source DOC → same source doc → multiple chunk hashes (same problem as citation_id)",
+        "Not stable across reindex if chunking params change",
+        "No way to map back to upload document_id without storing the mapping server-side"
+      ],
+      "verdict": "BROKEN. Could be used for chunk-level dedup but not for per-result auth at the document level."
+    },
+    {
+      "key": "fetch extra metadata via /file/statuses or /files endpoint (server-side join)",
+      "stability_evidence": "Need empirical verification — does Onyx expose `document_id` in /api/user/projects/files/{project_id}?",
+      "issues": [
+        "Requires an extra round-trip per search result (N+1 problem)",
+        "Couples recall to project-level query (not all docs are in a single project)",
+        "Performance cost likely unacceptable for the Library's hot path"
+      ],
+      "verdict": "Workable but adds latency. Needs measurement."
+    },
+    {
+      "key": "POST /api/user/projects/file/upload returns document_id; ECE records it in engine_documents at write time (registry written by ECE, NOT derived from search response)",
+      "stability_evidence": "Upload returns `document_id` (user_file.id UUID) which is ECE-controlled",
+      "issues": [
+        "Solves write-path mapping (upload_id ↔ registry row is 1:1)",
+        "DOES NOT solve read-path mapping (which user_file.id appeared in /api/search result?) — same as the original problem",
+        "Recovers the upload side; still blocked on the recall side"
+      ],
+      "verdict": "PARTIAL. Required regardless, but doesn't unblock step 1 alone."
+    }
+  ],
+  "verdict": "STOP per TASK §1.2 step 1.1. Wait for codex alignment on mapping key before continuing with steps 1.2+ (registry, backfill, per-result auth, timebox, org scope, three design docs)."
+}

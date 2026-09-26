@@ -1,0 +1,65 @@
+=== OEI-012 步骤 5.1 — 契约不回归（A6）===
+date: 2026-09-26T09:57:17+08:00
+
+############ 1. 改动面：src/ 下只有 3 个连接器文件 ############
+$ git status --porcelain -- src/ data/ demos/ pyproject.toml uv.lock
+ M src/ece/connectors/onyx/mock_adapter.py
+ M src/ece/connectors/onyx/onyx_adapter.py
+ M src/ece/connectors/onyx/port.py
+
+$ git diff --stat -- src/
+ src/ece/connectors/onyx/mock_adapter.py | 11 ++++++++++-
+ src/ece/connectors/onyx/onyx_adapter.py | 10 +++++++++-
+ src/ece/connectors/onyx/port.py         |  8 ++++++++
+ 3 files changed, 27 insertions(+), 2 deletions(-)
+
+断言：src/ 下被改的只有 connectors/onyx/{port,onyx_adapter,mock_adapter}.py；
+      无新依赖（pyproject.toml / uv.lock 均不在改动列表）；demos/ 零改动。
+
+############ 2. 既有契约测试全绿（不是新写的测试）############
+$ ECE_CONTENT_ENGINE=mock pytest <既有引擎/咨询单测> -v --tb=short -o addopts=''
+tests/unit/test_consulting_documents.py::test_resolve_metadata_caller_wins_and_garbage_dropped PASSED [ 70%]
+tests/unit/test_consulting_documents.py::test_validate_metadata_drops_unknown_keys_silently PASSED [ 70%]
+tests/unit/test_consulting_documents.py::test_adapters_satisfy_port_protocol PASSED [ 71%]
+tests/unit/test_consulting_documents.py::test_engine_document_status_shape_is_stable PASSED [ 72%]
+tests/unit/test_consulting_documents.py::test_mock_upload_then_status_roundtrip PASSED [ 73%]
+tests/unit/test_consulting_documents.py::test_mock_status_unknown_raises_engine_error PASSED [ 74%]
+tests/unit/test_consulting_documents.py::test_mock_store_persists_across_instances PASSED [ 75%]
+tests/unit/test_consulting_documents.py::test_mock_doc_ids_are_unique_within_process PASSED [ 75%]
+tests/unit/test_consulting_documents.py::test_reset_mock_engine_store_clears_state PASSED [ 76%]
+tests/unit/test_consulting_documents.py::test_upload_happy PASSED        [ 77%]
+tests/unit/test_consulting_documents.py::test_upload_bad_extension_rejected PASSED [ 78%]
+tests/unit/test_consulting_documents.py::test_upload_empty_rejected_per_file PASSED [ 79%]
+tests/unit/test_consulting_documents.py::test_upload_oversize_single_rejected_per_file PASSED [ 80%]
+tests/unit/test_consulting_documents.py::test_upload_aggregate_oversize_is_413 PASSED [ 80%]
+tests/unit/test_consulting_documents.py::test_upload_zero_files_is_422 PASSED [ 81%]
+tests/unit/test_consulting_documents.py::test_upload_multi_file_partial_success PASSED [ 82%]
+tests/unit/test_consulting_documents.py::test_upload_metadata_vocab_check_field PASSED [ 83%]
+tests/unit/test_consulting_documents.py::test_get_status_happy PASSED    [ 84%]
+tests/unit/test_consulting_documents.py::test_get_status_unknown_returns_404 PASSED [ 85%]
+tests/unit/test_consulting_documents.py::test_get_status_engine_down_returns_502 PASSED [ 85%]
+tests/unit/test_consulting_documents.py::test_get_status_engine_not_found_returns_404 PASSED [ 86%]
+tests/unit/test_consulting_documents.py::test_static_side_byte_identical_with_or_without_uploads PASSED [ 87%]
+tests/unit/test_consulting_service.py::test_search_returns_library_response_with_full_corpus_facets PASSED [ 88%]
+tests/unit/test_consulting_service.py::test_search_filters_by_type PASSED [ 89%]
+tests/unit/test_consulting_service.py::test_search_filters_by_source_origin PASSED [ 90%]
+tests/unit/test_consulting_service.py::test_multi_value_filter_is_any_match PASSED [ 90%]
+tests/unit/test_consulting_service.py::test_keyword_search_matches_across_text_fields PASSED [ 91%]
+tests/unit/test_consulting_service.py::test_sort_title_orders_by_id PASSED [ 92%]
+tests/unit/test_consulting_service.py::test_limit_and_offset_paginate PASSED [ 93%]
+tests/unit/test_consulting_service.py::test_get_returns_object_or_none PASSED [ 94%]
+tests/unit/test_consulting_service.py::test_facets_have_six_documented_keys PASSED [ 95%]
+tests/unit/test_consulting_seed_schema.py::test_seed_bundle_is_valid_json PASSED [ 95%]
+tests/unit/test_consulting_seed_schema.py::test_every_seed_record_passes_pydantic_schema PASSED [ 96%]
+tests/unit/test_consulting_seed_schema.py::test_type_enum_is_exactly_one_of_six PASSED [ 97%]
+tests/unit/test_consulting_seed_schema.py::test_source_origin_enum_is_exactly_one_of_four PASSED [ 98%]
+tests/unit/test_consulting_seed_schema.py::test_required_text_fields_are_nonempty PASSED [ 99%]
+tests/unit/test_consulting_seed_schema.py::test_catalog_can_load_seed_without_error PASSED [100%]
+
+=============================== warnings summary ===============================
+.venv/lib/python3.12/site-packages/starlette/testclient.py:53
+  /mnt/d/Projects/domainAgentECE/ece/.venv/lib/python3.12/site-packages/starlette/testclient.py:53: DeprecationWarning: The anyio.abc.BlockingPortal alias is deprecated, use anyio.from_thread.BlockingPortal instead.
+    _PortalFactoryType = Callable[[], AbstractContextManager[anyio.abc.BlockingPortal]]
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+======================== 120 passed, 1 warning in 7.44s ========================

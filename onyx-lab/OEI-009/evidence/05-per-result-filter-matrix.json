@@ -1,0 +1,220 @@
+== OEI-009 step 2.6 — cleanup: {"registry_deleted": 0, "acl_deleted": 0, "entity_deleted": 0, "files_deleted": ["0ab96c3f-fc81-4c4a-906a-4cf1d0217989"], "delete_failures": [], "files_found_by_name": ["ece-df16d19c9e7b-oei009-comparison-restricted.md"]}
+== stale-index clear: cleared=True after 2 poll(s)
+{
+  "marker": "oei009step26comparisonmarker",
+  "controlled_filename": "ece-df16d19c9e7b-oei009-comparison-restricted.md",
+  "demo_query": "oei009step26comparisonmarker",
+  "isolation_query": "员工报销政策与发票审核流程",
+  "cleanup": {
+    "registry_deleted": 0,
+    "acl_deleted": 0,
+    "entity_deleted": 0,
+    "files_deleted": [
+      "0ab96c3f-fc81-4c4a-906a-4cf1d0217989"
+    ],
+    "delete_failures": [],
+    "files_found_by_name": [
+      "ece-df16d19c9e7b-oei009-comparison-restricted.md"
+    ]
+  },
+  "stale_clear": {
+    "poll_history": [
+      {
+        "t": 1790335006.89,
+        "status": 200,
+        "raw_count": 4,
+        "stale_matches": 1
+      },
+      {
+        "t": 1790335059.13,
+        "status": 200,
+        "raw_count": 3,
+        "stale_matches": 0
+      }
+    ],
+    "cleared": true
+  },
+  "upload_status": 200,
+  "upload_body": {
+    "user_files": [
+      {
+        "id": "6138305b-0f40-468f-a1c8-bdea6f68d424",
+        "temp_id": null,
+        "name": "ece-df16d19c9e7b-oei009-comparison-restricted.md",
+        "project_id": null,
+        "user_id": "c7483a82-9008-41f0-88f7-b8b9dba6d78e",
+        "file_id": "1d3c880a-91fd-4069-9133-4bc0b9d2292a",
+        "created_at": "2026-09-25T11:17:40.594497Z",
+        "status": "PROCESSING",
+        "last_accessed_at": "2026-09-25T11:17:40.593874Z",
+        "file_type": "text/markdown",
+        "chat_file_type": "plain_text",
+        "token_count": 331,
+        "chunk_count": null
+      }
+    ],
+    "rejected_files": []
+  },
+  "user_file_id": "6138305b-0f40-468f-a1c8-bdea6f68d424",
+  "poll_history": [
+    {
+      "t": 1790335060.69,
+      "status": 200,
+      "body": [
+        {
+          "id": "6138305b-0f40-468f-a1c8-bdea6f68d424",
+          "temp_id": null,
+          "name": "ece-df16d19c9e7b-oei009-comparison-restricted.md",
+          "project_id": null,
+          "user_id": "c7483a82-9008-41f0-88f7-b8b9dba6d78e",
+          "file_id": "1d3c880a-91fd-4069-9133-4bc0b9d2292a",
+          "created_at": "2026-09-25T11:17:40.594497",
+          "status": "PROCESSING",
+          "last_accessed_at": "2026-09-25T11:17:40.593874Z",
+          "file_type": "text/markdown",
+          "chat_file_type": "plain_text",
+          "token_count": 331,
+          "chunk_count": null
+        }
+      ]
+    },
+    {
+      "t": 1790335062.79,
+      "status": 200,
+      "body": [
+        {
+          "id": "6138305b-0f40-468f-a1c8-bdea6f68d424",
+          "temp_id": null,
+          "name": "ece-df16d19c9e7b-oei009-comparison-restricted.md",
+          "project_id": null,
+          "user_id": "c7483a82-9008-41f0-88f7-b8b9dba6d78e",
+          "file_id": "1d3c880a-91fd-4069-9133-4bc0b9d2292a",
+          "created_at": "2026-09-25T11:17:40.594497",
+          "status": "COMPLETED",
+          "last_accessed_at": "2026-09-25T11:17:40.593874Z",
+          "file_type": "text/markdown",
+          "chat_file_type": "plain_text",
+          "token_count": 324,
+          "chunk_count": 1
+        }
+      ]
+    }
+  ],
+  "indexed": true,
+  "registry_id": 7,
+  "acl": {
+    "subject_ref": "alice",
+    "object_ref": "engine_document:7",
+    "valid_from": "2026-09-25",
+    "valid_to": "2026-10-02",
+    "valid_days": 7
+  },
+  "raw_recall": {
+    "demo_query": {
+      "status": 200,
+      "count": 4,
+      "distinct_titles": [
+        "case-management-consulting.md",
+        "ece-df16d19c9e7b-oei009-comparison-restricted.md",
+        "methodology-framework.md",
+        "play-sales-delivery.md"
+      ],
+      "distinct_count": 4,
+      "titles": [
+        "case-management-consulting.md",
+        "ece-df16d19c9e7b-oei009-comparison-restricted.md",
+        "methodology-framework.md",
+        "play-sales-delivery.md"
+      ],
+      "source_types": [
+        "user_file"
+      ]
+    },
+    "isolation_query": {
+      "status": 200,
+      "count": 1,
+      "distinct_titles": [
+        "ece-df16d19c9e7b-oei009-comparison-restricted.md"
+      ],
+      "distinct_count": 1,
+      "titles": [
+        "ece-df16d19c9e7b-oei009-comparison-restricted.md"
+      ],
+      "source_types": [
+        "user_file"
+      ]
+    }
+  },
+  "demo__anonymous": {
+    "query": "oei009step26comparisonmarker",
+    "status": 200,
+    "engine_status": "ok",
+    "engine_items_count": 3,
+    "engine_items_titles": [
+      "case-management-consulting.md",
+      "methodology-framework.md",
+      "play-sales-delivery.md"
+    ],
+    "restricted_visible": false
+  },
+  "demo__demo_user": {
+    "query": "oei009step26comparisonmarker",
+    "status": 200,
+    "engine_status": "ok",
+    "engine_items_count": 4,
+    "engine_items_titles": [
+      "case-management-consulting.md",
+      "ece-df16d19c9e7b-oei009-comparison-restricted.md",
+      "methodology-framework.md",
+      "play-sales-delivery.md"
+    ],
+    "restricted_visible": true
+  },
+  "demo__other_user": {
+    "query": "oei009step26comparisonmarker",
+    "status": 200,
+    "engine_status": "ok",
+    "engine_items_count": 3,
+    "engine_items_titles": [
+      "case-management-consulting.md",
+      "methodology-framework.md",
+      "play-sales-delivery.md"
+    ],
+    "restricted_visible": false
+  },
+  "isolation__anonymous": {
+    "query": "员工报销政策与发票审核流程",
+    "status": 200,
+    "engine_status": "ok",
+    "engine_items_count": 0,
+    "engine_items_titles": [],
+    "restricted_visible": false
+  },
+  "isolation__demo_user": {
+    "query": "员工报销政策与发票审核流程",
+    "status": 200,
+    "engine_status": "ok",
+    "engine_items_count": 1,
+    "engine_items_titles": [
+      "ece-df16d19c9e7b-oei009-comparison-restricted.md"
+    ],
+    "restricted_visible": true
+  },
+  "isolation__other_user": {
+    "query": "员工报销政策与发票审核流程",
+    "status": 200,
+    "engine_status": "ok",
+    "engine_items_count": 0,
+    "engine_items_titles": [],
+    "restricted_visible": false
+  }
+}
+
+demo      anonymous : 3 items (engine_status=ok, restricted=False)
+demo      demo_user : 4 items (engine_status=ok, restricted=True)
+demo      other_user: 3 items (engine_status=ok, restricted=False)
+isolation anonymous : 0 items (engine_status=ok, restricted=False)
+isolation demo_user : 1 items (engine_status=ok, restricted=True)
+isolation other_user: 0 items (engine_status=ok, restricted=False)
+
+PASS — Step 2.6 (R1): demo_query → anon/other 3, demo_user 4 (restricted hidden from non-holders); isolation_query → anon/other 0 (engine_status=ok, genuine zero-authorized-result), demo_user 1.

@@ -1,0 +1,93 @@
+{
+  "what_this_proves": "A8: an injected persistent memory is traceable — it appears in context_items (item_kind='memory') and in GET /api/v1/audit/context/{request_id} for the request's owner — while remaining absent from every user-facing surface.",
+  "trace": {
+    "context_call": {
+      "status": 200,
+      "request_id": "fc8366e7-9a65-4792-859a-2dcec4e7a765",
+      "injected_memory_refs": [
+        "memory:47"
+      ],
+      "our_statements_injected": [
+        "oei010 step7 probe audit-trail memory"
+      ],
+      "metadata": {
+        "generated_at": "2026-09-25T12:09:44.001464+00:00",
+        "as_of": null,
+        "counts": {
+          "entities": 1,
+          "relationships": 6,
+          "documents": 0,
+          "rows": 0,
+          "denied": 0
+        },
+        "insufficient_context": false,
+        "memory_count": 1,
+        "memory_dropped": 0
+      }
+    },
+    "audit_as_owner": {
+      "status": 200,
+      "request_id": "fc8366e7-9a65-4792-859a-2dcec4e7a765",
+      "memory_items": [
+        {
+          "seq": 7,
+          "item_kind": "memory",
+          "ref": "memory:47",
+          "decision": "allowed",
+          "reason": "acl:allow-user",
+          "source": {
+            "system": "ece:memory",
+            "record_id": "memory:47"
+          }
+        }
+      ]
+    },
+    "audit_as_other_user": {
+      "status": 403
+    },
+    "context_items_for_request": [
+      {
+        "seq": 7,
+        "item_kind": "memory",
+        "ref": "memory:47",
+        "decision": "allowed",
+        "reason": "acl:allow-user"
+      }
+    ],
+    "after_delete_row": {
+      "deleted_at": "2026-09-25 12:09:44.053067+00:00"
+    },
+    "audit_after_delete": {
+      "status": 200,
+      "memory_items": [
+        {
+          "seq": 7,
+          "item_kind": "memory",
+          "ref": "memory:47",
+          "decision": "allowed",
+          "reason": "acl:allow-user",
+          "source": {
+            "system": "ece:memory",
+            "record_id": "memory:47"
+          }
+        }
+      ]
+    },
+    "context_items_after_delete": 1,
+    "not_reinjected_after_delete": {
+      "our_statements_injected": []
+    },
+    "spa_check": {
+      "method": "see evidence/07-audit-provenance.txt (git diff + grep)",
+      "expectation": "zero changes under ece/demos/spa/**"
+    }
+  },
+  "assertions_checked": [
+    "an injected memory appears in context_items with item_kind='memory'",
+    "the owner can read its own /audit/context/{request_id} trace; others get 403",
+    "the audit ref is the memory ref, never the statement text",
+    "soft-deleting the memory does NOT remove its audit history"
+  ],
+  "failures": [],
+  "verdict": "PASS"
+}

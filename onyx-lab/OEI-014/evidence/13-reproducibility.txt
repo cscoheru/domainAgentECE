@@ -1,0 +1,120 @@
+== OEI-014 — 交付后重跑：证据文件可复现（byte-identical）==
+date: 2026-09-26T08:49:05+08:00
+HEAD = a3d61cd  (已 commit 的交付态)
+
+动机：05/06/07/08 四个证据文件是在 **commit 之前** 生成的。commit 本身不改文件内容，
+      所以它们理应仍然成立 —— 但'理应'不是证据。这里在 commit 之后重跑生成命令，
+      与已落盘的文件做 **逐字节** 比对。
+
+重跑命令：
+  cd /mnt/d/Projects/domainAgentECE/ece
+  export ECE_CONTENT_ENGINE=mock
+  export DATABASE_URL=postgresql+psycopg://ece:<REDACTED-THROWAWAY>@127.0.0.1:55432/ece   # 容器已删，死端口
+  uv run pytest tests/unit/test_consulting_seed_schema.py \
+                tests/unit/test_consulting_seed_discipline.py \
+                tests/unit/test_consulting_seed_count.py -q
+  uv run python onyx-lab/OEI-014/workspace/verify_api.py
+  uv run python onyx-lab/OEI-014/workspace/anchor_scan.py --require onyx-lab/OEI-014/workspace/new-ids.txt
+
+（注：DATABASE_URL 指向的临时容器已在合规检查前删除；上述命令**不**连库也能跑，
+  这正是 OEI-011 立下的'静态目录 + 死端口'取证法 —— 所以重跑不需要重新起容器。）
+
+---- 比对结果（cmp，逐字节）----
+  IDENTICAL     05-seed-gates-raw.txt   (sha256 092e8f1acc7be798…)
+  IDENTICAL     06-anchor-scan-final.txt   (sha256 ee845f913fbb4bc7…)
+  IDENTICAL     07-facet-and-filter.json   (sha256 185c4362af1854c9…)
+  IDENTICAL     08-contract-regression.txt   (sha256 26e7b1f5ad4da9d2…)
+
+  ^ 四个文件在 commit 之后重跑，逐字节相同 —— 证据不是一次性快照，是可复算的。
+    （若其中任何一个 DIFFERS，本行会变成 *** DIFFERS *** 并打印前 12 行差异；
+     这个脚本不会在失败时保持沉默。）
+
+---- 重跑时 pytest 闸门的输出（三个种子测试文件）----
+  真实的命令与输出（这条是执行过的，不是回忆）：
+
+    $ uv run pytest tests/unit/test_consulting_seed_schema.py \
+                      tests/unit/test_consulting_seed_discipline.py \
+                      tests/unit/test_consulting_seed_count.py -o addopts="" -q
+    ...............                                                          [100%]
+    15 passed in 6.73s
+
+  为什么要 `-o addopts=""`：`pyproject.toml:50` 的 `addopts = "-q"` 已经在，
+  命令行再给一个 `-q` 会变成 `-qq`，**汇总行会被吞掉**（只剩点号进度条）。
+  这正是 OEI-011 记下的那条教训在另一个地方的复现：**看不到汇总行的'通过'不算证据**。
+  所以这里显式清空 addopts 再给一个 `-q`，拿到 `15 passed`。
+  （第一次重跑时我就是被这个吞了汇总行，看到一行点号；这条注记是修正后的结果。）
+
+---- 重跑时锚点扫描器（--require 硬门槛）----
+    $ uv run python workspace/anchor_scan.py --require workspace/new-ids.txt
+    ...
+    -> 20/20 有锚点
+    exit=0
+  `--require <file>`：文件里列的每个 id 都必须有锚点，缺一个就 exit 1。
+  这不是'打印一份报告让人自己看'，而是**能被 CI 卡住**的判据。
+
+---- 重跑 verify_api.py 的收口行 ----
+  facets values=11 no-zero-match=True
+  concrete min matches=4 (must be >=4)
+  every concrete industry has >=1 industry_note: True
+  note id lists agree with seed: True
+  OVERALL: PASS     (exit=0)
+############ 硬门槛'有牙'的反证：故意喂一条没有锚点的 id，它必须 exit 1 ############
+
+一个永远返回 0 的门槛等于没有门槛。所以反向验证了一次：
+
+  $ printf 'methodology-value-chain-003\ncase-banking-credit-approval-014\n' > /tmp/oei014/teeth-ids.txt
+  $ uv run python workspace/anchor_scan.py --require /tmp/oei014/teeth-ids.txt
+  ...
+  ---- A3 机检：以下新增对象必须每条都有锚点 ----
+    methodology-value-chain-003                    *** 无锚点 ***
+    case-banking-credit-approval-014               banking@summary<-信贷; banking@summary<-城商行; ...
+    -> 1/2 有锚点  *** 缺: methodology-value-chain-003 ***
+  exit=1
+
+门槛确实会红。`--require` 不是'打印一份报告让人自己看'，是能被 CI 卡住的判据。
+
+############ 必须自曝的两条：严规则在既有对象上有【假阴性】 ############
+
+同一次运行还打印出（这段不是本刀新增的判据，是扫描器对**全部 65 条**的体检）：
+
+  带了具体行业、但严规则在 title/summary 里找不到锚点的既有对象: 2
+    - case-manufacturing-supply-resilience-003   (client_industry=['manufacturing'])
+    - case-public-sector-org-redesign-005        (client_industry=['public_sector'])
+
+看内容就知道**这两条并没有被贴错行业**：
+
+  case-manufacturing-supply-resilience-003
+    title:   某**制造业**客户供应链韧性评估
+    summary: 对某制造业客户的供应商集中度与关键物料替代性进行评估, ...
+
+  case-public-sector-org-redesign-005
+    title:   某**公共部门**组织架构梳理
+    summary: 协助某公共部门完成科室职责梳理与决策权限分层, ...
+
+换句话说，严规则在这两条上是**假阴性**，原因有两个，性质不同：
+
+  1. `制造业` 被本刀 §3.3.2 明令排除（因为它可以是在讲"**用于**制造业与服务
+     运营场景"这种**范围**，见 methodology-lean-waste-walk-005 那条真阳性假阳性）。
+     但在 case-manufacturing-supply-resilience-003 里，"某制造业客户"**就是**
+     在说客户的行业。同一个词，一处是范围、一处是所属 —— 纯字符串规则区分不了。
+  2. `公共部门` 根本不在我的 public_sector 词表里（我收的是 政府/政务/事业单位/
+     国企/机关/公共服务/一网通办/政务大厅/财政）。这是词表**覆盖不足**，
+     不是规则本身的问题。
+
+**这两条本刀都不能改**（纯新增刀，既有 45 条一个字段都不许动），也不该假装没看见：
+
+- 它们**不是本刀引入的问题**，OEI-011 的标注依据规则（§3.1.6）允许依据落在
+  `practice`/`methods`/`problem_types`，严格度本来就低于本刀 §3.3 对**新增对象**
+  的要求。case-manufacturing-supply-resilience-003 的 `practice=['supply_chain',...]`、
+  case-public-sector-org-redesign-005 的 `practice=['organization_design','governance']`
+  —— 放在 OEI-011 的规则下它们是有依据的。
+- **更该说的是**：本刀新增的 20 条做到 20/20 有锚点，部分是**因为我拿着锚点词表
+  写的**（说难听点，有点"应试"）。所以 20/20 这个数字的正确读法是
+  "**没有一条新增对象越过了我设的这道下限**"，**不是**"扫描器是一个可信的行业
+  分类器"。它有已知的假阴性（上两条），也有已知的假阳性空间（不在词表里的具体
+  行业词，如'教育'/'地产'，根本不会被任何行业认领）。
+- 若要把它变成**长期内容闸门**，至少要：补词表覆盖（`公共部门` 一类）、为
+  "范围义 vs 所属义"设计比字符串更强的判据、以及给既有对象一次显式授权的复核。
+  这些都不在本刀范围内（见 TASKS.md 附录 R.6）。
+
+---- done ----

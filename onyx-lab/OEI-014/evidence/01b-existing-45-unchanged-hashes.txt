@@ -1,0 +1,152 @@
+== OEI-014 A1 — 既有 45 条【全字段】逐字节不变（对照 c30e50e）==
+MODE: 真实写盘后的文件
+baseline: git show c30e50e:src/ece/consulting/seed/consulting_objects.json
+hash: sha256 of the canonical JSON of the ENTIRE object (sorted keys, compact
+      separators). 本刀是纯新增刀，所以是**整对象**相等，不是'除某字段外'相等。
+      写盘前已验证：seed 文件能被子自身的序列化器逐字节复原（否则排版会变），
+      且写盘时既有 45 条是按原 dict 原样拼接的（不是重新构造）。
+      为防'新条目与旧条目的一刀切'被混淆，这里也比较了文件长度：
+        baseline 文件对象数 = 45；current 文件对象数 = 65
+
+[ 1/45] case-retail-procurement-diagnosis-001
+        c30e50e(baseline) whole-object sha256 = c5c124adcfdfa92f9f9976253fc6738fd10eda665a6ae9859fb7760c2ae9fbdb
+        current            whole-object sha256 = c5c124adcfdfa92f9f9976253fc6738fd10eda665a6ae9859fb7760c2ae9fbdb   EQUAL
+[ 2/45] case-bank-retail-channel-002
+        c30e50e(baseline) whole-object sha256 = 5ab96961ba026c1d1dbdef24537daadbffe5fb03dc166abce9fe82b0bd65bcd0
+        current            whole-object sha256 = 5ab96961ba026c1d1dbdef24537daadbffe5fb03dc166abce9fe82b0bd65bcd0   EQUAL
+[ 3/45] case-manufacturing-supply-resilience-003
+        c30e50e(baseline) whole-object sha256 = fce0909057fe9323c9cfce24a937baa4111cc37383a516f84b5645d4336dea7b
+        current            whole-object sha256 = fce0909057fe9323c9cfce24a937baa4111cc37383a516f84b5645d4336dea7b   EQUAL
+[ 4/45] case-saas-pricing-restructure-004
+        c30e50e(baseline) whole-object sha256 = 00be85aab794264fc84f5865f818a8641175e386640e65e801314b85d51085c5
+        current            whole-object sha256 = 00be85aab794264fc84f5865f818a8641175e386640e65e801314b85d51085c5   EQUAL
+[ 5/45] case-public-sector-org-redesign-005
+        c30e50e(baseline) whole-object sha256 = a9e9f456f1f269f7c1132c151aa678ca757d8e0ef34eb45b8367ff93b40c35d4
+        current            whole-object sha256 = a9e9f456f1f269f7c1132c151aa678ca757d8e0ef34eb45b8367ff93b40c35d4   EQUAL
+[ 6/45] case-consumer-goods-channel-006
+        c30e50e(baseline) whole-object sha256 = c56cfac551cbe72dbe147b8ea7bf3e60bf5d33a1923399ac4cd7706891d22b20
+        current            whole-object sha256 = c56cfac551cbe72dbe147b8ea7bf3e60bf5d33a1923399ac4cd7706891d22b20   EQUAL
+[ 7/45] case-logistics-network-007
+        c30e50e(baseline) whole-object sha256 = ca441a25bca6fa73d8ded979fd5dfbcc29e95e09374c1fb196690d786979cbdb
+        current            whole-object sha256 = ca441a25bca6fa73d8ded979fd5dfbcc29e95e09374c1fb196690d786979cbdb   EQUAL
+[ 8/45] case-insurance-claim-flow-008
+        c30e50e(baseline) whole-object sha256 = 20ea7973d8634620382507c0b86c575fff61fbe695cd8c4d51a062c1a0daf4d8
+        current            whole-object sha256 = 20ea7973d8634620382507c0b86c575fff61fbe695cd8c4d51a062c1a0daf4d8   EQUAL
+[ 9/45] case-energy-procurement-009
+        c30e50e(baseline) whole-object sha256 = 335b65e299a2e632036558c4344c51ce7bdba113e95f0b71ce8f604c384b7318
+        current            whole-object sha256 = 335b65e299a2e632036558c4344c51ce7bdba113e95f0b71ce8f604c384b7318   EQUAL
+[10/45] case-healthcare-service-blueprint-010
+        c30e50e(baseline) whole-object sha256 = 82b691e8d6f87e8f68d2b9e1f5b1bdb812ff14badd1d8a6414f67c5dd42727ba
+        current            whole-object sha256 = 82b691e8d6f87e8f68d2b9e1f5b1bdb812ff14badd1d8a6414f67c5dd42727ba   EQUAL
+[11/45] methodology-swot-quick-001
+        c30e50e(baseline) whole-object sha256 = c4a5944f867982f2a3f57cfd69889337b96a99b996f79435b51b537c9f2dc87f
+        current            whole-object sha256 = c4a5944f867982f2a3f57cfd69889337b96a99b996f79435b51b537c9f2dc87f   EQUAL
+[12/45] methodology-porter-five-forces-002
+        c30e50e(baseline) whole-object sha256 = 117661a1df2e25da88676aed234a669ad781360a14b481d9960d87dd8e3576b6
+        current            whole-object sha256 = 117661a1df2e25da88676aed234a669ad781360a14b481d9960d87dd8e3576b6   EQUAL
+[13/45] methodology-value-chain-003
+        c30e50e(baseline) whole-object sha256 = eb7b9474d20634a0805a777f558a71341d211dee2be8b25c5b4c70fab8ac4fae
+        current            whole-object sha256 = eb7b9474d20634a0805a777f558a71341d211dee2be8b25c5b4c70fab8ac4fae   EQUAL
+[14/45] methodology-mckinsey-7s-004
+        c30e50e(baseline) whole-object sha256 = 050a47ecd0f1b1b26480e3be0e884f95e0a216eec100e2b45cb67b51c3ca7b3b
+        current            whole-object sha256 = 050a47ecd0f1b1b26480e3be0e884f95e0a216eec100e2b45cb67b51c3ca7b3b   EQUAL
+[15/45] methodology-lean-waste-walk-005
+        c30e50e(baseline) whole-object sha256 = 05aa58e52a49b6c50116d6500ced1d36cb5838b9942ef999604b600879169d41
+        current            whole-object sha256 = 05aa58e52a49b6c50116d6500ced1d36cb5838b9942ef999604b600879169d41   EQUAL
+[16/45] methodology-raci-matrix-006
+        c30e50e(baseline) whole-object sha256 = 010b4353aa27e708d276bf3383109639fc8a9fe8005906ebe72a6b49b97470e0
+        current            whole-object sha256 = 010b4353aa27e708d276bf3383109639fc8a9fe8005906ebe72a6b49b97470e0   EQUAL
+[17/45] methodology-kpi-tree-007
+        c30e50e(baseline) whole-object sha256 = 1008d588c7e7ed5dd8edba4943a066fb4d74fd9530f864528ede65f5ca8d35c6
+        current            whole-object sha256 = 1008d588c7e7ed5dd8edba4943a066fb4d74fd9530f864528ede65f5ca8d35c6   EQUAL
+[18/45] methodology-journey-map-008
+        c30e50e(baseline) whole-object sha256 = e00286a2b837131259ea0cb47f6f30f7be68e9083ae833054a17774a4d22d29d
+        current            whole-object sha256 = e00286a2b837131259ea0cb47f6f30f7be68e9083ae833054a17774a4d22d29d   EQUAL
+[19/45] methodology-spend-analysis-009
+        c30e50e(baseline) whole-object sha256 = f5da9ec770037086e105eb9effdba4eec7e0ec692e099984eb0a24324f20762b
+        current            whole-object sha256 = f5da9ec770037086e105eb9effdba4eec7e0ec692e099984eb0a24324f20762b   EQUAL
+[20/45] methodology-benchmarking-public-010
+        c30e50e(baseline) whole-object sha256 = 4a037e10e1bbbda39b5fc9a0eb34670b8f533b9d3712d1a9c75f1fdd8781833d
+        current            whole-object sha256 = 4a037e10e1bbbda39b5fc9a0eb34670b8f533b9d3712d1a9c75f1fdd8781833d   EQUAL
+[21/45] proposal-play-discovery-questions-001
+        c30e50e(baseline) whole-object sha256 = 89bef2281fa788889b41fcbdce48cab2718ce36a0b3b7acb8687221089ef594e
+        current            whole-object sha256 = 89bef2281fa788889b41fcbdce48cab2718ce36a0b3b7acb8687221089ef594e   EQUAL
+[22/45] proposal-play-qualification-checklist-002
+        c30e50e(baseline) whole-object sha256 = 06e6bd2e9ad3b95d6d748f43ac6fba2a9e3f82a8b716d69c66b6446312c53868
+        current            whole-object sha256 = 06e6bd2e9ad3b95d6d748f43ac6fba2a9e3f82a8b716d69c66b6446312c53868   EQUAL
+[23/45] proposal-play-proposal-outline-003
+        c30e50e(baseline) whole-object sha256 = 31485120d4cea4cebd8f2d2617ca45f8529c98bb6e1f8653361a44db9198e8b4
+        current            whole-object sha256 = 31485120d4cea4cebd8f2d2617ca45f8529c98bb6e1f8653361a44db9198e8b4   EQUAL
+[24/45] proposal-play-pricing-narrative-004
+        c30e50e(baseline) whole-object sha256 = 3d2e8b1e94754c3640fdc285c32255aed51a6a72350c6ffe39ab1e51af8eeaa6
+        current            whole-object sha256 = 3d2e8b1e94754c3640fdc285c32255aed51a6a72350c6ffe39ab1e51af8eeaa6   EQUAL
+[25/45] proposal-play-staffing-mix-005
+        c30e50e(baseline) whole-object sha256 = 72db3e3d345e4a0f609b4cbf00d52e584f359169dd3ecb6d18973cda14366093
+        current            whole-object sha256 = 72db3e3d345e4a0f609b4cbf00d52e584f359169dd3ecb6d18973cda14366093   EQUAL
+[26/45] proposal-play-risk-disclosure-006
+        c30e50e(baseline) whole-object sha256 = df60042fed6492e9f967d94ba348389c6fa65c910e6e6370ec3126d2d34d640f
+        current            whole-object sha256 = df60042fed6492e9f967d94ba348389c6fa65c910e6e6370ec3126d2d34d640f   EQUAL
+[27/45] deliverable-template-diagnostic-report-001
+        c30e50e(baseline) whole-object sha256 = fba5767a6dfe628e41958f7f8ef312027f0e1d7953d38eaf245e9900c2c42e39
+        current            whole-object sha256 = fba5767a6dfe628e41958f7f8ef312027f0e1d7953d38eaf245e9900c2c42e39   EQUAL
+[28/45] deliverable-template-roadmap-deck-002
+        c30e50e(baseline) whole-object sha256 = 02ec23d34eb7b92e2e6cfcbdeedb73636899e4cf38923caddc057ce554db6e54
+        current            whole-object sha256 = 02ec23d34eb7b92e2e6cfcbdeedb73636899e4cf38923caddc057ce554db6e54   EQUAL
+[29/45] deliverable-template-sop-003
+        c30e50e(baseline) whole-object sha256 = 31cec8a54818031665033f958caf0e1ac131dc88db6668c54f6ba0490bbf8285
+        current            whole-object sha256 = 31cec8a54818031665033f958caf0e1ac131dc88db6668c54f6ba0490bbf8285   EQUAL
+[30/45] deliverable-template-exec-summary-004
+        c30e50e(baseline) whole-object sha256 = 8dd9cd2401d9bf994c1077340722157fd4725ebc4db9fb92bef2d93b310eaf19
+        current            whole-object sha256 = 8dd9cd2401d9bf994c1077340722157fd4725ebc4db9fb92bef2d93b310eaf19   EQUAL
+[31/45] risk-check-data-availability-001
+        c30e50e(baseline) whole-object sha256 = c9c25dda28c8c07f52591174433914d55e5b5c5d612adf0e161da06c96ac4b48
+        current            whole-object sha256 = c9c25dda28c8c07f52591174433914d55e5b5c5d612adf0e161da06c96ac4b48   EQUAL
+[32/45] risk-check-stakeholder-alignment-002
+        c30e50e(baseline) whole-object sha256 = 66586d7fde347f3ac873451d8213bd632d31861bfd2c8009d016dda709e32cbd
+        current            whole-object sha256 = 66586d7fde347f3ac873451d8213bd632d31861bfd2c8009d016dda709e32cbd   EQUAL
+[33/45] risk-check-scope-creep-003
+        c30e50e(baseline) whole-object sha256 = dc68750a4370ab1baff28bef5dc4212f140d0bcac6a9a950c6861506d8fa0681
+        current            whole-object sha256 = dc68750a4370ab1baff28bef5dc4212f140d0bcac6a9a950c6861506d8fa0681   EQUAL
+[34/45] risk-check-data-confidentiality-004
+        c30e50e(baseline) whole-object sha256 = f34728d30e34f7892fc64ba41505be122b1ea436c2893eb73735d0da739d802f
+        current            whole-object sha256 = f34728d30e34f7892fc64ba41505be122b1ea436c2893eb73735d0da739d802f   EQUAL
+[35/45] industry-note-cn-banking-2026-001
+        c30e50e(baseline) whole-object sha256 = 57530a78cd5e27987b63dd6d5174e890624e5fba5bb686593ce525070c7c65ba
+        current            whole-object sha256 = 57530a78cd5e27987b63dd6d5174e890624e5fba5bb686593ce525070c7c65ba   EQUAL
+[36/45] industry-note-cn-consumer-2026-002
+        c30e50e(baseline) whole-object sha256 = b2a7efb3187b5b0d64e2663fabc5a28c30a2f3dbe4f57913c1d4eb86e9549309
+        current            whole-object sha256 = b2a7efb3187b5b0d64e2663fabc5a28c30a2f3dbe4f57913c1d4eb86e9549309   EQUAL
+[37/45] industry-note-cn-manufacturing-2026-003
+        c30e50e(baseline) whole-object sha256 = c8cba1680029bb2bad243fad02ac0fe4f24827bc1588472d4358bf45555bb0dc
+        current            whole-object sha256 = c8cba1680029bb2bad243fad02ac0fe4f24827bc1588472d4358bf45555bb0dc   EQUAL
+[38/45] industry-note-cn-logistics-2026-004
+        c30e50e(baseline) whole-object sha256 = 69f12284344e94f2d02ce9af0707d642b05493eff400fde81c82053a2a09c2b0
+        current            whole-object sha256 = 69f12284344e94f2d02ce9af0707d642b05493eff400fde81c82053a2a09c2b0   EQUAL
+[39/45] industry-note-cn-healthcare-2026-005
+        c30e50e(baseline) whole-object sha256 = ef093b4e86bebb5b036b4b11ed74a3a20b367dad3afc1e8034bc841402288aff
+        current            whole-object sha256 = ef093b4e86bebb5b036b4b11ed74a3a20b367dad3afc1e8034bc841402288aff   EQUAL
+[40/45] industry-note-cn-energy-2026-006
+        c30e50e(baseline) whole-object sha256 = e9f76369b09e9d32bec255db5ee06b8691da2eee47e9caec6cdb54e265cb5ec2
+        current            whole-object sha256 = e9f76369b09e9d32bec255db5ee06b8691da2eee47e9caec6cdb54e265cb5ec2   EQUAL
+[41/45] case-technology-data-platform-011
+        c30e50e(baseline) whole-object sha256 = a5a1890659e42366079b9fd7205b8011f62f419d0269a28ebb16c0757fad52a9
+        current            whole-object sha256 = a5a1890659e42366079b9fd7205b8011f62f419d0269a28ebb16c0757fad52a9   EQUAL
+[42/45] case-public-sector-service-window-012
+        c30e50e(baseline) whole-object sha256 = 7f2ee0c22decbbdb22c4fec3fbafda996504d9e760c906f0831279a4748d12c6
+        current            whole-object sha256 = 7f2ee0c22decbbdb22c4fec3fbafda996504d9e760c906f0831279a4748d12c6   EQUAL
+[43/45] case-insurance-underwriting-013
+        c30e50e(baseline) whole-object sha256 = f240ad26cf1b3bb2df3f9c7c92b4eee9dab660a3562152d5fbccd08d57050864
+        current            whole-object sha256 = f240ad26cf1b3bb2df3f9c7c92b4eee9dab660a3562152d5fbccd08d57050864   EQUAL
+[44/45] risk-check-timeline-slippage-005
+        c30e50e(baseline) whole-object sha256 = f7d0fb998fd619328492faf3a021e4db43d04f3e0ae97fa526a12753b49e4cf8
+        current            whole-object sha256 = f7d0fb998fd619328492faf3a021e4db43d04f3e0ae97fa526a12753b49e4cf8   EQUAL
+[45/45] risk-check-benefit-realization-006
+        c30e50e(baseline) whole-object sha256 = a239f8977ddd122687ce97bd902acd3f2754d9a2e23686a074cf8dd0c51aa6a2
+        current            whole-object sha256 = a239f8977ddd122687ce97bd902acd3f2754d9a2e23686a074cf8dd0c51aa6a2   EQUAL
+
+RESULT: 既有 45/45 条整对象 sha256 相等 —— 一个字都没动。
+
+文件级 diff 形态（证明只有新增）：
+  $ git diff --numstat -- src/ece/consulting/seed/consulting_objects.json
+    见 evidence/01c-seed-diff-stat.txt（由本脚本外的命令落盘）
+---- done ----

@@ -1,0 +1,22 @@
+=== 修前输出 ===
+Saved working directory and index state WIP on main: a9cee31 fix(consulting): restore DB-free unit tests via FastAPI dependency override (OEI-008 R1)
+
+Common: 18 | Docs-only (planned): 0 | App-only: 4
+
+ERROR — implemented but not documented (S0.4 violation: must update API.md):
+  GET    /api/v1/consulting/documents/{document_id}
+  GET    /api/v1/consulting/facets
+  GET    /api/v1/consulting/objects/{object_id}
+  POST   /api/v1/consulting/documents
+On branch main
+Your branch is up to date with 'origin/main'.
+
+=== 修后输出 ===
+  POST   /api/v1/ingest/runs
+  POST   /api/v1/permissions/check
+  POST   /api/v1/resolve
+  POST   /api/v1/search
+
+Common: 22 | Docs-only (planned): 0 | App-only: 0
+
+OK — no app-only routes; docs-only are planned Sprint 1+ scope

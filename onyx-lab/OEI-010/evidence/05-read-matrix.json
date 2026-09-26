@@ -1,0 +1,256 @@
+{
+  "setup": {
+    "fin_user_scope": {
+      "status": 200,
+      "body": {
+        "created": true,
+        "memory": {
+          "id": 18,
+          "ref": "memory:18",
+          "scope": "user",
+          "owner_ref": "demo-user-finance",
+          "statement": "oei010 step5 probe finance-only preference",
+          "classification": "restricted",
+          "source": "explicit:api",
+          "source_ref": null,
+          "confidence": null,
+          "created_at": "2026-09-25T12:06:33.667622+00:00",
+          "updated_at": "2026-09-25T12:06:33.667622+00:00",
+          "expires_at": null,
+          "deleted_at": null
+        }
+      }
+    },
+    "proc_user_scope": {
+      "status": 200,
+      "body": {
+        "created": true,
+        "memory": {
+          "id": 19,
+          "ref": "memory:19",
+          "scope": "user",
+          "owner_ref": "demo-user-procurement",
+          "statement": "oei010 step5 probe procurement-only preference",
+          "classification": "restricted",
+          "source": "explicit:api",
+          "source_ref": null,
+          "confidence": null,
+          "created_at": "2026-09-25T12:06:33.682981+00:00",
+          "updated_at": "2026-09-25T12:06:33.682981+00:00",
+          "expires_at": null,
+          "deleted_at": null
+        }
+      }
+    },
+    "org_a_scope": {
+      "status": 200,
+      "body": {
+        "created": true,
+        "memory": {
+          "id": 20,
+          "ref": "memory:20",
+          "scope": "org",
+          "owner_ref": "org:consulting-a",
+          "statement": "oei010 step5 probe org-a canonical terminology",
+          "classification": "restricted",
+          "source": "explicit:api",
+          "source_ref": null,
+          "confidence": null,
+          "created_at": "2026-09-25T12:06:33.694053+00:00",
+          "updated_at": "2026-09-25T12:06:33.694053+00:00",
+          "expires_at": null,
+          "deleted_at": null
+        }
+      }
+    },
+    "org_b_scope_fixture": {
+      "memory_id": 21,
+      "acl_object_ref": "memory:21",
+      "via": "SQL fixture (no seeded org_admin belongs to org B)"
+    }
+  },
+  "callers": {
+    "finance_org_a": {
+      "user_ref": "demo-user-finance",
+      "resolved_org_id": "org:consulting-a"
+    },
+    "engineering_org_b": {
+      "user_ref": "demo-user-engineering",
+      "resolved_org_id": "org:consulting-b"
+    },
+    "procurement_org_a": {
+      "user_ref": "demo-user-procurement",
+      "resolved_org_id": "org:consulting-a"
+    },
+    "probe_no_org": {
+      "user_ref": "oei010-probe-no-org",
+      "resolved_org_id": null
+    },
+    "unknown_user": {
+      "user_ref": "oei010-probe-unknown-user",
+      "resolved_org_id": null
+    }
+  },
+  "probes": {
+    "finance_org_a": {
+      "caller": "demo-user-finance",
+      "caller_org_id": "org:consulting-a",
+      "status": 200,
+      "memory_count": 4,
+      "metadata_memory_count": 4,
+      "metadata_memory_dropped": 0,
+      "memory": [
+        {
+          "ref": "memory:20",
+          "scope": "org",
+          "statement": "oei010 step5 probe org-a canonical terminology"
+        },
+        {
+          "ref": "memory:16",
+          "scope": "org",
+          "statement": "oei010 step4 probe canonical org stance (written by admin)"
+        },
+        {
+          "ref": "memory:18",
+          "scope": "user",
+          "statement": "oei010 step5 probe finance-only preference"
+        },
+        {
+          "ref": "memory:15",
+          "scope": "user",
+          "statement": "oei010 step4 probe finance own preference"
+        }
+      ],
+      "memory_sources": [
+        {
+          "sid": "sd077",
+          "system": "ece:memory",
+          "record_id": "memory:20"
+        },
+        {
+          "sid": "s9075",
+          "system": "ece:memory",
+          "record_id": "memory:16"
+        },
+        {
+          "sid": "s0240",
+          "system": "ece:memory",
+          "record_id": "memory:18"
+        },
+        {
+          "sid": "sb3d6",
+          "system": "ece:memory",
+          "record_id": "memory:15"
+        }
+      ],
+      "forbidden_statement_hits_anywhere": [],
+      "response_sha256": "35df6273ef6d4da12e00c5d5b138410c11871d218ce15a7b1731683c816d4c51"
+    },
+    "engineering_org_b": {
+      "caller": "demo-user-engineering",
+      "caller_org_id": "org:consulting-b",
+      "status": 200,
+      "memory_count": 1,
+      "metadata_memory_count": 1,
+      "metadata_memory_dropped": 0,
+      "memory": [
+        {
+          "ref": "memory:21",
+          "scope": "org",
+          "statement": "oei010 step5 probe org-b canonical terminology"
+        }
+      ],
+      "memory_sources": [
+        {
+          "sid": "sdaac",
+          "system": "ece:memory",
+          "record_id": "memory:21"
+        }
+      ],
+      "forbidden_statement_hits_anywhere": [],
+      "response_sha256": "351fb9a2a2c81a27ab91ab29bd0675ec4326d0ea3feac9651ead880bd8f9ec0e"
+    },
+    "procurement_org_a": {
+      "caller": "demo-user-procurement",
+      "caller_org_id": "org:consulting-a",
+      "status": 200,
+      "memory_count": 3,
+      "metadata_memory_count": 3,
+      "metadata_memory_dropped": 0,
+      "memory": [
+        {
+          "ref": "memory:20",
+          "scope": "org",
+          "statement": "oei010 step5 probe org-a canonical terminology"
+        },
+        {
+          "ref": "memory:16",
+          "scope": "org",
+          "statement": "oei010 step4 probe canonical org stance (written by admin)"
+        },
+        {
+          "ref": "memory:19",
+          "scope": "user",
+          "statement": "oei010 step5 probe procurement-only preference"
+        }
+      ],
+      "memory_sources": [
+        {
+          "sid": "sd077",
+          "system": "ece:memory",
+          "record_id": "memory:20"
+        },
+        {
+          "sid": "s9075",
+          "system": "ece:memory",
+          "record_id": "memory:16"
+        },
+        {
+          "sid": "s80d5",
+          "system": "ece:memory",
+          "record_id": "memory:19"
+        }
+      ],
+      "forbidden_statement_hits_anywhere": [],
+      "response_sha256": "4911875c546848bda20207de25b99219294e0f8b6e67788b6391a7f0261c6b63"
+    },
+    "probe_no_org": {
+      "caller": "oei010-probe-no-org",
+      "caller_org_id": null,
+      "status": 200,
+      "memory_count": 0,
+      "metadata_memory_count": 0,
+      "metadata_memory_dropped": 0,
+      "memory": [],
+      "memory_sources": [],
+      "forbidden_statement_hits_anywhere": [],
+      "response_sha256": "580f26024192562cabde654057143e43d5002531b9283b4c35286d818dd033ff"
+    },
+    "unknown_user": {
+      "caller": "oei010-probe-unknown-user",
+      "caller_org_id": null,
+      "status": 200,
+      "memory_count": 0,
+      "metadata_memory_count": 0,
+      "metadata_memory_dropped": 0,
+      "memory": [],
+      "memory_sources": [],
+      "forbidden_statement_hits_anywhere": [],
+      "response_sha256": "5281867f89e2657a860c9143ffa97e736b51af0be8ea61344e6594d455fba51b"
+    }
+  },
+  "assertions_checked": [
+    "entitled memory present for every caller",
+    "non-entitled memory absent from memory[] for every caller",
+    "non-entitled statement text absent from the ENTIRE response body",
+    "metadata.memory_count == len(memory[])",
+    "sources[] carries exactly the injected memory refs",
+    "org scope sorts before user scope",
+    "org memory shared between the two org-A callers",
+    "user memory NOT shared between the two org-A callers",
+    "different orgs yield disjoint memory sets",
+    "org-less and unknown callers see no memory at all"
+  ],
+  "failures": [],
+  "verdict": "PASS"
+}

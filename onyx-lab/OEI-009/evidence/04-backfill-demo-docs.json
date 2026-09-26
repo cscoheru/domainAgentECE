@@ -1,0 +1,35 @@
+== OEI-009 step 1.4 — backfill demo project id=1
+   onyx base  : http://127.0.0.1:8080
+   cookie file: /home/fisher/.onyx-lab/.secrets/admin-cookies.txt
+   sql engine : postgresql+psycopg://ece:ece@127.0.0.1:55432/ece
+   onyx reports 4 files in project id=1
+   will register 3 rows (classification=public)
+   skipped (not in DEMO_TITLES whitelist): ['ece-df16d19c9e7b-oei009-comparison-restricted.md']
+   engine_documents now has 3 rows
+[
+  {
+    "id": 1,
+    "engine_filename": "play-sales-delivery.md",
+    "engine_document_id": "3b14b918-cea2-4df7-9edb-4375a9b171ab",
+    "classification": "public",
+    "uploaded_by": "system:backfill-oei009"
+  },
+  {
+    "id": 2,
+    "engine_filename": "methodology-framework.md",
+    "engine_document_id": "1457df88-02cc-473a-aacc-16dbaba0e332",
+    "classification": "public",
+    "uploaded_by": "system:backfill-oei009"
+  },
+  {
+    "id": 3,
+    "engine_filename": "case-management-consulting.md",
+    "engine_document_id": "7bb48d46-f7e4-4e20-b178-9791fea73334",
+    "classification": "public",
+    "uploaded_by": "system:backfill-oei009"
+  }
+]
+
+   second run: engine_documents still 3 rows (idempotent: True)
+
+   PASS — backfill idempotent, rows printed above.

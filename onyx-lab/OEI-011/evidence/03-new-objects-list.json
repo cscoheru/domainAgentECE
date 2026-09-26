@@ -1,0 +1,124 @@
+{
+  "step": "OEI-011 step 2",
+  "baseline_rev": "a463658",
+  "new_object_count": 9,
+  "threshold_note": "TASK §3.2 suggests 8-12; A4 requires >= 8 (total >= 44).",
+  "objects": [
+    {
+      "id": "industry-note-cn-manufacturing-2026-003",
+      "type": "industry_note",
+      "client_industry": [
+        "manufacturing"
+      ],
+      "engagement_phase": [
+        "qualification",
+        "proposal"
+      ],
+      "source_origin": "synthetic_variant",
+      "rationale": "industry_note 2→3；manufacturing 1→2"
+    },
+    {
+      "id": "industry-note-cn-logistics-2026-004",
+      "type": "industry_note",
+      "client_industry": [
+        "logistics"
+      ],
+      "engagement_phase": [
+        "qualification",
+        "proposal"
+      ],
+      "source_origin": "synthetic_variant",
+      "rationale": "industry_note 3→4；logistics 1→2"
+    },
+    {
+      "id": "industry-note-cn-healthcare-2026-005",
+      "type": "industry_note",
+      "client_industry": [
+        "healthcare"
+      ],
+      "engagement_phase": [
+        "qualification",
+        "proposal"
+      ],
+      "source_origin": "synthetic_variant",
+      "rationale": "industry_note 4→5；healthcare 1→2"
+    },
+    {
+      "id": "industry-note-cn-energy-2026-006",
+      "type": "industry_note",
+      "client_industry": [
+        "energy"
+      ],
+      "engagement_phase": [
+        "qualification",
+        "proposal"
+      ],
+      "source_origin": "synthetic_variant",
+      "rationale": "industry_note 5→6；energy 1→2"
+    },
+    {
+      "id": "case-technology-data-platform-011",
+      "type": "case",
+      "client_industry": [
+        "technology"
+      ],
+      "engagement_phase": [
+        "diagnosis",
+        "proposal"
+      ],
+      "source_origin": "synthetic_variant",
+      "rationale": "technology 1→2（case 必须落在具体行业，不得 cross_industry）"
+    },
+    {
+      "id": "case-public-sector-service-window-012",
+      "type": "case",
+      "client_industry": [
+        "public_sector"
+      ],
+      "engagement_phase": [
+        "diagnosis",
+        "delivery"
+      ],
+      "source_origin": "synthetic_variant",
+      "rationale": "public_sector 1→2（同上）"
+    },
+    {
+      "id": "case-insurance-underwriting-013",
+      "type": "case",
+      "client_industry": [
+        "insurance"
+      ],
+      "engagement_phase": [
+        "diagnosis",
+        "implementation"
+      ],
+      "source_origin": "synthetic_variant",
+      "rationale": "insurance 1→2（同上）"
+    },
+    {
+      "id": "risk-check-timeline-slippage-005",
+      "type": "risk_check",
+      "client_industry": [
+        "cross_industry"
+      ],
+      "engagement_phase": [
+        "proposal",
+        "delivery"
+      ],
+      "source_origin": "synthetic_variant",
+      "rationale": "risk_check 4→5（通用，故 cross_industry）"
+    },
+    {
+      "id": "risk-check-benefit-realization-006",
+      "type": "risk_check",
+      "client_industry": [
+        "cross_industry"
+      ],
+      "engagement_phase": [
+        "delivery"
+      ],
+      "source_origin": "synthetic_variant",
+      "rationale": "risk_check 5→6（通用，故 cross_industry）"
+    }
+  ]
+}

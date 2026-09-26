@@ -1,0 +1,104 @@
+=== OEI-012 步骤 3 — 命中率 / 复现性 / 延迟 汇总（由 04 原始数据机算）===
+source      : evidence/04-retrieval-matrix.json
+eval_set    : data/eval/retrieval/consulting-demo.json
+engine      : onyx via OnyxContentEngineAdapter
+started_at  : 2026-09-26T09:54:16+0800
+finished_at : 2026-09-26T09:54:16+0800
+wall_seconds: 465.4
+partial_run : False  (false = 全量矩阵, 12 query × 2 档 × 3 次)
+client_timeout_seconds: 180.0 (测量用；产品默认仍为 60)
+
+图例: CASE=case-management-consulting.md  METH=methodology-framework.md
+      PLAY=play-sales-delivery.md  RESTR=ece-...-oei009-comparison-restricted.md
+
+--- A3 命中率（hit = expected_title 出现在去重后前 k 个 title 里）---
+  expansion_on   hit@1 = 0.0%   hit@3 = 0.0%   (hit 行数 27 = 9 query × 3 次)
+  expansion_off  hit@1 = 0.0%   hit@3 = 0.0%   (hit 行数 27 = 9 query × 3 次)
+  误召回（miss query 里 expected_title 仍出现）: expansion_on=3/9  expansion_off=3/9
+
+--- A2 复现性（逐 query、每档：3 次去重 title 集是否完全一致）---
+  expansion_on   完全一致 10/12 = 0.833   两两 Jaccard 均值 = 0.926   (运行不完整 query 数 0)
+  expansion_off  完全一致 12/12 = 1.0   两两 Jaccard 均值 = 1.0   (运行不完整 query 数 0)
+
+--- A2 复现性明细：逐 query 的**逐次两两 Jaccard**（N=3 → 3 对）---
+  [expansion_on]
+    q01: r1~r2=1.0  r1~r3=1.0  r2~r3=1.0   [全部 1.0]
+    q02: r1~r2=1.0  r1~r3=1.0  r2~r3=1.0   [全部 1.0]
+    q03: r1~r2=1.0  r1~r3=1.0  r2~r3=1.0   [全部 1.0]
+    q04: r1~r2=1.0  r1~r3=1.0  r2~r3=1.0   [全部 1.0]
+    q05: r1~r2=1.0  r1~r3=1.0  r2~r3=1.0   [全部 1.0]
+    q06: r1~r2=1.0  r1~r3=1.0  r2~r3=1.0   [全部 1.0]
+    q07: r1~r2=1.0  r1~r3=1.0  r2~r3=1.0   [全部 1.0]
+    q08: r1~r2=1.0  r1~r3=1.0  r2~r3=1.0   [全部 1.0]
+    q09: r1~r2=0.333  r1~r3=0.333  r2~r3=1.0   *** 有 <1.0 ***
+    q10: r1~r2=1.0  r1~r3=1.0  r2~r3=1.0   [全部 1.0]
+    q11: r1~r2=0.333  r1~r3=0.333  r2~r3=1.0   *** 有 <1.0 ***
+    q12: r1~r2=1.0  r1~r3=1.0  r2~r3=1.0   [全部 1.0]
+  [expansion_off]
+    q01: r1~r2=1.0  r1~r3=1.0  r2~r3=1.0   [全部 1.0]
+    q02: r1~r2=1.0  r1~r3=1.0  r2~r3=1.0   [全部 1.0]
+    q03: r1~r2=1.0  r1~r3=1.0  r2~r3=1.0   [全部 1.0]
+    q04: r1~r2=1.0  r1~r3=1.0  r2~r3=1.0   [全部 1.0]
+    q05: r1~r2=1.0  r1~r3=1.0  r2~r3=1.0   [全部 1.0]
+    q06: r1~r2=1.0  r1~r3=1.0  r2~r3=1.0   [全部 1.0]
+    q07: r1~r2=1.0  r1~r3=1.0  r2~r3=1.0   [全部 1.0]
+    q08: r1~r2=1.0  r1~r3=1.0  r2~r3=1.0   [全部 1.0]
+    q09: r1~r2=1.0  r1~r3=1.0  r2~r3=1.0   [全部 1.0]
+    q10: r1~r2=1.0  r1~r3=1.0  r2~r3=1.0   [全部 1.0]
+    q11: r1~r2=1.0  r1~r3=1.0  r2~r3=1.0   [全部 1.0]
+    q12: r1~r2=1.0  r1~r3=1.0  r2~r3=1.0   [全部 1.0]
+
+--- 延迟（秒；仅统计成功行）---
+  expansion_on   n=36  min=3.332  median=5.022  mean=10.67  max=46.631
+  expansion_off  n=36  min=1.349  median=1.471  mean=2.25  max=27.268
+  → expansion_off / expansion_on 中位数加速比 = 3.41x
+  → expansion_off / expansion_on 均值加速比   = 4.74x
+
+--- 调用失败数 ---  expansion_on=0  expansion_off=0
+
+--- 逐 query × 档：3 次运行的去重 title 序列（顺序即引擎返回顺序）---
+  q01 [hit] expect=CASE  q=某零售集团毛利率连续下滑，怎么降本
+      expansion_on   RESTR | RESTR | RESTR                        [一致] hit@3=[False, False, False]
+      expansion_off  RESTR | RESTR | RESTR                        [一致] hit@3=[False, False, False]
+  q02 [hit] expect=CASE  q=SKU 过度膨胀怎么砍尾
+      expansion_on   RESTR | RESTR | RESTR                        [一致] hit@3=[False, False, False]
+      expansion_off  RESTR | RESTR | RESTR                        [一致] hit@3=[False, False, False]
+  q03 [hit] expect=CASE  q=库存周转天数过高怎么降低
+      expansion_on   RESTR | RESTR | RESTR                        [一致] hit@3=[False, False, False]
+      expansion_off  RESTR | RESTR | RESTR                        [一致] hit@3=[False, False, False]
+  q04 [hit] expect=METH  q=问题树怎么拆解业务问题
+      expansion_on   RESTR | RESTR | RESTR                        [一致] hit@3=[False, False, False]
+      expansion_off  RESTR | RESTR | RESTR                        [一致] hit@3=[False, False, False]
+  q05 [hit] expect=METH  q=MECE 的排他性和穷尽性怎么检验
+      expansion_on   CASE+RESTR+PLAY | CASE+RESTR+PLAY | CASE+RESTR+PLAY [一致] hit@3=[False, False, False]
+      expansion_off  CASE+RESTR | CASE+RESTR | CASE+RESTR         [一致] hit@3=[False, False, False]
+  q06 [hit] expect=METH  q=假设驱动怎么排验证优先级
+      expansion_on   RESTR | RESTR | RESTR                        [一致] hit@3=[False, False, False]
+      expansion_off  RESTR | RESTR | RESTR                        [一致] hit@3=[False, False, False]
+  q07 [hit] expect=PLAY  q=销售到交付的五阶段衔接怎么做
+      expansion_on   RESTR | RESTR | RESTR                        [一致] hit@3=[False, False, False]
+      expansion_off  RESTR | RESTR | RESTR                        [一致] hit@3=[False, False, False]
+  q08 [hit] expect=PLAY  q=售前立项书要包含什么内容
+      expansion_on   RESTR | RESTR | RESTR                        [一致] hit@3=[False, False, False]
+      expansion_off  RESTR | RESTR | RESTR                        [一致] hit@3=[False, False, False]
+  q09 [hit] expect=PLAY  q=交付 kickoff 会议要讲清哪三件事
+      expansion_on   CASE+RESTR | CASE+METH | CASE+METH           [不一致] hit@3=[False, False, False]
+      expansion_off  CASE+METH | CASE+METH | CASE+METH            [一致] hit@3=[False, False, False]
+  q10 [miss] expect=PLAY  q=员工报销政策与发票审核流程
+      expansion_on   RESTR | RESTR | RESTR                        [一致] hit@3=[False, False, False]
+      expansion_off  RESTR | RESTR | RESTR                        [一致] hit@3=[False, False, False]
+  q11 [miss] expect=CASE  q=研发团队 OKR 绩效考核办法
+      expansion_on   METH+CASE+PLAY | CASE | CASE                 [不一致] hit@3=[True, True, True]
+      expansion_off  CASE | CASE | CASE                           [一致] hit@3=[True, True, True]
+  q12 [miss] expect=METH  q=数据中心机房选址与服务器运维
+      expansion_on   RESTR | RESTR | RESTR                        [一致] hit@3=[False, False, False]
+      expansion_off  RESTR | RESTR | RESTR                        [一致] hit@3=[False, False, False]
+
+--- 对照：三份目标文档是否**确实可被召回**（否则 0% 可能是索引坏了）---
+  CASE   在矩阵中被召回  18 次  例: q05/expansion_on, q05/expansion_on, q05/expansion_on, q05/expansion_off, q05/expansion_off, q05/expansion_off
+  METH   在矩阵中被召回   6 次  例: q09/expansion_on, q09/expansion_on, q09/expansion_off, q09/expansion_off, q09/expansion_off, q11/expansion_on
+  PLAY   在矩阵中被召回   4 次  例: q05/expansion_on, q05/expansion_on, q05/expansion_on, q11/expansion_on
+  RESTR  在矩阵中被召回  61 次  例: q01/expansion_on, q01/expansion_on, q01/expansion_on, q01/expansion_off, q01/expansion_off, q01/expansion_off
+
+结论口径提醒: hit@k 衡量的是**排名**（目标文档是否进入前 k），
+而本节衡量的是**可召回性**。两者都报，才能区分『索引里没有』与『排不上来』。

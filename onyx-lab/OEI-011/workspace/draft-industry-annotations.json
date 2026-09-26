@@ -1,0 +1,396 @@
+[
+  {
+    "id": "methodology-swot-quick-001",
+    "type": "methodology",
+    "title": "SWOT 快速诊断框架",
+    "old_value": [],
+    "new_value": [
+      "cross_industry"
+    ],
+    "basis_field": "summary",
+    "basis_quote": "经典 SWOT 框架的快速落地变体, 用于项目启动会与高层访谈. 输出四象限与可执行行动项.",
+    "basis_scan": {
+      "strict_hits": [],
+      "loose_substring_hits": []
+    },
+    "basis_note": "title / summary / practice / problem_types / methods 五个字段中均无具体行业锚点：该对象是通用方法/模板/风险清单，不针对特定行业（§3.1.4）。"
+  },
+  {
+    "id": "methodology-porter-five-forces-002",
+    "type": "methodology",
+    "title": "Porter 五力分析简化版",
+    "old_value": [],
+    "new_value": [
+      "cross_industry"
+    ],
+    "basis_field": "summary",
+    "basis_quote": "基于公开 Porter 五力模型整理的简化分析表, 适用于客户行业判断与竞争格局梳理.",
+    "basis_scan": {
+      "strict_hits": [],
+      "loose_substring_hits": []
+    },
+    "basis_note": "title / summary / practice / problem_types / methods 五个字段中均无具体行业锚点：该对象是通用方法/模板/风险清单，不针对特定行业（§3.1.4）。"
+  },
+  {
+    "id": "methodology-value-chain-003",
+    "type": "methodology",
+    "title": "价值链拆解方法",
+    "old_value": [],
+    "new_value": [
+      "cross_industry"
+    ],
+    "basis_field": "summary",
+    "basis_quote": "公开价值链模型在咨询场景中的落地步骤, 包含主活动 + 支持活动拆解与改进机会识别.",
+    "basis_scan": {
+      "strict_hits": [],
+      "loose_substring_hits": [
+        "technology:ai"
+      ]
+    },
+    "basis_note": "loose 扫描命中 technology:'ai'，实为 practice 'supply_chain' 的子串（ch-ai-n）；按词边界严格扫描为 0 命中。"
+  },
+  {
+    "id": "methodology-mckinsey-7s-004",
+    "type": "methodology",
+    "title": "组织 7S 诊断框架",
+    "old_value": [],
+    "new_value": [
+      "cross_industry"
+    ],
+    "basis_field": "summary",
+    "basis_quote": "基于公开组织 7S 模型整理的诊断问卷与可视化模板, 适用于组织架构与文化一致性诊断.",
+    "basis_scan": {
+      "strict_hits": [],
+      "loose_substring_hits": []
+    },
+    "basis_note": "title / summary / practice / problem_types / methods 五个字段中均无具体行业锚点：该对象是通用方法/模板/风险清单，不针对特定行业（§3.1.4）。"
+  },
+  {
+    "id": "methodology-lean-waste-walk-005",
+    "type": "methodology",
+    "title": "Lean 八大浪费现场走访",
+    "old_value": [],
+    "new_value": [
+      "cross_industry"
+    ],
+    "basis_field": "summary",
+    "basis_quote": "基于公开 Lean 八大浪费分类的现场走访模板, 用于制造业与服务运营场景.",
+    "basis_scan": {
+      "strict_hits": [
+        "manufacturing:制造"
+      ],
+      "loose_substring_hits": [
+        "manufacturing:制造"
+      ]
+    },
+    "basis_note": "对象自述'用于制造业与服务运营场景'——同时覆盖制造业与服务业，不是行业专属；按 §3.1.5（判断不了/跨行业 → cross_industry），贴 manufacturing 属于'硬贴行业'。"
+  },
+  {
+    "id": "methodology-raci-matrix-006",
+    "type": "methodology",
+    "title": "RACI 职责分配矩阵",
+    "old_value": [],
+    "new_value": [
+      "cross_industry"
+    ],
+    "basis_field": "summary",
+    "basis_quote": "公开 RACI 模型的实施步骤与边界判定规则, 用于多部门协作场景的职责澄清.",
+    "basis_scan": {
+      "strict_hits": [],
+      "loose_substring_hits": []
+    },
+    "basis_note": "title / summary / practice / problem_types / methods 五个字段中均无具体行业锚点：该对象是通用方法/模板/风险清单，不针对特定行业（§3.1.4）。"
+  },
+  {
+    "id": "methodology-kpi-tree-007",
+    "type": "methodology",
+    "title": "KPI 拆解树",
+    "old_value": [],
+    "new_value": [
+      "cross_industry"
+    ],
+    "basis_field": "summary",
+    "basis_quote": "公司级 KPI 拆解到部门 / 团队 / 个人的层级结构方法, 用于目标管理与绩效对齐.",
+    "basis_scan": {
+      "strict_hits": [],
+      "loose_substring_hits": []
+    },
+    "basis_note": "title / summary / practice / problem_types / methods 五个字段中均无具体行业锚点：该对象是通用方法/模板/风险清单，不针对特定行业（§3.1.4）。"
+  },
+  {
+    "id": "methodology-journey-map-008",
+    "type": "methodology",
+    "title": "客户旅程地图",
+    "old_value": [],
+    "new_value": [
+      "cross_industry"
+    ],
+    "basis_field": "summary",
+    "basis_quote": "公开客户旅程地图方法, 用于 B2C 与 B2B 场景下客户全流程触点梳理.",
+    "basis_scan": {
+      "strict_hits": [],
+      "loose_substring_hits": []
+    },
+    "basis_note": "title / summary / practice / problem_types / methods 五个字段中均无具体行业锚点：该对象是通用方法/模板/风险清单，不针对特定行业（§3.1.4）。"
+  },
+  {
+    "id": "methodology-spend-analysis-009",
+    "type": "methodology",
+    "title": "采购支出分析框架",
+    "old_value": [],
+    "new_value": [
+      "cross_industry"
+    ],
+    "basis_field": "summary",
+    "basis_quote": "将间接采购支出按品类 / 供应商 / 部门进行切片的标准化方法, 用于发现整合空间.",
+    "basis_scan": {
+      "strict_hits": [],
+      "loose_substring_hits": []
+    },
+    "basis_note": "title / summary / practice / problem_types / methods 五个字段中均无具体行业锚点：该对象是通用方法/模板/风险清单，不针对特定行业（§3.1.4）。"
+  },
+  {
+    "id": "methodology-benchmarking-public-010",
+    "type": "methodology",
+    "title": "公开基准对照",
+    "old_value": [],
+    "new_value": [
+      "cross_industry"
+    ],
+    "basis_field": "summary",
+    "basis_quote": "使用公开行业基准 (协会报告 / 上市公司披露) 进行客户指标对照的方法, 不依赖私有数据库.",
+    "basis_scan": {
+      "strict_hits": [],
+      "loose_substring_hits": [
+        "public_sector:public"
+      ]
+    },
+    "basis_note": "loose 扫描命中 public_sector:'public'，实为 methods 'public_benchmark' 的子串；按词边界严格扫描为 0 命中。"
+  },
+  {
+    "id": "proposal-play-discovery-questions-001",
+    "type": "proposal_play",
+    "title": "诊断阶段 Discovery 问题清单",
+    "old_value": [],
+    "new_value": [
+      "cross_industry"
+    ],
+    "basis_field": "summary",
+    "basis_quote": "诊断阶段项目启动前一周用于客户高层与一线业务访谈的问题模板, 包含 5 大类 30+ 问.",
+    "basis_scan": {
+      "strict_hits": [],
+      "loose_substring_hits": []
+    },
+    "basis_note": "title / summary / practice / problem_types / methods 五个字段中均无具体行业锚点：该对象是通用方法/模板/风险清单，不针对特定行业（§3.1.4）。"
+  },
+  {
+    "id": "proposal-play-qualification-checklist-002",
+    "type": "proposal_play",
+    "title": "线索资格检查清单",
+    "old_value": [],
+    "new_value": [
+      "cross_industry"
+    ],
+    "basis_field": "summary",
+    "basis_quote": "BD 阶段判断线索是否值得投入提案资源的标准清单, 含 5 个核心问 + 红线条件.",
+    "basis_scan": {
+      "strict_hits": [],
+      "loose_substring_hits": []
+    },
+    "basis_note": "title / summary / practice / problem_types / methods 五个字段中均无具体行业锚点：该对象是通用方法/模板/风险清单，不针对特定行业（§3.1.4）。"
+  },
+  {
+    "id": "proposal-play-proposal-outline-003",
+    "type": "proposal_play",
+    "title": "标准提案大纲模板",
+    "old_value": [],
+    "new_value": [
+      "cross_industry"
+    ],
+    "basis_field": "summary",
+    "basis_quote": "覆盖问题陈述 / 方法 / 团队 / 报价 / 时间表的标准提案大纲, 适用于中型咨询项目.",
+    "basis_scan": {
+      "strict_hits": [],
+      "loose_substring_hits": []
+    },
+    "basis_note": "title / summary / practice / problem_types / methods 五个字段中均无具体行业锚点：该对象是通用方法/模板/风险清单，不针对特定行业（§3.1.4）。"
+  },
+  {
+    "id": "proposal-play-pricing-narrative-004",
+    "type": "proposal_play",
+    "title": "报价叙事情节",
+    "old_value": [],
+    "new_value": [
+      "cross_industry"
+    ],
+    "basis_field": "summary",
+    "basis_quote": "在提案中解释报价合理性 + 价值叙事的标准段落结构, 包含三个常见客户反问预案.",
+    "basis_scan": {
+      "strict_hits": [],
+      "loose_substring_hits": []
+    },
+    "basis_note": "title / summary / practice / problem_types / methods 五个字段中均无具体行业锚点：该对象是通用方法/模板/风险清单，不针对特定行业（§3.1.4）。"
+  },
+  {
+    "id": "proposal-play-staffing-mix-005",
+    "type": "proposal_play",
+    "title": "项目组人员组合",
+    "old_value": [],
+    "new_value": [
+      "cross_industry"
+    ],
+    "basis_field": "summary",
+    "basis_quote": "中型咨询项目的合伙人 / 经理 / 顾问 / 分析师标准人员组合与角色定位说明.",
+    "basis_scan": {
+      "strict_hits": [],
+      "loose_substring_hits": []
+    },
+    "basis_note": "title / summary / practice / problem_types / methods 五个字段中均无具体行业锚点：该对象是通用方法/模板/风险清单，不针对特定行业（§3.1.4）。"
+  },
+  {
+    "id": "proposal-play-risk-disclosure-006",
+    "type": "proposal_play",
+    "title": "项目风险披露段落",
+    "old_value": [],
+    "new_value": [
+      "cross_industry"
+    ],
+    "basis_field": "summary",
+    "basis_quote": "提案末尾风险披露段落的标准模板, 覆盖范围 / 数据 / 变更 / 合规四类常见风险.",
+    "basis_scan": {
+      "strict_hits": [],
+      "loose_substring_hits": []
+    },
+    "basis_note": "title / summary / practice / problem_types / methods 五个字段中均无具体行业锚点：该对象是通用方法/模板/风险清单，不针对特定行业（§3.1.4）。"
+  },
+  {
+    "id": "deliverable-template-diagnostic-report-001",
+    "type": "deliverable_template",
+    "title": "诊断报告骨架",
+    "old_value": [],
+    "new_value": [
+      "cross_industry"
+    ],
+    "basis_field": "summary",
+    "basis_quote": "标准咨询诊断报告的章节骨架: 执行摘要 / 现状 / 诊断结论 / 改进方向 / 实施路径.",
+    "basis_scan": {
+      "strict_hits": [],
+      "loose_substring_hits": []
+    },
+    "basis_note": "title / summary / practice / problem_types / methods 五个字段中均无具体行业锚点：该对象是通用方法/模板/风险清单，不针对特定行业（§3.1.4）。"
+  },
+  {
+    "id": "deliverable-template-roadmap-deck-002",
+    "type": "deliverable_template",
+    "title": "改进路线图演示骨架",
+    "old_value": [],
+    "new_value": [
+      "cross_industry"
+    ],
+    "basis_field": "summary",
+    "basis_quote": "改进路线图对外汇报用的 10 页标准演示骨架, 适合董事会与高层评审.",
+    "basis_scan": {
+      "strict_hits": [],
+      "loose_substring_hits": []
+    },
+    "basis_note": "title / summary / practice / problem_types / methods 五个字段中均无具体行业锚点：该对象是通用方法/模板/风险清单，不针对特定行业（§3.1.4）。"
+  },
+  {
+    "id": "deliverable-template-sop-003",
+    "type": "deliverable_template",
+    "title": "SOP 文档骨架",
+    "old_value": [],
+    "new_value": [
+      "cross_industry"
+    ],
+    "basis_field": "summary",
+    "basis_quote": "标准作业流程文档的章节骨架: 适用范围 / 角色 / 步骤 / 输入输出 / 例外处理.",
+    "basis_scan": {
+      "strict_hits": [],
+      "loose_substring_hits": []
+    },
+    "basis_note": "title / summary / practice / problem_types / methods 五个字段中均无具体行业锚点：该对象是通用方法/模板/风险清单，不针对特定行业（§3.1.4）。"
+  },
+  {
+    "id": "deliverable-template-exec-summary-004",
+    "type": "deliverable_template",
+    "title": "执行摘要骨架",
+    "old_value": [],
+    "new_value": [
+      "cross_industry"
+    ],
+    "basis_field": "summary",
+    "basis_quote": "咨询交付物首页执行摘要的 1 页模板, 适合诊断与路线图两类交付物首页使用.",
+    "basis_scan": {
+      "strict_hits": [],
+      "loose_substring_hits": []
+    },
+    "basis_note": "title / summary / practice / problem_types / methods 五个字段中均无具体行业锚点：该对象是通用方法/模板/风险清单，不针对特定行业（§3.1.4）。"
+  },
+  {
+    "id": "risk-check-data-availability-001",
+    "type": "risk_check",
+    "title": "数据可得性风险",
+    "old_value": [],
+    "new_value": [
+      "cross_industry"
+    ],
+    "basis_field": "summary",
+    "basis_quote": "诊断阶段数据可得性评估清单: 数据源 / 数据时间窗 / 数据口径 / 数据访问权限四类检查.",
+    "basis_scan": {
+      "strict_hits": [],
+      "loose_substring_hits": [
+        "technology:ai"
+      ]
+    },
+    "basis_note": "loose 扫描命中 technology:'ai'，实为 problem_types 'data_availability' 的子串（av-ai-lability）；按词边界严格扫描为 0 命中。"
+  },
+  {
+    "id": "risk-check-stakeholder-alignment-002",
+    "type": "risk_check",
+    "title": "关键 stakeholder 对齐风险",
+    "old_value": [],
+    "new_value": [
+      "cross_industry"
+    ],
+    "basis_field": "summary",
+    "basis_quote": "项目启动时识别关键 stakeholder 与其立场差异, 防止项目推进中出现反复.",
+    "basis_scan": {
+      "strict_hits": [],
+      "loose_substring_hits": []
+    },
+    "basis_note": "title / summary / practice / problem_types / methods 五个字段中均无具体行业锚点：该对象是通用方法/模板/风险清单，不针对特定行业（§3.1.4）。"
+  },
+  {
+    "id": "risk-check-scope-creep-003",
+    "type": "risk_check",
+    "title": "范围蔓延风险",
+    "old_value": [],
+    "new_value": [
+      "cross_industry"
+    ],
+    "basis_field": "summary",
+    "basis_quote": "项目执行过程中范围蔓延的早期信号 + 三道防线 (变更控制 / 例外记录 / 客户确认).",
+    "basis_scan": {
+      "strict_hits": [],
+      "loose_substring_hits": []
+    },
+    "basis_note": "title / summary / practice / problem_types / methods 五个字段中均无具体行业锚点：该对象是通用方法/模板/风险清单，不针对特定行业（§3.1.4）。"
+  },
+  {
+    "id": "risk-check-data-confidentiality-004",
+    "type": "risk_check",
+    "title": "客户数据保密风险",
+    "old_value": [],
+    "new_value": [
+      "cross_industry"
+    ],
+    "basis_field": "summary",
+    "basis_quote": "客户敏感数据接触范围 + 数据脱敏 + 离场处置三步检查, 适用于所有诊断项目.",
+    "basis_scan": {
+      "strict_hits": [],
+      "loose_substring_hits": []
+    },
+    "basis_note": "title / summary / practice / problem_types / methods 五个字段中均无具体行业锚点：该对象是通用方法/模板/风险清单，不针对特定行业（§3.1.4）。"
+  }
+]

@@ -1,0 +1,209 @@
+== OEI-013 — compliance & resource checks ==
+date: 2026-09-26T13:39:06+08:00
+
+本轮收尾口径与前面几刀**相反**，先说清楚：
+  §8 + 用户指令：常驻 demo 链是**交付物**，收尾时**留在现场**，不拆。
+  所以 CHECK 1 问的不是「还剩什么在跑」，而是「demo 链还在不在、是不是只有它」。
+  唯一要释放的临时资源是评测用 Postgres（ece-pg-oei013-eval, :55432）。
+
+############ CHECK 1/3 — 进程：demo 链应在，评测进程应无 ############
+
+--- 应当还在（交付物）---
+  ✓ :8765  ece.main:app  (pid 320105)
+  ✓ :8181  demo_origin.py  (pid 307419)
+
+  demo 链是否真的应答（不是只看进程）：
+    http://127.0.0.1:8181/index.html             HTTP 200
+    http://127.0.0.1:8181/healthz                HTTP 200
+
+--- 应当已无（评测期临时进程）---
+  :8766 是契约检查用的临时 API，必须已停：
+    ✓ 未监听
+
+  · [交付物，预期在场] 307419  python3 /mnt/d/Projects/domainAgentECE/onyx-lab/OEI-013/workspace/demo_origin.py --port 8181 --upstream http:/
+  · [交付物，预期在场] 320105  /mnt/d/Projects/domainAgentECE/ece/.venv/bin/python -m uvicorn ece.main:app --host 127.0.0.1 --port 8765
+  · 容器 cgroup 内的同名进程 1 个 —— 属预期（Onyx 栈自己就跑 uvicorn），不计为本刀残留
+      [container] /bin/sh -c alembic upgrade head && echo "Starting Onyx Api Server" && uvicorn onyx.main:app --host 0.0.0.0 --p
+  ✓ 宿主上除上面两个交付物外，无残留 pytest / uv run / alembic / *_runner / 评测 API
+
+--- 归属纪律说明 ---
+  `pgrep -f demo_origin.py` 会匹配到检查脚本自己的命令行（假阳性）；
+  `ps | grep uvicorn` 会匹配到 Onyx 容器里的 api_server（假阳性）。
+  上面的归属按 /proc/<pid>/cgroup（区分宿主 vs 容器）+ cmdline 判定，因此可信。
+  本检查第一次跑时确实把 Onyx 容器进程报成了 STRAY —— 这正是加 cgroup 过滤的原因。
+
+############ CHECK 2/3 — 容器 ############
+$ docker ps -a --filter name=ece-
+ece-pg-demo	Up 3 hours	pgvector/pgvector:pg16
+
+  ece-pg-demo (交付物，必须留着) running
+  ece-pg-oei013-eval (评测临时，必须已删) 
+gone ✅
+
+  Onyx 容器仍在运行: 9   -> 必须为 9（本刀未停/未重启/未删任何一个）
+
+--- Onyx 容器 RestartCount 必须为 0 (A11) ---
+  onyx-api_server-1                  RestartCount=0  StartedAt=2026-09-25T05:57:06.314989818Z
+  onyx-background-1                  RestartCount=0  StartedAt=2026-09-25T05:57:06.327787153Z
+  onyx-cache-1                       RestartCount=0  StartedAt=2026-09-25T05:57:06.334430632Z
+  onyx-indexing_model_server-1       RestartCount=0  StartedAt=2026-09-25T05:57:06.277813833Z
+  onyx-inference_model_server-1      RestartCount=0  StartedAt=2026-09-25T05:57:06.284783026Z
+  onyx-nginx-1                       RestartCount=0  StartedAt=2026-09-25T05:57:06.323873434Z
+  onyx-opensearch-1                  RestartCount=0  StartedAt=2026-09-25T05:57:06.337797519Z
+  onyx-relational_db-1               RestartCount=0  StartedAt=2026-09-25T05:57:06.340298188Z
+  onyx-web_server-1                  RestartCount=0  StartedAt=2026-09-25T05:57:06.330693118Z
+  -> 无任何 restart/stop/rm 被下发到 onyx-* 容器。
+
+--- 卷：评测库的卷应已随容器删除 ---
+    (none)
+
+############ CHECK 3/3 — 内存 / swap 快照 ############
+$ free -h
+                 total        used        free      shared  buff/cache   available
+  Mem:            13Gi        12Gi       146Mi       196Mi       963Mi       541Mi
+  Swap:          8.0Gi       8.0Gi          0B
+
+  MemTotal:       14311060 kB
+  MemAvailable:     553580 kB
+  SwapTotal:       8388608 kB
+  SwapFree:              0 kB
+
+  如实报，不粉饰：Onyx 9 容器 + 常驻 demo 链同时在场，内存本来就紧
+  （OEI-009 起就警告过）。本刀**没有**为回收内存停掉任何 Onyx 容器 ——
+  §8 明令不许。演示前若内存吃紧，先看 demo 链的 uvicorn/origin 日志，
+  不要动 Onyx。
+
+############ 仓库足迹 ############
+NOTE: 按协议顺序，本检查在 commit（证据 09）**之后**跑，所以比对的是
+      `4a67c28..HEAD`（两个 commit），不是工作区。工作区应为干净。
+
+$ git status --porcelain   # 应只剩本检查自己要排除的预先存在工件
+   T docs/demo-platform/DEMO_PLATFORM_PRD.md
+   T docs/demo-platform/DEPLOY_USER_PROXY.md
+   M reports/cut-042R3/mutation-evidence/M1_re_read_through_assembly_skipped.md
+   M reports/cut-042R3/mutation-evidence/M2_apply_context_update_skip_sql.md
+   M reports/cut-042R3/mutation-evidence/M3_permission_acl_check_bypassed.md
+   M reports/cut-042R3/mutation-evidence/M4_evaluated_conditions_inject_nondeterministic_amount.md
+   M reports/cut-042R3/mutation-evidence/M5_jwt_decode_skips_signature_verification.md
+   M reports/cut-042R3/mutation-evidence/M6_materialize_fn_disabled_in_loop.md
+   M reports/cut-043/mutation-evidence/M1_km_validity_invert.md
+   M reports/cut-043/mutation-evidence/M2_km_permission_invert.md
+   M reports/cut-043/mutation-evidence/M3_km_decision_and_to_or.md
+   M reports/cut-044/mutation-evidence/M1_comp_count_condition_invert.md
+   M reports/cut-044/mutation-evidence/M2_comp_coverage_issubset_to_isdisjoint.md
+   M reports/cut-044/mutation-evidence/M3_comp_decision_force_gap_list.md
+
+$ git diff --stat 4a67c28 HEAD
+   Makefile                                   |  20 ++-
+   TASKS.md                                   | 172 +++++++++++++++++++++++
+   demos/spa/app.js                           | 215 +++++++++++++++++++++++++++--
+   demos/spa/index.html                       | 107 ++++++++++----
+   demos/spa/styles.css                       |  90 ++++++++++++
+   docs/API.md                                |  29 ++++
+   src/ece/connectors/onyx/mock_adapter.py    |   3 +
+   src/ece/connectors/onyx/onyx_adapter.py    |   2 +
+   src/ece/connectors/onyx/port.py            |  16 +++
+   src/ece/consulting/engine_merge.py         |  55 +++++++-
+   tests/unit/test_consulting_demo_rewrite.py | 199 ++++++++++++++++++++++++++
+   tests/unit/test_library_recall_mode.py     | 196 ++++++++++++++++++++++++++
+   12 files changed, 1062 insertions(+), 42 deletions(-)
+
+--- 授权面逐条核对（§8）---
+    [授权 §8] Makefile  (demo-up/down 入口)
+    [授权 §8] TASKS.md  (附录 T)
+    [授权 §8] demos/spa/app.js  (本刀起解冻前端)
+    [授权 §8] demos/spa/index.html  (本刀起解冻前端)
+    [授权 §8] demos/spa/styles.css  (本刀起解冻前端)
+    [授权 §8] docs/API.md  (文档)
+    [授权 §8] src/ece/connectors/onyx/mock_adapter.py  (连接器；检索修复必要处)
+    [授权 §8] src/ece/connectors/onyx/onyx_adapter.py  (连接器；检索修复必要处)
+    [授权 §8] src/ece/connectors/onyx/port.py  (连接器；检索修复必要处)
+    [授权 §8] src/ece/consulting/engine_merge.py  (consulting 域)
+    [授权 §8] tests/unit/test_consulting_demo_rewrite.py  (新增测试；既有断言见下)
+    [授权 §8] tests/unit/test_library_recall_mode.py  (新增测试；既有断言见下)
+
+--- 明令冻结的面（应全部零 diff）---
+  ✓ pyproject.toml                     zero diff
+  ✓ uv.lock                            zero diff
+  ✓ src/ece/migrations/                zero diff
+  ✓ src/ece/db.py                      zero diff
+  ✓ src/ece/identity/                  zero diff
+  ✓ src/ece/api/routers/               zero diff
+  ✓ src/ece/consulting/models.py       zero diff
+  ✓ src/ece/consulting/router.py       zero diff
+  ✓ docker-compose.yml                 zero diff
+  ✓ .env                               zero diff
+
+--- Onyx 服务端配置 / compose / .env ---
+  ✓ deploy/docker-compose.demo.yml           zero diff
+  (absent) deploy/onyx/docker-compose.yml
+  Onyx 跑在 /home/codex/onyx-lab（上游只读）：
+      /home/codex  mode=750  owner=codex:codex
+    当前身份 fisher (uid 1000): readable=NO writable=NO
+
+--- 既有测试断言未改（只允许新增文件）---
+  tests/ 下新增文件: 2 ；被修改的既有文件: 0 -> 必须为 0
+  既有测试文件里被删除的行数: 0 -> 必须为 0
+    A	tests/unit/test_consulting_demo_rewrite.py
+    A	tests/unit/test_library_recall_mode.py
+
+$ git log --oneline -2
+  16b4684 feat(OEI-013): consulting demo platform v1 + honest product-layer re-measure
+  4a67c28 feat(OEI-012): expose skip_query_expansion + a reproducible retrieval eval set
+  -> 本刀已 commit（见证据 09），**未 push**：下面确认上游仍落后。
+    16b4684 feat(OEI-013): consulting demo platform v1 + honest product-layer re-measure
+    4a67c28 feat(OEI-012): expose skip_query_expansion + a reproducible retrieval eval set
+    a3d61cd feat(OEI-014): deepen the consulting library - every industry >=4, industry notes filled
+    c30e50e feat(OEI-011): fill the consulting industry axis, bounded increment, usable facets
+    a463658 feat(OEI-010): persistent context memory, permission-gated on both write and read
+    a884d41 feat(OEI-009): engine-document registry + per-result permission filter + ACL time-box
+    本地领先上游 commit 数: 6
+
+--- 凭据：本刀读了 cookie；任何制品里不得出现其值 ---
+  /home/fisher/.onyx-lab/.secrets/admin-cookies.txt EXISTS (mode 600, 237 bytes)
+  mtime: 2026-09-25 15:20:16.550917567 +0800
+  NOTE: 只读取用（/api/search + 两个 demo 文档的回填）。本刀**没有**刷新/
+        重写/索取 cookie。下面不打印任何值。
+  jar 中提取到的不同 cookie 值 token 数: 1
+  -> 用 -F 拿真 jar 的值在 evidence/ + workspace/ 全量搜：0 命中。
+     （扫描非空转：上面 n=1 > 0，确实在搜真值。）
+
+  --- 扫描器有牙？（合成 canary，绝不落真实 cookie 值）---
+    [1] canary 在场 → 检出。检测机制有效。
+    [2] canary 移除 → 安静（无假阳性）。canary 已删除。
+    [3] 旧过滤器盲区对照（只报个数，不打印值）：
+        old 'grep -vE ^#'             -> 0 token(s)  ← 0 = 盲
+        new 'grep -vE ^#([^H]|H[^t])' -> 1 token(s)
+        （Netscape jar 真实 cookie 行以 #HttpOnly_ 开头，被 ^# 一并滤掉。）
+
+  --- 关键词扫描（password / token / secret / 私钥）---
+  REVIEW (classified) /mnt/d/Projects/domainAgentECE/onyx-lab/OEI-013/workspace/demo-up.sh:133:    -e POSTGRES_USER=ece -e POSTGRES_PASSWORD=<REDACTED-THROWAWAY> -e POSTGRES_DB=ece \
+  REVIEW (classified) /mnt/d/Projects/domainAgentECE/onyx-lab/OEI-013/workspace/eval_pg_up.sh:25:  -e POSTGRES_USER=ece -e POSTGRES_PASSWORD=<REDACTED-THROWAWAY> -e POSTGRES_DB=ece \
+  REVIEW (classified) /mnt/d/Projects/domainAgentECE/onyx-lab/OEI-013/workspace/full_suite.sh:78:  -e POSTGRES_USER=ece -e POSTGRES_PASSWORD=<REDACTED-THROWAWAY> -e POSTGRES_DB=ece \
+  ^ 分类：命中项仅为本地一次性的容器口令（ece/ece，127.0.0.1 回环，
+    容器已随收尾删除）。无项目密钥、无 cookie、无 token、无私钥。
+
+  --- 第二种模式：URL 内嵌凭据（scheme://user:pass@host）---
+    REVIEW (masked) /mnt/d/Projects/domainAgentECE/onyx-lab/OEI-013/evidence/07-contract-regression.txt:<REDACTED-THROWAWAY>@1
+    REVIEW (masked) /mnt/d/Projects/domainAgentECE/onyx-lab/OEI-013/evidence/08-test-suite-raw.txt:<REDACTED-THROWAWAY>@1
+    REVIEW (masked) /mnt/d/Projects/domainAgentECE/onyx-lab/OEI-013/workspace/compliance_check.sh:<REDACTED-THROWAWAY>@1
+    REVIEW (masked) /mnt/d/Projects/domainAgentECE/onyx-lab/OEI-013/workspace/contract_regression.sh:<REDACTED-THROWAWAY>@1
+    REVIEW (masked) /mnt/d/Projects/domainAgentECE/onyx-lab/OEI-013/workspace/demo-up.sh:<REDACTED-THROWAWAY>@1
+    REVIEW (masked) /mnt/d/Projects/domainAgentECE/onyx-lab/OEI-013/workspace/eval_pg_up.sh:<REDACTED-THROWAWAY>@1
+    REVIEW (masked) /mnt/d/Projects/domainAgentECE/onyx-lab/OEI-013/workspace/full_suite.sh:<REDACTED-THROWAWAY>@1
+    ^ 出现次数: 7
+      全部是本地一次性数据库 DSN（ece:ece@127.0.0.1），非项目凭据。
+  --- 确认无真实密钥被写进任何文件 ---
+  明文密码/cookie 值/私钥块：0 个文件（应为 0）
+
+############ verdict ############
+CHECK 1 (进程): demo 链按 §8 **留在现场**（:8765 API + :8181 origin 均在且应答）；
+  评测期临时 API :8766 已停；无残留 pytest/uv/alembic。
+CHECK 2 (容器): ece-pg-demo 保留（交付物）；ece-pg-oei013-eval 已释放；
+  9 个 Onyx 容器全部在跑且 RestartCount=0。
+CHECK 3 (内存): 如实报 —— Onyx + 常驻 demo 同场，内存本就紧。
+  未为回收内存停任何 Onyx 容器（§8 禁止）。
+仓库：改动全部落在 §8 授权面内；pyproject/uv.lock/migrations/identity/routers 零 diff；
+  tests/ 仅新增，既有断言 0 删除。
+凭据：cookie 只读；0 个 cookie 值出现在任何制品；扫描器经 canary 证明有牙。
+---- done ----

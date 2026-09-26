@@ -1,0 +1,34 @@
+== OEI-011 步骤 6.1 — 既有契约不回归：只允许值集变化，不允许键变化 (A10) ==
+pre-cut source: git show a463658:src/ece/consulting/models.py
+current source: HEAD
+
+--- 1. 模型字段名：pre-cut vs HEAD（逐键）---
+  FacetsResponse:
+    pre-cut : ['facets', 'total']
+    HEAD    : ['facets', 'total']
+    identical: True
+  KnowledgeObject:
+    pre-cut : ['id', 'type', 'title', 'summary', 'practice', 'engagement_phase', 'client_industry', 'problem_types', 'methods', 'deliverables', 'outcomes', 'source_origin', 'confidence', 'review_state']
+    HEAD    : ['id', 'type', 'title', 'summary', 'practice', 'engagement_phase', 'client_industry', 'problem_types', 'methods', 'deliverables', 'outcomes', 'source_origin', 'confidence', 'review_state']
+    identical: True
+  LibraryResponse:
+    pre-cut : ['items', 'total', 'limit', 'offset', 'facets', 'engine_items', 'engine_status']
+    HEAD    : ['items', 'total', 'limit', 'offset', 'facets', 'engine_items', 'engine_status']
+    identical: True
+
+--- 2. 运行时响应键（这一次真的调了接口）---
+  GET /library  -> keys ['engine_items', 'engine_status', 'facets', 'items', 'limit', 'offset', 'total']
+  GET /facets   -> keys ['facets', 'total']
+  facets 轴键   -> ['client_industries', 'engagement_phases', 'practices', 'problem_types', 'source_origins', 'types']
+  items[0] 键   -> ['client_industry', 'confidence', 'deliverables', 'engagement_phase', 'id', 'methods', 'outcomes', 'practice', 'problem_types', 'review_state', 'source_origin', 'summary', 'title', 'type']
+
+--- 3. 允许变化 vs 不允许变化 ---
+  library 键集合 与 pre-cut LibraryResponse 字段一致: True
+  facets  键集合 与 pre-cut FacetsResponse  字段一致: True
+  items[0] 键集合 与 pre-cut KnowledgeObject 字段一致: True
+
+  发生变化的是**值集**，不是键集：
+    client_industries: 10 -> 11 个值（+cross_industry）
+    total: 36 -> 45（静态目录 45；此调用未传 limit，取默认）
+  这些正是本刀**目的**（TASK §0）。键集合一字未变 = 前端 `app.js` 不需要改。
+---- done ----

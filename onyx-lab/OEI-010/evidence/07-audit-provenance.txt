@@ -1,0 +1,73 @@
+== OEI-010 step 7 (A8) — SPA zero-change proof ==
+date: 2026-09-25T20:10:25+08:00
+ECE repo: /mnt/d/Projects/domainAgentECE/ece
+HEAD: a884d4189fd362f669438635d86c1268d2229fe1  (feat(OEI-009): engine-document registry + per-result permission filter + ACL time-box)
+SPA path checked: demos/spa  (== ece/demos/spa from the project root)
+
+tracked files under demos/spa: 3
+
+---- 1. git status for the SPA tree (expect no output) ----
+[end of status output]
+
+---- 2. git diff --stat vs HEAD (expect no output) ----
+[end of diff output]
+
+---- 3. per-file content hash: worktree vs committed blob ----
+worktree files: 3
+committed files: 3
+-- per-file hashes --
+008c526dd2d69929e0e268006b3ae30ca768280fd6fdd8d4c95a61d099391bcd  demos/spa/app.js
+a2e08362f43717a77f57fe619adf65a22f186f0ceb0bcbc31588f5d36f1cf605  demos/spa/index.html
+f8bfe420eef972041d0d194dcd7291b5118664c00723d9c7265ccfb1f641f1e1  demos/spa/styles.css
+-- differences (expect none) --
+IDENTICAL: every SPA file matches its committed blob byte-for-byte
+
+---- 4. memory-related strings ANYWHERE in the SPA ----
+grep -rniE 'memory|memories|记忆' demos/spa :
+demos/spa/app.js:569:      // Debounce-free immediate search; SPA is in-memory small dataset.
+  NOTE: matches are not automatically a violation — the word 'memory' may
+  appear in unrelated pre-existing code. Section 3 proves these files are
+  byte-identical to HEAD, so none of the above was added by this cut.
+
+---- 5. what the SPA actually renders (a memory display would appear here) ----
+-- demos/spa/app.js: references to package fields --
+331:  // ----- OEI-006 — second source: documents recalled from the content engine.
+409:    // catalogue has no match" and "the indexed documents have no match" are
+640:    fetch("/api/v1/consulting/documents/" + encodeURIComponent(docId))
+697:    fetch("/api/v1/consulting/documents", { method: "POST", body: fd })
+700:        var docs = (r.body && r.body.documents) || [];
+-- demos/spa/index.html: references to package fields --
+  (none)
+
+---- 6. the migration/tests/docs this cut DID touch, for contrast ----
+   T docs/demo-platform/DEMO_PLATFORM_PRD.md
+   T docs/demo-platform/DEPLOY_USER_PROXY.md
+   M reports/cut-042R3/mutation-evidence/M1_re_read_through_assembly_skipped.md
+   M reports/cut-042R3/mutation-evidence/M2_apply_context_update_skip_sql.md
+   M reports/cut-042R3/mutation-evidence/M3_permission_acl_check_bypassed.md
+   M reports/cut-042R3/mutation-evidence/M4_evaluated_conditions_inject_nondeterministic_amount.md
+   M reports/cut-042R3/mutation-evidence/M5_jwt_decode_skips_signature_verification.md
+   M reports/cut-042R3/mutation-evidence/M6_materialize_fn_disabled_in_loop.md
+   M reports/cut-043/mutation-evidence/M1_km_validity_invert.md
+   M reports/cut-043/mutation-evidence/M2_km_permission_invert.md
+   M reports/cut-043/mutation-evidence/M3_km_decision_and_to_or.md
+   M reports/cut-044/mutation-evidence/M1_comp_count_condition_invert.md
+   M reports/cut-044/mutation-evidence/M2_comp_coverage_issubset_to_isdisjoint.md
+   M reports/cut-044/mutation-evidence/M3_comp_decision_force_gap_list.md
+   M src/ece/context/assembly.py
+   M src/ece/identity/parser.py
+   M src/ece/main.py
+   M src/ece/permissions/engine.py
+   M src/ece/seed.py
+   M tests/integration/test_s32_assembly.py
+  ?? src/ece/api/memory.py
+  ?? src/ece/context/memory.py
+  ?? src/ece/migrations/versions/0010_memories.py
+  ?? tests/unit/test_check_permission_org.py
+  ?? tests/unit/test_memory_policy.py
+  (note: nothing under demos/spa appears above)
+
+---- verdict ----
+SPA tree is byte-identical to HEAD (a884d41); this cut added no
+memory display to the SPA, and no SPA file was modified.
+---- done ----

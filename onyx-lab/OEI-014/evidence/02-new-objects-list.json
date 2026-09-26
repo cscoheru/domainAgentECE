@@ -1,0 +1,259 @@
+{
+  "step": "OEI-014 step 2/3",
+  "baseline_rev": "c30e50e",
+  "baseline_total": 45,
+  "new_object_count": 20,
+  "total_after": 65,
+  "objects": [
+    {
+      "id": "case-banking-credit-approval-014",
+      "type": "case",
+      "client_industry": [
+        "banking"
+      ],
+      "engagement_phase": [
+        "diagnosis",
+        "implementation"
+      ],
+      "source_origin": "synthetic_variant",
+      "rationale": "banking 第 3 条：行业深度 2→4，且补一条 case（案例是该行业的演示面）"
+    },
+    {
+      "id": "risk-check-banking-branch-007",
+      "type": "risk_check",
+      "client_industry": [
+        "banking"
+      ],
+      "engagement_phase": [
+        "implementation"
+      ],
+      "source_origin": "synthetic_variant",
+      "rationale": "banking 第 4 条：补一条行业相关的风险清单（风险清单最容易被误标为通用，这里明确锚定网点）"
+    },
+    {
+      "id": "case-consumer-goods-distributor-015",
+      "type": "case",
+      "client_industry": [
+        "consumer_goods"
+      ],
+      "engagement_phase": [
+        "diagnosis"
+      ],
+      "source_origin": "synthetic_variant",
+      "rationale": "consumer_goods 第 3 条：补 case，锚点落在快消与经销商"
+    },
+    {
+      "id": "proposal-play-consumer-goods-listing-007",
+      "type": "proposal_play",
+      "client_industry": [
+        "consumer_goods"
+      ],
+      "engagement_phase": [
+        "proposal"
+      ],
+      "source_origin": "synthetic_variant",
+      "rationale": "consumer_goods 第 4 条：补 proposal_play（该行业原有 case + note，缺提案类）"
+    },
+    {
+      "id": "case-energy-grid-load-016",
+      "type": "case",
+      "client_industry": [
+        "energy"
+      ],
+      "engagement_phase": [
+        "diagnosis",
+        "implementation"
+      ],
+      "source_origin": "synthetic_variant",
+      "rationale": "energy 第 3 条：补 case"
+    },
+    {
+      "id": "risk-check-energy-maintenance-008",
+      "type": "risk_check",
+      "client_industry": [
+        "energy"
+      ],
+      "engagement_phase": [
+        "implementation"
+      ],
+      "source_origin": "synthetic_variant",
+      "rationale": "energy 第 4 条：补风险清单"
+    },
+    {
+      "id": "case-healthcare-outpatient-017",
+      "type": "case",
+      "client_industry": [
+        "healthcare"
+      ],
+      "engagement_phase": [
+        "diagnosis"
+      ],
+      "source_origin": "synthetic_variant",
+      "rationale": "healthcare 第 3 条：补 case"
+    },
+    {
+      "id": "deliverable-template-healthcare-005",
+      "type": "deliverable_template",
+      "client_industry": [
+        "healthcare"
+      ],
+      "engagement_phase": [
+        "diagnosis"
+      ],
+      "source_origin": "synthetic_variant",
+      "rationale": "healthcare 第 4 条 + deliverable_template 第 5 条（4→≥6 的第 1 条）"
+    },
+    {
+      "id": "industry-note-cn-insurance-2026-007",
+      "type": "industry_note",
+      "client_industry": [
+        "insurance"
+      ],
+      "engagement_phase": [
+        "qualification",
+        "proposal"
+      ],
+      "source_origin": "synthetic_variant",
+      "rationale": "insurance 无 industry_note（0→1），这是 §1.2 三个洞之一"
+    },
+    {
+      "id": "risk-check-insurance-underwriting-009",
+      "type": "risk_check",
+      "client_industry": [
+        "insurance"
+      ],
+      "engagement_phase": [
+        "implementation"
+      ],
+      "source_origin": "synthetic_variant",
+      "rationale": "insurance 第 4 条：补风险清单；锚点用「核保」"
+    },
+    {
+      "id": "case-logistics-warehouse-018",
+      "type": "case",
+      "client_industry": [
+        "logistics"
+      ],
+      "engagement_phase": [
+        "diagnosis",
+        "implementation"
+      ],
+      "source_origin": "synthetic_variant",
+      "rationale": "logistics 第 3 条：补 case"
+    },
+    {
+      "id": "proposal-play-logistics-network-008",
+      "type": "proposal_play",
+      "client_industry": [
+        "logistics"
+      ],
+      "engagement_phase": [
+        "proposal"
+      ],
+      "source_origin": "synthetic_variant",
+      "rationale": "logistics 第 4 条：补 proposal_play"
+    },
+    {
+      "id": "deliverable-template-manufacturing-006",
+      "type": "deliverable_template",
+      "client_industry": [
+        "manufacturing"
+      ],
+      "engagement_phase": [
+        "diagnosis"
+      ],
+      "source_origin": "synthetic_variant",
+      "rationale": "manufacturing 第 3 条 + deliverable_template 第 2 条"
+    },
+    {
+      "id": "methodology-manufacturing-oee-011",
+      "type": "methodology",
+      "client_industry": [
+        "manufacturing"
+      ],
+      "engagement_phase": [
+        "diagnosis",
+        "implementation"
+      ],
+      "source_origin": "synthetic_variant",
+      "rationale": "manufacturing 第 4 条：补 methodology；锚点用「设备综合效率」（不是弱词「制造」）"
+    },
+    {
+      "id": "industry-note-cn-public-sector-2026-008",
+      "type": "industry_note",
+      "client_industry": [
+        "public_sector"
+      ],
+      "engagement_phase": [
+        "qualification",
+        "proposal"
+      ],
+      "source_origin": "synthetic_variant",
+      "rationale": "public_sector 无 industry_note（0→1），三个洞之二；锚点用「政务大厅」「一网通办」"
+    },
+    {
+      "id": "case-public-sector-permit-cycle-019",
+      "type": "case",
+      "client_industry": [
+        "public_sector"
+      ],
+      "engagement_phase": [
+        "diagnosis",
+        "implementation"
+      ],
+      "source_origin": "synthetic_variant",
+      "rationale": "public_sector 第 4 条：补 case；锚点用「政务大厅」"
+    },
+    {
+      "id": "deliverable-template-retail-007",
+      "type": "deliverable_template",
+      "client_industry": [
+        "retail"
+      ],
+      "engagement_phase": [
+        "diagnosis",
+        "delivery"
+      ],
+      "source_origin": "synthetic_variant",
+      "rationale": "retail 第 3 条 + deliverable_template 第 3 条"
+    },
+    {
+      "id": "methodology-retail-shelf-012",
+      "type": "methodology",
+      "client_industry": [
+        "retail"
+      ],
+      "engagement_phase": [
+        "diagnosis"
+      ],
+      "source_origin": "synthetic_variant",
+      "rationale": "retail 第 4 条：补 methodology；锚点用「门店」「坪效」"
+    },
+    {
+      "id": "industry-note-cn-technology-2026-009",
+      "type": "industry_note",
+      "client_industry": [
+        "technology"
+      ],
+      "engagement_phase": [
+        "qualification",
+        "proposal"
+      ],
+      "source_origin": "synthetic_variant",
+      "rationale": "technology 无 industry_note（0→1），三个洞之三；锚点用「科技企业」"
+    },
+    {
+      "id": "case-technology-rd-delivery-020",
+      "type": "case",
+      "client_industry": [
+        "technology"
+      ],
+      "engagement_phase": [
+        "diagnosis",
+        "implementation"
+      ],
+      "source_origin": "synthetic_variant",
+      "rationale": "technology 第 4 条：补 case；锚点用「软件」"
+    }
+  ]
+}

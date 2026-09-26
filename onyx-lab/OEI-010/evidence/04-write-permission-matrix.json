@@ -1,0 +1,213 @@
+{
+  "note": "each cell: (caller, scope, owner_ref) -> HTTP status + code. gate1 = owner_ref vs credential; gate2 = check_permission on the memory_scope object.",
+  "cells": {
+    "1_self_user_ALLOW": {
+      "status": 200,
+      "body": {
+        "created": true,
+        "memory": {
+          "id": 15,
+          "ref": "memory:15",
+          "scope": "user",
+          "owner_ref": "demo-user-finance",
+          "statement": "oei010 step4 probe finance own preference",
+          "classification": "restricted",
+          "source": "explicit:api",
+          "source_ref": null,
+          "confidence": null,
+          "created_at": "2026-09-25T12:06:26.250909+00:00",
+          "updated_at": "2026-09-25T12:06:26.250909+00:00",
+          "expires_at": null,
+          "deleted_at": null
+        }
+      },
+      "inputs": {
+        "caller": "demo-user-finance",
+        "scope": "user",
+        "owner_ref": "demo-user-finance",
+        "credential": "<X-User-Id header>"
+      }
+    },
+    "2_other_user_DENY": {
+      "status": 403,
+      "body": {
+        "detail": {
+          "code": "permission_denied",
+          "message": "owner_ref for a user-scope memory must equal the authenticated caller"
+        }
+      },
+      "inputs": {
+        "caller": "demo-user-finance",
+        "scope": "user",
+        "owner_ref": "demo-user-procurement",
+        "credential": "<X-User-Id header>"
+      }
+    },
+    "3_org_without_role_DENY": {
+      "status": 403,
+      "body": {
+        "detail": {
+          "code": "permission_denied",
+          "message": "not authorized to write org memory for 'org:consulting-a'",
+          "matched_rule": "default-deny"
+        }
+      },
+      "inputs": {
+        "caller": "demo-user-finance",
+        "scope": "org",
+        "owner_ref": "org:consulting-a",
+        "credential": "<X-User-Id header>"
+      }
+    },
+    "4_org_with_role_ALLOW": {
+      "status": 200,
+      "body": {
+        "created": true,
+        "memory": {
+          "id": 16,
+          "ref": "memory:16",
+          "scope": "org",
+          "owner_ref": "org:consulting-a",
+          "statement": "oei010 step4 probe canonical org stance (written by admin)",
+          "classification": "restricted",
+          "source": "explicit:api",
+          "source_ref": null,
+          "confidence": null,
+          "created_at": "2026-09-25T12:06:26.277306+00:00",
+          "updated_at": "2026-09-25T12:06:26.277306+00:00",
+          "expires_at": null,
+          "deleted_at": null
+        }
+      },
+      "inputs": {
+        "caller": "demo-user-admin",
+        "scope": "org",
+        "owner_ref": "org:consulting-a",
+        "credential": "<X-User-Id header>"
+      }
+    },
+    "5_org_admin_other_org_DENY": {
+      "status": 403,
+      "body": {
+        "detail": {
+          "code": "permission_denied",
+          "message": "owner_ref for an org-scope memory must equal the caller's own org"
+        }
+      },
+      "inputs": {
+        "caller": "demo-user-admin",
+        "scope": "org",
+        "owner_ref": "org:consulting-b",
+        "credential": "<X-User-Id header>"
+      }
+    },
+    "6_no_org_claim_DENY": {
+      "status": 403,
+      "body": {
+        "detail": {
+          "code": "permission_denied",
+          "message": "caller has no org (entities.attributes.org_id is unset) — cannot write org-scope memory"
+        }
+      },
+      "inputs": {
+        "caller": "oei010-probe-no-org",
+        "scope": "org",
+        "owner_ref": "org:consulting-a",
+        "credential": "<X-User-Id header>"
+      }
+    },
+    "7_ungranted_self_user_DENY": {
+      "status": 403,
+      "body": {
+        "detail": {
+          "code": "permission_denied",
+          "message": "not authorized to write user memory for 'oei010-probe-unknown-user'",
+          "matched_rule": "default-deny"
+        }
+      },
+      "inputs": {
+        "caller": "oei010-probe-unknown-user",
+        "scope": "user",
+        "owner_ref": "oei010-probe-unknown-user",
+        "credential": "<X-User-Id header>"
+      }
+    },
+    "8_no_credential_DENY": {
+      "status": 400,
+      "body": {
+        "detail": {
+          "code": "bad_request",
+          "message": "X-User-Id header or Authorization: Bearer <jwt> required"
+        }
+      },
+      "inputs": {
+        "caller": null,
+        "scope": "user",
+        "owner_ref": "demo-user-finance",
+        "credential": "<none — anonymous>"
+      }
+    },
+    "9_duplicate_create": {
+      "status": 200,
+      "body": {
+        "created": false,
+        "memory": {
+          "id": 15,
+          "ref": "memory:15",
+          "scope": "user",
+          "owner_ref": "demo-user-finance",
+          "statement": "oei010 step4 probe finance own preference",
+          "classification": "restricted",
+          "source": "explicit:api",
+          "source_ref": null,
+          "confidence": null,
+          "created_at": "2026-09-25T12:06:26.250909+00:00",
+          "updated_at": "2026-09-25T12:06:26.250909+00:00",
+          "expires_at": null,
+          "deleted_at": null
+        }
+      },
+      "inputs": {
+        "caller": "demo-user-finance",
+        "scope": "user",
+        "owner_ref": "demo-user-finance",
+        "note": "byte-identical repeat of cell 1"
+      }
+    }
+  },
+  "row_counts": {
+    "memories_before_probe_block": 4,
+    "memories_created_by_cells_1_to_8": 2,
+    "distinct_statements": 2
+  },
+  "acl_rows_written_for_new_memories": 2,
+  "created_memories": [
+    {
+      "id": 15,
+      "scope": "user",
+      "owner_ref": "demo-user-finance",
+      "statement": "oei010 step4 probe finance own preference"
+    },
+    {
+      "id": 16,
+      "scope": "org",
+      "owner_ref": "org:consulting-a",
+      "statement": "oei010 step4 probe canonical org stance (written by admin)"
+    }
+  ],
+  "assertions_checked": [
+    "self user scope allowed (200)",
+    "another user's scope denied at gate 1 (403)",
+    "org scope without org_admin denied at gate 2 (403)",
+    "org scope with org_admin allowed (200)",
+    "org_admin naming ANOTHER org denied at gate 1 (403)",
+    "caller with no org claim denied (403)",
+    "ungranted caller on its OWN scope denied — fail-closed (403)",
+    "no credential denied (400)",
+    "exactly 2 rows landed from 8 write attempts",
+    "one auto-grant ACL row per created memory",
+    "duplicate create returns the SAME row with created=false"
+  ],
+  "failures": [],
+  "verdict": "PASS"
+}

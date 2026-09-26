@@ -1,0 +1,22 @@
+== OEI-014 — 种子文件 diff 形态（证明只有新增）(A1) ==
+date: 2026-09-26T08:40:22+08:00
+file: src/ece/consulting/seed/consulting_objects.json
+baseline: c30e50e  (git show c30e50e:src/ece/consulting/seed/consulting_objects.json)
+
+$ git diff --numstat -- src/ece/consulting/seed/consulting_objects.json
+713	0	src/ece/consulting/seed/consulting_objects.json
+  (列含义: 新增行数 <TAB> 删除行数 <TAB> 文件)
+
+$ git diff -U0 | grep "^-[^-]"      # 被删掉的行
+  (没有任何被删除的行)
+
+$ git diff --stat
+ src/ece/consulting/seed/consulting_objects.json | 713 ++++++++++++++++++++++++
+ 1 file changed, 713 insertions(+)
+
+读法（不许含糊）：
+  · numstat 显示 **713 增 / 0 删** —— 纯追加的形态；
+  · 但 diff 的行匹配**有可能碰巧对齐**，所以它只是旁证，不是证明；
+  · A1 的**证明**是逐条哈希：既有 45 条的**整对象**规范化 sha256 与 c30e50e
+    逐条相等（见 evidence/01b-existing-45-unchanged-hashes.txt，45/45 EQUAL）。
+---- done ----

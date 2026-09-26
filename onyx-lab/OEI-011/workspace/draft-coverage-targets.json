@@ -1,0 +1,313 @@
+{
+  "a1_only_client_industry_changed": [
+    {
+      "id": "case-retail-procurement-diagnosis-001",
+      "all_other_fields_identical": true,
+      "client_industry_changed": false
+    },
+    {
+      "id": "case-bank-retail-channel-002",
+      "all_other_fields_identical": true,
+      "client_industry_changed": false
+    },
+    {
+      "id": "case-manufacturing-supply-resilience-003",
+      "all_other_fields_identical": true,
+      "client_industry_changed": false
+    },
+    {
+      "id": "case-saas-pricing-restructure-004",
+      "all_other_fields_identical": true,
+      "client_industry_changed": false
+    },
+    {
+      "id": "case-public-sector-org-redesign-005",
+      "all_other_fields_identical": true,
+      "client_industry_changed": false
+    },
+    {
+      "id": "case-consumer-goods-channel-006",
+      "all_other_fields_identical": true,
+      "client_industry_changed": false
+    },
+    {
+      "id": "case-logistics-network-007",
+      "all_other_fields_identical": true,
+      "client_industry_changed": false
+    },
+    {
+      "id": "case-insurance-claim-flow-008",
+      "all_other_fields_identical": true,
+      "client_industry_changed": false
+    },
+    {
+      "id": "case-energy-procurement-009",
+      "all_other_fields_identical": true,
+      "client_industry_changed": false
+    },
+    {
+      "id": "case-healthcare-service-blueprint-010",
+      "all_other_fields_identical": true,
+      "client_industry_changed": false
+    },
+    {
+      "id": "methodology-swot-quick-001",
+      "all_other_fields_identical": true,
+      "client_industry_changed": true
+    },
+    {
+      "id": "methodology-porter-five-forces-002",
+      "all_other_fields_identical": true,
+      "client_industry_changed": true
+    },
+    {
+      "id": "methodology-value-chain-003",
+      "all_other_fields_identical": true,
+      "client_industry_changed": true
+    },
+    {
+      "id": "methodology-mckinsey-7s-004",
+      "all_other_fields_identical": true,
+      "client_industry_changed": true
+    },
+    {
+      "id": "methodology-lean-waste-walk-005",
+      "all_other_fields_identical": true,
+      "client_industry_changed": true
+    },
+    {
+      "id": "methodology-raci-matrix-006",
+      "all_other_fields_identical": true,
+      "client_industry_changed": true
+    },
+    {
+      "id": "methodology-kpi-tree-007",
+      "all_other_fields_identical": true,
+      "client_industry_changed": true
+    },
+    {
+      "id": "methodology-journey-map-008",
+      "all_other_fields_identical": true,
+      "client_industry_changed": true
+    },
+    {
+      "id": "methodology-spend-analysis-009",
+      "all_other_fields_identical": true,
+      "client_industry_changed": true
+    },
+    {
+      "id": "methodology-benchmarking-public-010",
+      "all_other_fields_identical": true,
+      "client_industry_changed": true
+    },
+    {
+      "id": "proposal-play-discovery-questions-001",
+      "all_other_fields_identical": true,
+      "client_industry_changed": true
+    },
+    {
+      "id": "proposal-play-qualification-checklist-002",
+      "all_other_fields_identical": true,
+      "client_industry_changed": true
+    },
+    {
+      "id": "proposal-play-proposal-outline-003",
+      "all_other_fields_identical": true,
+      "client_industry_changed": true
+    },
+    {
+      "id": "proposal-play-pricing-narrative-004",
+      "all_other_fields_identical": true,
+      "client_industry_changed": true
+    },
+    {
+      "id": "proposal-play-staffing-mix-005",
+      "all_other_fields_identical": true,
+      "client_industry_changed": true
+    },
+    {
+      "id": "proposal-play-risk-disclosure-006",
+      "all_other_fields_identical": true,
+      "client_industry_changed": true
+    },
+    {
+      "id": "deliverable-template-diagnostic-report-001",
+      "all_other_fields_identical": true,
+      "client_industry_changed": true
+    },
+    {
+      "id": "deliverable-template-roadmap-deck-002",
+      "all_other_fields_identical": true,
+      "client_industry_changed": true
+    },
+    {
+      "id": "deliverable-template-sop-003",
+      "all_other_fields_identical": true,
+      "client_industry_changed": true
+    },
+    {
+      "id": "deliverable-template-exec-summary-004",
+      "all_other_fields_identical": true,
+      "client_industry_changed": true
+    },
+    {
+      "id": "risk-check-data-availability-001",
+      "all_other_fields_identical": true,
+      "client_industry_changed": true
+    },
+    {
+      "id": "risk-check-stakeholder-alignment-002",
+      "all_other_fields_identical": true,
+      "client_industry_changed": true
+    },
+    {
+      "id": "risk-check-scope-creep-003",
+      "all_other_fields_identical": true,
+      "client_industry_changed": true
+    },
+    {
+      "id": "risk-check-data-confidentiality-004",
+      "all_other_fields_identical": true,
+      "client_industry_changed": true
+    },
+    {
+      "id": "industry-note-cn-banking-2026-001",
+      "all_other_fields_identical": true,
+      "client_industry_changed": false
+    },
+    {
+      "id": "industry-note-cn-consumer-2026-002",
+      "all_other_fields_identical": true,
+      "client_industry_changed": false
+    }
+  ],
+  "a2_violations": [],
+  "a5_gate_results": {
+    "kc001_schema::test_catalog_can_load_seed_without_error": {
+      "outcome": "not_driven_in_memory",
+      "error": "reads the on-disk seed; unaffected by an in-memory plan"
+    },
+    "kc001_schema::test_every_seed_record_passes_pydantic_schema": {
+      "outcome": "pass",
+      "error": null
+    },
+    "kc001_schema::test_required_text_fields_are_nonempty": {
+      "outcome": "pass",
+      "error": null
+    },
+    "kc001_schema::test_seed_bundle_is_valid_json": {
+      "outcome": "not_driven_in_memory",
+      "error": "reads the on-disk seed; unaffected by an in-memory plan"
+    },
+    "kc001_schema::test_source_origin_enum_is_exactly_one_of_four": {
+      "outcome": "pass",
+      "error": null
+    },
+    "kc001_schema::test_type_enum_is_exactly_one_of_six": {
+      "outcome": "pass",
+      "error": null
+    },
+    "kc001_disc::test_founder_case_records_are_marked_as_such": {
+      "outcome": "pass",
+      "error": null
+    },
+    "kc001_disc::test_no_precision_numeric_outcome_claims": {
+      "outcome": "pass",
+      "error": null
+    },
+    "kc001_disc::test_no_real_or_competitor_org_names": {
+      "outcome": "pass",
+      "error": null
+    },
+    "kc001_disc::test_summary_and_title_are_chinese": {
+      "outcome": "pass",
+      "error": null
+    },
+    "kc001_disc::test_synthetic_confidence_requires_synthetic_variant": {
+      "outcome": "pass",
+      "error": null
+    }
+  },
+  "targets": {
+    "before": {
+      "total": 36,
+      "type_counts": {
+        "case": 10,
+        "deliverable_template": 4,
+        "industry_note": 2,
+        "methodology": 10,
+        "proposal_play": 6,
+        "risk_check": 4
+      },
+      "industry_counts": {
+        "banking": 2,
+        "consumer_goods": 2,
+        "energy": 1,
+        "healthcare": 1,
+        "insurance": 1,
+        "logistics": 1,
+        "manufacturing": 1,
+        "public_sector": 1,
+        "retail": 2,
+        "technology": 1
+      },
+      "industries_with_1_object": [
+        "energy",
+        "healthcare",
+        "insurance",
+        "logistics",
+        "manufacturing",
+        "public_sector",
+        "technology"
+      ]
+    },
+    "after": {
+      "total": 45,
+      "type_counts": {
+        "case": 13,
+        "deliverable_template": 4,
+        "industry_note": 6,
+        "methodology": 10,
+        "proposal_play": 6,
+        "risk_check": 6
+      },
+      "industry_counts": {
+        "banking": 2,
+        "consumer_goods": 2,
+        "cross_industry": 26,
+        "energy": 2,
+        "healthcare": 2,
+        "insurance": 2,
+        "logistics": 2,
+        "manufacturing": 2,
+        "public_sector": 2,
+        "retail": 2,
+        "technology": 2
+      },
+      "cross_industry_count": 26
+    },
+    "a4_thresholds": {
+      "total>=44": true,
+      "every_concrete_industry>=2": true,
+      "industry_note>=6": true,
+      "risk_check>=6": true,
+      "cross_industry>=10": true
+    },
+    "a7_facet_has_all_10_concrete_plus_cross": true,
+    "a7_a8_match_counts_per_industry_value": {
+      "banking": 2,
+      "consumer_goods": 2,
+      "cross_industry": 26,
+      "energy": 2,
+      "healthcare": 2,
+      "insurance": 2,
+      "logistics": 2,
+      "manufacturing": 2,
+      "public_sector": 2,
+      "retail": 2,
+      "technology": 2
+    },
+    "a7_no_zero_match_value": true,
+    "new_object_ids_collide_with_existing": []
+  }
+}

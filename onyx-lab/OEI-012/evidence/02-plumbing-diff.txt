@@ -1,0 +1,105 @@
+=== OEI-012 步骤 2 — skip_query_expansion 接入 diff（port/onyx/mock 三处）===
+date: 2026-09-26T09:37:53+08:00
+scope: 仅新增形参 + 真实适配器请求体透传；既有语义（空结果/错误/审计）未改
+
+--- git status (src + tests) ---
+ M src/ece/connectors/onyx/mock_adapter.py
+ M src/ece/connectors/onyx/onyx_adapter.py
+ M src/ece/connectors/onyx/port.py
+?? tests/unit/test_skip_query_expansion.py
+
+--- git diff --stat ---
+ src/ece/connectors/onyx/mock_adapter.py | 11 ++++++++++-
+ src/ece/connectors/onyx/onyx_adapter.py | 10 +++++++++-
+ src/ece/connectors/onyx/port.py         |  8 ++++++++
+ 3 files changed, 27 insertions(+), 2 deletions(-)
+
+--- git diff (tracked) ---
+diff --git a/src/ece/connectors/onyx/mock_adapter.py b/src/ece/connectors/onyx/mock_adapter.py
+index 302b565..a37e357 100644
+--- a/src/ece/connectors/onyx/mock_adapter.py
++++ b/src/ece/connectors/onyx/mock_adapter.py
+@@ -144,6 +144,7 @@ class MockContentEngineAdapter:
+         *,
+         top_k: int | None = None,
+         caller: EngineCallerContext | None = None,
++        skip_query_expansion: bool = False,
+     ) -> list[EngineDocument]:
+         start = time.perf_counter()
+         # simulate ~50ms "engine work" so latency is non-zero
+@@ -154,9 +155,17 @@ class MockContentEngineAdapter:
+             results = all_docs[: max(1, min(top_k, len(all_docs)))]
+         else:
+             results = all_docs
++        # OEI-012 §A4: the mock accepts the request-level switch for signature
++        # isomorphism with the real adapter (A6) and records it in `audit_log`,
++        # which is how the DB-free test proves the wire-through without a
++        # network. The mock's result set is deliberately NOT affected: it is a
++        # fixed fixture independent of corpus/expansion, so inventing a
++        # behavioural difference here would be dishonest. The real two-mode
++        # difference is measured against the live engine (evidence 04/05).
+         # record latency as float seconds
+         self._last_latency = time.perf_counter() - start
+-        self._audit("search", caller=caller, result=f"hits={len(results)}", query=query, top_k=top_k)
++        self._audit("search", caller=caller, result=f"hits={len(results)}", query=query,
++                    top_k=top_k, skip_query_expansion=skip_query_expansion)
+         return list(results)
+ 
+     async def engine_status(
+diff --git a/src/ece/connectors/onyx/onyx_adapter.py b/src/ece/connectors/onyx/onyx_adapter.py
+index ee5cfc2..8984ba0 100644
+--- a/src/ece/connectors/onyx/onyx_adapter.py
++++ b/src/ece/connectors/onyx/onyx_adapter.py
+@@ -160,9 +160,16 @@ class OnyxContentEngineAdapter:
+         *,
+         top_k: int | None = None,
+         caller: EngineCallerContext | None = None,
++        skip_query_expansion: bool = False,
+     ) -> list[EngineDocument]:
+         start = time.perf_counter()
+         body: dict[str, Any] = {"query": query}
++        # OEI-012 §A4: forward the engine's request-level query-expansion switch.
++        # Onyx v4.7.8 /api/search accepts `skip_query_expansion` (bool). Only sent
++        # when True so the default request body stays byte-identical to pre-OEI-012
++        # (no behaviour change for existing callers).
++        if skip_query_expansion:
++            body["skip_query_expansion"] = True
+         # Onyx v4.7.8 /api/search does not accept top_k directly; we cap client-side
+         # by slicing results. Future: pass source_limit or similar if added.
+         try:
+@@ -203,7 +210,8 @@ class OnyxContentEngineAdapter:
+         # identity too — an empty hit list is a legitimate `ok` (the engine
+         # answered "nothing"), not a failure, per the four-state policy.
+         self._audit("search", caller=caller, result="ok",
+-                    hits=len(docs), query=query, top_k=top_k)
++                    hits=len(docs), query=query, top_k=top_k,
++                    skip_query_expansion=skip_query_expansion)
+         return docs
+ 
+     async def engine_status(
+diff --git a/src/ece/connectors/onyx/port.py b/src/ece/connectors/onyx/port.py
+index f7e525b..a7f54cf 100644
+--- a/src/ece/connectors/onyx/port.py
++++ b/src/ece/connectors/onyx/port.py
+@@ -214,6 +214,7 @@ class ContentEnginePort(Protocol):
+         *,
+         top_k: int | None = None,
+         caller: EngineCallerContext | None = None,
++        skip_query_expansion: bool = False,
+     ) -> list[EngineDocument]:
+         """Run a search query and return up to top_k documents (engine's default if None).
+ 
+@@ -221,6 +222,13 @@ class ContentEnginePort(Protocol):
+         MUST raise EngineError on transport / HTTP / parsing failures.
+         `caller` is for audit only (does not affect results — see CE
+         permission-limitation note in module docstring).
++
++        `skip_query_expansion` (OEI-012) forwards the engine's own
++        request-level query-expansion switch to the backend. It defaults to
++        False, which preserves the pre-existing behaviour exactly; the flag is
++        opt-in and no caller flips it by default. Onyx v4.7.8 only exposes this
++        single request-level retrieval switch (server-side `auto_detect_filters`
++        is not request-controllable), so it is the whole of the A4 surface.
+         """
+         ...
+ 

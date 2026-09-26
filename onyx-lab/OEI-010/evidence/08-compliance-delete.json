@@ -1,0 +1,722 @@
+{
+  "setup": {
+    "fin_user_memory": {
+      "status": 200,
+      "body": {
+        "created": true,
+        "memory": {
+          "id": 42,
+          "ref": "memory:42",
+          "scope": "user",
+          "owner_ref": "demo-user-finance",
+          "statement": "oei010 step7 probe finance listable memory",
+          "classification": "restricted",
+          "source": "explicit:api",
+          "source_ref": null,
+          "confidence": null,
+          "created_at": "2026-09-25T12:09:43.776325+00:00",
+          "updated_at": "2026-09-25T12:09:43.776325+00:00",
+          "expires_at": null,
+          "deleted_at": null
+        }
+      }
+    },
+    "fin_bulk_candidate": {
+      "status": 200,
+      "body": {
+        "created": true,
+        "memory": {
+          "id": 43,
+          "ref": "memory:43",
+          "scope": "user",
+          "owner_ref": "demo-user-finance",
+          "statement": "oei010 step7 probe finance bulk-delete candidate",
+          "classification": "restricted",
+          "source": "explicit:api",
+          "source_ref": null,
+          "confidence": null,
+          "created_at": "2026-09-25T12:09:43.789038+00:00",
+          "updated_at": "2026-09-25T12:09:43.789038+00:00",
+          "expires_at": null,
+          "deleted_at": null
+        }
+      }
+    },
+    "fin_traceable_memory": {
+      "status": 200,
+      "body": {
+        "created": true,
+        "memory": {
+          "id": 44,
+          "ref": "memory:44",
+          "scope": "user",
+          "owner_ref": "demo-user-finance",
+          "statement": "oei010 step7 probe finance traceable memory",
+          "classification": "restricted",
+          "source": "explicit:api",
+          "source_ref": null,
+          "confidence": null,
+          "created_at": "2026-09-25T12:09:43.798895+00:00",
+          "updated_at": "2026-09-25T12:09:43.798895+00:00",
+          "expires_at": null,
+          "deleted_at": null
+        }
+      }
+    },
+    "proc_user_memory": {
+      "status": 200,
+      "body": {
+        "created": true,
+        "memory": {
+          "id": 45,
+          "ref": "memory:45",
+          "scope": "user",
+          "owner_ref": "demo-user-procurement",
+          "statement": "oei010 step7 probe procurement memory (other user's)",
+          "classification": "restricted",
+          "source": "explicit:api",
+          "source_ref": null,
+          "confidence": null,
+          "created_at": "2026-09-25T12:09:43.809134+00:00",
+          "updated_at": "2026-09-25T12:09:43.809134+00:00",
+          "expires_at": null,
+          "deleted_at": null
+        }
+      }
+    },
+    "org_memory": {
+      "status": 200,
+      "body": {
+        "created": true,
+        "memory": {
+          "id": 46,
+          "ref": "memory:46",
+          "scope": "org",
+          "owner_ref": "org:consulting-a",
+          "statement": "oei010 step7 probe org-a memory (bulk-delete target)",
+          "classification": "restricted",
+          "source": "explicit:api",
+          "source_ref": null,
+          "confidence": null,
+          "created_at": "2026-09-25T12:09:43.819176+00:00",
+          "updated_at": "2026-09-25T12:09:43.819176+00:00",
+          "expires_at": null,
+          "deleted_at": null
+        }
+      }
+    }
+  },
+  "list": {
+    "finance_default": {
+      "status": 200,
+      "count": 4,
+      "our_statements": [
+        "oei010 step7 probe finance bulk-delete candidate",
+        "oei010 step7 probe finance listable memory",
+        "oei010 step7 probe finance traceable memory",
+        "oei010 step7 probe org-a memory (bulk-delete target)"
+      ],
+      "raw": {
+        "status": 200,
+        "body": {
+          "memories": [
+            {
+              "id": 46,
+              "ref": "memory:46",
+              "scope": "org",
+              "owner_ref": "org:consulting-a",
+              "statement": "oei010 step7 probe org-a memory (bulk-delete target)",
+              "classification": "restricted",
+              "source": "explicit:api",
+              "source_ref": null,
+              "confidence": null,
+              "created_at": "2026-09-25T12:09:43.819176+00:00",
+              "updated_at": "2026-09-25T12:09:43.819176+00:00",
+              "expires_at": null,
+              "deleted_at": null
+            },
+            {
+              "id": 44,
+              "ref": "memory:44",
+              "scope": "user",
+              "owner_ref": "demo-user-finance",
+              "statement": "oei010 step7 probe finance traceable memory",
+              "classification": "restricted",
+              "source": "explicit:api",
+              "source_ref": null,
+              "confidence": null,
+              "created_at": "2026-09-25T12:09:43.798895+00:00",
+              "updated_at": "2026-09-25T12:09:43.798895+00:00",
+              "expires_at": null,
+              "deleted_at": null
+            },
+            {
+              "id": 43,
+              "ref": "memory:43",
+              "scope": "user",
+              "owner_ref": "demo-user-finance",
+              "statement": "oei010 step7 probe finance bulk-delete candidate",
+              "classification": "restricted",
+              "source": "explicit:api",
+              "source_ref": null,
+              "confidence": null,
+              "created_at": "2026-09-25T12:09:43.789038+00:00",
+              "updated_at": "2026-09-25T12:09:43.789038+00:00",
+              "expires_at": null,
+              "deleted_at": null
+            },
+            {
+              "id": 42,
+              "ref": "memory:42",
+              "scope": "user",
+              "owner_ref": "demo-user-finance",
+              "statement": "oei010 step7 probe finance listable memory",
+              "classification": "restricted",
+              "source": "explicit:api",
+              "source_ref": null,
+              "confidence": null,
+              "created_at": "2026-09-25T12:09:43.776325+00:00",
+              "updated_at": "2026-09-25T12:09:43.776325+00:00",
+              "expires_at": null,
+              "deleted_at": null
+            }
+          ],
+          "include_inactive": false,
+          "count": 4
+        }
+      }
+    },
+    "engineering_default": {
+      "status": 200,
+      "count": 1,
+      "our_statements": [],
+      "raw": {
+        "status": 200,
+        "body": {
+          "memories": [
+            {
+              "id": 21,
+              "ref": "memory:21",
+              "scope": "org",
+              "owner_ref": "org:consulting-b",
+              "statement": "oei010 step5 probe org-b canonical terminology",
+              "classification": "restricted",
+              "source": "fixture:oei010-read-matrix",
+              "source_ref": "read-path fixture — no seeded org_admin exists in org B",
+              "confidence": null,
+              "created_at": "2026-09-25T12:06:33.698898+00:00",
+              "updated_at": "2026-09-25T12:06:33.698898+00:00",
+              "expires_at": null,
+              "deleted_at": null
+            }
+          ],
+          "include_inactive": false,
+          "count": 1
+        }
+      }
+    },
+    "procurement_default": {
+      "status": 200,
+      "count": 3,
+      "our_statements": [
+        "oei010 step7 probe org-a memory (bulk-delete target)",
+        "oei010 step7 probe procurement memory (other user's)"
+      ],
+      "raw": {
+        "status": 200,
+        "body": {
+          "memories": [
+            {
+              "id": 46,
+              "ref": "memory:46",
+              "scope": "org",
+              "owner_ref": "org:consulting-a",
+              "statement": "oei010 step7 probe org-a memory (bulk-delete target)",
+              "classification": "restricted",
+              "source": "explicit:api",
+              "source_ref": null,
+              "confidence": null,
+              "created_at": "2026-09-25T12:09:43.819176+00:00",
+              "updated_at": "2026-09-25T12:09:43.819176+00:00",
+              "expires_at": null,
+              "deleted_at": null
+            },
+            {
+              "id": 45,
+              "ref": "memory:45",
+              "scope": "user",
+              "owner_ref": "demo-user-procurement",
+              "statement": "oei010 step7 probe procurement memory (other user's)",
+              "classification": "restricted",
+              "source": "explicit:api",
+              "source_ref": null,
+              "confidence": null,
+              "created_at": "2026-09-25T12:09:43.809134+00:00",
+              "updated_at": "2026-09-25T12:09:43.809134+00:00",
+              "expires_at": null,
+              "deleted_at": null
+            },
+            {
+              "id": 19,
+              "ref": "memory:19",
+              "scope": "user",
+              "owner_ref": "demo-user-procurement",
+              "statement": "oei010 step5 probe procurement-only preference",
+              "classification": "restricted",
+              "source": "explicit:api",
+              "source_ref": null,
+              "confidence": null,
+              "created_at": "2026-09-25T12:06:33.682981+00:00",
+              "updated_at": "2026-09-25T12:06:33.682981+00:00",
+              "expires_at": null,
+              "deleted_at": null
+            }
+          ],
+          "include_inactive": false,
+          "count": 3
+        }
+      }
+    },
+    "finance_include_inactive": {
+      "status": 200,
+      "count": 12,
+      "our_statements": [
+        "oei010 step7 probe finance bulk-delete candidate",
+        "oei010 step7 probe finance listable memory",
+        "oei010 step7 probe finance traceable memory",
+        "oei010 step7 probe org-a memory (bulk-delete target)"
+      ],
+      "raw": {
+        "status": 200,
+        "body": {
+          "memories": [
+            {
+              "id": 46,
+              "ref": "memory:46",
+              "scope": "org",
+              "owner_ref": "org:consulting-a",
+              "statement": "oei010 step7 probe org-a memory (bulk-delete target)",
+              "classification": "restricted",
+              "source": "explicit:api",
+              "source_ref": null,
+              "confidence": null,
+              "created_at": "2026-09-25T12:09:43.819176+00:00",
+              "updated_at": "2026-09-25T12:09:43.921393+00:00",
+              "expires_at": null,
+              "deleted_at": "2026-09-25T12:09:43.921393+00:00"
+            },
+            {
+              "id": 29,
+              "ref": "memory:29",
+              "scope": "org",
+              "owner_ref": "org:consulting-a",
+              "statement": "oei010 step6 probe org-a memory under an ACL time box",
+              "classification": "restricted",
+              "source": "explicit:api",
+              "source_ref": null,
+              "confidence": null,
+              "created_at": "2026-09-25T12:08:00.964318+00:00",
+              "updated_at": "2026-09-25T12:09:05.442943+00:00",
+              "expires_at": null,
+              "deleted_at": "2026-09-25T12:09:05.442943+00:00"
+            },
+            {
+              "id": 20,
+              "ref": "memory:20",
+              "scope": "org",
+              "owner_ref": "org:consulting-a",
+              "statement": "oei010 step5 probe org-a canonical terminology",
+              "classification": "restricted",
+              "source": "explicit:api",
+              "source_ref": null,
+              "confidence": null,
+              "created_at": "2026-09-25T12:06:33.694053+00:00",
+              "updated_at": "2026-09-25T12:09:05.442943+00:00",
+              "expires_at": null,
+              "deleted_at": "2026-09-25T12:09:05.442943+00:00"
+            },
+            {
+              "id": 16,
+              "ref": "memory:16",
+              "scope": "org",
+              "owner_ref": "org:consulting-a",
+              "statement": "oei010 step4 probe canonical org stance (written by admin)",
+              "classification": "restricted",
+              "source": "explicit:api",
+              "source_ref": null,
+              "confidence": null,
+              "created_at": "2026-09-25T12:06:26.277306+00:00",
+              "updated_at": "2026-09-25T12:09:05.442943+00:00",
+              "expires_at": null,
+              "deleted_at": "2026-09-25T12:09:05.442943+00:00"
+            },
+            {
+              "id": 44,
+              "ref": "memory:44",
+              "scope": "user",
+              "owner_ref": "demo-user-finance",
+              "statement": "oei010 step7 probe finance traceable memory",
+              "classification": "restricted",
+              "source": "explicit:api",
+              "source_ref": null,
+              "confidence": null,
+              "created_at": "2026-09-25T12:09:43.798895+00:00",
+              "updated_at": "2026-09-25T12:09:43.906988+00:00",
+              "expires_at": null,
+              "deleted_at": "2026-09-25T12:09:43.906988+00:00"
+            },
+            {
+              "id": 43,
+              "ref": "memory:43",
+              "scope": "user",
+              "owner_ref": "demo-user-finance",
+              "statement": "oei010 step7 probe finance bulk-delete candidate",
+              "classification": "restricted",
+              "source": "explicit:api",
+              "source_ref": null,
+              "confidence": null,
+              "created_at": "2026-09-25T12:09:43.789038+00:00",
+              "updated_at": "2026-09-25T12:09:43.906988+00:00",
+              "expires_at": null,
+              "deleted_at": "2026-09-25T12:09:43.906988+00:00"
+            },
+            {
+              "id": 42,
+              "ref": "memory:42",
+              "scope": "user",
+              "owner_ref": "demo-user-finance",
+              "statement": "oei010 step7 probe finance listable memory",
+              "classification": "restricted",
+              "source": "explicit:api",
+              "source_ref": null,
+              "confidence": null,
+              "created_at": "2026-09-25T12:09:43.776325+00:00",
+              "updated_at": "2026-09-25T12:09:43.869676+00:00",
+              "expires_at": null,
+              "deleted_at": "2026-09-25T12:09:43.869676+00:00"
+            },
+            {
+              "id": 28,
+              "ref": "memory:28",
+              "scope": "user",
+              "owner_ref": "demo-user-finance",
+              "statement": "oei010 step6 probe soon-to-be-deleted user memory",
+              "classification": "restricted",
+              "source": "explicit:api",
+              "source_ref": null,
+              "confidence": null,
+              "created_at": "2026-09-25T12:08:00.951661+00:00",
+              "updated_at": "2026-09-25T12:08:01.142700+00:00",
+              "expires_at": null,
+              "deleted_at": "2026-09-25T12:08:01.142700+00:00"
+            },
+            {
+              "id": 27,
+              "ref": "memory:27",
+              "scope": "user",
+              "owner_ref": "demo-user-finance",
+              "statement": "oei010 step6 probe expired user memory",
+              "classification": "restricted",
+              "source": "explicit:api",
+              "source_ref": null,
+              "confidence": null,
+              "created_at": "2026-09-25T12:08:00.931034+00:00",
+              "updated_at": "2026-09-25T12:09:05.426939+00:00",
+              "expires_at": "2026-09-24T12:08:00.918741+00:00",
+              "deleted_at": "2026-09-25T12:09:05.426939+00:00"
+            },
+            {
+              "id": 26,
+              "ref": "memory:26",
+              "scope": "user",
+              "owner_ref": "demo-user-finance",
+              "statement": "oei010 step6 probe live user memory",
+              "classification": "restricted",
+              "source": "explicit:api",
+              "source_ref": null,
+              "confidence": null,
+              "created_at": "2026-09-25T12:08:00.903632+00:00",
+              "updated_at": "2026-09-25T12:09:05.426939+00:00",
+              "expires_at": null,
+              "deleted_at": "2026-09-25T12:09:05.426939+00:00"
+            },
+            {
+              "id": 18,
+              "ref": "memory:18",
+              "scope": "user",
+              "owner_ref": "demo-user-finance",
+              "statement": "oei010 step5 probe finance-only preference",
+              "classification": "restricted",
+              "source": "explicit:api",
+              "source_ref": null,
+              "confidence": null,
+              "created_at": "2026-09-25T12:06:33.667622+00:00",
+              "updated_at": "2026-09-25T12:09:05.426939+00:00",
+              "expires_at": null,
+              "deleted_at": "2026-09-25T12:09:05.426939+00:00"
+            },
+            {
+              "id": 15,
+              "ref": "memory:15",
+              "scope": "user",
+              "owner_ref": "demo-user-finance",
+              "statement": "oei010 step4 probe finance own preference",
+              "classification": "restricted",
+              "source": "explicit:api",
+              "source_ref": null,
+              "confidence": null,
+              "created_at": "2026-09-25T12:06:26.250909+00:00",
+              "updated_at": "2026-09-25T12:09:05.426939+00:00",
+              "expires_at": null,
+              "deleted_at": "2026-09-25T12:09:05.426939+00:00"
+            }
+          ],
+          "include_inactive": true,
+          "count": 12
+        }
+      }
+    },
+    "engineering_include_inactive": {
+      "status": 200,
+      "count": 1,
+      "our_statements": [],
+      "raw": {
+        "status": 200,
+        "body": {
+          "memories": [
+            {
+              "id": 21,
+              "ref": "memory:21",
+              "scope": "org",
+              "owner_ref": "org:consulting-b",
+              "statement": "oei010 step5 probe org-b canonical terminology",
+              "classification": "restricted",
+              "source": "fixture:oei010-read-matrix",
+              "source_ref": "read-path fixture — no seeded org_admin exists in org B",
+              "confidence": null,
+              "created_at": "2026-09-25T12:06:33.698898+00:00",
+              "updated_at": "2026-09-25T12:06:33.698898+00:00",
+              "expires_at": null,
+              "deleted_at": null
+            }
+          ],
+          "include_inactive": true,
+          "count": 1
+        }
+      }
+    }
+  },
+  "delete": {
+    "other_users_memory_DENY": {
+      "status": 403,
+      "body": {
+        "detail": {
+          "code": "permission_denied",
+          "message": "can only delete own user-scope memories"
+        }
+      }
+    },
+    "proc_row_after_denied_delete": {
+      "deleted_at": null
+    },
+    "own_memory_ALLOW": {
+      "status": 200,
+      "body": {
+        "memory": {
+          "id": 42,
+          "ref": "memory:42",
+          "scope": "user",
+          "owner_ref": "demo-user-finance",
+          "statement": "oei010 step7 probe finance listable memory",
+          "classification": "restricted",
+          "source": "explicit:api",
+          "source_ref": null,
+          "confidence": null,
+          "created_at": "2026-09-25T12:09:43.776325+00:00",
+          "updated_at": "2026-09-25T12:09:43.869676+00:00",
+          "expires_at": null,
+          "deleted_at": "2026-09-25T12:09:43.869676+00:00"
+        },
+        "already_deleted": false
+      }
+    },
+    "own_row_after_delete": {
+      "row_still_exists": 1,
+      "deleted_at": "2026-09-25 12:09:43.869676+00:00"
+    },
+    "own_memory_again": {
+      "status": 200,
+      "body": {
+        "memory": {
+          "id": 42,
+          "ref": "memory:42",
+          "scope": "user",
+          "owner_ref": "demo-user-finance",
+          "statement": "oei010 step7 probe finance listable memory",
+          "classification": "restricted",
+          "source": "explicit:api",
+          "source_ref": null,
+          "confidence": null,
+          "created_at": "2026-09-25T12:09:43.776325+00:00",
+          "updated_at": "2026-09-25T12:09:43.869676+00:00",
+          "expires_at": null,
+          "deleted_at": "2026-09-25T12:09:43.869676+00:00"
+        },
+        "already_deleted": true
+      }
+    },
+    "nonexistent_id": {
+      "status": 404,
+      "body": {
+        "detail": {
+          "code": "not_found",
+          "message": "memory 999999999 not found"
+        }
+      }
+    }
+  },
+  "bulk": {
+    "org_by_plain_user_DENY": {
+      "status": 403,
+      "body": {
+        "detail": {
+          "code": "permission_denied",
+          "message": "not authorized to write org memory for 'org:consulting-a'",
+          "matched_rule": "default-deny"
+        }
+      }
+    },
+    "org_rows_after_denied_bulk": {
+      "live_org_a_memories": 1
+    },
+    "user_by_owner_ALLOW": {
+      "status": 200,
+      "body": {
+        "deleted": [
+          43,
+          44
+        ],
+        "deleted_count": 2,
+        "scope": "user",
+        "already_deleted": []
+      }
+    },
+    "after_user_bulk": {
+      "fin_live_user_memories": 0,
+      "proc_live_user_memories": 2
+    },
+    "org_by_admin_ALLOW": {
+      "status": 200,
+      "body": {
+        "deleted": [
+          46
+        ],
+        "deleted_count": 1,
+        "scope": "org",
+        "already_deleted": []
+      }
+    }
+  },
+  "trace": {
+    "context_call": {
+      "status": 200,
+      "request_id": "fc8366e7-9a65-4792-859a-2dcec4e7a765",
+      "injected_memory_refs": [
+        "memory:47"
+      ],
+      "our_statements_injected": [
+        "oei010 step7 probe audit-trail memory"
+      ],
+      "metadata": {
+        "generated_at": "2026-09-25T12:09:44.001464+00:00",
+        "as_of": null,
+        "counts": {
+          "entities": 1,
+          "relationships": 6,
+          "documents": 0,
+          "rows": 0,
+          "denied": 0
+        },
+        "insufficient_context": false,
+        "memory_count": 1,
+        "memory_dropped": 0
+      }
+    },
+    "audit_as_owner": {
+      "status": 200,
+      "request_id": "fc8366e7-9a65-4792-859a-2dcec4e7a765",
+      "memory_items": [
+        {
+          "seq": 7,
+          "item_kind": "memory",
+          "ref": "memory:47",
+          "decision": "allowed",
+          "reason": "acl:allow-user",
+          "source": {
+            "system": "ece:memory",
+            "record_id": "memory:47"
+          }
+        }
+      ]
+    },
+    "audit_as_other_user": {
+      "status": 403
+    },
+    "context_items_for_request": [
+      {
+        "seq": 7,
+        "item_kind": "memory",
+        "ref": "memory:47",
+        "decision": "allowed",
+        "reason": "acl:allow-user"
+      }
+    ],
+    "after_delete_row": {
+      "deleted_at": "2026-09-25 12:09:44.053067+00:00"
+    },
+    "audit_after_delete": {
+      "status": 200,
+      "memory_items": [
+        {
+          "seq": 7,
+          "item_kind": "memory",
+          "ref": "memory:47",
+          "decision": "allowed",
+          "reason": "acl:allow-user",
+          "source": {
+            "system": "ece:memory",
+            "record_id": "memory:47"
+          }
+        }
+      ]
+    },
+    "context_items_after_delete": 1,
+    "not_reinjected_after_delete": {
+      "our_statements_injected": []
+    },
+    "spa_check": {
+      "method": "see evidence/07-audit-provenance.txt (git diff + grep)",
+      "expectation": "zero changes under ece/demos/spa/**"
+    }
+  },
+  "assertions_checked": [
+    "GET /memory returns only the caller's user memory + its own org memory",
+    "another user's memory is not listable",
+    "deleting another user's memory is 403 and leaves the row untouched",
+    "the owner's delete is a soft delete (row kept, deleted_at set)",
+    "re-deleting is idempotent",
+    "bulk org delete without org write permission is 403 and deletes nothing",
+    "bulk user delete removes only the caller's own user memories",
+    "bulk org delete by an org_admin succeeds",
+    "include_inactive returns the caller's own inactive memories only",
+    "an injected memory appears in context_items with item_kind='memory'",
+    "the owner can read its own /audit/context/{request_id} trace; others get 403",
+    "the audit ref is the memory ref, never the statement text",
+    "soft-deleting the memory does NOT remove its audit history",
+    "a deleted memory is not injected again"
+  ],
+  "failures": [],
+  "verdict": "PASS",
+  "a8_provenance_evidence_file": "evidence/07-audit-provenance.json",
+  "a9_failures": []
+}

@@ -1,0 +1,15 @@
+== OEI-011 — baseline of the §1.6 content gates, TODAY's seed (control) ==
+date: 2026-09-25T21:13:09+08:00
+$ uv run pytest tests/unit/test_consulting_seed_count.py tests/unit/test_consulting_seed_schema.py \
+                 tests/unit/test_consulting_seed_discipline.py tests/unit/test_consulting_service.py -q
+........................                                                 [100%]
+
+  -> the §1.6 gates are GREEN on today's seed. The contradiction reproduced in
+     00-blocked-contract-conflict.json is therefore not confounded by a
+     pre-existing failure.
+
+---- also: the three authorized sites, as they stand (unchanged) ----
+  documents.py:263     assert body["static_catalog_size"] == 36  # KC-001 baseline preserved
+  documents.py:315     assert r.json()["static_catalog_size"] == 36
+  engine_merge.py:339     assert body["total"] == 36
+---- done ----

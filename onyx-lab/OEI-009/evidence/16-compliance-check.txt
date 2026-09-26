@@ -1,0 +1,48 @@
+OEI-009 step 0.1 — assertion count (precise measure, replaces cc's earlier rough number)
+
+# File: tests/integration/test_s20_audit_webhook.py
+
+# Method 1 — rough (counted `assert` substring anywhere in file):
+#   OLD measurement (cc REPORT v1, judged imprecise by codex):
+#     HEAD         = 20  (actual: docstring bodies had 3 extra matches,
+#                          giving the user-reported "23" from a looser grep)
+#     working tree = 23
+#   codex correctly noted: 20=20 actual.
+#
+# Method 2 — precise: drop triple-quoted strings (docstrings), then count
+# lines matching `^\s*assert\s`:
+#   HEAD         = 20
+#   working tree = 20  (no assertion added, removed, or modified)
+#
+# The earlier discrepancy (20 -> 23) was a docstring example block in the
+# new `_wait_for_events` helper:
+#
+#     Assertion semantics are unchanged: callers do
+#         events = _wait_for_events(lambda e: len(e) >= 1)
+#         assert len(events) >= 1   <- this line is INSIDE a docstring,
+#                                    counts as +1 under loose match.
+#     --- the variable name, ...
+#
+# Method 2 strips that.
+
+# Function (test_) count:
+#   HEAD         = 8
+#   working tree = 8
+# (no tests deleted, no tests added; the flake fix is per-test only.)
+
+# time.sleep references:
+#   HEAD (5 occurrences, lines 108/132/172/191/201):
+#     4 × `time.sleep(0.5)` in success-path tests
+#     1 × `time.sleep(1.5)` in test_webhook_failure_does_not_raise
+#   working tree (3 occurrences):
+#     1 × `time.sleep(interval)` inside `_wait_for_events` (NEW helper)
+#     1 × `time.sleep(1.5)` preserved as-is in the failure-path test
+#     1 × `time.sleep(...)` referenced in the helper docstring text (not code)
+#   Result: the 4 success-path fixed sleeps are removed; the failure-path
+#   sleep stays; 1 new polling sleep appears inside the helper.
+
+# Constraint check (TASK §7 / OEI-008 VERDICT §5):
+#   - assert count: 20 -> 20 (assertions NOT changed)             ✓
+#   - test function count: 8 -> 8 (tests NOT deleted)            ✓
+#   - fixture / helper: 1 new helper added, 1 fixture unchanged   ✓
+#   - "断言不得改动、测试不得删除"                                   ✓

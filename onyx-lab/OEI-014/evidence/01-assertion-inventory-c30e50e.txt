@@ -1,0 +1,167 @@
+== OEI-014 步骤 1 — 断言重盘（照抄 OEI-011 v1.1 §1.5 的三条命令）(A6) ==
+date: 2026-09-26T08:37:47+08:00
+commit: c30e50e  (feat(OEI-011): fill the consulting industry axis, bounded in)
+目的：证明**没有任何断言与语料规模/分布精确耦合**，因此本刀新增 ~20 条不会再撞断言。
+本刀**不改任何断言**；如果这条盘点出现任何需要改的断言 → 停手报 BLOCKED。
+
+############ 命令 1：grep -rn "\b36\b" tests/ ############
+tests/integration/test_consulting_api_contract.py:55:    assert body["total"] >= 36, f"expected ≥ 36 library records, got {body['total']}"
+tests/unit/test_consulting_documents.py:263:    # `>= 36`, not `== 36`: KC-001's 36 is a FLOOR ("the bundled catalogue is at
+tests/unit/test_consulting_documents.py:265:    # actual value is 45; pinning it to 36 would make every future content cut
+tests/unit/test_consulting_documents.py:267:    assert body["static_catalog_size"] >= 36  # KC-001 baseline is a floor
+tests/unit/test_consulting_documents.py:320:    assert r.json()["static_catalog_size"] >= 36
+tests/unit/test_consulting_engine_merge.py:339:    # `>= 36`: the static side must still show the WHOLE catalogue (this is the
+tests/unit/test_consulting_engine_merge.py:341:    # static side). 36 is the KC-001 floor; OEI-011 raised the catalogue to 45.
+tests/unit/test_consulting_engine_merge.py:342:    assert body["total"] >= 36
+tests/unit/test_server_deployment_checklist.py:255:        (r"\bghp_[A-Za-z0-9]{36}\b", "GitHub personal access token"),
+tests/unit/test_consulting_seed_count.py:3:Per Task §4.2 the bundled seed must contain at least 36 knowledge objects
+tests/unit/test_consulting_seed_count.py:28:    """Task §4.2: ≥ 36 knowledge objects. Anything less is a content shortfall."""
+tests/unit/test_consulting_seed_count.py:29:    assert len(catalog.objects) >= 36, (
+tests/unit/test_consulting_seed_count.py:30:        f"need ≥ 36 seed objects; got {len(catalog.objects)}"
+tests/unit/test_consulting_seed_count.py:39:    distribution of a 36-object corpus. Those numbers are a FLOOR here: the
+tests/unit/test_consulting_seed_count.py:41:    (`sum(expected) == 36`), which is not what this test is for. Its real
+
+############ 命令 2：grep -rn "Counter(" tests/ ############
+tests/integration/test_v0_specialized.py:121:        f"decision_value must be byte-equal across N={N} runs; got {Counter(decision_values)}"
+tests/unit/test_consulting_seed_count.py:55:    actual = Counter(o.type for o in catalog.objects)
+tests/unit/test_consulting_seed_count.py:81:    counts = Counter(ids)
+
+############ 命令 3：grep -rn "client_industries" tests/ ############
+tests/integration/test_consulting_api_contract.py:59:        "client_industries", "problem_types", "source_origins",
+tests/integration/test_consulting_api_contract.py:73:        "client_industries", "problem_types", "source_origins",
+tests/unit/test_consulting_service.py:110:        "client_industries", "problem_types", "source_origins",
+
+############ 补充（OEI-011 教训：只看这三条不够，要看"精确耦合"的全形状）############
+$ grep -rnE "== *[0-9]+" tests/ | grep -viE "status_code|content_type|schema_version|count ==|== 0|== 1\b" | head -40
+tests/conftest.py:8:and Codex reproducible verification (e.g. `date.today() == 2027-01-01`) would
+tests/integration/test_canonical_seed_completeness.py:16:    not on `count(*) == 1200` — a total alone cannot distinguish "the right 1200
+tests/integration/test_compliance_boundary.py:277:    assert db_rs_count == 3, (
+tests/integration/test_consulting_api_contract.py:139:    assert len(r1["items"]) == 3
+tests/integration/test_consulting_api_contract.py:140:    assert len(r2["items"]) == 3
+tests/integration/test_params_land_in_db.py:133:    assert attrs.get("amount") == 1_500_000, (
+tests/integration/test_s10_rate_limit.py:58:    assert _period_to_seconds("m") == 60.0
+tests/integration/test_s10_rate_limit.py:59:    assert _period_to_seconds("h") == 3600.0
+tests/integration/test_s10_rate_limit.py:60:    assert _period_to_seconds("d") == 86400.0
+tests/integration/test_quote_count_boundary.py:382:    assert _count_selects_relations(PR_SOURCE_ID, FIXTURE_SYSTEM) == 3
+tests/integration/test_quote_count_boundary.py:386:    assert ctx_count == 3, f"R4-B1: Context SELECTS={ctx_count} != DB SELECTS=3"
+tests/integration/test_s17_lua_rate_limit.py:121:    assert int(val) == 3
+tests/integration/test_s13_revocation_rate_gate.py:271:    assert r3 == 429, f"expected 429 (bucket exhausted); got {r3}"
+tests/integration/test_s13_revocation_rate_gate.py:290:    assert r == 429, (
+tests/integration/test_s13_revocation_rate_gate.py:332:        assert r == 429, (
+tests/integration/test_s15_quota.py:42:    assert _period_to_seconds("d") == 86400.0
+tests/integration/test_s15_quota.py:43:    assert _period_to_seconds("w") == 604800.0
+tests/integration/test_s15_quota.py:44:    assert _period_to_seconds("m") == 2592000.0
+tests/integration/test_s35_eval_suites.py:106:    if result.returncode == 3:
+tests/integration/test_s35_eval_suites.py:123:    if result.returncode == 3:
+tests/integration/test_s35_eval_suites.py:135:    if result.returncode == 3:
+tests/integration/test_s31_spec.py:33:    assert spec.limits.max_entities == 60
+tests/integration/test_s31_spec.py:34:    assert spec.limits.max_relationships == 100
+tests/integration/test_s31_spec.py:63:    assert spec.max_entities == 50
+tests/integration/test_s31_spec.py:64:    assert spec.max_relationships == 100
+tests/integration/test_s5_1_rules.py:41:    assert result["deviation_pct"] == 20.0
+tests/integration/test_s5_1_rules.py:48:    assert result["deviation_pct"] == 5.0
+tests/integration/test_s7_multi_tenant_bench.py:31:    assert _percentile(values, 50) == 5.5
+tests/integration/test_s7_multi_tenant_bench.py:49:    assert _percentile([42.0], 50) == 42.0
+tests/integration/test_s7_multi_tenant_bench.py:50:    assert _percentile([42.0], 95) == 42.0
+tests/integration/test_v0_apply_context_update.py:174:    assert attrs["amount"] == 1_280_000
+tests/integration/test_v0_specialized.py:162:    assert len(hex_prefix) == 24 and all(c in "0123456789abcdef" for c in hex_prefix), (
+tests/integration/test_v0_loop.py:140:    assert result.re_read_attrs["amount"] == 1_280_000
+tests/integration/test_v0_loop.py:264:    assert len(calls) == 3, (
+tests/integration/test_v0_loop.py:288:    assert result.pr_attrs_before["amount"] == 1_280_000
+tests/unit/test_consulting_documents.py:263:    # `>= 36`, not `== 36`: KC-001's 36 is a FLOOR ("the bundled catalogue is at
+tests/unit/test_consulting_service.py:92:    assert len(page1.items) == 5
+tests/unit/test_consulting_seed_count.py:41:    (`sum(expected) == 36`), which is not what this test is for. Its real
+tests/unit/test_engine_documents_registry.py:72:    assert len(stem_parts[1]) == 12
+tests/unit/test_memory_policy.py:308:    assert len(kept) == MEMORY_LIMIT == 10
+
+############ 补充 2：镜片透视图 —— 语料规模相关的下限断言（>=>=36）############
+$ grep -rnE ">= *36" tests/
+tests/integration/test_consulting_api_contract.py:55:    assert body["total"] >= 36, f"expected ≥ 36 library records, got {body['total']}"
+tests/unit/test_consulting_documents.py:263:    # `>= 36`, not `== 36`: KC-001's 36 is a FLOOR ("the bundled catalogue is at
+tests/unit/test_consulting_documents.py:267:    assert body["static_catalog_size"] >= 36  # KC-001 baseline is a floor
+tests/unit/test_consulting_documents.py:320:    assert r.json()["static_catalog_size"] >= 36
+tests/unit/test_consulting_engine_merge.py:339:    # `>= 36`: the static side must still show the WHOLE catalogue (this is the
+tests/unit/test_consulting_engine_merge.py:342:    assert body["total"] >= 36
+tests/unit/test_consulting_seed_count.py:29:    assert len(catalog.objects) >= 36, (
+
+############ 补充 3：有没有测试钉住"每行业条数"或"行业取值"？############
+$ grep -rnE "client_industry" tests/
+tests/integration/test_consulting_filters_search.py:6:  - multi-value practice / engagement_phase / client_industry / problem_type
+tests/integration/test_consulting_api_contract.py:92:        "practice", "engagement_phase", "client_industry",
+tests/unit/test_consulting_documents.py:88:        assert a["client_industry"] == ["retail"]
+tests/unit/test_consulting_documents.py:89:        assert a["client_industry"][0] in md.ALLOWED_INDUSTRIES
+tests/unit/test_consulting_documents.py:90:        assert all(v in md.ALLOWED_INDUSTRIES for v in a["client_industry"])
+tests/unit/test_consulting_documents.py:110:                "client_industry": md.ALLOWED_INDUSTRIES,
+tests/unit/test_consulting_documents.py:120:        {"client_industry": ["energy"], "type": "proposal_play",
+tests/unit/test_consulting_documents.py:124:    assert merged["client_industry"] == ["energy"]
+tests/unit/test_consulting_documents.py:135:    out = md.validate_metadata({"client_industry": ["retail"], "unknown_key": ["v"]})
+tests/unit/test_consulting_documents.py:136:    assert out["client_industry"] == ["retail"]
+tests/unit/test_consulting_documents.py:328:                    data={"client_industry": "made_up_industry"})
+
+############ 结论 ############
+  · 计数断言全部为下限（>= 36），无 == 36 形态；
+  · 类型分布自 OEI-011 起为六个 >= 下限（test_consulting_seed_count.py）；
+  · 无任何测试钉住行业取值或每行业条数。
+  => 本刀新增对象不会撞任何断言。
+---- done ----
+
+############ 补充 4（本刀自己加的）：三条规定命令**看不见**"钉住当前值 45"的断言 ############
+上一刀的教训是"清单要附命令"。三条命令锚的是 `36`（KC-001 基线），但本刀把 45 变成 65，
+所以真正要问的是：**有没有断言钉住 45 / 或其他会随语料增长的数**。
+
+$ grep -rnE "\b45\b" tests/
+tests/unit/test_consulting_seed_count.py:44:    OEI-011 raised the corpus to 45: case=13, methodology=10, proposal_play=6,
+tests/unit/test_consulting_documents.py:265:    # actual value is 45; pinning it to 36 would make every future content cut
+tests/unit/test_consulting_engine_merge.py:341:    # static side). 36 is the KC-001 floor; OEI-011 raised the catalogue to 45.
+
+$ grep -rnE "\b(46|50|60|64|65|66|70)\b" tests/ | grep -viE "status|timeout|byte|_count ==|len\(.*\).*== *[0-9]" 
+tests/integration/test_e2_permission.py:12:    """E2 dataset must exist with >= 50 cases including indirect-leak category."""
+tests/integration/test_e2_permission.py:17:    assert len(data["cases"]) >= 50, f"E2 needs >= 50 cases, got {len(data['cases'])}"
+tests/integration/test_s12_redis_rate_limit.py:67:    allowed, code, retry = _check_rate_limit_redis(fake, "org_test", 5, 60.0)
+tests/integration/test_s12_redis_rate_limit.py:82:        allowed, code, _ = _check_rate_limit_redis(fake, "org_test", 3, 60.0)
+tests/integration/test_s12_redis_rate_limit.py:85:    allowed, code, retry = _check_rate_limit_redis(fake, "org_test", 3, 60.0)
+tests/integration/test_s12_redis_rate_limit.py:174:    _check_rate_limit_redis(fake, "org_a", 2, 60.0)
+tests/integration/test_s12_redis_rate_limit.py:175:    _check_rate_limit_redis(fake, "org_a", 2, 60.0)
+tests/integration/test_s12_redis_rate_limit.py:176:    allowed_a, _, _ = _check_rate_limit_redis(fake, "org_a", 2, 60.0)
+tests/integration/test_s12_redis_rate_limit.py:180:    allowed_b, code, _ = _check_rate_limit_redis(fake, "org_b", 5, 60.0)
+tests/integration/test_s10_rate_limit.py:58:    assert _period_to_seconds("m") == 60.0
+tests/integration/test_s10_rate_limit.py:69:        assert result["org_a"] == (100, 60.0)
+tests/integration/test_s10_rate_limit.py:88:        assert result["org_b"] == (200, 60.0)
+tests/integration/test_quote_count_boundary.py:43:与 production demo fixture (50 个 SUP 供应商) 隔离。
+tests/integration/test_s17_lua_rate_limit.py:31:    allowed, code, _ = _check_rate_limit_redis(fake, "org_lua", 5, 60.0)
+tests/integration/test_s17_lua_rate_limit.py:41:        allowed, _, _ = _check_rate_limit_redis(fake, "org_lua", 3, 60.0)
+tests/integration/test_s17_lua_rate_limit.py:44:    allowed, code, retry = _check_rate_limit_redis(fake, "org_lua", 3, 60.0)
+tests/integration/test_s17_lua_rate_limit.py:94:    allowed, code, _ = _check_rate_limit_redis(fallback, "org_fallback", 5, 60.0)
+tests/integration/test_s17_lua_rate_limit.py:106:        allowed, _, _ = _check_rate_limit_redis(fake_lua, "org_a", 2, 60.0)
+tests/integration/test_s17_lua_rate_limit.py:108:    allowed, _, _ = _check_rate_limit_redis(fake_lua, "org_a", 2, 60.0)
+tests/integration/test_s17_lua_rate_limit.py:114:    fake_lua.set("ece:rl:org_a", 0, ex=60, nx=True)
+tests/integration/test_s17_lua_rate_limit.py:129:        _check_rate_limit_redis(fake, "org_atomic", 5, 60.0)
+tests/integration/test_s23_resolver.py:17:    """Demo dataset has 50 suppliers seeded by cut-005 R1 fix."""
+tests/integration/test_s4_4_perf.py:22:N_QUERIES = 30  # smaller than bench script (N=50) for CI speed
+tests/integration/test_s5_3_eval.py:4:1. e6_agent.json dataset is well-formed (≥20 cases V0; target 50 cut-015+)
+tests/integration/test_s5_3_eval.py:21:    """E6 dataset ≥20 cases (V0 starter; target 50 cut-015+)."""
+tests/integration/test_s7_multi_tenant_bench.py:31:    assert _percentile(values, 50) == 5.5
+tests/integration/test_s7_multi_tenant_bench.py:43:    assert _percentile([], 50) == 0.0
+tests/integration/test_s7_multi_tenant_bench.py:49:    assert _percentile([42.0], 50) == 42.0
+tests/unit/test_consulting_seed_discipline.py:32:# A reasonable "is mostly Chinese" check: at least 60% of non-space characters
+tests/unit/test_ops_evidence_redaction.py:66:# Cloudflare edge IPs (currently 104.16.0.0/12, 172.64.0.0/13, 173.245.48.0/20,
+tests/unit/test_ops_evidence_redaction.py:68:# 141.101.64.0/18, 131.0.72.0/22, 190.93.240.0/20, 188.114.96.0/20,
+tests/unit/test_ops_evidence_redaction.py:69:# 173.245.48.0/20 — represented as 172.67.x, 104.21.x, 104.16.x, 172.64.x,
+tests/unit/test_ops_evidence_redaction.py:79:    "172.64.", "172.65.", "172.66.", "172.67.", "172.68.", "172.69.", "172.70.", "172.71.",  # CF
+tests/unit/test_ops_evidence_redaction.py:85:    "173.245.48.", "173.245.49.", "173.245.50.", "173.245.51.", "173.245.52.", "173.245.53.", "173.245.54.", "173.245.55.",  # CF
+
+$ grep -rnE "len\((catalog|.*\.objects)\) *==|total.*== *[0-9]+|static_catalog_size.*== *[0-9]+|facets.*== *[0-9]+" tests/
+tests/integration/test_canonical_seed_completeness.py:196:        assert status["total"] == 0, "fixture should be empty after the wipe"
+tests/integration/test_consulting_filters_search.py:118:    assert body["total"] == 0, f"empty filter must yield total=0, got {body['total']}"
+
+$ grep -rnE "facets" tests/ | grep -iE "len\(|== *[0-9]"
+  (no match)
+
+############ 补充 4 的结论 ############
+  · 没有任何断言钉住 45 / 50 / 65 这类当前值或未来值；
+  · 没有 len(catalog.objects) == N / total == N / static_catalog_size == N 形态；
+  · facets 在测试里只被钉**键集合**与非空，不被钉计数。
+  => 三条规定命令 + 本次补充 4 条，共同覆盖了钉住语料规模的所有已知形状。
+     仍无法排除的形状：测试里间接依赖（例如对某 id 的存在性断言）——
+     本刀只新增、不删不改，故任何既有 id 仍存在的断言天然继续成立。
+---- done ----

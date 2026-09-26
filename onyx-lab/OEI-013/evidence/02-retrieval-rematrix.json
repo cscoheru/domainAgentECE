@@ -1,0 +1,1392 @@
+{
+  "eval_set": "data/eval/retrieval/consulting-demo.json",
+  "engine": "onyx",
+  "engine_adapter": "OnyxContentEngineAdapter",
+  "wall_seconds": 307.9,
+  "partial_run": false,
+  "started_at": "2026-09-26T10:25:32+0800",
+  "finished_at": "2026-09-26T10:30:41+0800",
+  "summary": {
+    "n_runs_per_query_per_mode": 3,
+    "client_timeout_seconds": 180.0,
+    "modes": {
+      "expansion_on": {
+        "skip_query_expansion": false
+      },
+      "expansion_off": {
+        "skip_query_expansion": true
+      }
+    },
+    "errors_by_mode": {
+      "expansion_on": 0,
+      "expansion_off": 0
+    },
+    "hit_at_1_pct": {
+      "expansion_on": 0.0,
+      "expansion_off": 0.0
+    },
+    "hit_at_3_pct": {
+      "expansion_on": 0.0,
+      "expansion_off": 0.0
+    },
+    "hit_rows_total": {
+      "expansion_on": 27,
+      "expansion_off": 27
+    },
+    "hit_queries_total": 9,
+    "reproducibility": {
+      "expansion_on": {
+        "queries_fully_reproducible": 11,
+        "queries_with_complete_runs": 12,
+        "queries_with_incomplete_runs": 0,
+        "fully_reproducible_ratio": 0.917,
+        "mean_pairwise_jaccard": 0.944
+      },
+      "expansion_off": {
+        "queries_fully_reproducible": 12,
+        "queries_with_complete_runs": 12,
+        "queries_with_incomplete_runs": 0,
+        "fully_reproducible_ratio": 1.0,
+        "mean_pairwise_jaccard": 1.0
+      }
+    },
+    "latency_seconds": {
+      "expansion_on": {
+        "n": 36,
+        "min": 3.334,
+        "max": 15.296,
+        "mean": 6.99,
+        "median": 4.567
+      },
+      "expansion_off": {
+        "n": 36,
+        "min": 1.326,
+        "max": 2.201,
+        "mean": 1.57,
+        "median": 1.518
+      }
+    },
+    "miss_false_recall_count": {
+      "expansion_on": 2,
+      "expansion_off": 3
+    },
+    "miss_rows_total": {
+      "expansion_on": 9,
+      "expansion_off": 9
+    },
+    "miss_queries_total": 3
+  },
+  "rows": [
+    {
+      "id": "q01",
+      "query": "某零售集团毛利率连续下滑，怎么降本",
+      "kind": "hit",
+      "expected_title": "case-management-consulting.md",
+      "mode": "expansion_on",
+      "run": 1,
+      "latency_seconds": 11.34,
+      "dedup_titles": [
+        "ece-df16d19c9e7b-oei009-comparison-restricted.md"
+      ],
+      "raw_title_count": 1,
+      "error": null,
+      "ok": true,
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "expected_present": false
+    },
+    {
+      "id": "q01",
+      "query": "某零售集团毛利率连续下滑，怎么降本",
+      "kind": "hit",
+      "expected_title": "case-management-consulting.md",
+      "mode": "expansion_on",
+      "run": 2,
+      "latency_seconds": 4.301,
+      "dedup_titles": [
+        "ece-df16d19c9e7b-oei009-comparison-restricted.md"
+      ],
+      "raw_title_count": 1,
+      "error": null,
+      "ok": true,
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "expected_present": false
+    },
+    {
+      "id": "q01",
+      "query": "某零售集团毛利率连续下滑，怎么降本",
+      "kind": "hit",
+      "expected_title": "case-management-consulting.md",
+      "mode": "expansion_on",
+      "run": 3,
+      "latency_seconds": 4.26,
+      "dedup_titles": [
+        "ece-df16d19c9e7b-oei009-comparison-restricted.md"
+      ],
+      "raw_title_count": 1,
+      "error": null,
+      "ok": true,
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "expected_present": false
+    },
+    {
+      "id": "q01",
+      "query": "某零售集团毛利率连续下滑，怎么降本",
+      "kind": "hit",
+      "expected_title": "case-management-consulting.md",
+      "mode": "expansion_off",
+      "run": 1,
+      "latency_seconds": 2.055,
+      "dedup_titles": [
+        "ece-df16d19c9e7b-oei009-comparison-restricted.md"
+      ],
+      "raw_title_count": 1,
+      "error": null,
+      "ok": true,
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "expected_present": false
+    },
+    {
+      "id": "q01",
+      "query": "某零售集团毛利率连续下滑，怎么降本",
+      "kind": "hit",
+      "expected_title": "case-management-consulting.md",
+      "mode": "expansion_off",
+      "run": 2,
+      "latency_seconds": 1.587,
+      "dedup_titles": [
+        "ece-df16d19c9e7b-oei009-comparison-restricted.md"
+      ],
+      "raw_title_count": 1,
+      "error": null,
+      "ok": true,
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "expected_present": false
+    },
+    {
+      "id": "q01",
+      "query": "某零售集团毛利率连续下滑，怎么降本",
+      "kind": "hit",
+      "expected_title": "case-management-consulting.md",
+      "mode": "expansion_off",
+      "run": 3,
+      "latency_seconds": 1.584,
+      "dedup_titles": [
+        "ece-df16d19c9e7b-oei009-comparison-restricted.md"
+      ],
+      "raw_title_count": 1,
+      "error": null,
+      "ok": true,
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "expected_present": false
+    },
+    {
+      "id": "q02",
+      "query": "SKU 过度膨胀怎么砍尾",
+      "kind": "hit",
+      "expected_title": "case-management-consulting.md",
+      "mode": "expansion_on",
+      "run": 1,
+      "latency_seconds": 9.625,
+      "dedup_titles": [
+        "ece-df16d19c9e7b-oei009-comparison-restricted.md"
+      ],
+      "raw_title_count": 1,
+      "error": null,
+      "ok": true,
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "expected_present": false
+    },
+    {
+      "id": "q02",
+      "query": "SKU 过度膨胀怎么砍尾",
+      "kind": "hit",
+      "expected_title": "case-management-consulting.md",
+      "mode": "expansion_on",
+      "run": 2,
+      "latency_seconds": 3.908,
+      "dedup_titles": [
+        "ece-df16d19c9e7b-oei009-comparison-restricted.md"
+      ],
+      "raw_title_count": 1,
+      "error": null,
+      "ok": true,
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "expected_present": false
+    },
+    {
+      "id": "q02",
+      "query": "SKU 过度膨胀怎么砍尾",
+      "kind": "hit",
+      "expected_title": "case-management-consulting.md",
+      "mode": "expansion_on",
+      "run": 3,
+      "latency_seconds": 3.714,
+      "dedup_titles": [
+        "ece-df16d19c9e7b-oei009-comparison-restricted.md"
+      ],
+      "raw_title_count": 1,
+      "error": null,
+      "ok": true,
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "expected_present": false
+    },
+    {
+      "id": "q02",
+      "query": "SKU 过度膨胀怎么砍尾",
+      "kind": "hit",
+      "expected_title": "case-management-consulting.md",
+      "mode": "expansion_off",
+      "run": 1,
+      "latency_seconds": 1.902,
+      "dedup_titles": [
+        "ece-df16d19c9e7b-oei009-comparison-restricted.md"
+      ],
+      "raw_title_count": 1,
+      "error": null,
+      "ok": true,
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "expected_present": false
+    },
+    {
+      "id": "q02",
+      "query": "SKU 过度膨胀怎么砍尾",
+      "kind": "hit",
+      "expected_title": "case-management-consulting.md",
+      "mode": "expansion_off",
+      "run": 2,
+      "latency_seconds": 1.535,
+      "dedup_titles": [
+        "ece-df16d19c9e7b-oei009-comparison-restricted.md"
+      ],
+      "raw_title_count": 1,
+      "error": null,
+      "ok": true,
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "expected_present": false
+    },
+    {
+      "id": "q02",
+      "query": "SKU 过度膨胀怎么砍尾",
+      "kind": "hit",
+      "expected_title": "case-management-consulting.md",
+      "mode": "expansion_off",
+      "run": 3,
+      "latency_seconds": 1.518,
+      "dedup_titles": [
+        "ece-df16d19c9e7b-oei009-comparison-restricted.md"
+      ],
+      "raw_title_count": 1,
+      "error": null,
+      "ok": true,
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "expected_present": false
+    },
+    {
+      "id": "q03",
+      "query": "库存周转天数过高怎么降低",
+      "kind": "hit",
+      "expected_title": "case-management-consulting.md",
+      "mode": "expansion_on",
+      "run": 1,
+      "latency_seconds": 9.82,
+      "dedup_titles": [
+        "ece-df16d19c9e7b-oei009-comparison-restricted.md"
+      ],
+      "raw_title_count": 1,
+      "error": null,
+      "ok": true,
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "expected_present": false
+    },
+    {
+      "id": "q03",
+      "query": "库存周转天数过高怎么降低",
+      "kind": "hit",
+      "expected_title": "case-management-consulting.md",
+      "mode": "expansion_on",
+      "run": 2,
+      "latency_seconds": 4.131,
+      "dedup_titles": [
+        "ece-df16d19c9e7b-oei009-comparison-restricted.md"
+      ],
+      "raw_title_count": 1,
+      "error": null,
+      "ok": true,
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "expected_present": false
+    },
+    {
+      "id": "q03",
+      "query": "库存周转天数过高怎么降低",
+      "kind": "hit",
+      "expected_title": "case-management-consulting.md",
+      "mode": "expansion_on",
+      "run": 3,
+      "latency_seconds": 4.13,
+      "dedup_titles": [
+        "ece-df16d19c9e7b-oei009-comparison-restricted.md"
+      ],
+      "raw_title_count": 1,
+      "error": null,
+      "ok": true,
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "expected_present": false
+    },
+    {
+      "id": "q03",
+      "query": "库存周转天数过高怎么降低",
+      "kind": "hit",
+      "expected_title": "case-management-consulting.md",
+      "mode": "expansion_off",
+      "run": 1,
+      "latency_seconds": 1.485,
+      "dedup_titles": [
+        "ece-df16d19c9e7b-oei009-comparison-restricted.md"
+      ],
+      "raw_title_count": 1,
+      "error": null,
+      "ok": true,
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "expected_present": false
+    },
+    {
+      "id": "q03",
+      "query": "库存周转天数过高怎么降低",
+      "kind": "hit",
+      "expected_title": "case-management-consulting.md",
+      "mode": "expansion_off",
+      "run": 2,
+      "latency_seconds": 1.421,
+      "dedup_titles": [
+        "ece-df16d19c9e7b-oei009-comparison-restricted.md"
+      ],
+      "raw_title_count": 1,
+      "error": null,
+      "ok": true,
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "expected_present": false
+    },
+    {
+      "id": "q03",
+      "query": "库存周转天数过高怎么降低",
+      "kind": "hit",
+      "expected_title": "case-management-consulting.md",
+      "mode": "expansion_off",
+      "run": 3,
+      "latency_seconds": 1.453,
+      "dedup_titles": [
+        "ece-df16d19c9e7b-oei009-comparison-restricted.md"
+      ],
+      "raw_title_count": 1,
+      "error": null,
+      "ok": true,
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "expected_present": false
+    },
+    {
+      "id": "q04",
+      "query": "问题树怎么拆解业务问题",
+      "kind": "hit",
+      "expected_title": "methodology-framework.md",
+      "mode": "expansion_on",
+      "run": 1,
+      "latency_seconds": 13.291,
+      "dedup_titles": [
+        "ece-df16d19c9e7b-oei009-comparison-restricted.md"
+      ],
+      "raw_title_count": 1,
+      "error": null,
+      "ok": true,
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "expected_present": false
+    },
+    {
+      "id": "q04",
+      "query": "问题树怎么拆解业务问题",
+      "kind": "hit",
+      "expected_title": "methodology-framework.md",
+      "mode": "expansion_on",
+      "run": 2,
+      "latency_seconds": 7.168,
+      "dedup_titles": [
+        "ece-df16d19c9e7b-oei009-comparison-restricted.md"
+      ],
+      "raw_title_count": 1,
+      "error": null,
+      "ok": true,
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "expected_present": false
+    },
+    {
+      "id": "q04",
+      "query": "问题树怎么拆解业务问题",
+      "kind": "hit",
+      "expected_title": "methodology-framework.md",
+      "mode": "expansion_on",
+      "run": 3,
+      "latency_seconds": 4.365,
+      "dedup_titles": [
+        "ece-df16d19c9e7b-oei009-comparison-restricted.md"
+      ],
+      "raw_title_count": 1,
+      "error": null,
+      "ok": true,
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "expected_present": false
+    },
+    {
+      "id": "q04",
+      "query": "问题树怎么拆解业务问题",
+      "kind": "hit",
+      "expected_title": "methodology-framework.md",
+      "mode": "expansion_off",
+      "run": 1,
+      "latency_seconds": 1.514,
+      "dedup_titles": [
+        "ece-df16d19c9e7b-oei009-comparison-restricted.md"
+      ],
+      "raw_title_count": 1,
+      "error": null,
+      "ok": true,
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "expected_present": false
+    },
+    {
+      "id": "q04",
+      "query": "问题树怎么拆解业务问题",
+      "kind": "hit",
+      "expected_title": "methodology-framework.md",
+      "mode": "expansion_off",
+      "run": 2,
+      "latency_seconds": 1.459,
+      "dedup_titles": [
+        "ece-df16d19c9e7b-oei009-comparison-restricted.md"
+      ],
+      "raw_title_count": 1,
+      "error": null,
+      "ok": true,
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "expected_present": false
+    },
+    {
+      "id": "q04",
+      "query": "问题树怎么拆解业务问题",
+      "kind": "hit",
+      "expected_title": "methodology-framework.md",
+      "mode": "expansion_off",
+      "run": 3,
+      "latency_seconds": 1.494,
+      "dedup_titles": [
+        "ece-df16d19c9e7b-oei009-comparison-restricted.md"
+      ],
+      "raw_title_count": 1,
+      "error": null,
+      "ok": true,
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "expected_present": false
+    },
+    {
+      "id": "q05",
+      "query": "MECE 的排他性和穷尽性怎么检验",
+      "kind": "hit",
+      "expected_title": "methodology-framework.md",
+      "mode": "expansion_on",
+      "run": 1,
+      "latency_seconds": 12.003,
+      "dedup_titles": [
+        "case-management-consulting.md",
+        "ece-df16d19c9e7b-oei009-comparison-restricted.md",
+        "play-sales-delivery.md"
+      ],
+      "raw_title_count": 3,
+      "error": null,
+      "ok": true,
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "expected_present": false
+    },
+    {
+      "id": "q05",
+      "query": "MECE 的排他性和穷尽性怎么检验",
+      "kind": "hit",
+      "expected_title": "methodology-framework.md",
+      "mode": "expansion_on",
+      "run": 2,
+      "latency_seconds": 6.133,
+      "dedup_titles": [
+        "case-management-consulting.md",
+        "ece-df16d19c9e7b-oei009-comparison-restricted.md",
+        "play-sales-delivery.md"
+      ],
+      "raw_title_count": 3,
+      "error": null,
+      "ok": true,
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "expected_present": false
+    },
+    {
+      "id": "q05",
+      "query": "MECE 的排他性和穷尽性怎么检验",
+      "kind": "hit",
+      "expected_title": "methodology-framework.md",
+      "mode": "expansion_on",
+      "run": 3,
+      "latency_seconds": 6.212,
+      "dedup_titles": [
+        "case-management-consulting.md",
+        "ece-df16d19c9e7b-oei009-comparison-restricted.md",
+        "play-sales-delivery.md"
+      ],
+      "raw_title_count": 3,
+      "error": null,
+      "ok": true,
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "expected_present": false
+    },
+    {
+      "id": "q05",
+      "query": "MECE 的排他性和穷尽性怎么检验",
+      "kind": "hit",
+      "expected_title": "methodology-framework.md",
+      "mode": "expansion_off",
+      "run": 1,
+      "latency_seconds": 2.201,
+      "dedup_titles": [
+        "case-management-consulting.md",
+        "ece-df16d19c9e7b-oei009-comparison-restricted.md"
+      ],
+      "raw_title_count": 2,
+      "error": null,
+      "ok": true,
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "expected_present": false
+    },
+    {
+      "id": "q05",
+      "query": "MECE 的排他性和穷尽性怎么检验",
+      "kind": "hit",
+      "expected_title": "methodology-framework.md",
+      "mode": "expansion_off",
+      "run": 2,
+      "latency_seconds": 1.868,
+      "dedup_titles": [
+        "case-management-consulting.md",
+        "ece-df16d19c9e7b-oei009-comparison-restricted.md"
+      ],
+      "raw_title_count": 2,
+      "error": null,
+      "ok": true,
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "expected_present": false
+    },
+    {
+      "id": "q05",
+      "query": "MECE 的排他性和穷尽性怎么检验",
+      "kind": "hit",
+      "expected_title": "methodology-framework.md",
+      "mode": "expansion_off",
+      "run": 3,
+      "latency_seconds": 1.803,
+      "dedup_titles": [
+        "case-management-consulting.md",
+        "ece-df16d19c9e7b-oei009-comparison-restricted.md"
+      ],
+      "raw_title_count": 2,
+      "error": null,
+      "ok": true,
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "expected_present": false
+    },
+    {
+      "id": "q06",
+      "query": "假设驱动怎么排验证优先级",
+      "kind": "hit",
+      "expected_title": "methodology-framework.md",
+      "mode": "expansion_on",
+      "run": 1,
+      "latency_seconds": 12.361,
+      "dedup_titles": [
+        "ece-df16d19c9e7b-oei009-comparison-restricted.md"
+      ],
+      "raw_title_count": 1,
+      "error": null,
+      "ok": true,
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "expected_present": false
+    },
+    {
+      "id": "q06",
+      "query": "假设驱动怎么排验证优先级",
+      "kind": "hit",
+      "expected_title": "methodology-framework.md",
+      "mode": "expansion_on",
+      "run": 2,
+      "latency_seconds": 4.147,
+      "dedup_titles": [
+        "ece-df16d19c9e7b-oei009-comparison-restricted.md"
+      ],
+      "raw_title_count": 1,
+      "error": null,
+      "ok": true,
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "expected_present": false
+    },
+    {
+      "id": "q06",
+      "query": "假设驱动怎么排验证优先级",
+      "kind": "hit",
+      "expected_title": "methodology-framework.md",
+      "mode": "expansion_on",
+      "run": 3,
+      "latency_seconds": 4.196,
+      "dedup_titles": [
+        "ece-df16d19c9e7b-oei009-comparison-restricted.md"
+      ],
+      "raw_title_count": 1,
+      "error": null,
+      "ok": true,
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "expected_present": false
+    },
+    {
+      "id": "q06",
+      "query": "假设驱动怎么排验证优先级",
+      "kind": "hit",
+      "expected_title": "methodology-framework.md",
+      "mode": "expansion_off",
+      "run": 1,
+      "latency_seconds": 1.423,
+      "dedup_titles": [
+        "ece-df16d19c9e7b-oei009-comparison-restricted.md"
+      ],
+      "raw_title_count": 1,
+      "error": null,
+      "ok": true,
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "expected_present": false
+    },
+    {
+      "id": "q06",
+      "query": "假设驱动怎么排验证优先级",
+      "kind": "hit",
+      "expected_title": "methodology-framework.md",
+      "mode": "expansion_off",
+      "run": 2,
+      "latency_seconds": 1.469,
+      "dedup_titles": [
+        "ece-df16d19c9e7b-oei009-comparison-restricted.md"
+      ],
+      "raw_title_count": 1,
+      "error": null,
+      "ok": true,
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "expected_present": false
+    },
+    {
+      "id": "q06",
+      "query": "假设驱动怎么排验证优先级",
+      "kind": "hit",
+      "expected_title": "methodology-framework.md",
+      "mode": "expansion_off",
+      "run": 3,
+      "latency_seconds": 1.453,
+      "dedup_titles": [
+        "ece-df16d19c9e7b-oei009-comparison-restricted.md"
+      ],
+      "raw_title_count": 1,
+      "error": null,
+      "ok": true,
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "expected_present": false
+    },
+    {
+      "id": "q07",
+      "query": "销售到交付的五阶段衔接怎么做",
+      "kind": "hit",
+      "expected_title": "play-sales-delivery.md",
+      "mode": "expansion_on",
+      "run": 1,
+      "latency_seconds": 12.426,
+      "dedup_titles": [
+        "ece-df16d19c9e7b-oei009-comparison-restricted.md"
+      ],
+      "raw_title_count": 1,
+      "error": null,
+      "ok": true,
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "expected_present": false
+    },
+    {
+      "id": "q07",
+      "query": "销售到交付的五阶段衔接怎么做",
+      "kind": "hit",
+      "expected_title": "play-sales-delivery.md",
+      "mode": "expansion_on",
+      "run": 2,
+      "latency_seconds": 4.483,
+      "dedup_titles": [
+        "ece-df16d19c9e7b-oei009-comparison-restricted.md"
+      ],
+      "raw_title_count": 1,
+      "error": null,
+      "ok": true,
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "expected_present": false
+    },
+    {
+      "id": "q07",
+      "query": "销售到交付的五阶段衔接怎么做",
+      "kind": "hit",
+      "expected_title": "play-sales-delivery.md",
+      "mode": "expansion_on",
+      "run": 3,
+      "latency_seconds": 4.567,
+      "dedup_titles": [
+        "ece-df16d19c9e7b-oei009-comparison-restricted.md"
+      ],
+      "raw_title_count": 1,
+      "error": null,
+      "ok": true,
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "expected_present": false
+    },
+    {
+      "id": "q07",
+      "query": "销售到交付的五阶段衔接怎么做",
+      "kind": "hit",
+      "expected_title": "play-sales-delivery.md",
+      "mode": "expansion_off",
+      "run": 1,
+      "latency_seconds": 1.366,
+      "dedup_titles": [
+        "ece-df16d19c9e7b-oei009-comparison-restricted.md"
+      ],
+      "raw_title_count": 1,
+      "error": null,
+      "ok": true,
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "expected_present": false
+    },
+    {
+      "id": "q07",
+      "query": "销售到交付的五阶段衔接怎么做",
+      "kind": "hit",
+      "expected_title": "play-sales-delivery.md",
+      "mode": "expansion_off",
+      "run": 2,
+      "latency_seconds": 1.379,
+      "dedup_titles": [
+        "ece-df16d19c9e7b-oei009-comparison-restricted.md"
+      ],
+      "raw_title_count": 1,
+      "error": null,
+      "ok": true,
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "expected_present": false
+    },
+    {
+      "id": "q07",
+      "query": "销售到交付的五阶段衔接怎么做",
+      "kind": "hit",
+      "expected_title": "play-sales-delivery.md",
+      "mode": "expansion_off",
+      "run": 3,
+      "latency_seconds": 1.475,
+      "dedup_titles": [
+        "ece-df16d19c9e7b-oei009-comparison-restricted.md"
+      ],
+      "raw_title_count": 1,
+      "error": null,
+      "ok": true,
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "expected_present": false
+    },
+    {
+      "id": "q08",
+      "query": "售前立项书要包含什么内容",
+      "kind": "hit",
+      "expected_title": "play-sales-delivery.md",
+      "mode": "expansion_on",
+      "run": 1,
+      "latency_seconds": 11.829,
+      "dedup_titles": [
+        "ece-df16d19c9e7b-oei009-comparison-restricted.md"
+      ],
+      "raw_title_count": 1,
+      "error": null,
+      "ok": true,
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "expected_present": false
+    },
+    {
+      "id": "q08",
+      "query": "售前立项书要包含什么内容",
+      "kind": "hit",
+      "expected_title": "play-sales-delivery.md",
+      "mode": "expansion_on",
+      "run": 2,
+      "latency_seconds": 3.805,
+      "dedup_titles": [
+        "ece-df16d19c9e7b-oei009-comparison-restricted.md"
+      ],
+      "raw_title_count": 1,
+      "error": null,
+      "ok": true,
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "expected_present": false
+    },
+    {
+      "id": "q08",
+      "query": "售前立项书要包含什么内容",
+      "kind": "hit",
+      "expected_title": "play-sales-delivery.md",
+      "mode": "expansion_on",
+      "run": 3,
+      "latency_seconds": 3.668,
+      "dedup_titles": [
+        "ece-df16d19c9e7b-oei009-comparison-restricted.md"
+      ],
+      "raw_title_count": 1,
+      "error": null,
+      "ok": true,
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "expected_present": false
+    },
+    {
+      "id": "q08",
+      "query": "售前立项书要包含什么内容",
+      "kind": "hit",
+      "expected_title": "play-sales-delivery.md",
+      "mode": "expansion_off",
+      "run": 1,
+      "latency_seconds": 1.359,
+      "dedup_titles": [
+        "ece-df16d19c9e7b-oei009-comparison-restricted.md"
+      ],
+      "raw_title_count": 1,
+      "error": null,
+      "ok": true,
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "expected_present": false
+    },
+    {
+      "id": "q08",
+      "query": "售前立项书要包含什么内容",
+      "kind": "hit",
+      "expected_title": "play-sales-delivery.md",
+      "mode": "expansion_off",
+      "run": 2,
+      "latency_seconds": 1.412,
+      "dedup_titles": [
+        "ece-df16d19c9e7b-oei009-comparison-restricted.md"
+      ],
+      "raw_title_count": 1,
+      "error": null,
+      "ok": true,
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "expected_present": false
+    },
+    {
+      "id": "q08",
+      "query": "售前立项书要包含什么内容",
+      "kind": "hit",
+      "expected_title": "play-sales-delivery.md",
+      "mode": "expansion_off",
+      "run": 3,
+      "latency_seconds": 1.499,
+      "dedup_titles": [
+        "ece-df16d19c9e7b-oei009-comparison-restricted.md"
+      ],
+      "raw_title_count": 1,
+      "error": null,
+      "ok": true,
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "expected_present": false
+    },
+    {
+      "id": "q09",
+      "query": "交付 kickoff 会议要讲清哪三件事",
+      "kind": "hit",
+      "expected_title": "play-sales-delivery.md",
+      "mode": "expansion_on",
+      "run": 1,
+      "latency_seconds": 15.296,
+      "dedup_titles": [
+        "case-management-consulting.md",
+        "methodology-framework.md"
+      ],
+      "raw_title_count": 2,
+      "error": null,
+      "ok": true,
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "expected_present": false
+    },
+    {
+      "id": "q09",
+      "query": "交付 kickoff 会议要讲清哪三件事",
+      "kind": "hit",
+      "expected_title": "play-sales-delivery.md",
+      "mode": "expansion_on",
+      "run": 2,
+      "latency_seconds": 3.786,
+      "dedup_titles": [
+        "case-management-consulting.md",
+        "methodology-framework.md"
+      ],
+      "raw_title_count": 2,
+      "error": null,
+      "ok": true,
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "expected_present": false
+    },
+    {
+      "id": "q09",
+      "query": "交付 kickoff 会议要讲清哪三件事",
+      "kind": "hit",
+      "expected_title": "play-sales-delivery.md",
+      "mode": "expansion_on",
+      "run": 3,
+      "latency_seconds": 3.659,
+      "dedup_titles": [
+        "case-management-consulting.md",
+        "methodology-framework.md"
+      ],
+      "raw_title_count": 2,
+      "error": null,
+      "ok": true,
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "expected_present": false
+    },
+    {
+      "id": "q09",
+      "query": "交付 kickoff 会议要讲清哪三件事",
+      "kind": "hit",
+      "expected_title": "play-sales-delivery.md",
+      "mode": "expansion_off",
+      "run": 1,
+      "latency_seconds": 1.719,
+      "dedup_titles": [
+        "case-management-consulting.md",
+        "methodology-framework.md"
+      ],
+      "raw_title_count": 2,
+      "error": null,
+      "ok": true,
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "expected_present": false
+    },
+    {
+      "id": "q09",
+      "query": "交付 kickoff 会议要讲清哪三件事",
+      "kind": "hit",
+      "expected_title": "play-sales-delivery.md",
+      "mode": "expansion_off",
+      "run": 2,
+      "latency_seconds": 1.594,
+      "dedup_titles": [
+        "case-management-consulting.md",
+        "methodology-framework.md"
+      ],
+      "raw_title_count": 2,
+      "error": null,
+      "ok": true,
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "expected_present": false
+    },
+    {
+      "id": "q09",
+      "query": "交付 kickoff 会议要讲清哪三件事",
+      "kind": "hit",
+      "expected_title": "play-sales-delivery.md",
+      "mode": "expansion_off",
+      "run": 3,
+      "latency_seconds": 1.527,
+      "dedup_titles": [
+        "case-management-consulting.md",
+        "methodology-framework.md"
+      ],
+      "raw_title_count": 2,
+      "error": null,
+      "ok": true,
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "expected_present": false
+    },
+    {
+      "id": "q10",
+      "query": "员工报销政策与发票审核流程",
+      "kind": "miss",
+      "expected_title": "play-sales-delivery.md",
+      "mode": "expansion_on",
+      "run": 1,
+      "latency_seconds": 9.003,
+      "dedup_titles": [
+        "ece-df16d19c9e7b-oei009-comparison-restricted.md"
+      ],
+      "raw_title_count": 1,
+      "error": null,
+      "ok": true,
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "expected_present": false
+    },
+    {
+      "id": "q10",
+      "query": "员工报销政策与发票审核流程",
+      "kind": "miss",
+      "expected_title": "play-sales-delivery.md",
+      "mode": "expansion_on",
+      "run": 2,
+      "latency_seconds": 3.558,
+      "dedup_titles": [
+        "ece-df16d19c9e7b-oei009-comparison-restricted.md"
+      ],
+      "raw_title_count": 1,
+      "error": null,
+      "ok": true,
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "expected_present": false
+    },
+    {
+      "id": "q10",
+      "query": "员工报销政策与发票审核流程",
+      "kind": "miss",
+      "expected_title": "play-sales-delivery.md",
+      "mode": "expansion_on",
+      "run": 3,
+      "latency_seconds": 3.334,
+      "dedup_titles": [
+        "ece-df16d19c9e7b-oei009-comparison-restricted.md"
+      ],
+      "raw_title_count": 1,
+      "error": null,
+      "ok": true,
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "expected_present": false
+    },
+    {
+      "id": "q10",
+      "query": "员工报销政策与发票审核流程",
+      "kind": "miss",
+      "expected_title": "play-sales-delivery.md",
+      "mode": "expansion_off",
+      "run": 1,
+      "latency_seconds": 1.554,
+      "dedup_titles": [
+        "ece-df16d19c9e7b-oei009-comparison-restricted.md"
+      ],
+      "raw_title_count": 1,
+      "error": null,
+      "ok": true,
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "expected_present": false
+    },
+    {
+      "id": "q10",
+      "query": "员工报销政策与发票审核流程",
+      "kind": "miss",
+      "expected_title": "play-sales-delivery.md",
+      "mode": "expansion_off",
+      "run": 2,
+      "latency_seconds": 1.586,
+      "dedup_titles": [
+        "ece-df16d19c9e7b-oei009-comparison-restricted.md"
+      ],
+      "raw_title_count": 1,
+      "error": null,
+      "ok": true,
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "expected_present": false
+    },
+    {
+      "id": "q10",
+      "query": "员工报销政策与发票审核流程",
+      "kind": "miss",
+      "expected_title": "play-sales-delivery.md",
+      "mode": "expansion_off",
+      "run": 3,
+      "latency_seconds": 1.606,
+      "dedup_titles": [
+        "ece-df16d19c9e7b-oei009-comparison-restricted.md"
+      ],
+      "raw_title_count": 1,
+      "error": null,
+      "ok": true,
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "expected_present": false
+    },
+    {
+      "id": "q11",
+      "query": "研发团队 OKR 绩效考核办法",
+      "kind": "miss",
+      "expected_title": "case-management-consulting.md",
+      "mode": "expansion_on",
+      "run": 1,
+      "latency_seconds": 11.681,
+      "dedup_titles": [
+        "methodology-framework.md"
+      ],
+      "raw_title_count": 1,
+      "error": null,
+      "ok": true,
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "expected_present": false
+    },
+    {
+      "id": "q11",
+      "query": "研发团队 OKR 绩效考核办法",
+      "kind": "miss",
+      "expected_title": "case-management-consulting.md",
+      "mode": "expansion_on",
+      "run": 2,
+      "latency_seconds": 10.519,
+      "dedup_titles": [
+        "case-management-consulting.md"
+      ],
+      "raw_title_count": 1,
+      "error": null,
+      "ok": true,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "expected_present": true
+    },
+    {
+      "id": "q11",
+      "query": "研发团队 OKR 绩效考核办法",
+      "kind": "miss",
+      "expected_title": "case-management-consulting.md",
+      "mode": "expansion_on",
+      "run": 3,
+      "latency_seconds": 5.212,
+      "dedup_titles": [
+        "case-management-consulting.md"
+      ],
+      "raw_title_count": 1,
+      "error": null,
+      "ok": true,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "expected_present": true
+    },
+    {
+      "id": "q11",
+      "query": "研发团队 OKR 绩效考核办法",
+      "kind": "miss",
+      "expected_title": "case-management-consulting.md",
+      "mode": "expansion_off",
+      "run": 1,
+      "latency_seconds": 1.647,
+      "dedup_titles": [
+        "case-management-consulting.md"
+      ],
+      "raw_title_count": 1,
+      "error": null,
+      "ok": true,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "expected_present": true
+    },
+    {
+      "id": "q11",
+      "query": "研发团队 OKR 绩效考核办法",
+      "kind": "miss",
+      "expected_title": "case-management-consulting.md",
+      "mode": "expansion_off",
+      "run": 2,
+      "latency_seconds": 1.689,
+      "dedup_titles": [
+        "case-management-consulting.md"
+      ],
+      "raw_title_count": 1,
+      "error": null,
+      "ok": true,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "expected_present": true
+    },
+    {
+      "id": "q11",
+      "query": "研发团队 OKR 绩效考核办法",
+      "kind": "miss",
+      "expected_title": "case-management-consulting.md",
+      "mode": "expansion_off",
+      "run": 3,
+      "latency_seconds": 1.661,
+      "dedup_titles": [
+        "case-management-consulting.md"
+      ],
+      "raw_title_count": 1,
+      "error": null,
+      "ok": true,
+      "hit_at_1": true,
+      "hit_at_3": true,
+      "expected_present": true
+    },
+    {
+      "id": "q12",
+      "query": "数据中心机房选址与服务器运维",
+      "kind": "miss",
+      "expected_title": "methodology-framework.md",
+      "mode": "expansion_on",
+      "run": 1,
+      "latency_seconds": 11.472,
+      "dedup_titles": [
+        "ece-df16d19c9e7b-oei009-comparison-restricted.md"
+      ],
+      "raw_title_count": 1,
+      "error": null,
+      "ok": true,
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "expected_present": false
+    },
+    {
+      "id": "q12",
+      "query": "数据中心机房选址与服务器运维",
+      "kind": "miss",
+      "expected_title": "methodology-framework.md",
+      "mode": "expansion_on",
+      "run": 2,
+      "latency_seconds": 4.332,
+      "dedup_titles": [
+        "ece-df16d19c9e7b-oei009-comparison-restricted.md"
+      ],
+      "raw_title_count": 1,
+      "error": null,
+      "ok": true,
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "expected_present": false
+    },
+    {
+      "id": "q12",
+      "query": "数据中心机房选址与服务器运维",
+      "kind": "miss",
+      "expected_title": "methodology-framework.md",
+      "mode": "expansion_on",
+      "run": 3,
+      "latency_seconds": 3.801,
+      "dedup_titles": [
+        "ece-df16d19c9e7b-oei009-comparison-restricted.md"
+      ],
+      "raw_title_count": 1,
+      "error": null,
+      "ok": true,
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "expected_present": false
+    },
+    {
+      "id": "q12",
+      "query": "数据中心机房选址与服务器运维",
+      "kind": "miss",
+      "expected_title": "methodology-framework.md",
+      "mode": "expansion_off",
+      "run": 1,
+      "latency_seconds": 1.326,
+      "dedup_titles": [
+        "ece-df16d19c9e7b-oei009-comparison-restricted.md"
+      ],
+      "raw_title_count": 1,
+      "error": null,
+      "ok": true,
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "expected_present": false
+    },
+    {
+      "id": "q12",
+      "query": "数据中心机房选址与服务器运维",
+      "kind": "miss",
+      "expected_title": "methodology-framework.md",
+      "mode": "expansion_off",
+      "run": 2,
+      "latency_seconds": 1.36,
+      "dedup_titles": [
+        "ece-df16d19c9e7b-oei009-comparison-restricted.md"
+      ],
+      "raw_title_count": 1,
+      "error": null,
+      "ok": true,
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "expected_present": false
+    },
+    {
+      "id": "q12",
+      "query": "数据中心机房选址与服务器运维",
+      "kind": "miss",
+      "expected_title": "methodology-framework.md",
+      "mode": "expansion_off",
+      "run": 3,
+      "latency_seconds": 1.417,
+      "dedup_titles": [
+        "ece-df16d19c9e7b-oei009-comparison-restricted.md"
+      ],
+      "raw_title_count": 1,
+      "error": null,
+      "ok": true,
+      "hit_at_1": false,
+      "hit_at_3": false,
+      "expected_present": false
+    }
+  ]
+}

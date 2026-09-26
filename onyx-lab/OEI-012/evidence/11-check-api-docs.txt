@@ -1,0 +1,65 @@
+=== OEI-012 步骤 6.3 — make check-api-docs（A9）===
+date: 2026-09-26T10:04:11+08:00
+
+$ make check-api-docs
+uv run python scripts/check_api_docs.py
+API.md endpoints (26):
+  DELETE /api/v1/memory
+  DELETE /api/v1/memory/{memory_id}
+  GET    /api/v1/audit/context/{request_id}
+  GET    /api/v1/consulting/documents/{document_id}
+  GET    /api/v1/consulting/facets
+  GET    /api/v1/consulting/library
+  GET    /api/v1/consulting/objects/{object_id}
+  GET    /api/v1/demo/domains
+  GET    /api/v1/entities
+  GET    /api/v1/entities/{display_id}
+  GET    /api/v1/entities/{display_id}/relationships
+  GET    /api/v1/ingest/runs/{run_id}
+  GET    /api/v1/memory
+  GET    /debug/context/{request_id}
+  GET    /engine/status
+  POST   /api/v1/actions/execute
+  POST   /api/v1/actions/preview
+  POST   /api/v1/consulting/documents
+  POST   /api/v1/context
+  POST   /api/v1/demo/scenarios/generate
+  POST   /api/v1/entities
+  POST   /api/v1/ingest/runs
+  POST   /api/v1/memory
+  POST   /api/v1/permissions/check
+  POST   /api/v1/resolve
+  POST   /api/v1/search
+
+App routes (26):
+  DELETE /api/v1/memory
+  DELETE /api/v1/memory/{memory_id}
+  GET    /api/v1/audit/context/{request_id}
+  GET    /api/v1/consulting/documents/{document_id}
+  GET    /api/v1/consulting/facets
+  GET    /api/v1/consulting/library
+  GET    /api/v1/consulting/objects/{object_id}
+  GET    /api/v1/demo/domains
+  GET    /api/v1/entities
+  GET    /api/v1/entities/{display_id}
+  GET    /api/v1/entities/{display_id}/relationships
+  GET    /api/v1/ingest/runs/{run_id}
+  GET    /api/v1/memory
+  GET    /debug/context/{request_id}
+  GET    /engine/status
+  POST   /api/v1/actions/execute
+  POST   /api/v1/actions/preview
+  POST   /api/v1/consulting/documents
+  POST   /api/v1/context
+  POST   /api/v1/demo/scenarios/generate
+  POST   /api/v1/entities
+  POST   /api/v1/ingest/runs
+  POST   /api/v1/memory
+  POST   /api/v1/permissions/check
+  POST   /api/v1/resolve
+  POST   /api/v1/search
+
+Common: 26 | Docs-only (planned): 0 | App-only: 0
+
+OK — no app-only routes; docs-only are planned Sprint 1+ scope
+make exit=0

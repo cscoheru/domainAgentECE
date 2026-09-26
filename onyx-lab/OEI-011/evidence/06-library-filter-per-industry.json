@@ -1,0 +1,148 @@
+{
+  "endpoint": "GET /api/v1/consulting/library?client_industry=<v>",
+  "note": "one real call per facet value; `first_ids` proves the response is the filtered subset, not just a total",
+  "calls": [
+    {
+      "value": "banking",
+      "http_status": 200,
+      "total": 2,
+      "returned_on_first_page": 2,
+      "limit": 24,
+      "first_ids": [
+        "case-bank-retail-channel-002",
+        "industry-note-cn-banking-2026-001"
+      ],
+      "meets_min_2": true
+    },
+    {
+      "value": "consumer_goods",
+      "http_status": 200,
+      "total": 2,
+      "returned_on_first_page": 2,
+      "limit": 24,
+      "first_ids": [
+        "case-consumer-goods-channel-006",
+        "industry-note-cn-consumer-2026-002"
+      ],
+      "meets_min_2": true
+    },
+    {
+      "value": "cross_industry",
+      "http_status": 200,
+      "total": 26,
+      "returned_on_first_page": 24,
+      "limit": 24,
+      "first_ids": [
+        "deliverable-template-diagnostic-report-001",
+        "deliverable-template-exec-summary-004",
+        "deliverable-template-roadmap-deck-002"
+      ],
+      "meets_min_2": true
+    },
+    {
+      "value": "energy",
+      "http_status": 200,
+      "total": 2,
+      "returned_on_first_page": 2,
+      "limit": 24,
+      "first_ids": [
+        "case-energy-procurement-009",
+        "industry-note-cn-energy-2026-006"
+      ],
+      "meets_min_2": true
+    },
+    {
+      "value": "healthcare",
+      "http_status": 200,
+      "total": 2,
+      "returned_on_first_page": 2,
+      "limit": 24,
+      "first_ids": [
+        "case-healthcare-service-blueprint-010",
+        "industry-note-cn-healthcare-2026-005"
+      ],
+      "meets_min_2": true
+    },
+    {
+      "value": "insurance",
+      "http_status": 200,
+      "total": 2,
+      "returned_on_first_page": 2,
+      "limit": 24,
+      "first_ids": [
+        "case-insurance-claim-flow-008",
+        "case-insurance-underwriting-013"
+      ],
+      "meets_min_2": true
+    },
+    {
+      "value": "logistics",
+      "http_status": 200,
+      "total": 2,
+      "returned_on_first_page": 2,
+      "limit": 24,
+      "first_ids": [
+        "case-logistics-network-007",
+        "industry-note-cn-logistics-2026-004"
+      ],
+      "meets_min_2": true
+    },
+    {
+      "value": "manufacturing",
+      "http_status": 200,
+      "total": 2,
+      "returned_on_first_page": 2,
+      "limit": 24,
+      "first_ids": [
+        "case-manufacturing-supply-resilience-003",
+        "industry-note-cn-manufacturing-2026-003"
+      ],
+      "meets_min_2": true
+    },
+    {
+      "value": "public_sector",
+      "http_status": 200,
+      "total": 2,
+      "returned_on_first_page": 2,
+      "limit": 24,
+      "first_ids": [
+        "case-public-sector-org-redesign-005",
+        "case-public-sector-service-window-012"
+      ],
+      "meets_min_2": true
+    },
+    {
+      "value": "retail",
+      "http_status": 200,
+      "total": 2,
+      "returned_on_first_page": 2,
+      "limit": 24,
+      "first_ids": [
+        "case-retail-procurement-diagnosis-001",
+        "industry-note-cn-consumer-2026-002"
+      ],
+      "meets_min_2": true
+    },
+    {
+      "value": "technology",
+      "http_status": 200,
+      "total": 2,
+      "returned_on_first_page": 2,
+      "limit": 24,
+      "first_ids": [
+        "case-saas-pricing-restructure-004",
+        "case-technology-data-platform-011"
+      ],
+      "meets_min_2": true
+    }
+  ],
+  "all_200_and_ge_2": true,
+  "sampled_new_object_detail": {
+    "id": "industry-note-cn-manufacturing-2026-003",
+    "http_status": 200,
+    "client_industry": [
+      "manufacturing"
+    ],
+    "type": "industry_note"
+  }
+}

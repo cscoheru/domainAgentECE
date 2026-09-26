@@ -1,0 +1,69 @@
+=== OEI-012 步骤 6.2 — git commit（不 push，A10）===
+date: 2026-09-26T10:07:53+08:00
+
+commit: 4a67c28cc1c3164fe26a5f584c5d1fe965e7cfef
+short : 4a67c28
+subject: feat(OEI-012): expose skip_query_expansion + a reproducible retrieval eval set
+
+############ 本刀提交的文件清单（7 个）############
+ TASKS.md                                 | 102 ++++++++++++++++
+ data/eval/retrieval/consulting-demo.json | 107 +++++++++++++++++
+ docs/API.md                              |  37 ++++++
+ src/ece/connectors/onyx/mock_adapter.py  |  11 +-
+ src/ece/connectors/onyx/onyx_adapter.py  |  10 +-
+ src/ece/connectors/onyx/port.py          |   8 ++
+ tests/unit/test_skip_query_expansion.py  | 193 +++++++++++++++++++++++++++++++
+ 7 files changed, 466 insertions(+), 2 deletions(-)
+
+############ 逐个文件的改动性质 ############
+  src/ece/connectors/onyx/port.py                  +8 -0
+  src/ece/connectors/onyx/onyx_adapter.py          +9 -1
+  src/ece/connectors/onyx/mock_adapter.py          +10 -1
+  tests/unit/test_skip_query_expansion.py          +193 -0
+  data/eval/retrieval/consulting-demo.json         +107 -0
+  docs/API.md                                      +37 -0
+  TASKS.md                                         +102 -0
+
+############ 未 push 证明 ############
+$ git status -sb | head -1
+## main...origin/main [ahead 5]
+$ git log --oneline @{u}..HEAD
+4a67c28 feat(OEI-012): expose skip_query_expansion + a reproducible retrieval eval set
+a3d61cd feat(OEI-014): deepen the consulting library - every industry >=4, industry notes filled
+c30e50e feat(OEI-011): fill the consulting industry axis, bounded increment, usable facets
+a463658 feat(OEI-010): persistent context memory, permission-gated on both write and read
+a884d41 feat(OEI-009): engine-document registry + per-result permission filter + ACL time-box
+
+############ 基线对比：只有授权面被改（A11）############
+$ git diff --stat a3d61cd HEAD
+ TASKS.md                                 | 102 ++++++++++++++++
+ data/eval/retrieval/consulting-demo.json | 107 +++++++++++++++++
+ docs/API.md                              |  37 ++++++
+ src/ece/connectors/onyx/mock_adapter.py  |  11 +-
+ src/ece/connectors/onyx/onyx_adapter.py  |  10 +-
+ src/ece/connectors/onyx/port.py          |   8 ++
+ tests/unit/test_skip_query_expansion.py  | 193 +++++++++++++++++++++++++++++++
+ 7 files changed, 466 insertions(+), 2 deletions(-)
+
+  改动文件数: 7  -> 必须为 7
+
+############ 冻结面零 diff ############
+  pyproject.toml                   diff lines: 0
+  uv.lock                          diff lines: 0
+  demos/                           diff lines: 0
+  src/ece/migrations/              diff lines: 0
+  src/ece/consulting/              diff lines: 0
+  src/ece/db.py                    diff lines: 0
+
+############ 既有测试断言未改（tests/ 只允许新增）############
+  tests/ 下改动文件: tests/unit/test_skip_query_expansion.py 
+  tests/ 下删除行数（必须 0）: 0
+
+############ data/eval/retrieval 已入库 ############
+data/eval/retrieval/consulting-demo.json
+  注：git check-ignore 对已 tracked 的文件默认不报告，故此处沉默 = '已在库中'，
+  而不是 '未被 ignore'。规则本身仍在（用 --no-index 问它才肯答）：
+.gitignore:16:data/	data/eval/retrieval/consulting-demo.json
+  ^ .gitignore:16 的 data/ 规则仍然匹配该路径；它能入库是因为用了 git add -f
+    （与既有 6 个 data/eval/*.json 同一惯例：先被 -f 加过，此后一直是 tracked）。
+  既有 data/eval/*.json 同为 tracked: 7 个

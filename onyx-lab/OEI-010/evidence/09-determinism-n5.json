@@ -1,0 +1,277 @@
+{
+  "fixtures": {
+    "created": [
+      {
+        "id": 48,
+        "statement": "oei010 step8 det fixture 00",
+        "age_minutes": 1
+      },
+      {
+        "id": 49,
+        "statement": "oei010 step8 det fixture 01",
+        "age_minutes": 2
+      },
+      {
+        "id": 50,
+        "statement": "oei010 step8 det fixture 02",
+        "age_minutes": 3
+      },
+      {
+        "id": 51,
+        "statement": "oei010 step8 det fixture 03",
+        "age_minutes": 4
+      },
+      {
+        "id": 52,
+        "statement": "oei010 step8 det fixture 04",
+        "age_minutes": 5
+      },
+      {
+        "id": 53,
+        "statement": "oei010 step8 det fixture 05",
+        "age_minutes": 6
+      },
+      {
+        "id": 54,
+        "statement": "oei010 step8 det fixture 06",
+        "age_minutes": 7
+      },
+      {
+        "id": 55,
+        "statement": "oei010 step8 det fixture 07",
+        "age_minutes": 8
+      },
+      {
+        "id": 56,
+        "statement": "oei010 step8 det fixture 08",
+        "age_minutes": 9
+      },
+      {
+        "id": 57,
+        "statement": "oei010 step8 det fixture 09",
+        "age_minutes": 10
+      },
+      {
+        "id": 58,
+        "statement": "oei010 step8 det fixture 10",
+        "age_minutes": 11
+      },
+      {
+        "id": 59,
+        "statement": "oei010 step8 det fixture 11",
+        "age_minutes": 12
+      },
+      {
+        "id": 60,
+        "statement": "oei010 step8 det fixture 12",
+        "age_minutes": 13
+      }
+    ]
+  },
+  "runs": {
+    "run1": {
+      "status": 200,
+      "memory_count": 10,
+      "metadata_memory_count": 10,
+      "metadata_memory_dropped": 3,
+      "memory_sha256": "bc2b109a6c50b45bc662507e86100e26bb10d2e82b25aa22607f43a2785ce1e6",
+      "refs_in_order": [
+        "memory:48",
+        "memory:49",
+        "memory:50",
+        "memory:51",
+        "memory:52",
+        "memory:53",
+        "memory:54",
+        "memory:55",
+        "memory:56",
+        "memory:57"
+      ],
+      "statements_in_order": [
+        "oei010 step8 det fixture 00",
+        "oei010 step8 det fixture 01",
+        "oei010 step8 det fixture 02",
+        "oei010 step8 det fixture 03",
+        "oei010 step8 det fixture 04",
+        "oei010 step8 det fixture 05",
+        "oei010 step8 det fixture 06",
+        "oei010 step8 det fixture 07",
+        "oei010 step8 det fixture 08",
+        "oei010 step8 det fixture 09"
+      ]
+    },
+    "run2": {
+      "status": 200,
+      "memory_count": 10,
+      "metadata_memory_count": 10,
+      "metadata_memory_dropped": 3,
+      "memory_sha256": "bc2b109a6c50b45bc662507e86100e26bb10d2e82b25aa22607f43a2785ce1e6",
+      "refs_in_order": [
+        "memory:48",
+        "memory:49",
+        "memory:50",
+        "memory:51",
+        "memory:52",
+        "memory:53",
+        "memory:54",
+        "memory:55",
+        "memory:56",
+        "memory:57"
+      ],
+      "statements_in_order": [
+        "oei010 step8 det fixture 00",
+        "oei010 step8 det fixture 01",
+        "oei010 step8 det fixture 02",
+        "oei010 step8 det fixture 03",
+        "oei010 step8 det fixture 04",
+        "oei010 step8 det fixture 05",
+        "oei010 step8 det fixture 06",
+        "oei010 step8 det fixture 07",
+        "oei010 step8 det fixture 08",
+        "oei010 step8 det fixture 09"
+      ]
+    },
+    "run3": {
+      "status": 200,
+      "memory_count": 10,
+      "metadata_memory_count": 10,
+      "metadata_memory_dropped": 3,
+      "memory_sha256": "bc2b109a6c50b45bc662507e86100e26bb10d2e82b25aa22607f43a2785ce1e6",
+      "refs_in_order": [
+        "memory:48",
+        "memory:49",
+        "memory:50",
+        "memory:51",
+        "memory:52",
+        "memory:53",
+        "memory:54",
+        "memory:55",
+        "memory:56",
+        "memory:57"
+      ],
+      "statements_in_order": [
+        "oei010 step8 det fixture 00",
+        "oei010 step8 det fixture 01",
+        "oei010 step8 det fixture 02",
+        "oei010 step8 det fixture 03",
+        "oei010 step8 det fixture 04",
+        "oei010 step8 det fixture 05",
+        "oei010 step8 det fixture 06",
+        "oei010 step8 det fixture 07",
+        "oei010 step8 det fixture 08",
+        "oei010 step8 det fixture 09"
+      ]
+    },
+    "run4": {
+      "status": 200,
+      "memory_count": 10,
+      "metadata_memory_count": 10,
+      "metadata_memory_dropped": 3,
+      "memory_sha256": "bc2b109a6c50b45bc662507e86100e26bb10d2e82b25aa22607f43a2785ce1e6",
+      "refs_in_order": [
+        "memory:48",
+        "memory:49",
+        "memory:50",
+        "memory:51",
+        "memory:52",
+        "memory:53",
+        "memory:54",
+        "memory:55",
+        "memory:56",
+        "memory:57"
+      ],
+      "statements_in_order": [
+        "oei010 step8 det fixture 00",
+        "oei010 step8 det fixture 01",
+        "oei010 step8 det fixture 02",
+        "oei010 step8 det fixture 03",
+        "oei010 step8 det fixture 04",
+        "oei010 step8 det fixture 05",
+        "oei010 step8 det fixture 06",
+        "oei010 step8 det fixture 07",
+        "oei010 step8 det fixture 08",
+        "oei010 step8 det fixture 09"
+      ]
+    },
+    "run5": {
+      "status": 200,
+      "memory_count": 10,
+      "metadata_memory_count": 10,
+      "metadata_memory_dropped": 3,
+      "memory_sha256": "bc2b109a6c50b45bc662507e86100e26bb10d2e82b25aa22607f43a2785ce1e6",
+      "refs_in_order": [
+        "memory:48",
+        "memory:49",
+        "memory:50",
+        "memory:51",
+        "memory:52",
+        "memory:53",
+        "memory:54",
+        "memory:55",
+        "memory:56",
+        "memory:57"
+      ],
+      "statements_in_order": [
+        "oei010 step8 det fixture 00",
+        "oei010 step8 det fixture 01",
+        "oei010 step8 det fixture 02",
+        "oei010 step8 det fixture 03",
+        "oei010 step8 det fixture 04",
+        "oei010 step8 det fixture 05",
+        "oei010 step8 det fixture 06",
+        "oei010 step8 det fixture 07",
+        "oei010 step8 det fixture 08",
+        "oei010 step8 det fixture 09"
+      ]
+    }
+  },
+  "limit": {
+    "limit_constant": 10,
+    "eligible": 13,
+    "injected": 10,
+    "dropped": 3,
+    "expected_injected_refs_in_order": [
+      "memory:48",
+      "memory:49",
+      "memory:50",
+      "memory:51",
+      "memory:52",
+      "memory:53",
+      "memory:54",
+      "memory:55",
+      "memory:56",
+      "memory:57"
+    ],
+    "injected_refs": [
+      "memory:48",
+      "memory:49",
+      "memory:50",
+      "memory:51",
+      "memory:52",
+      "memory:53",
+      "memory:54",
+      "memory:55",
+      "memory:56",
+      "memory:57"
+    ]
+  },
+  "dropped_check": {
+    "eligible_scopes": {
+      "org": 0,
+      "user": 13
+    },
+    "eligible_count_from_db": 13,
+    "expected_injected": 10,
+    "expected_dropped": 3
+  },
+  "assertions_checked": [
+    "5 identical requests produce a byte-identical memory array (sha256)",
+    "the memory array is identical INCLUDING order (refs compared positionally)",
+    "exactly 10 memories are injected when 13 fixtures are eligible",
+    "the injected 10 are the 10 the (org-first, newest-first) rule selects",
+    "metadata.memory_dropped == (eligible from DB) - 10, not the app's own count",
+    "metadata.memory_count == len(memory[]) on every run"
+  ],
+  "failures": [],
+  "verdict": "PASS"
+}

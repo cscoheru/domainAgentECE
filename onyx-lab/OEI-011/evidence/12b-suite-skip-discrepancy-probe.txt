@@ -1,0 +1,80 @@
+== OEI-011 — 全套件 skip 数出入的记录与排查（非收口证据，是"如实说明"的附件） ==
+date: 2026-09-25
+
+背景：本刀的收口证据 `12-test-suite-raw.txt` 是**全新库 + 完整前置链**上的全套件
+原始输出，结论 847 passed / 5 skipped / 0 failed，与 §1.7 基线一致，且**五条 skip
+各自的理由都打印在文件里**。但在它之前，本刀还有一次同样走完整链的全套件跑出了
+846 passed / 6 skipped。这份附件把两次都记下来，并说明差的那一条是什么、我查到了
+什么程度。
+
+--------------------------------------------------------------------------
+1. 全部跑次（同一棵树 a463658 + 未提交工作区，ECE_CONTENT_ENGINE=mock）
+--------------------------------------------------------------------------
+
+  跑次  时间(本地)    passed  skipped  failed   -rs?   skip 名单是否落盘
+  A     21:45:57       846      6        0      ✗      否 ← 差额在这次
+  B     21:53          847      5        0      ✓      是（/tmp/oei011/skip-reasons.txt）
+  C     （单文件）     test_e2_permission.py 单跑 2 次：均为 1 passed, 2 skipped
+  D     21:55 起       847      5        0      ✓      是（/tmp/oei011/chain2.txt）
+  E     22:05 起       847      5        0      ✓      是 ← 收口证据 evidence/12
+
+  跑次 A 与 E 走的是**同一条脚本、同一个全新库流程**（`fresh_db_chain.sh`：
+  docker 全新 postgres:16-pgvector → alembic upgrade head → gen_dataset → make seed
+  → 四个 fixture seeder → pytest -m "not eval and not eval_llm"）。
+
+  关键事实：
+    - **4 次跑次（B/D/E + 本次收口）全部 0 failed；跑次 A 也是 0 failed。**
+      差额只在 skip 数，从不在失败数上。
+    - 跑次 A 发生在给脚本加 `-rs` **之前**，所以它那 6 条 skip 一条名字都没留下；
+      其完整日志（当时的 /tmp 文件）已被后续跑次覆盖，**无法事后归因**。
+      我不打算用"大概是某某"来填这个空 —— 下面是实际做过的排查。
+
+--------------------------------------------------------------------------
+2. 跑次 A 少一个 passed 多一个 skipped：结构上可能的来源
+--------------------------------------------------------------------------
+
+  852 = 847 + 5 = 846 + 6，两次的非 deselected 用例总数相同 → 恰好**一条用例
+  由 passed 变成 skipped**。
+
+  addopts 只有 `-q`；pyproject 里**没有** pytest-randomly / pytest-xdist / pytest-order
+  （已 grep 确认），所以条件固定时用例顺序是确定的、且是串行的 —— 差异只能来自
+  **用例内部的 subprocess 超时/环境守卫**，不能来自顺序或并发。
+
+  全仓 skip 点共 44 处（`grep -rn "pytest.skip\|pytest.importorskip" tests/`）。
+  其中"会因为机器忙/跑得慢而跳过"的候选主要是：
+    - tests/integration/test_e2_permission.py:42,99   `timeout=30` 超时 → skip
+    - tests/integration/test_s35_eval_suites.py:107,124,136  E3/E4/E5 runner
+      "env-not-ready (API down?)" → skip
+    - test_s4_3_search.py:37 / test_s4_6_step6_7.py:42 / test_s4_5_temporal.py:54
+      （子进程失败 → skip）
+
+  注意 test_e2_permission.py 的 :42/:50 与 :99/:103 是同一个用例的**两条互为
+  排斥的**出口 —— 超时跳或换码跳，**skip 数不变**。所以跑次 A 多出来的那一条
+  **不可能**是 e2 这两个用例，只能是别处的 pass→skip。
+
+--------------------------------------------------------------------------
+3. 实际做的排查（未证实，也未推翻 —— 如实记为"未归因"）
+--------------------------------------------------------------------------
+
+  首选项按上面的候选列表取 `test_s35_eval_suites.py`（3 个 env-not-ready 守卫），
+  在同一套已 seed 的库上连跑 3 次：
+
+    $ uv run pytest tests/integration/test_s35_eval_suites.py -rs
+      run 1: 6 passed in 17.93s
+      run 2: 6 passed in 19.31s
+      run 3: 6 passed in 18.56s
+
+  → **3 次全绿、零 skip。该候选在稳态下不成立。**
+
+  跑次 A 的特殊之处是它跑在"容器刚建、刚迁移、刚 seed 完"的**最高负载瞬间**。
+  要复现那一刻的负载才能继续追。我已经把同样的完整链又走了两遍（跑次 D、E），
+  **两遍都是 847/5/0**，没能复现 —— 也就是说这个差额**不是稳定可复现的**。
+
+  结论，按证据能支撑的强度写：
+    - 已证实：0 failed 在全部跑次里成立；收口跑次与基线 847/5/0 逐项一致，
+      且 5 条 skip 的理由都落盘。
+    - 已排除：s35 eval runner 守卫（3 连跑全绿）；e2 两条出口（skip 数不变）。
+    - 未归因：跑次 A 那第 6 条 skip 的名字。**不猜。** 若要闭环，需要在写脚本时
+      就带 `-rs`（本刀已把 `-rs` 固化进 `fresh_db_chain.sh`，后续跑次不会再出现
+      "有 skip 数、无 skip 名"的情况）。
+---- done ----

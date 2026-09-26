@@ -1,0 +1,63 @@
+== OEI-010 — canonical chain on a FRESH database (A0 / A13) ==
+date: 2026-09-25T20:30:31+08:00
+database: ece_oei010_fresh (created empty in the same temp PG, then dropped in teardown)
+ECE_CONTENT_ENGINE=mock
+
+Why a second database: by the time the docs were written the main test DB had
+accumulated fixtures from two full suite runs (comp:/km:/spike:/r4test rows),
+so its counts can no longer be compared to the documented baseline. A fresh DB
+shows what the canonical chain produces on its own — and doubles as an
+end-to-end check that migration 0010 applies from scratch.
+
+--- chain ---
+$ alembic upgrade head
+  ... 0008_evidence_records -> 0009_engine_documents
+  ... 0009_engine_documents -> 0010_memories, S2.10 (OEI-010) — `memories` table
+$ make gen-dataset   -> OK — all counts within tolerance, adversarial cases present
+$ make seed          -> Total created: 420 / Total skipped: 0
+                        Relationships: 1200
+
+--- counts on the fresh DB (expect 428 entities / 1200 relationships) ---
+entities=428  relationships=1200
+
+--- entities by source_system ---
+api:header|4
+demo:demo|420
+demo:seed_departments|4
+
+--- the 4 demo identities: org_id + roles (A1 + the org_admin grant) ---
+demo-user-admin|org:consulting-a|["admin", "org_admin"]
+demo-user-engineering|org:consulting-b|["buyer"]
+demo-user-finance|org:consulting-a|["finance_manager"]
+demo-user-procurement|org:consulting-a|["procurement_manager", "buyer"]
+
+--- memory_scope ACL rows (= the entire write policy, OEI-010 candidate A) ---
+role|org_admin|memory_scope|org:org:consulting-a|allow
+role|org_admin|memory_scope|org:org:consulting-b|allow
+user|demo-user-admin|memory_scope|user:demo-user-admin|allow
+user|demo-user-engineering|memory_scope|user:demo-user-engineering|allow
+user|demo-user-finance|memory_scope|user:demo-user-finance|allow
+user|demo-user-procurement|memory_scope|user:demo-user-procurement|allow
+
+--- re-run 'make seed' on the already-seeded DB (idempotency / convergence) ---
+Total created: 0   (relationships re-written as the same 1200)
+after re-seed: entities=428  relationships=1200  memory_scope_acl=6
+
+--- A13: the seed's existing content is untouched ---
+pyproject.toml / uv.lock: `git diff --stat` empty -> ZERO new dependencies
+src/ece/seed.py: 155 insertions, 3 deletions. The 3 deletions are:
+  -        "roles": ["admin"],                 -> replaced by ["admin", "org_admin"] (declared)
+  -        if display_id:                      -> restructured inside seed_test_users
+  -            counters["person"] += 1
+No demo-dataset object definition was removed, and no seed DATA file is modified
+(git status shows src/ece/seed.py as the only seed-related change). The 420
+demo:demo objects and 1200 relationships are reproduced exactly on a fresh DB,
+and the three-domain business assertions are covered by the full suite (847 passed,
+0 failed).
+
+--- observation (not a deviation): the `org:org:` double prefix ---
+TASK §5 step 1.3 specifies org ids literally as 'org:consulting-a'/'org:consulting-b'.
+The scope object_ref format is 'org:<org_id>', so it renders as 'org:org:consulting-a'.
+Cosmetic only: nothing parses the prefix, and consistency is what matters for
+matching. Documented rather than silently renamed, because the org id value itself
+is fixed by the task book.

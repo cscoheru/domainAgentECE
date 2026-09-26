@@ -1,0 +1,112 @@
+== OEI-012 步骤 5.2 — 全套件，在【全新库】上，走完整文档化前置链 ==
+date: 2026-09-26T09:58:42+08:00
+cwd: /mnt/d/Projects/domainAgentECE/ece
+commit under test: a3d61cd029880de8ed8e77f5ec0ca682046cbf1b  (feat(OEI-014): deepen the consulting library - every industr)
+ECE_CONTENT_ENGINE = mock
+
+前置链（README.md / Makefile test-integration 记载的顺序）:
+  docker run postgres:16-pgvector                       (全新空库)
+  alembic -c src/ece/migrations/alembic.ini upgrade head
+  gen_dataset.py --out data/dataset/demo.json
+  make seed                                   (采购三域 demo pack)
+  seed_temporal_roles.py / seed_knowledge_fixture.py /
+  seed_compliance_fixture.py / seed_v0_spike_fixture.py   (集成 fixture)
+  pytest -m 'not eval and not eval_llm'       (= make test 的确切命令)
+
+NOTE: 'make seed-fixtures' 未使用 —— 它的 recipe 里 @echo 的反引号未转义，
+      shell 会做命令替换，导致该 target **顺带把整套测试跑一遍**（预先存在的
+      Makefile 缺陷，非本刀引入）。这里直接调它的四个 seeder，Makefile 注释与
+      README.md:79 都写明两者等价。
+
+############ 0. 全新库 ############
+  ready after 2s
+  extensions available: pg_trgm,vector
+
+############ 1. 迁移 ############
+INFO  [alembic.runtime.migration] Running upgrade 0006_pg_trgm -> 0007_user_orgs, 0007 — add org_id column to context_requests (cut-019 multi-tenant).
+INFO  [alembic.runtime.migration] Running upgrade 0007_user_orgs -> 0008_evidence_records, S2 (V0 Technical Spike) — `evidence_records` table.
+INFO  [alembic.runtime.migration] Running upgrade 0008_evidence_records -> 0009_engine_documents, S2.9 (OEI-009) — `engine_documents` registry table.
+INFO  [alembic.runtime.migration] Running upgrade 0009_engine_documents -> 0010_memories, S2.10 (OEI-010) — `memories` table: persistent context memory.
+  head = 0010_memories (head)
+
+############ 2. 数据集 + 种子 ############
+
+OK — all counts within tolerance, adversarial cases present
+Total created: 420
+Total skipped: 0
+Relationships: {'BELONGS_TO': 200, 'SUBMITTED_BY': 400, 'SELECTS': 200, 'CONTAINS': 200, 'SUBJECT_TO': 200} (replaced 0 prior rows, 4 departments)
+Total relationships in DB: 1200
+
+############ 3. 集成 fixture（四个 seeder，逐个跑） ############
+--- seed_temporal_roles.py ---
+U002 HAS_ROLE procurement_manager (2026-01-01 to NULL/current): ok
+U003 HAS_ROLE buyer (no time constraint): ok
+Total temporal relationships in DB: 3
+--- seed_knowledge_fixture.py ---
+------------------------------------------------------------------------
+SELF-CHECK PASSED — all 8 fixture entities present, 2 REQUIRES_ROLE + 2 HAS_ROLE,
+                     KM-POL-001 valid+requires_hr, DENY acl on km-eve.
+--- seed_compliance_fixture.py ---
+SELF-CHECK PASSED — all 6 fixture entities present, 9 REQUIRES_SYSTEM (3 per control),
+                     CTL-001 3 evidence / 3 systems, CTL-002 2 evidence / erp only,
+                     CTL-003 3 evidence / erp+hr, DENY acl on comp-eve → CTL-001.
+--- seed_v0_spike_fixture.py ---
+------------------------------------------------------------------------
+SELF-CHECK PASSED — all 7 fixture entities present, 1 SELECTS relationship,
+                     PR review_status='pending', DENY acl on current display_id.
+
+############ 4. 全套件（= make test 的确切命令 + -rs） ############
+$ uv run pytest -m "not eval and not eval_llm" -rs
+  pytest exit code: 0
+  raw log: /tmp/oei012/fresh-suite.txt (kept outside the repo)
+
+--- 原始输出尾部 ---
+........................................................................ [100%]
+=============================== warnings summary ===============================
+.venv/lib/python3.12/site-packages/starlette/testclient.py:53
+  /mnt/d/Projects/domainAgentECE/ece/.venv/lib/python3.12/site-packages/starlette/testclient.py:53: DeprecationWarning: The anyio.abc.BlockingPortal alias is deprecated, use anyio.from_thread.BlockingPortal instead.
+    _PortalFactoryType = Callable[[], AbstractContextManager[anyio.abc.BlockingPortal]]
+
+tests/integration/test_cut_045_local_origin_smoke.py:144
+  /mnt/d/Projects/domainAgentECE/ece/tests/integration/test_cut_045_local_origin_smoke.py:144: PytestUnknownMarkWarning: Unknown pytest.mark.timeout - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.timeout(90)
+
+tests/integration/test_s12_entity_pipeline.py::test_ontology_gate_rejects_bad_triple
+  /mnt/d/Projects/domainAgentECE/ece/src/ece/entities/ontology_resolver.py:106: UserWarning: ontology_resolver: unknown source_system prefix='r4test'; known prefixes=('comp', 'demo', 'km', 'spike'). Relations from this source_system will be REJECTED (fail-closed). If this is a new pack, call register_ontology_for_system(...) in its __init__.py.
+    pair = _lookup(prefix)
+
+tests/integration/test_s13_jwt_auth.py::test_decode_jwt_token_invalid_signature
+  /mnt/d/Projects/domainAgentECE/ece/.venv/lib/python3.12/site-packages/jwt/api_jwt.py:149: InsecureKeyLengthWarning: The HMAC key is 12 bytes long, which is below the minimum recommended length of 32 bytes for SHA256. See RFC 7518 Section 3.2.
+    return self._jws.encode(
+
+tests/integration/test_seed_relationships.py::test_seed_relationship_upsert_idempotent_direct
+  /mnt/d/Projects/domainAgentECE/ece/src/ece/entities/ontology_resolver.py:106: UserWarning: ontology_resolver: unknown source_system prefix='test'; known prefixes=('comp', 'demo', 'km', 'spike'). Relations from this source_system will be REJECTED (fail-closed). If this is a new pack, call register_ontology_for_system(...) in its __init__.py.
+    pair = _lookup(prefix)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+SKIPPED [1] ../../../../../Users/kjonekong/projects/domainAgentECE/ece/tests/integration/test_e2_permission.py:50: e2 runner returned unexpected exit 3 (likely env not ready)
+SKIPPED [1] ../../../../../Users/kjonekong/projects/domainAgentECE/ece/tests/integration/test_e2_permission.py:103: e2 runner returned unexpected exit 3 (likely env not ready)
+SKIPPED [1] tests/integration/test_s5_5_real_llm.py:36: ECE_LLM_BASE_URL not set; skipping real LLM client test
+SKIPPED [1] tests/integration/test_s5_5_real_llm.py:61: ECE_LLM_BASE_URL not set
+SKIPPED [1] tests/integration/test_s5_5_real_llm.py:100: ECE_LLM_BASE_URL not set; skipping real LLM E6 accuracy test
+859 passed, 5 skipped, 3 deselected, 5 warnings in 209.01s (0:03:29)
+
+--- 汇总行（不经管道，避免被 warnings 块挤掉）---
+859 passed, 5 skipped, 3 deselected, 5 warnings in 209.01s (0:03:29)
+
+--- 每一条 skip 及其原因 ---
+SKIPPED [1] ../../../../../Users/kjonekong/projects/domainAgentECE/ece/tests/integration/test_e2_permission.py:50: e2 runner returned unexpected exit 3 (likely env not ready)
+SKIPPED [1] ../../../../../Users/kjonekong/projects/domainAgentECE/ece/tests/integration/test_e2_permission.py:103: e2 runner returned unexpected exit 3 (likely env not ready)
+SKIPPED [1] tests/integration/test_s5_5_real_llm.py:36: ECE_LLM_BASE_URL not set; skipping real LLM client test
+SKIPPED [1] tests/integration/test_s5_5_real_llm.py:61: ECE_LLM_BASE_URL not set
+SKIPPED [1] tests/integration/test_s5_5_real_llm.py:100: ECE_LLM_BASE_URL not set; skipping real LLM E6 accuracy test
+  skip 条数: 5
+
+--- 每一条 deselected/failed（应为空）---
+  (no FAILED/ERROR lines)
+
+§1.7 基线为 847 passed / 5 skipped / 0 failed.
+本刀新增 1 个测试文件（tests/unit/test_skip_query_expansion.py，12 条用例）→ 期望 847+12 = 859 passed.
+本轮若 passed 不是 859，或 skip 不是 5，差额必须能由上一条打印出的名单解释 —— 名单就在上面，勿凭记忆。
+---- done ----

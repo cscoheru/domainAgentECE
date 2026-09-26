@@ -1,0 +1,127 @@
+{
+  "states": {
+    "demo-user-procurement": {
+      "user_ref": "demo-user-procurement",
+      "display_id": "U001",
+      "department": "procurement",
+      "roles": [
+        "procurement_manager",
+        "buyer"
+      ],
+      "is_management": false,
+      "org_id": "org:consulting-a"
+    },
+    "demo-user-finance": {
+      "user_ref": "demo-user-finance",
+      "display_id": "U002",
+      "department": "finance",
+      "roles": [
+        "finance_manager"
+      ],
+      "is_management": false,
+      "org_id": "org:consulting-a"
+    },
+    "demo-user-engineering": {
+      "user_ref": "demo-user-engineering",
+      "display_id": "U003",
+      "department": "sales",
+      "roles": [
+        "buyer"
+      ],
+      "is_management": false,
+      "org_id": "org:consulting-b"
+    },
+    "demo-user-admin": {
+      "user_ref": "demo-user-admin",
+      "display_id": "U004",
+      "department": "it",
+      "roles": [
+        "admin",
+        "org_admin"
+      ],
+      "is_management": false,
+      "org_id": "org:consulting-a"
+    },
+    "oei010-probe-no-org": {
+      "user_ref": "oei010-probe-no-org",
+      "display_id": "U008",
+      "department": "sales",
+      "roles": [
+        "buyer"
+      ],
+      "is_management": false,
+      "org_id": null
+    },
+    "oei010-probe-unknown-user": {
+      "user_ref": "oei010-probe-unknown-user",
+      "display_id": null,
+      "department": "",
+      "roles": [],
+      "is_management": false,
+      "org_id": null
+    }
+  },
+  "merge": {
+    "attributes_before": {
+      "roles": [
+        "finance_manager",
+        "buyer"
+      ],
+      "department": "finance",
+      "is_management": false
+    },
+    "attributes_after": {
+      "roles": [
+        "finance_manager",
+        "buyer"
+      ],
+      "org_id": "org:probe-a",
+      "department": "finance",
+      "is_management": false
+    },
+    "preserved_keys": [
+      "department",
+      "is_management",
+      "roles"
+    ],
+    "preserved_unchanged": true,
+    "org_id_added": "org:probe-a",
+    "attributes_after_second_write": {
+      "roles": [
+        "finance_manager",
+        "buyer"
+      ],
+      "org_id": "org:probe-a",
+      "department": "finance",
+      "is_management": false
+    },
+    "attributes_after_write_without_org": {
+      "roles": [
+        "finance_manager",
+        "buyer"
+      ],
+      "org_id": "org:probe-a",
+      "department": "finance",
+      "is_management": false
+    }
+  },
+  "seeded_persons": {},
+  "probe_no_org_attributes": {
+    "roles": [
+      "buyer"
+    ],
+    "department": "sales",
+    "is_management": false
+  },
+  "assertions_checked": [
+    "procurement/finance/admin resolve to org:consulting-a",
+    "engineering resolves to org:consulting-b",
+    "a person row without org_id resolves org_id=None",
+    "an unknown user resolves org_id=None",
+    "the org-less probe has no `org_id` KEY in its attributes at all",
+    "writing org_id preserves department/roles/is_management",
+    "a write WITHOUT org_id does not mutate the row (back-compat)"
+  ],
+  "failures": [],
+  "verdict": "PASS"
+}

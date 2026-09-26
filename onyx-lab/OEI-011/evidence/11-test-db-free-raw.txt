@@ -1,0 +1,31 @@
+== OEI-011 步骤 6 — 相关子集 + DB 无关层（A10） ==
+date: 2026-09-25T21:33:19+08:00
+cwd: /mnt/d/Projects/domainAgentECE/ece
+DATABASE_URL = postgresql+psycopg://ece:ece@127.0.0.1:55432/ece  (临时 PG ece-pg-oei011)
+ECE_CONTENT_ENGINE = mock
+alembic head = 0010_memories (head)
+
+NOTE（一条自纠）：本项目的 pyproject 里 addopts 已经是 "-q"，所以再传一个 -q 就是
+     -qq —— 那是 dots-only，**连汇总行都不打印**。我先前把这种现象归因于'管道吃掉了
+     汇总行'，是错的；成因是双 -q。下面的命令都不再重复传 -q。
+
+############ A. consulting 相关子集（单测 + 集成契约） ############
+$ uv run pytest tests/unit/test_consulting_*.py tests/integration/test_consulting_*.py
+........................................................................ [ 69%]
+................................                                         [100%]
+=============================== warnings summary ===============================
+.venv/lib/python3.12/site-packages/starlette/testclient.py:53
+  /mnt/d/Projects/domainAgentECE/ece/.venv/lib/python3.12/site-packages/starlette/testclient.py:53: DeprecationWarning: The anyio.abc.BlockingPortal alias is deprecated, use anyio.from_thread.BlockingPortal instead.
+    _PortalFactoryType = Callable[[], AbstractContextManager[anyio.abc.BlockingPortal]]
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+104 passed, 1 warning in 7.78s
+
+############ B. DB 无关层：DATABASE_URL 指向死端口 ############
+（沿用 OEI-010 的做法：连不上库还绿，才叫'不依赖库'——比'我觉得它不连库'硬）
+$ DATABASE_URL=postgresql+psycopg://nobody:nobody@127.0.0.1:1/nope uv run pytest \
+      tests/unit/test_consulting_seed_schema.py tests/unit/test_consulting_seed_discipline.py \
+      tests/unit/test_consulting_seed_count.py tests/unit/test_consulting_service.py
+........................                                                 [100%]
+24 passed in 3.49s
+---- done ----

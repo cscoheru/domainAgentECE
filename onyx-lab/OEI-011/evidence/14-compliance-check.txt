@@ -1,0 +1,185 @@
+== OEI-011 — compliance & resource checks (A13 / A14) ==
+date: 2026-09-25T22:14:48+08:00
+NOTE: one temporary Postgres container (ece-pg-oei011, port 55432) was used
+      for the full-suite run and has ALREADY been removed before this check.
+      So CHECK 1/2 are asked the question they are meant to ask: is anything
+      of it left? ('0 ece-* containers' below is therefore a real pass/fail
+      line, not a consequence of never having started one.)
+      The real content engine was never started — ECE_CONTENT_ENGINE=mock.
+
+############ CHECK 1/3 — no leftover processes ############
+
+--- host processes NOT inside a container cgroup, matching this cut's work ---
+  (none — no uvicorn, no reverse proxy, no alembic/seed/dataset run)
+
+--- anything listening on the OEI-010 temp PG port 55432? ---
+  (not listening)
+
+--- pytest / uv processes this cut left behind ---
+  (none)
+
+############ CHECK 2/3 — no leftover containers ############
+$ docker ps -a
+onyx-nginx-1	Up 8 hours (healthy)	nginx:1.25.5-alpine
+onyx-web_server-1	Up 8 hours (healthy)	onyxdotapp/onyx-web-server:latest
+onyx-background-1	Up 8 hours	onyxdotapp/onyx-backend:latest
+onyx-api_server-1	Up 8 hours (healthy)	onyxdotapp/onyx-backend:latest
+onyx-inference_model_server-1	Up 8 hours (healthy)	onyxdotapp/onyx-model-server:latest
+onyx-indexing_model_server-1	Up 8 hours (healthy)	onyxdotapp/onyx-model-server:latest
+onyx-relational_db-1	Up 8 hours (healthy)	postgres:15.2-alpine
+onyx-cache-1	Up 8 hours	redis:7.4-alpine
+onyx-opensearch-1	Up 8 hours	opensearchproject/opensearch:3.6.0
+postgres	Exited (255) 8 days ago	postgres
+redis	Exited (255) 8 days ago	redis
+qdrant	Exited (255) 8 days ago	qdrant/qdrant
+laughing_vaughan	Exited (0) 9 days ago	hello-world
+tender_hamilton	Exited (0) 9 days ago	hello-world
+
+  containers named ece-* (this cut's temp PG would be one): 0   -> must be 0
+  Onyx containers still running:                            9   -> must still be 9
+  (the 5 Exited containers pre-date this session by 8-9 days and were never touched.)
+
+--- volumes left behind? ---
+  (none)
+
+############ CHECK 3/3 — memory / swap snapshot ############
+$ free -h
+                 total        used        free      shared  buff/cache   available
+  Mem:            13Gi        11Gi       320Mi       180Mi       1.8Gi       1.5Gi
+  Swap:          8.0Gi       7.0Gi       1.0Gi
+
+  MemTotal:       14311060 kB
+  MemAvailable:    1621448 kB
+  SwapTotal:       8388608 kB
+  SwapFree:        1099912 kB
+
+############ the cut's footprint on the repository (A13) ############
+NOTE: the cut is COMMITTED by this point, so `git diff` (worktree vs index) is
+      trivially empty and would prove nothing. The question 'did the cut touch
+      anything it was not authorised to touch?' is instead put to the BASELINE:
+      `git diff a463658 HEAD`. That comparison cannot be satisfied by committing.
+
+$ git diff --stat a463658 HEAD         # must be exactly the 9 authorised files
+   TASKS.md                                        | 127 ++++++++
+   docs/API.md                                     |  43 ++-
+   docs/DATA_MODEL.md                              |   4 +-
+   src/ece/consulting/metadata.py                  |   7 +
+   src/ece/consulting/seed/consulting_objects.json | 403 ++++++++++++++++++++++--
+   tests/integration/test_s32_assembly.py          |  12 +-
+   tests/unit/test_consulting_documents.py         |   9 +-
+   tests/unit/test_consulting_engine_merge.py      |   5 +-
+   tests/unit/test_consulting_seed_count.py        |  24 +-
+   9 files changed, 593 insertions(+), 41 deletions(-)
+  files changed vs baseline: 9   -> must be 9
+
+  $ git diff --name-only a463658 HEAD | while read f; do case ... # authorisation map
+    [authorised] TASKS.md
+    [authorised] docs/API.md
+    [authorised] docs/DATA_MODEL.md
+    [authorised] src/ece/consulting/metadata.py
+    [authorised] src/ece/consulting/seed/consulting_objects.json
+    [authorised] tests/integration/test_s32_assembly.py  (step 0.1)
+    [authorised] tests/unit/test_consulting_documents.py  (§3.4)
+    [authorised] tests/unit/test_consulting_engine_merge.py  (§3.4)
+    [authorised] tests/unit/test_consulting_seed_count.py  (§3.4)
+
+$ git diff --stat a463658 HEAD -- pyproject.toml uv.lock demos/ src/ece/migrations/
+  (no output above = zero diff: no new dependency, no SPA byte changed, no migration)
+
+  pyproject.toml diff lines: 0   -> must be 0
+  uv.lock        diff lines: 0   -> must be 0
+  demos/spa/**   diff lines: 0   -> must be 0
+
+--- pre-existing dirt in the worktree (NOT this cut's; deliberately left alone) ---
+$ git -C /mnt/d/Projects/domainAgentECE/ece status --porcelain | wc -l
+  14 dirty entries:
+     T docs/demo-platform/DEMO_PLATFORM_PRD.md
+     T docs/demo-platform/DEPLOY_USER_PROXY.md
+     M reports/cut-042R3/mutation-evidence/M1_re_read_through_assembly_skipped.md
+     M reports/cut-042R3/mutation-evidence/M2_apply_context_update_skip_sql.md
+     M reports/cut-042R3/mutation-evidence/M3_permission_acl_check_bypassed.md
+     M reports/cut-042R3/mutation-evidence/M4_evaluated_conditions_inject_nondeterministic_amount.md
+     M reports/cut-042R3/mutation-evidence/M5_jwt_decode_skips_signature_verification.md
+     M reports/cut-042R3/mutation-evidence/M6_materialize_fn_disabled_in_loop.md
+     M reports/cut-043/mutation-evidence/M1_km_validity_invert.md
+     M reports/cut-043/mutation-evidence/M2_km_permission_invert.md
+     M reports/cut-043/mutation-evidence/M3_km_decision_and_to_or.md
+     M reports/cut-044/mutation-evidence/M1_comp_count_condition_invert.md
+     M reports/cut-044/mutation-evidence/M2_comp_coverage_issubset_to_isdisjoint.md
+     M reports/cut-044/mutation-evidence/M3_comp_decision_force_gap_list.md
+    (2 x ' T docs/demo-platform/*.md' symlink typechanges + 12 x ' M
+     reports/cut-04*/mutation-evidence/*.md' — all present before OEI-011 began,
+     all excluded from the commit; verified by the 9-file count above.)
+
+$ git -C /mnt/d/Projects/domainAgentECE/ece status -sb | head -1
+  ## main...origin/main [ahead 3]
+  -> local commits only; nothing pushed (TASK §8).
+
+$ git log --oneline @{u}..HEAD   # everything unpushed, incl. this cut
+    c30e50e feat(OEI-011): fill the consulting industry axis, bounded increment, usable facets
+    a463658 feat(OEI-010): persistent context memory, permission-gated on both write and read
+    a884d41 feat(OEI-009): engine-document registry + per-result permission filter + ACL time-box
+  HEAD = c30e50e  (feat(OEI-011): fill the consulting industry axis, bounded increm)
+
+--- no credential was read, written, refreshed or requested ---
+  /home/fisher/.onyx-lab/.secrets EXISTS (mode 700)
+  /home/fisher/.onyx-lab/.secrets/admin-cookies.txt EXISTS (mode 600)
+  /mnt/d/Projects/domainAgentECE/onyx-lab/OEI-011/.secrets  (absent)
+  NOTE: this cut never needed the real engine (static catalog + vocabulary only),
+  so no project cookie/token was touched and none was requested from the user.
+
+  REVIEW (classified) /mnt/d/Projects/domainAgentECE/onyx-lab/OEI-011/workspace/fresh_db_chain.sh:52:docker run -d --name "$PG_NAME" -e POSTGRES_USER=ece -e POSTGRES_PASSWORD=<REDACTED-THROWAWAY> \
+  ^ classification: the ONLY hits are the throwaway local-container password in
+    workspace/fresh_db_chain.sh. It guarded a temp DB on 127.0.0.1:55432 that
+    has been removed. No project secret, no cookie, no token, no private key.
+    The scan is not vacuous — it fired, and it fired on the one thing that
+    legitimately looks like a password.
+
+  --- second pattern: credentials embedded in a URL (scheme://user:pass@host) ---
+  The scan above greps KEYWORDS (password / token / secret ...). A DSN carries a
+  credential without any of those words, so a keyword-only scan is BLIND to it.
+  Asked separately here, and the value is masked in the output:
+    REVIEW (masked) /mnt/d/Projects/domainAgentECE/onyx-lab/OEI-011/evidence/11-test-db-free-raw.txt:<REDACTED-THROWAWAY>@1
+    REVIEW (masked) /mnt/d/Projects/domainAgentECE/onyx-lab/OEI-011/evidence/11-test-db-free-raw.txt:<REDACTED-THROWAWAY>@1
+    REVIEW (masked) /mnt/d/Projects/domainAgentECE/onyx-lab/OEI-011/workspace/fresh_db_chain.sh:<REDACTED-THROWAWAY>@1
+    REVIEW (masked) /mnt/d/Projects/domainAgentECE/onyx-lab/OEI-011/workspace/verify_api.py:<REDACTED-THROWAWAY>@1
+    ^ occurrence count: 4
+      All of them are the local temp-DB DSN for a container that no longer
+      exists — same pattern and same value as OEI-010's evidence, which passed
+      review (OEI-010's own compliance file masked it as 'ece:***@'). Not a
+      project credential: it never left 127.0.0.1 and the database is deleted.
+
+--- Onyx upstream / compose / .env ---
+    /home/codex  mode=750  owner=codex:codex
+  running as fisher (uid 1000): readable=NO writable=NO
+  -> unreachable at the permission level, not merely by intent.
+  onyx-nginx-1	Up 8 hours (healthy)
+  onyx-web_server-1	Up 8 hours (healthy)
+  onyx-background-1	Up 8 hours
+  onyx-api_server-1	Up 8 hours (healthy)
+  onyx-inference_model_server-1	Up 8 hours (healthy)
+  onyx-indexing_model_server-1	Up 8 hours (healthy)
+  onyx-relational_db-1	Up 8 hours (healthy)
+  onyx-cache-1	Up 8 hours
+  onyx-opensearch-1	Up 8 hours
+  (uptimes as reported. No restart/stop/down/rm was issued against any onyx-*
+   container: the only docker writes in this cut were `docker run` and
+   `docker rm -f` on the name ece-pg-oei011 — provable by grepping this cut's
+   workspace/ for 'docker'. All onyx-* uptimes above exceed this session's
+   length, which is the machine-checkable form of 'unchanged'.)
+
+############ verdict ############
+CHECK 1 (processes): clean — no uvicorn, no reverse proxy, no leftover pytest/uv,
+  nothing listening on the temp PG port. The temp PG container is gone.
+CHECK 2 (containers): clean — 0 ece-* containers after an explicit teardown;
+  9 Onyx containers running at uptimes longer than this session.
+CHECK 3 (memory/swap): REPORTED AS IT IS, not as 'fine' — swap usage is heavy and
+  MemAvailable is low (numbers above). This is PRE-EXISTING pressure from the Onyx
+  stack; this cut's only contribution was one Postgres container, now removed, which
+  the snapshot above is taken AFTER. Stated plainly because a teardown check that
+  reports 'clean' while the numbers say otherwise is worse than no check.
+Repository: 9 files changed vs the a463658 baseline, all authorised; zero diff on
+  pyproject.toml / uv.lock / demos/ / src/ece/migrations/. Nothing pushed.
+Secrets: no project credential appears anywhere; the scan fired only on a redacted
+  throwaway local-container password.
+---- done ----

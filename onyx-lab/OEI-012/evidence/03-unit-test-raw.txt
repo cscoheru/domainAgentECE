@@ -1,0 +1,54 @@
+=== OEI-012 步骤 5.2 — 新增 DB-free 单测原始输出（A7）+ 扫描器有牙（A12）===
+date: 2026-09-26T09:57:43+08:00
+
+############ 1. 新增单测（无网络、无 DB）############
+DB-free 证明：故意把 DATABASE_URL 指向死端口 127.0.0.1:1（无人监听）
+$ DATABASE_URL=postgresql+psycopg://ece:ece@127.0.0.1:1/nope pytest tests/unit/test_skip_query_expansion.py -v
+============================= test session starts ==============================
+platform linux -- Python 3.12.14, pytest-9.1.1, pluggy-1.6.0 -- /mnt/d/Projects/domainAgentECE/ece/.venv/bin/python
+cachedir: .pytest_cache
+rootdir: /mnt/d/Projects/domainAgentECE/ece
+configfile: pyproject.toml
+plugins: anyio-4.15.1, cov-7.1.0
+collecting ... collected 12 items
+
+tests/unit/test_skip_query_expansion.py::test_flag_true_is_put_on_the_request_body PASSED [  8%]
+tests/unit/test_skip_query_expansion.py::test_flag_false_omits_the_field_entirely PASSED [ 16%]
+tests/unit/test_skip_query_expansion.py::test_flag_recorded_in_audit_log_both_ways PASSED [ 25%]
+tests/unit/test_skip_query_expansion.py::test_mock_and_onyx_search_signatures_are_isomorphic PASSED [ 33%]
+tests/unit/test_skip_query_expansion.py::test_both_adapters_default_the_flag_to_false PASSED [ 41%]
+tests/unit/test_skip_query_expansion.py::test_port_protocol_declares_flag_defaulting_to_false PASSED [ 50%]
+tests/unit/test_skip_query_expansion.py::test_mock_records_flag_and_keeps_fixture_results_stable PASSED [ 58%]
+tests/unit/test_skip_query_expansion.py::test_empty_results_still_return_empty_list_not_raise PASSED [ 66%]
+tests/unit/test_skip_query_expansion.py::test_server_error_still_raises_engine_error_with_flag_on[500] PASSED [ 75%]
+tests/unit/test_skip_query_expansion.py::test_server_error_still_raises_engine_error_with_flag_on[503] PASSED [ 83%]
+tests/unit/test_skip_query_expansion.py::test_transport_failure_still_raises_engine_error_with_flag_on PASSED [ 91%]
+tests/unit/test_skip_query_expansion.py::test_auth_failure_still_raises_engine_error_with_flag_on PASSED [100%]
+
+============================== 12 passed in 2.17s ==============================
+
+############ 2. 扫描器有牙：变异检查 ############
+$ bash onyx-lab/OEI-012/workspace/mutation_check.sh
+== OEI-012 mutation check ==
+target : /mnt/d/Projects/domainAgentECE/ece/src/ece/connectors/onyx/onyx_adapter.py
+test   : tests/unit/test_skip_query_expansion.py
+
+--- [1/3] 未变异（基线）---
+............                                                             [100%]
+12 passed in 2.18s
+baseline exit=0
+
+--- [2/3] 变异：删除 body["skip_query_expansion"] = True ---
+mutation applied
+tests/unit/test_skip_query_expansion.py:86: KeyError
+=========================== short test summary info ============================
+FAILED tests/unit/test_skip_query_expansion.py::test_flag_true_is_put_on_the_request_body
+1 failed, 11 passed in 3.49s
+mutated exit=1
+
+--- [3/3] 还原并复验 ---
+............                                                             [100%]
+12 passed in 2.08s
+restored exit=0
+
+RESULT: PASS — 基线绿 / 变异红 / 还原绿 → 扫描器有牙，且接线确实被测到

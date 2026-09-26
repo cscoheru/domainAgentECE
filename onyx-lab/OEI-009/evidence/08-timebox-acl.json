@@ -1,0 +1,48 @@
+{
+  "acl_id": 1,
+  "object_ref": "engine_document:7",
+  "stages": [
+    {
+      "label": "A: valid_to=today+7 (active)",
+      "acl_valid_to": "2026-10-02",
+      "library_alice": {
+        "status": 200,
+        "engine_status": "ok",
+        "engine_items_titles": [
+          "case-management-consulting.md",
+          "ece-df16d19c9e7b-oei009-comparison-restricted.md",
+          "methodology-framework.md",
+          "play-sales-delivery.md"
+        ]
+      }
+    },
+    {
+      "label": "B: valid_to=yesterday (expired)",
+      "acl_valid_to": "2026-09-24",
+      "library_alice": {
+        "status": 200,
+        "engine_status": "ok",
+        "engine_items_titles": [
+          "case-management-consulting.md",
+          "methodology-framework.md",
+          "play-sales-delivery.md"
+        ]
+      }
+    },
+    {
+      "label": "C: valid_to=today+7 (restored)",
+      "acl_valid_to": "2026-10-02",
+      "library_alice": {
+        "status": 200,
+        "engine_status": "ok",
+        "engine_items_titles": [
+          "case-management-consulting.md",
+          "ece-df16d19c9e7b-oei009-comparison-restricted.md",
+          "methodology-framework.md",
+          "play-sales-delivery.md"
+        ]
+      }
+    }
+  ]
+}
+PASS — Step 3.3 timebox e2e: A=4, B=3 (expired), C=4 (restored).

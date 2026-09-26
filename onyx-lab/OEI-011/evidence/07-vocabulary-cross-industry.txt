@@ -1,0 +1,45 @@
+== OEI-011 步骤 3 — 上传路径的词表校验行为（越界仍静默丢弃） ==
+date: 2026-09-25T21:31:16
+ECE_CONTENT_ENGINE=mock（本刀不需要真引擎）
+
+TASK §3.3 的要求是：给 `ALLOWED_INDUSTRIES` 加 `cross_industry` **之后**，
+上传路径的词表校验**机制**不变 —— 合法值通过、越界值仍然静默丢弃。
+下面分两层证明：HTTP 一层，`validate_metadata` 与 pre-cut 源码逐例对照一层。
+
+############ A. HTTP 层（真实调用 /api/v1/consulting/documents）############
+契约字段是 `metadata_vocabulary_check`：'ok' = 没有值被丢弃，
+'dropped' = 有值越界被丢弃（`_dropped` 的提示）。
+上传身份：X-User-Id: test-user（未带凭据时该端点返回 403 identity-required，已实测）
+
+[1] client_industry='cross_industry'（本刀新增的合法值）
+    {"http_status": 200, "metadata_vocabulary_check": "ok", "requested": {"client_industry": "cross_industry"}, "document_accepted": true, "reason": null, "static_catalog_size": 45}
+[2] client_industry='manufacturing'（既有的合法值）
+    {"http_status": 200, "metadata_vocabulary_check": "ok", "requested": {"client_industry": "manufacturing"}, "document_accepted": true, "reason": null, "static_catalog_size": 45}
+[3] client_industry='made_up_industry'（越界值）
+    {"http_status": 200, "metadata_vocabulary_check": "dropped", "requested": {"client_industry": "made_up_industry"}, "document_accepted": true, "reason": null, "static_catalog_size": 45}
+[4] type='not_a_type'（越界值，另一个词表）
+    {"http_status": 200, "metadata_vocabulary_check": "dropped", "requested": {"type": "not_a_type"}, "document_accepted": true, "reason": null, "static_catalog_size": 45}
+
+判据：若 [1][2] 与 [3][4] 返回同一个取值，说明校验根本没跑（那才是回归）。
+      实测 [1][2] = 'ok' / 'ok'，[3][4] = 'dropped' / 'dropped' → 判据成立。
+
+############ B. 机制层：与 pre-cut 源码逐例对照 ############
+把 `git show a463658:src/ece/consulting/metadata.py` 载入为独立模块，
+与当前模块对同一组探针逐例比较 `validate_metadata` 的返回。
+
+  probe                                                          identical 
+  {"client_industry": ["retail"]}                                True      
+  {"client_industry": ["cross_industry"]}                        False     
+  {"client_industry": ["made_up_industry"]}                      True      
+  {"type": ["not_a_type"]}                                       True      
+  {"engagement_phase": ["nope"]}                                 True      
+  {"problem_types": ["nope"]}                                    True      
+  {"methods": ["nope"]}                                          True      
+  {"type": ["case"], "client_industry": ["retail", "cross_industry", "junk"]} False     
+
+  除去含 `cross_industry` 的探针，其余探针 100% 一致: True
+  → 越界丢弃的**机制**一字未改；唯一的行为差异正是本刀的目的：
+    `cross_industry` 由'被丢弃'变为'合法'。
+
+  （含 `cross_industry` 的两个探针**应当**不同——若它们相同，说明词表压根没加成功。）
+---- done ----

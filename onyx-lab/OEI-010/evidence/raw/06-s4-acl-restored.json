@@ -1,0 +1,231 @@
+{
+  "package_id": "ctx_02f5b113598c47caa18c6e8c",
+  "request_id": "02f5b113-598c-47ca-a18c-6e8cc2abd0eb",
+  "task": {
+    "intent": "evaluate_purchase_request",
+    "spec_version": 1
+  },
+  "user": {
+    "id": "demo-user-finance",
+    "display_id": "U002",
+    "name": "Demo Finance Manager",
+    "department": "finance",
+    "roles": [
+      "finance_manager"
+    ],
+    "is_management": false
+  },
+  "entities": [
+    {
+      "ref": "PR001",
+      "type": "purchase_request",
+      "name": "PR0000",
+      "attrs": {
+        "amount": 1500000,
+        "product": "IT服务-型号049",
+        "supplier": "供应商BM有限公司",
+        "created_at": "2026-04-08",
+        "department": "procurement"
+      },
+      "src": {
+        "system": "demo:demo",
+        "record_id": "PR0000"
+      }
+    }
+  ],
+  "relationships": [
+    {
+      "from": "PR001",
+      "rel": "SUBJECT_TO",
+      "to": "POL001",
+      "valid": [
+        null,
+        null
+      ],
+      "src": {
+        "system": "demo:seed_relationships",
+        "record_id": ""
+      }
+    },
+    {
+      "from": "PR001",
+      "rel": "SUBMITTED_BY",
+      "to": "U002",
+      "valid": [
+        null,
+        null
+      ],
+      "src": {
+        "system": "demo:seed_relationships",
+        "record_id": ""
+      }
+    },
+    {
+      "from": "PR001",
+      "rel": "CONTAINS",
+      "to": "PRD001",
+      "valid": [
+        null,
+        null
+      ],
+      "src": {
+        "system": "demo:seed_relationships",
+        "record_id": ""
+      }
+    },
+    {
+      "from": "PR001",
+      "rel": "SELECTS",
+      "to": "SUP001",
+      "valid": [
+        null,
+        null
+      ],
+      "src": {
+        "system": "demo:seed_relationships",
+        "record_id": ""
+      }
+    },
+    {
+      "from": "PR001",
+      "rel": "SUBMITTED_BY",
+      "to": "U001",
+      "valid": [
+        null,
+        null
+      ],
+      "src": {
+        "system": "demo:seed_relationships",
+        "record_id": ""
+      }
+    },
+    {
+      "from": "PR001",
+      "rel": "BELONGS_TO",
+      "to": "D001",
+      "valid": [
+        null,
+        null
+      ],
+      "src": {
+        "system": "demo:seed_relationships",
+        "record_id": ""
+      }
+    }
+  ],
+  "documents": [],
+  "business_data": [],
+  "denied": [],
+  "sources": [
+    {
+      "sid": "saa13",
+      "system": "demo:demo",
+      "record_id": "PR0000"
+    },
+    {
+      "sid": "s8e24",
+      "system": "demo:seed_relationships",
+      "record_id": ""
+    },
+    {
+      "sid": "sb8d0",
+      "system": "ece:memory",
+      "record_id": "memory:29"
+    },
+    {
+      "sid": "sd077",
+      "system": "ece:memory",
+      "record_id": "memory:20"
+    },
+    {
+      "sid": "s9075",
+      "system": "ece:memory",
+      "record_id": "memory:16"
+    },
+    {
+      "sid": "s310d",
+      "system": "ece:memory",
+      "record_id": "memory:26"
+    },
+    {
+      "sid": "s0240",
+      "system": "ece:memory",
+      "record_id": "memory:18"
+    },
+    {
+      "sid": "sb3d6",
+      "system": "ece:memory",
+      "record_id": "memory:15"
+    }
+  ],
+  "metadata": {
+    "generated_at": "2026-09-25T12:08:01.381659+00:00",
+    "as_of": null,
+    "counts": {
+      "entities": 1,
+      "relationships": 6,
+      "documents": 0,
+      "rows": 0,
+      "denied": 0
+    },
+    "insufficient_context": false,
+    "memory_count": 6,
+    "memory_dropped": 0
+  },
+  "memory": [
+    {
+      "ref": "memory:29",
+      "scope": "org",
+      "statement": "oei010 step6 probe org-a memory under an ACL time box",
+      "source": "explicit:api",
+      "confidence": null,
+      "created_at": "2026-09-25T12:08:00.964318+00:00",
+      "expires_at": null
+    },
+    {
+      "ref": "memory:20",
+      "scope": "org",
+      "statement": "oei010 step5 probe org-a canonical terminology",
+      "source": "explicit:api",
+      "confidence": null,
+      "created_at": "2026-09-25T12:06:33.694053+00:00",
+      "expires_at": null
+    },
+    {
+      "ref": "memory:16",
+      "scope": "org",
+      "statement": "oei010 step4 probe canonical org stance (written by admin)",
+      "source": "explicit:api",
+      "confidence": null,
+      "created_at": "2026-09-25T12:06:26.277306+00:00",
+      "expires_at": null
+    },
+    {
+      "ref": "memory:26",
+      "scope": "user",
+      "statement": "oei010 step6 probe live user memory",
+      "source": "explicit:api",
+      "confidence": null,
+      "created_at": "2026-09-25T12:08:00.903632+00:00",
+      "expires_at": null
+    },
+    {
+      "ref": "memory:18",
+      "scope": "user",
+      "statement": "oei010 step5 probe finance-only preference",
+      "source": "explicit:api",
+      "confidence": null,
+      "created_at": "2026-09-25T12:06:33.667622+00:00",
+      "expires_at": null
+    },
+    {
+      "ref": "memory:15",
+      "scope": "user",
+      "statement": "oei010 step4 probe finance own preference",
+      "source": "explicit:api",
+      "confidence": null,
+      "created_at": "2026-09-25T12:06:26.250909+00:00",
+      "expires_at": null
+    }
+  ]
+}

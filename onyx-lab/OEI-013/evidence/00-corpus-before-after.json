@@ -1,0 +1,127 @@
+{
+  "observed_at": "2026-09-26T12:41:03.538015+08:00",
+  "onyx_base": "http://127.0.0.1:8080",
+  "project_id": 1,
+  "identity": {
+    "email": "codex@onyx-lab.example.com",
+    "id": "c7483a82-9008-41f0-88f7-b8b9dba6d78e"
+  },
+  "decision": {
+    "removal_performed": false,
+    "decided_by": "user",
+    "decided_on": "2026-09-26",
+    "instruction_verbatim": "先不删，只做只读取证",
+    "task_reference": "TASK.md §3.1 / §5 step 0 / A1 / A2",
+    "note": "TASK §3.1 recorded the user as having approved removing the comparison document. When cc requested explicit confirmation for the irreversible deletion, the user instead chose read-only evidence. No deletion was attempted or performed in this cut."
+  },
+  "before": [
+    {
+      "name": "case-management-consulting.md",
+      "user_file_id": "7bb48d46-f7e4-4e20-b178-9791fea73334",
+      "file_id": "05513cc3-a6d4-479f-a736-ea5ca4020945",
+      "status": "COMPLETED",
+      "chunk_count": 3,
+      "token_count": 0
+    },
+    {
+      "name": "ece-df16d19c9e7b-oei009-comparison-restricted.md",
+      "user_file_id": "6138305b-0f40-468f-a1c8-bdea6f68d424",
+      "file_id": "1d3c880a-91fd-4069-9133-4bc0b9d2292a",
+      "status": "COMPLETED",
+      "chunk_count": 1,
+      "token_count": 324
+    },
+    {
+      "name": "methodology-framework.md",
+      "user_file_id": "1457df88-02cc-473a-aacc-16dbaba0e332",
+      "file_id": "d17470b5-d65e-4bdd-aca9-deff725f27f0",
+      "status": "COMPLETED",
+      "chunk_count": 4,
+      "token_count": 0
+    },
+    {
+      "name": "play-sales-delivery.md",
+      "user_file_id": "3b14b918-cea2-4df7-9edb-4375a9b171ab",
+      "file_id": "1fe0d696-c954-49d6-b0c8-1b07742b6fa3",
+      "status": "COMPLETED",
+      "chunk_count": 4,
+      "token_count": 0
+    }
+  ],
+  "after": [
+    {
+      "name": "case-management-consulting.md",
+      "user_file_id": "7bb48d46-f7e4-4e20-b178-9791fea73334",
+      "file_id": "05513cc3-a6d4-479f-a736-ea5ca4020945",
+      "status": "COMPLETED",
+      "chunk_count": 3,
+      "token_count": 0
+    },
+    {
+      "name": "ece-df16d19c9e7b-oei009-comparison-restricted.md",
+      "user_file_id": "6138305b-0f40-468f-a1c8-bdea6f68d424",
+      "file_id": "1d3c880a-91fd-4069-9133-4bc0b9d2292a",
+      "status": "COMPLETED",
+      "chunk_count": 1,
+      "token_count": 324
+    },
+    {
+      "name": "methodology-framework.md",
+      "user_file_id": "1457df88-02cc-473a-aacc-16dbaba0e332",
+      "file_id": "d17470b5-d65e-4bdd-aca9-deff725f27f0",
+      "status": "COMPLETED",
+      "chunk_count": 4,
+      "token_count": 0
+    },
+    {
+      "name": "play-sales-delivery.md",
+      "user_file_id": "3b14b918-cea2-4df7-9edb-4375a9b171ab",
+      "file_id": "1fe0d696-c954-49d6-b0c8-1b07742b6fa3",
+      "status": "COMPLETED",
+      "chunk_count": 4,
+      "token_count": 0
+    }
+  ],
+  "before_after_identical": true,
+  "counts": {
+    "total_files": 4,
+    "comparison_docs": 1,
+    "expected_real_docs_present": 3,
+    "task_expected_total_if_removed": 3
+  },
+  "would_be_deleted": {
+    "name": "ece-df16d19c9e7b-oei009-comparison-restricted.md",
+    "user_file_id": "6138305b-0f40-468f-a1c8-bdea6f68d424",
+    "file_id": "1d3c880a-91fd-4069-9133-4bc0b9d2292a",
+    "status": "COMPLETED",
+    "chunk_count": 1,
+    "token_count": 324
+  },
+  "real_docs": [
+    {
+      "name": "case-management-consulting.md",
+      "user_file_id": "7bb48d46-f7e4-4e20-b178-9791fea73334",
+      "file_id": "05513cc3-a6d4-479f-a736-ea5ca4020945",
+      "status": "COMPLETED",
+      "chunk_count": 3,
+      "token_count": 0
+    },
+    {
+      "name": "methodology-framework.md",
+      "user_file_id": "1457df88-02cc-473a-aacc-16dbaba0e332",
+      "file_id": "d17470b5-d65e-4bdd-aca9-deff725f27f0",
+      "status": "COMPLETED",
+      "chunk_count": 4,
+      "token_count": 0
+    },
+    {
+      "name": "play-sales-delivery.md",
+      "user_file_id": "3b14b918-cea2-4df7-9edb-4375a9b171ab",
+      "file_id": "1fe0d696-c954-49d6-b0c8-1b07742b6fa3",
+      "status": "COMPLETED",
+      "chunk_count": 4,
+      "token_count": 0
+    }
+  ],
+  "note_on_identifiers": "`user_file_id` is the Onyx `id` field and is what the two-step deletion (unlink then delete) takes; `file_id` is the underlying file object. Both are recorded so a future removal needs no rediscovery."
+}

@@ -1,0 +1,132 @@
+== OEI-014 步骤 3 — 终局锚点扫描（65 条；--require 20 条新增必须都有锚点）(A0/A3) ==
+date: 2026-09-26T08:40:54+08:00
+命令: uv run python workspace/anchor_scan.py --require workspace/new-ids.txt
+退出码是 A3 的机检判据（有任何一条新增对象没有锚点 → 非 0）。
+
+== OEI-014 步骤 0 — 行业锚点扫描器（词边界安全）+ 4 条假阳性回归 ==
+
+扫描器源码: /mnt/d/Projects/domainAgentECE/onyx-lab/OEI-014/workspace/anchor_scan.py
+被扫文件  : /mnt/d/Projects/domainAgentECE/ece/src/ece/consulting/seed/consulting_objects.json
+对象总数  : 65
+
+---- 规则（§3.3）----
+① 范围：锚点必须出现在对象**自己的 title 或 summary**里；
+   `practice` / `methods` / `problem_types` / 关键词表推导**不算**。
+② 词边界：ASCII 关键词用 \b...\b（大小写不敏感）。
+③ 词表：只收具体行业词。以下词**不得单独作为锚点判据**（§3.3.2）：
+     - `ai`：长度≤2 的 ASCII；是 supply_chain / availability 的子串
+     - `public`：可作普通词义（公开/公共）；是 public_benchmark 的一部分
+     - `tech`：可作普通词义；且常作别的词的前缀
+     - `制造 / 制造业`：可作'场景范围'讲（'用于制造业与服务运营场景'），不指内容所属行业
+     - `供应链 / supply_chain`：通用概念（任何行业都有供应链），且含 `ai` 子串
+     - `运输`：通用活动（任何行业都可能运输），单用不足以判定物流行业
+     - `金融`：跨银行/保险/证券的宽词，且常作'金融科技'修饰语
+
+严规则锚点词表（10 个具体行业）：
+  banking          ['银行', '城商行', '农商行', '信贷', '个贷', '对公', '网点', '存贷', '手机银行']
+  consumer_goods   ['消费品', '快消', '快消品', '经销商', '铺货', '动销', '品牌商']
+  energy           ['能源', '电力', '电网', '油气', '光伏', '风电', '储能', '双碳', '发电']
+  healthcare       ['医疗', '医院', '患者', '临床', '诊疗', '门诊', '住院', '药械', '药品']
+  insurance        ['保险', '寿险', '财险', '核保', '理赔', '精算', '保费', '保单', '投保']
+  logistics        ['物流', '仓储', '配送', '快递', '干线', '仓配', '运力', '末端配送']
+  manufacturing    ['制造企业', '工厂', '产线', '车间', '良率', '生产线', '工单', '工艺', '设备维护', '设备综合效率']
+  public_sector    ['政府', '政务', '事业单位', '国企', '机关', '公共服务', '一网通办', '政务大厅', '财政']
+  retail           ['零售', '门店', '坪效', '连锁', '便利店', '商超', '导购', '货架']
+  technology       ['科技企业', '软件', '互联网', '人工智能', 'SaaS', '云平台', '研发团队', '数据平台']
+
+---- 自注入故障自检（证明扫描器能说【是】，也能说【否】）----
+  注入正例 __injected_positive__ (title 含 '城商行'+'网点') -> 锚点行业 ['banking']  PASS
+  注入反例 __injected_negative__ (只有 supply_ch**ai**n / data_av**ai**lability) -> 严规则锚点 [] (应为空)，松规则却报了 ['technology']  PASS
+  回归样例 methodology-value-chain-003        严规则锚点 [] (应为空)  PASS
+  回归样例 methodology-lean-waste-walk-005    严规则锚点 [] (应为空)  PASS
+  回归样例 methodology-benchmarking-public-010 严规则锚点 [] (应为空)  PASS
+  回归样例 risk-check-data-availability-001   严规则锚点 [] (应为空)  PASS
+  自检总判定: PASS
+
+---- 对照：4 条已知假阳性，松规则 vs 严规则 ----
+  id                                   松规则(旧)报出                     严规则(本扫描器)
+  methodology-value-chain-003          technology←ai                无锚点 ✓
+  methodology-lean-waste-walk-005      manufacturing←制造             无锚点 ✓
+  methodology-benchmarking-public-010  public_sector←public         无锚点 ✓
+  risk-check-data-availability-001     technology←ai                无锚点 ✓
+
+  上表读法：松规则在 `practice`/`methods`/`problem_types` 或子串上命中，
+  严规则一律报【无锚点】 —— 这 4 条**本来就是通用方法/通用清单**，
+  这正是它们保持 `cross_industry` 的理由。
+
+---- 全量：既有对象里严规则能认出锚点的（参考；既有 45 条不改）----
+  case-retail-procurement-diagnosis-001          retail@summary←零售; retail@title←零售
+  case-bank-retail-channel-002                   banking@summary←城商行; banking@title←城商行
+  case-saas-pricing-restructure-004              technology@summary←SaaS; technology@title←SaaS
+  case-consumer-goods-channel-006                consumer_goods@summary←经销商; consumer_goods@title←快消; consumer_goods@title←快消品
+  case-logistics-network-007                     logistics@summary←物流; logistics@title←物流
+  case-insurance-claim-flow-008                  insurance@summary←保险; insurance@summary←理赔; insurance@title←保险; insurance@title←理赔
+  case-energy-procurement-009                    energy@summary←能源; energy@title←能源
+  case-healthcare-service-blueprint-010          healthcare@summary←医疗; healthcare@summary←患者; healthcare@title←医疗
+  industry-note-cn-banking-2026-001              banking@summary←城商行; banking@title←银行
+  industry-note-cn-consumer-2026-002             consumer_goods@title←消费品; retail@summary←零售
+  industry-note-cn-manufacturing-2026-003        manufacturing@summary←制造企业
+  industry-note-cn-logistics-2026-004            logistics@summary←仓储; logistics@title←物流
+  industry-note-cn-healthcare-2026-005           healthcare@summary←医疗; healthcare@title←医疗
+  industry-note-cn-energy-2026-006               energy@summary←能源; energy@title←能源
+  case-technology-data-platform-011              technology@summary←数据平台; technology@title←数据平台
+  case-public-sector-service-window-012          public_sector@summary←事业单位; public_sector@title←事业单位
+  case-insurance-underwriting-013                insurance@summary←保险; insurance@summary←核保; insurance@title←保险; insurance@title←核保
+  case-banking-credit-approval-014               banking@summary←信贷; banking@summary←城商行; banking@title←信贷; banking@title←城商行
+  risk-check-banking-branch-007                  banking@summary←城商行; banking@summary←网点; banking@title←网点; banking@title←银行
+  case-consumer-goods-distributor-015            consumer_goods@summary←动销; consumer_goods@summary←快消; consumer_goods@summary←快消品; consumer_goods@summary←经销商; consumer_goods@summary←铺货; consumer_goods@title←快消; consumer_goods@title←快消品; consumer_goods@title←经销商; consumer_goods@title←铺货
+  proposal-play-consumer-goods-listing-007       consumer_goods@summary←动销; consumer_goods@summary←快消; consumer_goods@summary←快消品; consumer_goods@summary←经销商; consumer_goods@summary←铺货; consumer_goods@title←快消; consumer_goods@title←铺货
+  case-energy-grid-load-016                      energy@summary←电网; energy@title←电网
+  risk-check-energy-maintenance-008              energy@summary←电力; energy@title←电力
+  case-healthcare-outpatient-017                 healthcare@summary←医院; healthcare@summary←门诊; healthcare@title←医院; healthcare@title←门诊
+  deliverable-template-healthcare-005            healthcare@summary←医院; healthcare@summary←患者; healthcare@summary←门诊; healthcare@title←医院; healthcare@title←门诊
+  industry-note-cn-insurance-2026-007            insurance@summary←寿险; insurance@summary←核保; insurance@summary←理赔; insurance@summary←财险; insurance@title←保险
+  risk-check-insurance-underwriting-009          insurance@summary←保险; insurance@summary←核保; insurance@title←保险; insurance@title←核保
+  case-logistics-warehouse-018                   logistics@summary←仓储; logistics@summary←仓配; logistics@summary←物流; logistics@summary←运力; logistics@title←仓储; logistics@title←物流
+  proposal-play-logistics-network-008            logistics@summary←仓配; logistics@summary←干线; logistics@summary←物流; logistics@summary←运力; logistics@title←物流
+  deliverable-template-manufacturing-006         manufacturing@summary←产线; manufacturing@summary←工单; manufacturing@summary←工厂; manufacturing@summary←良率; manufacturing@title←工厂
+  methodology-manufacturing-oee-011              manufacturing@summary←产线; manufacturing@summary←工厂; manufacturing@summary←良率; manufacturing@summary←设备综合效率; manufacturing@title←设备综合效率
+  industry-note-cn-public-sector-2026-008        public_sector@summary←一网通办; public_sector@summary←政务; public_sector@summary←政务大厅
+  case-public-sector-permit-cycle-019            public_sector@summary←政务; public_sector@summary←政务大厅; public_sector@title←政务; public_sector@title←政务大厅
+  deliverable-template-retail-007                retail@summary←导购; retail@summary←连锁; retail@summary←门店; retail@summary←零售; retail@title←门店; retail@title←零售
+  methodology-retail-shelf-012                   retail@summary←坪效; retail@summary←货架; retail@summary←门店; retail@summary←零售; retail@title←坪效; retail@title←货架; retail@title←门店
+  industry-note-cn-technology-2026-009           technology@summary←互联网; technology@summary←软件; technology@title←科技企业
+  case-technology-rd-delivery-020                technology@summary←软件; technology@title←软件
+  -> 严规则可认出锚点的对象: 37/65
+
+  没有任何行业的对象: 0  []
+  带了具体行业但严规则在 title/summary 找不到锚点的既有对象: 2
+    - case-manufacturing-supply-resilience-003
+    - case-public-sector-org-redesign-005
+
+  ⚠️ 读法（不许含糊）：上面这些既有对象**不是本刀的问题** —— OEI-011 的标注
+  规则允许依据落在 `practice`/`methods`/`problem_types`（OEI-011 §3.1.6），
+  严格度本来就低于本刀 §3.3 对**新增对象**的要求。本刀只新增、不改它们，
+  所以这里如实录出、不做任何回溯改动。
+
+---- A3 机检：以下新增对象必须每条都有锚点 ----
+  case-banking-credit-approval-014               banking@summary<-信贷; banking@summary<-城商行; banking@title<-信贷; banking@title<-城商行
+  risk-check-banking-branch-007                  banking@summary<-城商行; banking@summary<-网点; banking@title<-网点; banking@title<-银行
+  case-consumer-goods-distributor-015            consumer_goods@summary<-动销; consumer_goods@summary<-快消; consumer_goods@summary<-快消品; consumer_goods@summary<-经销商; consumer_goods@summary<-铺货; consumer_goods@title<-快消; consumer_goods@title<-快消品; consumer_goods@title<-经销商; consumer_goods@title<-铺货
+  proposal-play-consumer-goods-listing-007       consumer_goods@summary<-动销; consumer_goods@summary<-快消; consumer_goods@summary<-快消品; consumer_goods@summary<-经销商; consumer_goods@summary<-铺货; consumer_goods@title<-快消; consumer_goods@title<-铺货
+  case-energy-grid-load-016                      energy@summary<-电网; energy@title<-电网
+  risk-check-energy-maintenance-008              energy@summary<-电力; energy@title<-电力
+  case-healthcare-outpatient-017                 healthcare@summary<-医院; healthcare@summary<-门诊; healthcare@title<-医院; healthcare@title<-门诊
+  deliverable-template-healthcare-005            healthcare@summary<-医院; healthcare@summary<-患者; healthcare@summary<-门诊; healthcare@title<-医院; healthcare@title<-门诊
+  industry-note-cn-insurance-2026-007            insurance@summary<-寿险; insurance@summary<-核保; insurance@summary<-理赔; insurance@summary<-财险; insurance@title<-保险
+  risk-check-insurance-underwriting-009          insurance@summary<-保险; insurance@summary<-核保; insurance@title<-保险; insurance@title<-核保
+  case-logistics-warehouse-018                   logistics@summary<-仓储; logistics@summary<-仓配; logistics@summary<-物流; logistics@summary<-运力; logistics@title<-仓储; logistics@title<-物流
+  proposal-play-logistics-network-008            logistics@summary<-仓配; logistics@summary<-干线; logistics@summary<-物流; logistics@summary<-运力; logistics@title<-物流
+  deliverable-template-manufacturing-006         manufacturing@summary<-产线; manufacturing@summary<-工单; manufacturing@summary<-工厂; manufacturing@summary<-良率; manufacturing@title<-工厂
+  methodology-manufacturing-oee-011              manufacturing@summary<-产线; manufacturing@summary<-工厂; manufacturing@summary<-良率; manufacturing@summary<-设备综合效率; manufacturing@title<-设备综合效率
+  industry-note-cn-public-sector-2026-008        public_sector@summary<-一网通办; public_sector@summary<-政务; public_sector@summary<-政务大厅
+  case-public-sector-permit-cycle-019            public_sector@summary<-政务; public_sector@summary<-政务大厅; public_sector@title<-政务; public_sector@title<-政务大厅
+  deliverable-template-retail-007                retail@summary<-导购; retail@summary<-连锁; retail@summary<-门店; retail@summary<-零售; retail@title<-门店; retail@title<-零售
+  methodology-retail-shelf-012                   retail@summary<-坪效; retail@summary<-货架; retail@summary<-门店; retail@summary<-零售; retail@title<-坪效; retail@title<-货架; retail@title<-门店
+  industry-note-cn-technology-2026-009           technology@summary<-互联网; technology@summary<-软件; technology@title<-科技企业
+  case-technology-rd-delivery-020                technology@summary<-软件; technology@title<-软件
+  -> 20/20 有锚点
+---- done ----
+
+退出码: 0
+---- done ----

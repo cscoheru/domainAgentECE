@@ -1,0 +1,54 @@
+OEI-009 step 7 — git commit  (R4 corrected: author line + repo scope)
+
+commit:  a884d41  feat(OEI-009): engine-document registry + per-result permission filter + ACL time-box
+repo:    /mnt/d/Projects/domainAgentECE/ece   (the ECE product repository)
+branch:  main
+status:  ahead 1 of origin/main (origin/main = a9cee31) — NOT pushed, per TASK §7
+
+author:    Claude Code <cc@onyx-lab.local>
+committer: Claude Code <cc@onyx-lab.local>
+  (verified with: git log -1 --format='%an <%ae>%n%cn <%ce>' a884d41)
+
+Files committed (17):
+
+  TASKS.md                                             +87
+  docs/API.md                                          +145
+  docs/DATA_MODEL.md                                   +80
+  scripts/check_api_docs.py                            +16/-1
+  src/ece/consulting/engine_merge.py                   +66/-4
+  src/ece/consulting/permissions_filter.py             +239  (new)
+  src/ece/consulting/registry.py                       +298  (new)
+  src/ece/consulting/router.py                         +148/-9
+  src/ece/identity/parser.py                           +60/-2
+  src/ece/migrations/versions/0009_engine_documents.py +92   (new)
+  src/ece/permissions/engine.py                        +111/-3
+  tests/integration/test_s20_audit_webhook.py          +57/-9
+  tests/unit/test_check_permission_timebox.py          +299  (new)
+  tests/unit/test_consulting_engine_merge.py           +22   (fixture only)
+  tests/unit/test_engine_documents_registry.py         +135  (new)
+  tests/unit/test_engine_merge_filter.py               +410  (new)
+  tests/unit/test_org_scope.py                         +216  (new)
+  total: 17 files, +2424/-57
+
+Repo-scope note (R4 correction)
+-------------------------------
+The evidence scripts and design docs under `onyx-lab/OEI-009/workspace/` are
+**NOT part of this commit** and cannot be: `onyx-lab/` is not tracked by the
+ECE repository (`git ls-files | grep -c '^onyx-lab'` = 0 there). Those files
+live in the *parent* repository checkout of `/mnt/d/Projects/domainAgentECE`,
+where `onyx-lab/OEI-009/` is currently **untracked** (`git status --porcelain`
+reports `?? onyx-lab/OEI-009/`). The earlier REPORT draft listed the workspace
+scripts as part of commit a884d41; that was wrong and is corrected here.
+No commit was made in the parent repository (TASK §7 authorises an ECE commit,
+not a docs-repo commit).
+
+NOT committed (out of OEI-009 scope, pre-existing working-tree changes in ece):
+  reports/cut-04*/mutation-evidence/*.md (14 files)
+  docs/demo-platform/DEMO_PLATFORM_PRD.md
+  docs/demo-platform/DEPLOY_USER_PROXY.md
+  (per OEI-008 VERDICT §4 — these predate this cut)
+
+NOT pushed (per TASK §7):
+  git status shows "ahead 1" with no push action taken.
+  Verified: `git rev-parse origin/main` = a9cee31; a884d41 is not contained in
+  any remote-tracking branch.

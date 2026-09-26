@@ -1,0 +1,138 @@
+{
+  "task": "OEI-011",
+  "what_this_is": "reproduction of a TASK-vs-reality conflict (no repo writes)",
+  "seed_path": "/mnt/d/Projects/domainAgentECE/ece/src/ece/consulting/seed/consulting_objects.json",
+  "test_file": "/mnt/d/Projects/domainAgentECE/ece/tests/unit/test_consulting_seed_count.py",
+  "assertion_inventory_complete": {
+    "sites_coupling_to_catalog_size_or_distribution": [
+      {
+        "site": "tests/unit/test_consulting_documents.py:263",
+        "assertion": "static_catalog_size == 36",
+        "authorized_by_task": true,
+        "breaks_on_increment": true
+      },
+      {
+        "site": "tests/unit/test_consulting_documents.py:315",
+        "assertion": "static_catalog_size == 36",
+        "authorized_by_task": true,
+        "breaks_on_increment": true
+      },
+      {
+        "site": "tests/unit/test_consulting_engine_merge.py:339",
+        "assertion": "total == 36",
+        "authorized_by_task": true,
+        "breaks_on_increment": true
+      },
+      {
+        "site": "tests/unit/test_consulting_seed_count.py:29",
+        "assertion": "len(catalog.objects) >= 36",
+        "authorized_by_task": false,
+        "breaks_on_increment": false
+      },
+      {
+        "site": "tests/integration/test_consulting_api_contract.py:55",
+        "assertion": "total >= 36",
+        "authorized_by_task": false,
+        "breaks_on_increment": false
+      },
+      {
+        "site": "tests/unit/test_consulting_seed_count.py:34-50",
+        "assertion": "actual[type] == expected[type] for all six types (EXACT)",
+        "authorized_by_task": false,
+        "breaks_on_increment": true,
+        "listed_in_task_s1_5": false,
+        "note": "TASK §1.5 calls its table an exhaustive inventory (我逐个核过) and names only five sites; this sixth site is the strictest one and is absent from that table."
+      }
+    ]
+  },
+  "scenarios": {
+    "control_today_seed": {
+      "objects": 36,
+      "type_counts": {
+        "case": 10,
+        "deliverable_template": 4,
+        "industry_note": 2,
+        "methodology": 10,
+        "proposal_play": 6,
+        "risk_check": 4
+      },
+      "test_total_object_count_meets_minimum": {
+        "outcome": "pass",
+        "assertion_error": null
+      },
+      "test_type_distribution_matches_documented_targets": {
+        "outcome": "pass",
+        "assertion_error": null
+      }
+    },
+    "plus_one_industry_note": {
+      "objects": 37,
+      "type_counts": {
+        "case": 10,
+        "deliverable_template": 4,
+        "industry_note": 3,
+        "methodology": 10,
+        "proposal_play": 6,
+        "risk_check": 4
+      },
+      "test_total_object_count_meets_minimum": {
+        "outcome": "pass",
+        "assertion_error": null
+      },
+      "test_type_distribution_matches_documented_targets": {
+        "outcome": "fail",
+        "assertion_error": "type='industry_note': expected 2 objects, got 3 (full counts: {'case': 10, 'methodology': 10, 'proposal_play': 6, 'deliverable_template': 4, 'risk_check': 4, 'industry_note': 3})"
+      }
+    },
+    "a4_satisfying_plan": {
+      "objects": 45,
+      "type_counts": {
+        "case": 13,
+        "deliverable_template": 4,
+        "industry_note": 6,
+        "methodology": 10,
+        "proposal_play": 6,
+        "risk_check": 6
+      },
+      "industry_match_counts": {
+        "banking": 2,
+        "consumer_goods": 2,
+        "cross_industry": 2,
+        "energy": 2,
+        "healthcare": 2,
+        "insurance": 2,
+        "logistics": 2,
+        "manufacturing": 2,
+        "public_sector": 2,
+        "retail": 2,
+        "technology": 2
+      },
+      "test_total_object_count_meets_minimum": {
+        "outcome": "pass",
+        "assertion_error": null
+      },
+      "test_type_distribution_matches_documented_targets": {
+        "outcome": "fail",
+        "assertion_error": "type='case': expected 10 objects, got 13 (full counts: {'case': 13, 'methodology': 10, 'proposal_play': 6, 'deliverable_template': 4, 'risk_check': 6, 'industry_note': 6})"
+      }
+    }
+  },
+  "contradiction": {
+    "frozen_assertion": "tests/unit/test_consulting_seed_count.py:34-50",
+    "frozen_assertion_is_cast_as": "==",
+    "expected_sum_equals_current_total": true,
+    "expected_sum": 36,
+    "current_total": 36,
+    "why_impossible": "sum(expected) == current total (36). Every added object increments some actual[t], and the test requires actual[t] == expected[t] for all six types. Therefore ANY increment — even one object — makes the assertion false. A4 mandates total >= 44 and industry_note >= 6 and risk_check >= 6.",
+    "authorized_test_edits_per_task_s3_4_and_s8": [
+      "tests/unit/test_consulting_documents.py:263",
+      "tests/unit/test_consulting_documents.py:315",
+      "tests/unit/test_consulting_engine_merge.py:339",
+      "tests/integration/test_s32_assembly.py:92 (step 0.1)",
+      "+ new files"
+    ],
+    "this_file_is_not_authorized": true
+  },
+  "verdict": "BLOCKED",
+  "verdict_reason": "A4 (total>=44, industry_note>=6, risk_check>=6) is unsatisfiable while test_consulting_seed_count.py:34-50 keeps its `==` distribution assertion, and TASK §3.4/§8/A9 forbid editing that file. Reproduction: the real test function, run against the incremented catalog, raises AssertionError in both the minimal (+1) and the full (+9) scenario."
+}

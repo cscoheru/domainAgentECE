@@ -1,0 +1,1036 @@
+{
+  "step": "OEI-014 §3.3 锚点依据表",
+  "rule": "锚点必须出现在**该对象自己的** title 或 summary 里，且必须是具体行业词；ai / public / tech / 制造(业) / 供应链 等弱词不作为判据（见 workspace/anchor_scan.py 的 WEAK_TOKENS 与 ANCHOR_KEYWORDS）。",
+  "objects_without_anchor": [],
+  "all_new_objects_anchored": true,
+  "rows": [
+    {
+      "id": "case-banking-credit-approval-014",
+      "type": "case",
+      "client_industry": [
+        "banking"
+      ],
+      "anchors": [
+        {
+          "industry": "banking",
+          "anchor_keyword": "城商行",
+          "anchor_field": "title",
+          "match_mode": "cjk_substring",
+          "anchor_sentence": "某城商行小微信贷审批时效评估",
+          "is_substring_of_that_field": true,
+          "in_own_title_or_summary": true
+        },
+        {
+          "industry": "banking",
+          "anchor_keyword": "信贷",
+          "anchor_field": "title",
+          "match_mode": "cjk_substring",
+          "anchor_sentence": "某城商行小微信贷审批时效评估",
+          "is_substring_of_that_field": true,
+          "in_own_title_or_summary": true
+        },
+        {
+          "industry": "banking",
+          "anchor_keyword": "城商行",
+          "anchor_field": "summary",
+          "match_mode": "cjk_substring",
+          "anchor_sentence": "为某中型城商行梳理小微信贷审批的等待环节与贷后检查负担, 给出分级授权与集中作业建议. 客户名脱敏, 数据为示意.",
+          "is_substring_of_that_field": true,
+          "in_own_title_or_summary": true
+        },
+        {
+          "industry": "banking",
+          "anchor_keyword": "信贷",
+          "anchor_field": "summary",
+          "match_mode": "cjk_substring",
+          "anchor_sentence": "为某中型城商行梳理小微信贷审批的等待环节与贷后检查负担, 给出分级授权与集中作业建议. 客户名脱敏, 数据为示意.",
+          "is_substring_of_that_field": true,
+          "in_own_title_or_summary": true
+        }
+      ],
+      "every_industry_anchored": true
+    },
+    {
+      "id": "risk-check-banking-branch-007",
+      "type": "risk_check",
+      "client_industry": [
+        "banking"
+      ],
+      "anchors": [
+        {
+          "industry": "banking",
+          "anchor_keyword": "银行",
+          "anchor_field": "title",
+          "match_mode": "cjk_substring",
+          "anchor_sentence": "银行网点转型的落地风险清单",
+          "is_substring_of_that_field": true,
+          "in_own_title_or_summary": true
+        },
+        {
+          "industry": "banking",
+          "anchor_keyword": "网点",
+          "anchor_field": "title",
+          "match_mode": "cjk_substring",
+          "anchor_sentence": "银行网点转型的落地风险清单",
+          "is_substring_of_that_field": true,
+          "in_own_title_or_summary": true
+        },
+        {
+          "industry": "banking",
+          "anchor_keyword": "城商行",
+          "anchor_field": "summary",
+          "match_mode": "cjk_substring",
+          "anchor_sentence": "城商行网点转型常见风险: 柜面人员安置 / 自助设备替代节奏 / 客户迁移意愿三类检查项, 用于实施阶段前置识别.",
+          "is_substring_of_that_field": true,
+          "in_own_title_or_summary": true
+        },
+        {
+          "industry": "banking",
+          "anchor_keyword": "网点",
+          "anchor_field": "summary",
+          "match_mode": "cjk_substring",
+          "anchor_sentence": "城商行网点转型常见风险: 柜面人员安置 / 自助设备替代节奏 / 客户迁移意愿三类检查项, 用于实施阶段前置识别.",
+          "is_substring_of_that_field": true,
+          "in_own_title_or_summary": true
+        }
+      ],
+      "every_industry_anchored": true
+    },
+    {
+      "id": "case-consumer-goods-distributor-015",
+      "type": "case",
+      "client_industry": [
+        "consumer_goods"
+      ],
+      "anchors": [
+        {
+          "industry": "consumer_goods",
+          "anchor_keyword": "快消",
+          "anchor_field": "title",
+          "match_mode": "cjk_substring",
+          "anchor_sentence": "某快消品牌经销商库存与铺货诊断",
+          "is_substring_of_that_field": true,
+          "in_own_title_or_summary": true
+        },
+        {
+          "industry": "consumer_goods",
+          "anchor_keyword": "快消品",
+          "anchor_field": "title",
+          "match_mode": "cjk_substring",
+          "anchor_sentence": "某快消品牌经销商库存与铺货诊断",
+          "is_substring_of_that_field": true,
+          "in_own_title_or_summary": true
+        },
+        {
+          "industry": "consumer_goods",
+          "anchor_keyword": "经销商",
+          "anchor_field": "title",
+          "match_mode": "cjk_substring",
+          "anchor_sentence": "某快消品牌经销商库存与铺货诊断",
+          "is_substring_of_that_field": true,
+          "in_own_title_or_summary": true
+        },
+        {
+          "industry": "consumer_goods",
+          "anchor_keyword": "铺货",
+          "anchor_field": "title",
+          "match_mode": "cjk_substring",
+          "anchor_sentence": "某快消品牌经销商库存与铺货诊断",
+          "is_substring_of_that_field": true,
+          "in_own_title_or_summary": true
+        },
+        {
+          "industry": "consumer_goods",
+          "anchor_keyword": "快消",
+          "anchor_field": "summary",
+          "match_mode": "cjk_substring",
+          "anchor_sentence": "为某中型快消品牌评估经销商库存结构与铺货节奏, 识别动销差异与补货规则缺口, 给出渠道分层与观察口径建议. 客户名脱敏, 数据为示意.",
+          "is_substring_of_that_field": true,
+          "in_own_title_or_summary": true
+        },
+        {
+          "industry": "consumer_goods",
+          "anchor_keyword": "快消品",
+          "anchor_field": "summary",
+          "match_mode": "cjk_substring",
+          "anchor_sentence": "为某中型快消品牌评估经销商库存结构与铺货节奏, 识别动销差异与补货规则缺口, 给出渠道分层与观察口径建议. 客户名脱敏, 数据为示意.",
+          "is_substring_of_that_field": true,
+          "in_own_title_or_summary": true
+        },
+        {
+          "industry": "consumer_goods",
+          "anchor_keyword": "经销商",
+          "anchor_field": "summary",
+          "match_mode": "cjk_substring",
+          "anchor_sentence": "为某中型快消品牌评估经销商库存结构与铺货节奏, 识别动销差异与补货规则缺口, 给出渠道分层与观察口径建议. 客户名脱敏, 数据为示意.",
+          "is_substring_of_that_field": true,
+          "in_own_title_or_summary": true
+        },
+        {
+          "industry": "consumer_goods",
+          "anchor_keyword": "铺货",
+          "anchor_field": "summary",
+          "match_mode": "cjk_substring",
+          "anchor_sentence": "为某中型快消品牌评估经销商库存结构与铺货节奏, 识别动销差异与补货规则缺口, 给出渠道分层与观察口径建议. 客户名脱敏, 数据为示意.",
+          "is_substring_of_that_field": true,
+          "in_own_title_or_summary": true
+        },
+        {
+          "industry": "consumer_goods",
+          "anchor_keyword": "动销",
+          "anchor_field": "summary",
+          "match_mode": "cjk_substring",
+          "anchor_sentence": "为某中型快消品牌评估经销商库存结构与铺货节奏, 识别动销差异与补货规则缺口, 给出渠道分层与观察口径建议. 客户名脱敏, 数据为示意.",
+          "is_substring_of_that_field": true,
+          "in_own_title_or_summary": true
+        }
+      ],
+      "every_industry_anchored": true
+    },
+    {
+      "id": "proposal-play-consumer-goods-listing-007",
+      "type": "proposal_play",
+      "client_industry": [
+        "consumer_goods"
+      ],
+      "anchors": [
+        {
+          "industry": "consumer_goods",
+          "anchor_keyword": "快消",
+          "anchor_field": "title",
+          "match_mode": "cjk_substring",
+          "anchor_sentence": "快消新品铺货提案打法",
+          "is_substring_of_that_field": true,
+          "in_own_title_or_summary": true
+        },
+        {
+          "industry": "consumer_goods",
+          "anchor_keyword": "铺货",
+          "anchor_field": "title",
+          "match_mode": "cjk_substring",
+          "anchor_sentence": "快消新品铺货提案打法",
+          "is_substring_of_that_field": true,
+          "in_own_title_or_summary": true
+        },
+        {
+          "industry": "consumer_goods",
+          "anchor_keyword": "快消",
+          "anchor_field": "summary",
+          "match_mode": "cjk_substring",
+          "anchor_sentence": "面向快消品牌的新品铺货提案组织方式: 先对齐经销商分层与货架资源, 再给铺货节奏与动销观察口径, 避免只谈铺货率.",
+          "is_substring_of_that_field": true,
+          "in_own_title_or_summary": true
+        },
+        {
+          "industry": "consumer_goods",
+          "anchor_keyword": "快消品",
+          "anchor_field": "summary",
+          "match_mode": "cjk_substring",
+          "anchor_sentence": "面向快消品牌的新品铺货提案组织方式: 先对齐经销商分层与货架资源, 再给铺货节奏与动销观察口径, 避免只谈铺货率.",
+          "is_substring_of_that_field": true,
+          "in_own_title_or_summary": true
+        },
+        {
+          "industry": "consumer_goods",
+          "anchor_keyword": "经销商",
+          "anchor_field": "summary",
+          "match_mode": "cjk_substring",
+          "anchor_sentence": "面向快消品牌的新品铺货提案组织方式: 先对齐经销商分层与货架资源, 再给铺货节奏与动销观察口径, 避免只谈铺货率.",
+          "is_substring_of_that_field": true,
+          "in_own_title_or_summary": true
+        },
+        {
+          "industry": "consumer_goods",
+          "anchor_keyword": "铺货",
+          "anchor_field": "summary",
+          "match_mode": "cjk_substring",
+          "anchor_sentence": "面向快消品牌的新品铺货提案组织方式: 先对齐经销商分层与货架资源, 再给铺货节奏与动销观察口径, 避免只谈铺货率.",
+          "is_substring_of_that_field": true,
+          "in_own_title_or_summary": true
+        },
+        {
+          "industry": "consumer_goods",
+          "anchor_keyword": "动销",
+          "anchor_field": "summary",
+          "match_mode": "cjk_substring",
+          "anchor_sentence": "面向快消品牌的新品铺货提案组织方式: 先对齐经销商分层与货架资源, 再给铺货节奏与动销观察口径, 避免只谈铺货率.",
+          "is_substring_of_that_field": true,
+          "in_own_title_or_summary": true
+        }
+      ],
+      "every_industry_anchored": true
+    },
+    {
+      "id": "case-energy-grid-load-016",
+      "type": "case",
+      "client_industry": [
+        "energy"
+      ],
+      "anchors": [
+        {
+          "industry": "energy",
+          "anchor_keyword": "电网",
+          "anchor_field": "title",
+          "match_mode": "cjk_substring",
+          "anchor_sentence": "某电网企业负荷预测协同评估",
+          "is_substring_of_that_field": true,
+          "in_own_title_or_summary": true
+        },
+        {
+          "industry": "energy",
+          "anchor_keyword": "电网",
+          "anchor_field": "summary",
+          "match_mode": "cjk_substring",
+          "anchor_sentence": "为某省级电网企业评估负荷预测与检修计划的协同方式, 识别跨部门口径差异与滚动更新频率缺口, 给出预测节拍建议. 客户名脱敏, 数据为示意.",
+          "is_substring_of_that_field": true,
+          "in_own_title_or_summary": true
+        }
+      ],
+      "every_industry_anchored": true
+    },
+    {
+      "id": "risk-check-energy-maintenance-008",
+      "type": "risk_check",
+      "client_industry": [
+        "energy"
+      ],
+      "anchors": [
+        {
+          "industry": "energy",
+          "anchor_keyword": "电力",
+          "anchor_field": "title",
+          "match_mode": "cjk_substring",
+          "anchor_sentence": "电力检修窗口期的执行风险清单",
+          "is_substring_of_that_field": true,
+          "in_own_title_or_summary": true
+        },
+        {
+          "industry": "energy",
+          "anchor_keyword": "电力",
+          "anchor_field": "summary",
+          "match_mode": "cjk_substring",
+          "anchor_sentence": "电力企业检修窗口期常见风险: 停机窗口压缩 / 备件到位时序 / 跨专业协同三类检查项, 用于实施阶段风险前置.",
+          "is_substring_of_that_field": true,
+          "in_own_title_or_summary": true
+        }
+      ],
+      "every_industry_anchored": true
+    },
+    {
+      "id": "case-healthcare-outpatient-017",
+      "type": "case",
+      "client_industry": [
+        "healthcare"
+      ],
+      "anchors": [
+        {
+          "industry": "healthcare",
+          "anchor_keyword": "医院",
+          "anchor_field": "title",
+          "match_mode": "cjk_substring",
+          "anchor_sentence": "某三甲医院门诊流程等待评估",
+          "is_substring_of_that_field": true,
+          "in_own_title_or_summary": true
+        },
+        {
+          "industry": "healthcare",
+          "anchor_keyword": "门诊",
+          "anchor_field": "title",
+          "match_mode": "cjk_substring",
+          "anchor_sentence": "某三甲医院门诊流程等待评估",
+          "is_substring_of_that_field": true,
+          "in_own_title_or_summary": true
+        },
+        {
+          "industry": "healthcare",
+          "anchor_keyword": "医院",
+          "anchor_field": "summary",
+          "match_mode": "cjk_substring",
+          "anchor_sentence": "为某三甲医院评估门诊挂号到就诊的等待环节与检查预约衔接, 给出分时段号源与导诊动线建议. 机构名脱敏, 数据为示意.",
+          "is_substring_of_that_field": true,
+          "in_own_title_or_summary": true
+        },
+        {
+          "industry": "healthcare",
+          "anchor_keyword": "门诊",
+          "anchor_field": "summary",
+          "match_mode": "cjk_substring",
+          "anchor_sentence": "为某三甲医院评估门诊挂号到就诊的等待环节与检查预约衔接, 给出分时段号源与导诊动线建议. 机构名脱敏, 数据为示意.",
+          "is_substring_of_that_field": true,
+          "in_own_title_or_summary": true
+        }
+      ],
+      "every_industry_anchored": true
+    },
+    {
+      "id": "deliverable-template-healthcare-005",
+      "type": "deliverable_template",
+      "client_industry": [
+        "healthcare"
+      ],
+      "anchors": [
+        {
+          "industry": "healthcare",
+          "anchor_keyword": "医院",
+          "anchor_field": "title",
+          "match_mode": "cjk_substring",
+          "anchor_sentence": "医院门诊服务蓝图模板",
+          "is_substring_of_that_field": true,
+          "in_own_title_or_summary": true
+        },
+        {
+          "industry": "healthcare",
+          "anchor_keyword": "门诊",
+          "anchor_field": "title",
+          "match_mode": "cjk_substring",
+          "anchor_sentence": "医院门诊服务蓝图模板",
+          "is_substring_of_that_field": true,
+          "in_own_title_or_summary": true
+        },
+        {
+          "industry": "healthcare",
+          "anchor_keyword": "医院",
+          "anchor_field": "summary",
+          "match_mode": "cjk_substring",
+          "anchor_sentence": "面向医院门诊场景的服务蓝图骨架: 患者旅程阶段 / 前台可见动作 / 后台支撑 / 等待触点与信息断点.",
+          "is_substring_of_that_field": true,
+          "in_own_title_or_summary": true
+        },
+        {
+          "industry": "healthcare",
+          "anchor_keyword": "患者",
+          "anchor_field": "summary",
+          "match_mode": "cjk_substring",
+          "anchor_sentence": "面向医院门诊场景的服务蓝图骨架: 患者旅程阶段 / 前台可见动作 / 后台支撑 / 等待触点与信息断点.",
+          "is_substring_of_that_field": true,
+          "in_own_title_or_summary": true
+        },
+        {
+          "industry": "healthcare",
+          "anchor_keyword": "门诊",
+          "anchor_field": "summary",
+          "match_mode": "cjk_substring",
+          "anchor_sentence": "面向医院门诊场景的服务蓝图骨架: 患者旅程阶段 / 前台可见动作 / 后台支撑 / 等待触点与信息断点.",
+          "is_substring_of_that_field": true,
+          "in_own_title_or_summary": true
+        }
+      ],
+      "every_industry_anchored": true
+    },
+    {
+      "id": "industry-note-cn-insurance-2026-007",
+      "type": "industry_note",
+      "client_industry": [
+        "insurance"
+      ],
+      "anchors": [
+        {
+          "industry": "insurance",
+          "anchor_keyword": "保险",
+          "anchor_field": "title",
+          "match_mode": "cjk_substring",
+          "anchor_sentence": "中国保险业 2026 业务关注点",
+          "is_substring_of_that_field": true,
+          "in_own_title_or_summary": true
+        },
+        {
+          "industry": "insurance",
+          "anchor_keyword": "寿险",
+          "anchor_field": "summary",
+          "match_mode": "cjk_substring",
+          "anchor_sentence": "公开行业观察整理: 寿险与财险在核保、理赔时效与服务一致性上的关注点, 不涉及具体公司数据, 仅作行业语境.",
+          "is_substring_of_that_field": true,
+          "in_own_title_or_summary": true
+        },
+        {
+          "industry": "insurance",
+          "anchor_keyword": "财险",
+          "anchor_field": "summary",
+          "match_mode": "cjk_substring",
+          "anchor_sentence": "公开行业观察整理: 寿险与财险在核保、理赔时效与服务一致性上的关注点, 不涉及具体公司数据, 仅作行业语境.",
+          "is_substring_of_that_field": true,
+          "in_own_title_or_summary": true
+        },
+        {
+          "industry": "insurance",
+          "anchor_keyword": "核保",
+          "anchor_field": "summary",
+          "match_mode": "cjk_substring",
+          "anchor_sentence": "公开行业观察整理: 寿险与财险在核保、理赔时效与服务一致性上的关注点, 不涉及具体公司数据, 仅作行业语境.",
+          "is_substring_of_that_field": true,
+          "in_own_title_or_summary": true
+        },
+        {
+          "industry": "insurance",
+          "anchor_keyword": "理赔",
+          "anchor_field": "summary",
+          "match_mode": "cjk_substring",
+          "anchor_sentence": "公开行业观察整理: 寿险与财险在核保、理赔时效与服务一致性上的关注点, 不涉及具体公司数据, 仅作行业语境.",
+          "is_substring_of_that_field": true,
+          "in_own_title_or_summary": true
+        }
+      ],
+      "every_industry_anchored": true
+    },
+    {
+      "id": "risk-check-insurance-underwriting-009",
+      "type": "risk_check",
+      "client_industry": [
+        "insurance"
+      ],
+      "anchors": [
+        {
+          "industry": "insurance",
+          "anchor_keyword": "保险",
+          "anchor_field": "title",
+          "match_mode": "cjk_substring",
+          "anchor_sentence": "保险核保数字化的落地风险清单",
+          "is_substring_of_that_field": true,
+          "in_own_title_or_summary": true
+        },
+        {
+          "industry": "insurance",
+          "anchor_keyword": "核保",
+          "anchor_field": "title",
+          "match_mode": "cjk_substring",
+          "anchor_sentence": "保险核保数字化的落地风险清单",
+          "is_substring_of_that_field": true,
+          "in_own_title_or_summary": true
+        },
+        {
+          "industry": "insurance",
+          "anchor_keyword": "保险",
+          "anchor_field": "summary",
+          "match_mode": "cjk_substring",
+          "anchor_sentence": "保险核保环节数字化常见风险: 规则与人工复核的边界 / 影像件质量 / 告知一致性三类检查项, 用于实施阶段前置识别.",
+          "is_substring_of_that_field": true,
+          "in_own_title_or_summary": true
+        },
+        {
+          "industry": "insurance",
+          "anchor_keyword": "核保",
+          "anchor_field": "summary",
+          "match_mode": "cjk_substring",
+          "anchor_sentence": "保险核保环节数字化常见风险: 规则与人工复核的边界 / 影像件质量 / 告知一致性三类检查项, 用于实施阶段前置识别.",
+          "is_substring_of_that_field": true,
+          "in_own_title_or_summary": true
+        }
+      ],
+      "every_industry_anchored": true
+    },
+    {
+      "id": "case-logistics-warehouse-018",
+      "type": "case",
+      "client_industry": [
+        "logistics"
+      ],
+      "anchors": [
+        {
+          "industry": "logistics",
+          "anchor_keyword": "物流",
+          "anchor_field": "title",
+          "match_mode": "cjk_substring",
+          "anchor_sentence": "某物流企业仓储拣选效率评估",
+          "is_substring_of_that_field": true,
+          "in_own_title_or_summary": true
+        },
+        {
+          "industry": "logistics",
+          "anchor_keyword": "仓储",
+          "anchor_field": "title",
+          "match_mode": "cjk_substring",
+          "anchor_sentence": "某物流企业仓储拣选效率评估",
+          "is_substring_of_that_field": true,
+          "in_own_title_or_summary": true
+        },
+        {
+          "industry": "logistics",
+          "anchor_keyword": "物流",
+          "anchor_field": "summary",
+          "match_mode": "cjk_substring",
+          "anchor_sentence": "为某中型物流企业评估仓储拣选路径与波次安排, 识别高峰期运力与仓配衔接缺口, 给出排班与库位调整建议. 客户名脱敏, 数据为示意.",
+          "is_substring_of_that_field": true,
+          "in_own_title_or_summary": true
+        },
+        {
+          "industry": "logistics",
+          "anchor_keyword": "仓储",
+          "anchor_field": "summary",
+          "match_mode": "cjk_substring",
+          "anchor_sentence": "为某中型物流企业评估仓储拣选路径与波次安排, 识别高峰期运力与仓配衔接缺口, 给出排班与库位调整建议. 客户名脱敏, 数据为示意.",
+          "is_substring_of_that_field": true,
+          "in_own_title_or_summary": true
+        },
+        {
+          "industry": "logistics",
+          "anchor_keyword": "仓配",
+          "anchor_field": "summary",
+          "match_mode": "cjk_substring",
+          "anchor_sentence": "为某中型物流企业评估仓储拣选路径与波次安排, 识别高峰期运力与仓配衔接缺口, 给出排班与库位调整建议. 客户名脱敏, 数据为示意.",
+          "is_substring_of_that_field": true,
+          "in_own_title_or_summary": true
+        },
+        {
+          "industry": "logistics",
+          "anchor_keyword": "运力",
+          "anchor_field": "summary",
+          "match_mode": "cjk_substring",
+          "anchor_sentence": "为某中型物流企业评估仓储拣选路径与波次安排, 识别高峰期运力与仓配衔接缺口, 给出排班与库位调整建议. 客户名脱敏, 数据为示意.",
+          "is_substring_of_that_field": true,
+          "in_own_title_or_summary": true
+        }
+      ],
+      "every_industry_anchored": true
+    },
+    {
+      "id": "proposal-play-logistics-network-008",
+      "type": "proposal_play",
+      "client_industry": [
+        "logistics"
+      ],
+      "anchors": [
+        {
+          "industry": "logistics",
+          "anchor_keyword": "物流",
+          "anchor_field": "title",
+          "match_mode": "cjk_substring",
+          "anchor_sentence": "物流网络优化的提案打法",
+          "is_substring_of_that_field": true,
+          "in_own_title_or_summary": true
+        },
+        {
+          "industry": "logistics",
+          "anchor_keyword": "物流",
+          "anchor_field": "summary",
+          "match_mode": "cjk_substring",
+          "anchor_sentence": "物流网络优化提案的组织方式: 先给网络现状与运力口径, 再给干线-仓配的分层改进选项与推进节奏, 避免只给单一方案.",
+          "is_substring_of_that_field": true,
+          "in_own_title_or_summary": true
+        },
+        {
+          "industry": "logistics",
+          "anchor_keyword": "干线",
+          "anchor_field": "summary",
+          "match_mode": "cjk_substring",
+          "anchor_sentence": "物流网络优化提案的组织方式: 先给网络现状与运力口径, 再给干线-仓配的分层改进选项与推进节奏, 避免只给单一方案.",
+          "is_substring_of_that_field": true,
+          "in_own_title_or_summary": true
+        },
+        {
+          "industry": "logistics",
+          "anchor_keyword": "仓配",
+          "anchor_field": "summary",
+          "match_mode": "cjk_substring",
+          "anchor_sentence": "物流网络优化提案的组织方式: 先给网络现状与运力口径, 再给干线-仓配的分层改进选项与推进节奏, 避免只给单一方案.",
+          "is_substring_of_that_field": true,
+          "in_own_title_or_summary": true
+        },
+        {
+          "industry": "logistics",
+          "anchor_keyword": "运力",
+          "anchor_field": "summary",
+          "match_mode": "cjk_substring",
+          "anchor_sentence": "物流网络优化提案的组织方式: 先给网络现状与运力口径, 再给干线-仓配的分层改进选项与推进节奏, 避免只给单一方案.",
+          "is_substring_of_that_field": true,
+          "in_own_title_or_summary": true
+        }
+      ],
+      "every_industry_anchored": true
+    },
+    {
+      "id": "deliverable-template-manufacturing-006",
+      "type": "deliverable_template",
+      "client_industry": [
+        "manufacturing"
+      ],
+      "anchors": [
+        {
+          "industry": "manufacturing",
+          "anchor_keyword": "工厂",
+          "anchor_field": "title",
+          "match_mode": "cjk_substring",
+          "anchor_sentence": "工厂现场诊断报告模板",
+          "is_substring_of_that_field": true,
+          "in_own_title_or_summary": true
+        },
+        {
+          "industry": "manufacturing",
+          "anchor_keyword": "工厂",
+          "anchor_field": "summary",
+          "match_mode": "cjk_substring",
+          "anchor_sentence": "面向工厂现场的诊断报告骨架: 产线概况 / 工单与在制品 / 良率与停机 / 改进机会与优先级.",
+          "is_substring_of_that_field": true,
+          "in_own_title_or_summary": true
+        },
+        {
+          "industry": "manufacturing",
+          "anchor_keyword": "产线",
+          "anchor_field": "summary",
+          "match_mode": "cjk_substring",
+          "anchor_sentence": "面向工厂现场的诊断报告骨架: 产线概况 / 工单与在制品 / 良率与停机 / 改进机会与优先级.",
+          "is_substring_of_that_field": true,
+          "in_own_title_or_summary": true
+        },
+        {
+          "industry": "manufacturing",
+          "anchor_keyword": "良率",
+          "anchor_field": "summary",
+          "match_mode": "cjk_substring",
+          "anchor_sentence": "面向工厂现场的诊断报告骨架: 产线概况 / 工单与在制品 / 良率与停机 / 改进机会与优先级.",
+          "is_substring_of_that_field": true,
+          "in_own_title_or_summary": true
+        },
+        {
+          "industry": "manufacturing",
+          "anchor_keyword": "工单",
+          "anchor_field": "summary",
+          "match_mode": "cjk_substring",
+          "anchor_sentence": "面向工厂现场的诊断报告骨架: 产线概况 / 工单与在制品 / 良率与停机 / 改进机会与优先级.",
+          "is_substring_of_that_field": true,
+          "in_own_title_or_summary": true
+        }
+      ],
+      "every_industry_anchored": true
+    },
+    {
+      "id": "methodology-manufacturing-oee-011",
+      "type": "methodology",
+      "client_industry": [
+        "manufacturing"
+      ],
+      "anchors": [
+        {
+          "industry": "manufacturing",
+          "anchor_keyword": "设备综合效率",
+          "anchor_field": "title",
+          "match_mode": "cjk_substring",
+          "anchor_sentence": "设备综合效率拆解方法",
+          "is_substring_of_that_field": true,
+          "in_own_title_or_summary": true
+        },
+        {
+          "industry": "manufacturing",
+          "anchor_keyword": "工厂",
+          "anchor_field": "summary",
+          "match_mode": "cjk_substring",
+          "anchor_sentence": "面向工厂产线的设备综合效率拆解: 可用率 / 性能率 / 良率三段分解与工时损失归类口径, 用于定位损失集中环节.",
+          "is_substring_of_that_field": true,
+          "in_own_title_or_summary": true
+        },
+        {
+          "industry": "manufacturing",
+          "anchor_keyword": "产线",
+          "anchor_field": "summary",
+          "match_mode": "cjk_substring",
+          "anchor_sentence": "面向工厂产线的设备综合效率拆解: 可用率 / 性能率 / 良率三段分解与工时损失归类口径, 用于定位损失集中环节.",
+          "is_substring_of_that_field": true,
+          "in_own_title_or_summary": true
+        },
+        {
+          "industry": "manufacturing",
+          "anchor_keyword": "良率",
+          "anchor_field": "summary",
+          "match_mode": "cjk_substring",
+          "anchor_sentence": "面向工厂产线的设备综合效率拆解: 可用率 / 性能率 / 良率三段分解与工时损失归类口径, 用于定位损失集中环节.",
+          "is_substring_of_that_field": true,
+          "in_own_title_or_summary": true
+        },
+        {
+          "industry": "manufacturing",
+          "anchor_keyword": "设备综合效率",
+          "anchor_field": "summary",
+          "match_mode": "cjk_substring",
+          "anchor_sentence": "面向工厂产线的设备综合效率拆解: 可用率 / 性能率 / 良率三段分解与工时损失归类口径, 用于定位损失集中环节.",
+          "is_substring_of_that_field": true,
+          "in_own_title_or_summary": true
+        }
+      ],
+      "every_industry_anchored": true
+    },
+    {
+      "id": "industry-note-cn-public-sector-2026-008",
+      "type": "industry_note",
+      "client_industry": [
+        "public_sector"
+      ],
+      "anchors": [
+        {
+          "industry": "public_sector",
+          "anchor_keyword": "政务",
+          "anchor_field": "summary",
+          "match_mode": "cjk_substring",
+          "anchor_sentence": "公开行业观察整理: 政务大厅与一网通办在服务标准化、窗口协同与材料精简上的关注点, 不涉及具体单位数据, 仅作行业语境.",
+          "is_substring_of_that_field": true,
+          "in_own_title_or_summary": true
+        },
+        {
+          "industry": "public_sector",
+          "anchor_keyword": "一网通办",
+          "anchor_field": "summary",
+          "match_mode": "cjk_substring",
+          "anchor_sentence": "公开行业观察整理: 政务大厅与一网通办在服务标准化、窗口协同与材料精简上的关注点, 不涉及具体单位数据, 仅作行业语境.",
+          "is_substring_of_that_field": true,
+          "in_own_title_or_summary": true
+        },
+        {
+          "industry": "public_sector",
+          "anchor_keyword": "政务大厅",
+          "anchor_field": "summary",
+          "match_mode": "cjk_substring",
+          "anchor_sentence": "公开行业观察整理: 政务大厅与一网通办在服务标准化、窗口协同与材料精简上的关注点, 不涉及具体单位数据, 仅作行业语境.",
+          "is_substring_of_that_field": true,
+          "in_own_title_or_summary": true
+        }
+      ],
+      "every_industry_anchored": true
+    },
+    {
+      "id": "case-public-sector-permit-cycle-019",
+      "type": "case",
+      "client_industry": [
+        "public_sector"
+      ],
+      "anchors": [
+        {
+          "industry": "public_sector",
+          "anchor_keyword": "政务",
+          "anchor_field": "title",
+          "match_mode": "cjk_substring",
+          "anchor_sentence": "某市政务大厅审批事项周期评估",
+          "is_substring_of_that_field": true,
+          "in_own_title_or_summary": true
+        },
+        {
+          "industry": "public_sector",
+          "anchor_keyword": "政务大厅",
+          "anchor_field": "title",
+          "match_mode": "cjk_substring",
+          "anchor_sentence": "某市政务大厅审批事项周期评估",
+          "is_substring_of_that_field": true,
+          "in_own_title_or_summary": true
+        },
+        {
+          "industry": "public_sector",
+          "anchor_keyword": "政务",
+          "anchor_field": "summary",
+          "match_mode": "cjk_substring",
+          "anchor_sentence": "为某市政务大厅评估高频审批事项的流转周期与材料补正次数, 给出并联办理与一次性告知改进建议. 单位名脱敏, 数据为示意.",
+          "is_substring_of_that_field": true,
+          "in_own_title_or_summary": true
+        },
+        {
+          "industry": "public_sector",
+          "anchor_keyword": "政务大厅",
+          "anchor_field": "summary",
+          "match_mode": "cjk_substring",
+          "anchor_sentence": "为某市政务大厅评估高频审批事项的流转周期与材料补正次数, 给出并联办理与一次性告知改进建议. 单位名脱敏, 数据为示意.",
+          "is_substring_of_that_field": true,
+          "in_own_title_or_summary": true
+        }
+      ],
+      "every_industry_anchored": true
+    },
+    {
+      "id": "deliverable-template-retail-007",
+      "type": "deliverable_template",
+      "client_industry": [
+        "retail"
+      ],
+      "anchors": [
+        {
+          "industry": "retail",
+          "anchor_keyword": "零售",
+          "anchor_field": "title",
+          "match_mode": "cjk_substring",
+          "anchor_sentence": "零售门店巡检报告模板",
+          "is_substring_of_that_field": true,
+          "in_own_title_or_summary": true
+        },
+        {
+          "industry": "retail",
+          "anchor_keyword": "门店",
+          "anchor_field": "title",
+          "match_mode": "cjk_substring",
+          "anchor_sentence": "零售门店巡检报告模板",
+          "is_substring_of_that_field": true,
+          "in_own_title_or_summary": true
+        },
+        {
+          "industry": "retail",
+          "anchor_keyword": "零售",
+          "anchor_field": "summary",
+          "match_mode": "cjk_substring",
+          "anchor_sentence": "面向连锁零售门店的巡检报告骨架: 门店动线与陈列 / 库存与缺货 / 导购执行 / 整改事项与优先级.",
+          "is_substring_of_that_field": true,
+          "in_own_title_or_summary": true
+        },
+        {
+          "industry": "retail",
+          "anchor_keyword": "门店",
+          "anchor_field": "summary",
+          "match_mode": "cjk_substring",
+          "anchor_sentence": "面向连锁零售门店的巡检报告骨架: 门店动线与陈列 / 库存与缺货 / 导购执行 / 整改事项与优先级.",
+          "is_substring_of_that_field": true,
+          "in_own_title_or_summary": true
+        },
+        {
+          "industry": "retail",
+          "anchor_keyword": "连锁",
+          "anchor_field": "summary",
+          "match_mode": "cjk_substring",
+          "anchor_sentence": "面向连锁零售门店的巡检报告骨架: 门店动线与陈列 / 库存与缺货 / 导购执行 / 整改事项与优先级.",
+          "is_substring_of_that_field": true,
+          "in_own_title_or_summary": true
+        },
+        {
+          "industry": "retail",
+          "anchor_keyword": "导购",
+          "anchor_field": "summary",
+          "match_mode": "cjk_substring",
+          "anchor_sentence": "面向连锁零售门店的巡检报告骨架: 门店动线与陈列 / 库存与缺货 / 导购执行 / 整改事项与优先级.",
+          "is_substring_of_that_field": true,
+          "in_own_title_or_summary": true
+        }
+      ],
+      "every_industry_anchored": true
+    },
+    {
+      "id": "methodology-retail-shelf-012",
+      "type": "methodology",
+      "client_industry": [
+        "retail"
+      ],
+      "anchors": [
+        {
+          "industry": "retail",
+          "anchor_keyword": "门店",
+          "anchor_field": "title",
+          "match_mode": "cjk_substring",
+          "anchor_sentence": "门店坪效与货架贡献分析方法",
+          "is_substring_of_that_field": true,
+          "in_own_title_or_summary": true
+        },
+        {
+          "industry": "retail",
+          "anchor_keyword": "坪效",
+          "anchor_field": "title",
+          "match_mode": "cjk_substring",
+          "anchor_sentence": "门店坪效与货架贡献分析方法",
+          "is_substring_of_that_field": true,
+          "in_own_title_or_summary": true
+        },
+        {
+          "industry": "retail",
+          "anchor_keyword": "货架",
+          "anchor_field": "title",
+          "match_mode": "cjk_substring",
+          "anchor_sentence": "门店坪效与货架贡献分析方法",
+          "is_substring_of_that_field": true,
+          "in_own_title_or_summary": true
+        },
+        {
+          "industry": "retail",
+          "anchor_keyword": "零售",
+          "anchor_field": "summary",
+          "match_mode": "cjk_substring",
+          "anchor_sentence": "零售门店的坪效与货架贡献分析: 按品类与货架段拆解贡献度, 识别低效陈列与缺货损失口径, 用于调整陈列优先级.",
+          "is_substring_of_that_field": true,
+          "in_own_title_or_summary": true
+        },
+        {
+          "industry": "retail",
+          "anchor_keyword": "门店",
+          "anchor_field": "summary",
+          "match_mode": "cjk_substring",
+          "anchor_sentence": "零售门店的坪效与货架贡献分析: 按品类与货架段拆解贡献度, 识别低效陈列与缺货损失口径, 用于调整陈列优先级.",
+          "is_substring_of_that_field": true,
+          "in_own_title_or_summary": true
+        },
+        {
+          "industry": "retail",
+          "anchor_keyword": "坪效",
+          "anchor_field": "summary",
+          "match_mode": "cjk_substring",
+          "anchor_sentence": "零售门店的坪效与货架贡献分析: 按品类与货架段拆解贡献度, 识别低效陈列与缺货损失口径, 用于调整陈列优先级.",
+          "is_substring_of_that_field": true,
+          "in_own_title_or_summary": true
+        },
+        {
+          "industry": "retail",
+          "anchor_keyword": "货架",
+          "anchor_field": "summary",
+          "match_mode": "cjk_substring",
+          "anchor_sentence": "零售门店的坪效与货架贡献分析: 按品类与货架段拆解贡献度, 识别低效陈列与缺货损失口径, 用于调整陈列优先级.",
+          "is_substring_of_that_field": true,
+          "in_own_title_or_summary": true
+        }
+      ],
+      "every_industry_anchored": true
+    },
+    {
+      "id": "industry-note-cn-technology-2026-009",
+      "type": "industry_note",
+      "client_industry": [
+        "technology"
+      ],
+      "anchors": [
+        {
+          "industry": "technology",
+          "anchor_keyword": "科技企业",
+          "anchor_field": "title",
+          "match_mode": "cjk_substring",
+          "anchor_sentence": "中国科技企业 2026 经营关注点",
+          "is_substring_of_that_field": true,
+          "in_own_title_or_summary": true
+        },
+        {
+          "industry": "technology",
+          "anchor_keyword": "软件",
+          "anchor_field": "summary",
+          "match_mode": "cjk_substring",
+          "anchor_sentence": "公开行业观察整理: 软件与互联网企业在研发投入节奏、续费结构与交付毛利上的关注点, 不涉及具体公司数据, 仅作行业语境.",
+          "is_substring_of_that_field": true,
+          "in_own_title_or_summary": true
+        },
+        {
+          "industry": "technology",
+          "anchor_keyword": "互联网",
+          "anchor_field": "summary",
+          "match_mode": "cjk_substring",
+          "anchor_sentence": "公开行业观察整理: 软件与互联网企业在研发投入节奏、续费结构与交付毛利上的关注点, 不涉及具体公司数据, 仅作行业语境.",
+          "is_substring_of_that_field": true,
+          "in_own_title_or_summary": true
+        }
+      ],
+      "every_industry_anchored": true
+    },
+    {
+      "id": "case-technology-rd-delivery-020",
+      "type": "case",
+      "client_industry": [
+        "technology"
+      ],
+      "anchors": [
+        {
+          "industry": "technology",
+          "anchor_keyword": "软件",
+          "anchor_field": "title",
+          "match_mode": "cjk_substring",
+          "anchor_sentence": "某软件企业研发交付节奏评估",
+          "is_substring_of_that_field": true,
+          "in_own_title_or_summary": true
+        },
+        {
+          "industry": "technology",
+          "anchor_keyword": "软件",
+          "anchor_field": "summary",
+          "match_mode": "cjk_substring",
+          "anchor_sentence": "为某中型软件企业评估需求排期到上线的交付节奏, 识别版本范围蔓延与测试资源缺口, 给出迭代节拍与冻结规则建议. 客户名脱敏, 数据为示意.",
+          "is_substring_of_that_field": true,
+          "in_own_title_or_summary": true
+        }
+      ],
+      "every_industry_anchored": true
+    }
+  ]
+}

@@ -1,0 +1,52 @@
+== OEI-014 步骤 3 — 两个闸门 + 数量/service 测试，在【真实种子文件】上跑 (A4) ==
+date: 2026-09-26T08:40:30+08:00
+seed: src/ece/consulting/seed/consulting_objects.json  (65 objects)
+DATABASE_URL = postgresql+psycopg://nobody:nobody@127.0.0.1:1/nope   ← 死端口（证明不依赖库）
+ECE_CONTENT_ENGINE = mock
+
+############ A. 两个内容闸门 + 数量 + service（-v，逐用例）############
+============================= test session starts ==============================
+platform linux -- Python 3.12.14, pytest-9.1.1, pluggy-1.6.0
+rootdir: /mnt/d/Projects/domainAgentECE/ece
+configfile: pyproject.toml
+plugins: anyio-4.15.1, cov-7.1.0
+collected 24 items
+
+tests/unit/test_consulting_seed_schema.py ......                         [ 25%]
+tests/unit/test_consulting_seed_discipline.py .....                      [ 45%]
+tests/unit/test_consulting_seed_count.py ....                            [ 62%]
+tests/unit/test_consulting_service.py .........                          [100%]
+
+============================== 24 passed in 1.82s ==============================
+
+############ B. 同一条命令的汇总行（-q 已在 addopts 里；这里不再加 -q，避免 -qq 吞掉汇总）############
+........................                                                 [100%]
+24 passed in 3.34s
+  exit=0
+
+############ C. 新增 20 条逐条过闸门（逐条列出，避免'整体过了但某条没过'）############
+  id                                           schema 中文title   中文summary    禁竞品     禁占位     禁精确%     合成标注     词表    
+  case-banking-credit-approval-014             PASS   PASS      PASS         PASS    PASS    PASS     PASS     PASS  
+  risk-check-banking-branch-007                PASS   PASS      PASS         PASS    PASS    PASS     PASS     PASS  
+  case-consumer-goods-distributor-015          PASS   PASS      PASS         PASS    PASS    PASS     PASS     PASS  
+  proposal-play-consumer-goods-listing-007     PASS   PASS      PASS         PASS    PASS    PASS     PASS     PASS  
+  case-energy-grid-load-016                    PASS   PASS      PASS         PASS    PASS    PASS     PASS     PASS  
+  risk-check-energy-maintenance-008            PASS   PASS      PASS         PASS    PASS    PASS     PASS     PASS  
+  case-healthcare-outpatient-017               PASS   PASS      PASS         PASS    PASS    PASS     PASS     PASS  
+  deliverable-template-healthcare-005          PASS   PASS      PASS         PASS    PASS    PASS     PASS     PASS  
+  industry-note-cn-insurance-2026-007          PASS   PASS      PASS         PASS    PASS    PASS     PASS     PASS  
+  risk-check-insurance-underwriting-009        PASS   PASS      PASS         PASS    PASS    PASS     PASS     PASS  
+  case-logistics-warehouse-018                 PASS   PASS      PASS         PASS    PASS    PASS     PASS     PASS  
+  proposal-play-logistics-network-008          PASS   PASS      PASS         PASS    PASS    PASS     PASS     PASS  
+  deliverable-template-manufacturing-006       PASS   PASS      PASS         PASS    PASS    PASS     PASS     PASS  
+  methodology-manufacturing-oee-011            PASS   PASS      PASS         PASS    PASS    PASS     PASS     PASS  
+  industry-note-cn-public-sector-2026-008      PASS   PASS      PASS         PASS    PASS    PASS     PASS     PASS  
+  case-public-sector-permit-cycle-019          PASS   PASS      PASS         PASS    PASS    PASS     PASS     PASS  
+  deliverable-template-retail-007              PASS   PASS      PASS         PASS    PASS    PASS     PASS     PASS  
+  methodology-retail-shelf-012                 PASS   PASS      PASS         PASS    PASS    PASS     PASS     PASS  
+  industry-note-cn-technology-2026-009         PASS   PASS      PASS         PASS    PASS    PASS     PASS     PASS  
+  case-technology-rd-delivery-020              PASS   PASS      PASS         PASS    PASS    PASS     PASS     PASS  
+
+  -> 20 条逐条全过: True
+
+---- done ----

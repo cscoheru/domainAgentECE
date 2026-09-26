@@ -1,0 +1,134 @@
+== OEI-011 步骤 1 — '既有 36 个对象只加了 client_industry' 的哈希证明 (A1) ==
+baseline: git show a463658:src/ece/consulting/seed/consulting_objects.json
+hash: sha256 of the canonical JSON (sorted keys, compact separators) of the
+      object with `client_industry` removed — i.e. EVERY OTHER FIELD.
+      The seed file's own serializer was verified to round-trip the pristine
+      bytes exactly, so 'other fields unchanged' is a statement about content,
+      not about formatting.
+
+[ 1/36] case-retail-procurement-diagnosis-001
+        baseline(a463658) other-fields sha256 = ce0cb1b0777a8122b7b59c3297734df816a5413a61cccf55036545f57694f746
+        current            other-fields sha256 = ce0cb1b0777a8122b7b59c3297734df816a5413a61cccf55036545f57694f746   EQUAL
+[ 2/36] case-bank-retail-channel-002
+        baseline(a463658) other-fields sha256 = 817aa0970e601d77aab3de4e575c60cf4dde61d4cf7fee9d778b5b0d67f47756
+        current            other-fields sha256 = 817aa0970e601d77aab3de4e575c60cf4dde61d4cf7fee9d778b5b0d67f47756   EQUAL
+[ 3/36] case-manufacturing-supply-resilience-003
+        baseline(a463658) other-fields sha256 = 52634d2a94c9a90c3ffce31d72f76b245a3d1a44ebbaf7b4278afa043aed9bcf
+        current            other-fields sha256 = 52634d2a94c9a90c3ffce31d72f76b245a3d1a44ebbaf7b4278afa043aed9bcf   EQUAL
+[ 4/36] case-saas-pricing-restructure-004
+        baseline(a463658) other-fields sha256 = 533200b2cb284a86f9afbc8ef229d56d2721691396cf91d9b647c8d6c246b18f
+        current            other-fields sha256 = 533200b2cb284a86f9afbc8ef229d56d2721691396cf91d9b647c8d6c246b18f   EQUAL
+[ 5/36] case-public-sector-org-redesign-005
+        baseline(a463658) other-fields sha256 = 6ee534b8db383e0aa3c716db30db59c9ffc091ac5443962cd910895132849f2a
+        current            other-fields sha256 = 6ee534b8db383e0aa3c716db30db59c9ffc091ac5443962cd910895132849f2a   EQUAL
+[ 6/36] case-consumer-goods-channel-006
+        baseline(a463658) other-fields sha256 = b2861897ced8ce96cc8cd5c54b1a6b358cefaa9a879fbe53f8e4d9c1707b57a9
+        current            other-fields sha256 = b2861897ced8ce96cc8cd5c54b1a6b358cefaa9a879fbe53f8e4d9c1707b57a9   EQUAL
+[ 7/36] case-logistics-network-007
+        baseline(a463658) other-fields sha256 = 69b38b4835c68c31a9452b5884ca3b2f848f49afb6f0565e348218dd6e1fa63f
+        current            other-fields sha256 = 69b38b4835c68c31a9452b5884ca3b2f848f49afb6f0565e348218dd6e1fa63f   EQUAL
+[ 8/36] case-insurance-claim-flow-008
+        baseline(a463658) other-fields sha256 = 37c3c2ea05aaae279b7ba031f765862927abe69c396244b1853b35fa12f8cb73
+        current            other-fields sha256 = 37c3c2ea05aaae279b7ba031f765862927abe69c396244b1853b35fa12f8cb73   EQUAL
+[ 9/36] case-energy-procurement-009
+        baseline(a463658) other-fields sha256 = 98a5c93d6fdb7b3b7198a38984d5fbed8b71cae141b276d5dedb6aee12d50a3f
+        current            other-fields sha256 = 98a5c93d6fdb7b3b7198a38984d5fbed8b71cae141b276d5dedb6aee12d50a3f   EQUAL
+[10/36] case-healthcare-service-blueprint-010
+        baseline(a463658) other-fields sha256 = 4b29de4add0f708b7db37f16f5e35954c649f19d829f1a3826bd7079d463801d
+        current            other-fields sha256 = 4b29de4add0f708b7db37f16f5e35954c649f19d829f1a3826bd7079d463801d   EQUAL
+[11/36] methodology-swot-quick-001
+        baseline(a463658) other-fields sha256 = ebe2abe056fc288b141038d072f48bc49a33856d8cbccfa3c485105d5f9ef88b
+        current            other-fields sha256 = ebe2abe056fc288b141038d072f48bc49a33856d8cbccfa3c485105d5f9ef88b   EQUAL
+[12/36] methodology-porter-five-forces-002
+        baseline(a463658) other-fields sha256 = 8bd3de17fb5a60aaa718c683b66ccc1473f5fa41038012f956e585fcdfb18456
+        current            other-fields sha256 = 8bd3de17fb5a60aaa718c683b66ccc1473f5fa41038012f956e585fcdfb18456   EQUAL
+[13/36] methodology-value-chain-003
+        baseline(a463658) other-fields sha256 = 3d7f89fcbf377d44b4c55714e859773171fc4374b40ab9bbd1a8fe9ba0a00d3c
+        current            other-fields sha256 = 3d7f89fcbf377d44b4c55714e859773171fc4374b40ab9bbd1a8fe9ba0a00d3c   EQUAL
+[14/36] methodology-mckinsey-7s-004
+        baseline(a463658) other-fields sha256 = 0ad61f27b3eef26e7f213c275a039c3ab5bc65f055790fde2bfacf80d270f5c3
+        current            other-fields sha256 = 0ad61f27b3eef26e7f213c275a039c3ab5bc65f055790fde2bfacf80d270f5c3   EQUAL
+[15/36] methodology-lean-waste-walk-005
+        baseline(a463658) other-fields sha256 = 1cdd917d88f3b472800288902eba9db120b6801b8108e5f8b227cd4326899bcb
+        current            other-fields sha256 = 1cdd917d88f3b472800288902eba9db120b6801b8108e5f8b227cd4326899bcb   EQUAL
+[16/36] methodology-raci-matrix-006
+        baseline(a463658) other-fields sha256 = f41ea9368bd70b190cb8fcabb12919fe379037ebd39c93bd30ee08e2ad70f1d8
+        current            other-fields sha256 = f41ea9368bd70b190cb8fcabb12919fe379037ebd39c93bd30ee08e2ad70f1d8   EQUAL
+[17/36] methodology-kpi-tree-007
+        baseline(a463658) other-fields sha256 = baf31939aae34ec7207d4c60e164abab8e2e388bff3c97fcde5cf00cc855eff6
+        current            other-fields sha256 = baf31939aae34ec7207d4c60e164abab8e2e388bff3c97fcde5cf00cc855eff6   EQUAL
+[18/36] methodology-journey-map-008
+        baseline(a463658) other-fields sha256 = bc352b42ae5ec90ec88c6d5681f3c559e33acddb3c6795edabda4e0e9b2b6ddb
+        current            other-fields sha256 = bc352b42ae5ec90ec88c6d5681f3c559e33acddb3c6795edabda4e0e9b2b6ddb   EQUAL
+[19/36] methodology-spend-analysis-009
+        baseline(a463658) other-fields sha256 = fd57c882bba94040f96064fade57deea2a6d721e2add9c7b00a641489f19fdb5
+        current            other-fields sha256 = fd57c882bba94040f96064fade57deea2a6d721e2add9c7b00a641489f19fdb5   EQUAL
+[20/36] methodology-benchmarking-public-010
+        baseline(a463658) other-fields sha256 = 74bbce75e07527767e423cb289108963f7965ee321ea55aa0c11364df8bd0199
+        current            other-fields sha256 = 74bbce75e07527767e423cb289108963f7965ee321ea55aa0c11364df8bd0199   EQUAL
+[21/36] proposal-play-discovery-questions-001
+        baseline(a463658) other-fields sha256 = 608bc199d7927d09454c728fa3a3fb84dd7af022171942a05aa6496f9bbac9c0
+        current            other-fields sha256 = 608bc199d7927d09454c728fa3a3fb84dd7af022171942a05aa6496f9bbac9c0   EQUAL
+[22/36] proposal-play-qualification-checklist-002
+        baseline(a463658) other-fields sha256 = 394d8db457fce39c8f4f3c44970a1fda8ea6718ce039ef7c2f449c7efc86ce90
+        current            other-fields sha256 = 394d8db457fce39c8f4f3c44970a1fda8ea6718ce039ef7c2f449c7efc86ce90   EQUAL
+[23/36] proposal-play-proposal-outline-003
+        baseline(a463658) other-fields sha256 = a07d7a9002235933aca223a9808c8fe507217461aefe84cc257c47b1b11c3578
+        current            other-fields sha256 = a07d7a9002235933aca223a9808c8fe507217461aefe84cc257c47b1b11c3578   EQUAL
+[24/36] proposal-play-pricing-narrative-004
+        baseline(a463658) other-fields sha256 = 6f6e9f1cac5460cab20d6db15350a8e67f2650bacce1bce407d58fcb43d4a08d
+        current            other-fields sha256 = 6f6e9f1cac5460cab20d6db15350a8e67f2650bacce1bce407d58fcb43d4a08d   EQUAL
+[25/36] proposal-play-staffing-mix-005
+        baseline(a463658) other-fields sha256 = 0b86b895c105cb56c96b9030f66bfaf55b7a7d00c569d18a2ff7e25245e7f900
+        current            other-fields sha256 = 0b86b895c105cb56c96b9030f66bfaf55b7a7d00c569d18a2ff7e25245e7f900   EQUAL
+[26/36] proposal-play-risk-disclosure-006
+        baseline(a463658) other-fields sha256 = a25c2f018edae3618659b9f0a2737cccfc308a585416b5ae045c5af4fbd21e16
+        current            other-fields sha256 = a25c2f018edae3618659b9f0a2737cccfc308a585416b5ae045c5af4fbd21e16   EQUAL
+[27/36] deliverable-template-diagnostic-report-001
+        baseline(a463658) other-fields sha256 = 908752b2cd6a4c1e5d45fb19cb2dac363e97ae9ba5250ffc1b88bfb757f1907e
+        current            other-fields sha256 = 908752b2cd6a4c1e5d45fb19cb2dac363e97ae9ba5250ffc1b88bfb757f1907e   EQUAL
+[28/36] deliverable-template-roadmap-deck-002
+        baseline(a463658) other-fields sha256 = eb09261f279cb6415d4b1ff2f51aa595010ba32dc23d72429017d93f3317de45
+        current            other-fields sha256 = eb09261f279cb6415d4b1ff2f51aa595010ba32dc23d72429017d93f3317de45   EQUAL
+[29/36] deliverable-template-sop-003
+        baseline(a463658) other-fields sha256 = e0bdfb1bd1d91903b4cf294620dec767892601b4173efa87ea4fb9b9a0f9fe36
+        current            other-fields sha256 = e0bdfb1bd1d91903b4cf294620dec767892601b4173efa87ea4fb9b9a0f9fe36   EQUAL
+[30/36] deliverable-template-exec-summary-004
+        baseline(a463658) other-fields sha256 = 05abe48999a2922ecf83a86cfb0701ee6b918d79a2d12f1d26a9835d0d170287
+        current            other-fields sha256 = 05abe48999a2922ecf83a86cfb0701ee6b918d79a2d12f1d26a9835d0d170287   EQUAL
+[31/36] risk-check-data-availability-001
+        baseline(a463658) other-fields sha256 = 8634f430d172aaddb9e32d17a1b7e704686d43b839c270bcf6fc02ded224148f
+        current            other-fields sha256 = 8634f430d172aaddb9e32d17a1b7e704686d43b839c270bcf6fc02ded224148f   EQUAL
+[32/36] risk-check-stakeholder-alignment-002
+        baseline(a463658) other-fields sha256 = f3a0eb217b2aea3a645148d2876fa2af774d31113502b963c018bb93e39c344e
+        current            other-fields sha256 = f3a0eb217b2aea3a645148d2876fa2af774d31113502b963c018bb93e39c344e   EQUAL
+[33/36] risk-check-scope-creep-003
+        baseline(a463658) other-fields sha256 = 66d8c5f5f0b60a310a669b48f4baf656d57196118fe8895dab52ef238ea36a16
+        current            other-fields sha256 = 66d8c5f5f0b60a310a669b48f4baf656d57196118fe8895dab52ef238ea36a16   EQUAL
+[34/36] risk-check-data-confidentiality-004
+        baseline(a463658) other-fields sha256 = 43be356068c7426809718e2284dfeee331d71f3c9f7c93f4b4a4e02a18fe815d
+        current            other-fields sha256 = 43be356068c7426809718e2284dfeee331d71f3c9f7c93f4b4a4e02a18fe815d   EQUAL
+[35/36] industry-note-cn-banking-2026-001
+        baseline(a463658) other-fields sha256 = f0adc99a2e0b41675bad8db1c70f566a68928c9de8ccf801823c942adc688ba4
+        current            other-fields sha256 = f0adc99a2e0b41675bad8db1c70f566a68928c9de8ccf801823c942adc688ba4   EQUAL
+[36/36] industry-note-cn-consumer-2026-002
+        baseline(a463658) other-fields sha256 = ebf7e09691a7fa44598c5b3e7d74a9a84fc0a09aee4b9eef1923dd8b5cdec482
+        current            other-fields sha256 = ebf7e09691a7fa44598c5b3e7d74a9a84fc0a09aee4b9eef1923dd8b5cdec482   EQUAL
+
+RESULT: other fields identical in 36/36 objects
+
+NOTE: A1 requires the pre-existing objects to be unchanged in every field
+except client_industry. It does NOT require the file's byte layout to be
+unchanged (9 objects were appended, which necessarily shifts the tail).
+---- done ----
+
+ADDENDUM — the applier is idempotent (re-running it changes nothing)
+  $ sha256sum src/ece/consulting/seed/consulting_objects.json   # before re-run
+  b6e7045bc626bccd3cfee6cbf81b9d15878d7759ccf11121f7fb6550b24f87a4
+  $ uv run python apply_seed.py            # second run, on the already-applied seed
+  note: 9 new-object ids already present -> replacing in place
+  A1 other-fields identical: 36/36 -> True
+  A3 basis locatable in own fields: 24/24
+  $ sha256sum src/ece/consulting/seed/consulting_objects.json   # after re-run
+  b6e7045bc626bccd3cfee6cbf81b9d15878d7759ccf11121f7fb6550b24f87a4
+  -> identical. The 9 new objects are replaced in place, not appended twice.

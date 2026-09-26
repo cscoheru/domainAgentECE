@@ -1,0 +1,68 @@
+== OEI-014 步骤 6.3 — commit（不 push）==
+date: 2026-09-26T08:47:50+08:00
+
+---- git commit 的输出 ----
+[main a3d61cd] feat(OEI-014): deepen the consulting library - every industry >=4, industry notes filled
+ 3 files changed, 893 insertions(+), 15 deletions(-)
+
+---- git show --stat HEAD ----
+a3d61cd029880de8ed8e77f5ec0ca682046cbf1b
+a3d61cd feat(OEI-014): deepen the consulting library - every industry >=4, industry notes filled
+cscoheru <klyliae@gmail.com>
+Sat Sep 26 08:47:42 2026 +0800
+
+
+ TASKS.md                                        | 150 +++++
+ docs/API.md                                     |  45 +-
+ src/ece/consulting/seed/consulting_objects.json | 713 ++++++++++++++++++++++++
+ 3 files changed, 893 insertions(+), 15 deletions(-)
+
+---- 该 commit 里正好 3 个文件（= TASK §8 白名单）----
+  TASKS.md
+  docs/API.md
+  src/ece/consulting/seed/consulting_objects.json
+  文件数: 3   -> 必须为 3
+
+---- 该 commit 里【没有】这些路径（冻结面）----
+  pyproject.toml                         在 commit 里的文件数: 0   (必须为 0)
+  uv.lock                                在 commit 里的文件数: 0   (必须为 0)
+  demos/                                 在 commit 里的文件数: 0   (必须为 0)
+  src/ece/migrations/                    在 commit 里的文件数: 0   (必须为 0)
+  src/ece/consulting/metadata.py         在 commit 里的文件数: 0   (必须为 0)
+  tests/                                 在 commit 里的文件数: 0   (必须为 0)
+  reports/                               在 commit 里的文件数: 0   (必须为 0)
+  docs/demo-platform/                    在 commit 里的文件数: 0   (必须为 0)
+
+---- commit 的 seed 只有新增 ----
+  713	0	src/ece/consulting/seed/consulting_objects.json
+  插入 / 删除 —— 删除必须为 0
+
+---- 未 push ----
+$ git status -sb | head -1
+  ## main...origin/main [ahead 4]
+$ git log --oneline @{u}..HEAD
+  a3d61cd feat(OEI-014): deepen the consulting library - every industry >=4, industry notes filled
+  c30e50e feat(OEI-011): fill the consulting industry axis, bounded increment, usable facets
+  a463658 feat(OEI-010): persistent context memory, permission-gated on both write and read
+  a884d41 feat(OEI-009): engine-document registry + per-result permission filter + ACL time-box
+  ^ 全部为本地 commit，一个都没 push（TASK §8 明确要求不 push）。
+
+---- commit 后工作区剩余状态（应只有开工前就存在的脏文件）----
+   T docs/demo-platform/DEMO_PLATFORM_PRD.md
+   T docs/demo-platform/DEPLOY_USER_PROXY.md
+   M reports/cut-042R3/mutation-evidence/M1_re_read_through_assembly_skipped.md
+   M reports/cut-042R3/mutation-evidence/M2_apply_context_update_skip_sql.md
+   M reports/cut-042R3/mutation-evidence/M3_permission_acl_check_bypassed.md
+   M reports/cut-042R3/mutation-evidence/M4_evaluated_conditions_inject_nondeterministic_amount.md
+   M reports/cut-042R3/mutation-evidence/M5_jwt_decode_skips_signature_verification.md
+   M reports/cut-042R3/mutation-evidence/M6_materialize_fn_disabled_in_loop.md
+   M reports/cut-043/mutation-evidence/M1_km_validity_invert.md
+   M reports/cut-043/mutation-evidence/M2_km_permission_invert.md
+   M reports/cut-043/mutation-evidence/M3_km_decision_and_to_or.md
+   M reports/cut-044/mutation-evidence/M1_comp_count_condition_invert.md
+   M reports/cut-044/mutation-evidence/M2_comp_coverage_issubset_to_isdisjoint.md
+   M reports/cut-044/mutation-evidence/M3_comp_decision_force_gap_list.md
+  ^ 14 条 = 2 条 docs/demo-platform 符号链接类型变更 + 12 条 reports/cut-04*/
+    mutation-evidence 的既有改动（条数是数出来的，不是写死的）。mtime 为
+    2026-09-22/23，早于本刀（08:40 开工），不属于本刀，本刀不 commit 它们。
+---- done ----

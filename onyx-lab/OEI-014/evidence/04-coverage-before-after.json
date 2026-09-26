@@ -1,0 +1,100 @@
+{
+  "step": "OEI-014 step 3",
+  "before": {
+    "total": 45,
+    "type_counts": {
+      "case": 13,
+      "deliverable_template": 4,
+      "industry_note": 6,
+      "methodology": 10,
+      "proposal_play": 6,
+      "risk_check": 6
+    },
+    "industry_counts": {
+      "banking": 2,
+      "consumer_goods": 2,
+      "cross_industry": 26,
+      "energy": 2,
+      "healthcare": 2,
+      "insurance": 2,
+      "logistics": 2,
+      "manufacturing": 2,
+      "public_sector": 2,
+      "retail": 2,
+      "technology": 2
+    },
+    "industry_note_per_industry": {
+      "banking": 1,
+      "consumer_goods": 1,
+      "energy": 1,
+      "healthcare": 1,
+      "logistics": 1,
+      "manufacturing": 1,
+      "retail": 1
+    }
+  },
+  "after": {
+    "total": 65,
+    "type_counts": {
+      "case": 20,
+      "deliverable_template": 7,
+      "industry_note": 9,
+      "methodology": 12,
+      "proposal_play": 8,
+      "risk_check": 9
+    },
+    "industry_counts": {
+      "banking": 4,
+      "consumer_goods": 4,
+      "cross_industry": 26,
+      "energy": 4,
+      "healthcare": 4,
+      "insurance": 4,
+      "logistics": 4,
+      "manufacturing": 4,
+      "public_sector": 4,
+      "retail": 4,
+      "technology": 4
+    },
+    "industry_note_per_industry": {
+      "banking": 1,
+      "consumer_goods": 1,
+      "energy": 1,
+      "healthcare": 1,
+      "insurance": 1,
+      "logistics": 1,
+      "manufacturing": 1,
+      "public_sector": 1,
+      "retail": 1,
+      "technology": 1
+    }
+  },
+  "concrete_industries_gaining_a_note": [
+    "insurance",
+    "public_sector",
+    "technology"
+  ],
+  "a2": {
+    "total 65<=N<=70": [
+      65,
+      true
+    ],
+    "every concrete industry >= 4": [
+      4,
+      true
+    ],
+    "every concrete industry has >=1 industry_note": [
+      1,
+      true
+    ],
+    "deliverable_template >= 6": [
+      7,
+      true
+    ],
+    "cross_industry >= 10": [
+      26,
+      true
+    ]
+  },
+  "all_targets_met": true
+}

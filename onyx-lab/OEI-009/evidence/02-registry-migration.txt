@@ -1,0 +1,21 @@
+=== R3.2 — registry migration evidence ===
+
+--- alembic downgrade to 0008 (drop engine_documents) ---
+INFO  [alembic.runtime.migration] Context impl PostgresqlImpl.
+INFO  [alembic.runtime.migration] Will assume transactional DDL.
+INFO  [alembic.runtime.migration] Running downgrade 0009_engine_documents -> 0008_evidence_records, S2.9 (OEI-009) — `engine_documents` registry table.
+
+--- alembic upgrade head (recreate engine_documents) ---
+INFO  [alembic.runtime.migration] Context impl PostgresqlImpl.
+INFO  [alembic.runtime.migration] Will assume transactional DDL.
+INFO  [alembic.runtime.migration] Running upgrade 0008_evidence_records -> 0009_engine_documents, S2.9 (OEI-009) — `engine_documents` registry table.
+
+--- direct SQL UNIQUE constraint proof ---
+insert 1 OK
+PASS: IntegrityError raised (IntegrityError): (psycopg.errors.UniqueViolation) duplicate key value violates unique constraint "engine_documents_engine_name_engine_filename_key"
+DETAIL:  Key (engine_name, engine_filename)=(onyx, r3-dup.md) already
+
+--- schema check (post round-trip) ---
+table: 1
+unique constraints: ['engine_documents_engine_name_engine_filename_key']
+indexes: ['engine_documents_engine_name_engine_filename_key', 'engine_documents_pkey', 'idx_engine_docs_lookup', 'idx_engine_docs_project', 'idx_engine_docs_uploader']

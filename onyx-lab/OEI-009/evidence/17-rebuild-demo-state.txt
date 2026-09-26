@@ -1,0 +1,328 @@
+== OEI-009 rebuild_demo_state: PG=ece-pg-oei009r1 port=55432 evidence=/mnt/d/Projects/domainAgentECE/onyx-lab/OEI-009/evidence
+   waiting for Postgres.. — ready
+
+==> (cwd=/mnt/d/Projects/domainAgentECE/ece) uv run --project /mnt/d/Projects/domainAgentECE/ece alembic -c src/ece/migrations/alembic.ini upgrade head
+INFO  [alembic.runtime.migration] Context impl PostgresqlImpl.
+INFO  [alembic.runtime.migration] Will assume transactional DDL.
+INFO  [alembic.runtime.migration] Running upgrade  -> 0001_initial, S0.5 initial migration — covers docs/DATA_MODEL.md sections 1-4 + acl_entries.
+INFO  [alembic.runtime.migration] Running upgrade 0001_initial -> 0002_relationship_unique, R3 -- 0002 migration: add unique index for relationships.
+INFO  [alembic.runtime.migration] Running upgrade 0002_relationship_unique -> 0003_ontology_rejections, S2.4 ontology rejection log migration.
+INFO  [alembic.runtime.migration] Running upgrade 0003_ontology_rejections -> 0004_resolution_pending, S2.3 R4 (cut-006 §7.3): pending resolution queue table.
+INFO  [alembic.runtime.migration] Running upgrade 0004_resolution_pending -> 0005_context_audit, S3.3 — context_requests + context_items tables (DATA_MODEL §5).
+INFO  [alembic.runtime.migration] Running upgrade 0005_context_audit -> 0006_pg_trgm, S4.4 — Chinese tokenization via pg_trgm.
+INFO  [alembic.runtime.migration] Running upgrade 0006_pg_trgm -> 0007_user_orgs, 0007 — add org_id column to context_requests (cut-019 multi-tenant).
+INFO  [alembic.runtime.migration] Running upgrade 0007_user_orgs -> 0008_evidence_records, S2 (V0 Technical Spike) — `evidence_records` table.
+INFO  [alembic.runtime.migration] Running upgrade 0008_evidence_records -> 0009_engine_documents, S2.9 (OEI-009) — `engine_documents` registry table.
+
+==> (cwd=/mnt/d/Projects/domainAgentECE/onyx-lab/OEI-009/workspace) uv run --project /mnt/d/Projects/domainAgentECE/ece python backfill_demo_docs.py
+== OEI-009 step 1.4 — backfill demo project id=1
+   onyx base  : http://127.0.0.1:8080
+   cookie file: /home/fisher/.onyx-lab/.secrets/admin-cookies.txt
+   sql engine : postgresql+psycopg://ece:ece@127.0.0.1:55432/ece
+   onyx reports 4 files in project id=1
+   will register 3 rows (classification=public)
+   skipped (not in DEMO_TITLES whitelist): ['ece-df16d19c9e7b-oei009-comparison-restricted.md']
+   engine_documents now has 3 rows
+[
+  {
+    "id": 1,
+    "engine_filename": "play-sales-delivery.md",
+    "engine_document_id": "3b14b918-cea2-4df7-9edb-4375a9b171ab",
+    "classification": "public",
+    "uploaded_by": "system:backfill-oei009"
+  },
+  {
+    "id": 2,
+    "engine_filename": "methodology-framework.md",
+    "engine_document_id": "1457df88-02cc-473a-aacc-16dbaba0e332",
+    "classification": "public",
+    "uploaded_by": "system:backfill-oei009"
+  },
+  {
+    "id": 3,
+    "engine_filename": "case-management-consulting.md",
+    "engine_document_id": "7bb48d46-f7e4-4e20-b178-9791fea73334",
+    "classification": "public",
+    "uploaded_by": "system:backfill-oei009"
+  }
+]
+
+   second run: engine_documents still 3 rows (idempotent: True)
+
+   PASS — backfill idempotent, rows printed above.
+
+==> (cwd=/mnt/d/Projects/domainAgentECE/onyx-lab/OEI-009/workspace) uv run --project /mnt/d/Projects/domainAgentECE/ece python step26_demo_falsifiable.py
+== OEI-009 step 2.6 — cleanup: {"registry_deleted": 0, "acl_deleted": 0, "entity_deleted": 0, "files_deleted": ["0ab96c3f-fc81-4c4a-906a-4cf1d0217989"], "delete_failures": [], "files_found_by_name": ["ece-df16d19c9e7b-oei009-comparison-restricted.md"]}
+== stale-index clear: cleared=True after 2 poll(s)
+{
+  "marker": "oei009step26comparisonmarker",
+  "controlled_filename": "ece-df16d19c9e7b-oei009-comparison-restricted.md",
+  "demo_query": "oei009step26comparisonmarker",
+  "isolation_query": "员工报销政策与发票审核流程",
+  "cleanup": {
+    "registry_deleted": 0,
+    "acl_deleted": 0,
+    "entity_deleted": 0,
+    "files_deleted": [
+      "0ab96c3f-fc81-4c4a-906a-4cf1d0217989"
+    ],
+    "delete_failures": [],
+    "files_found_by_name": [
+      "ece-df16d19c9e7b-oei009-comparison-restricted.md"
+    ]
+  },
+  "stale_clear": {
+    "poll_history": [
+      {
+        "t": 1790335006.89,
+        "status": 200,
+        "raw_count": 4,
+        "stale_matches": 1
+      },
+      {
+        "t": 1790335059.13,
+        "status": 200,
+        "raw_count": 3,
+        "stale_matches": 0
+      }
+    ],
+    "cleared": true
+  },
+  "upload_status": 200,
+  "upload_body": {
+    "user_files": [
+      {
+        "id": "6138305b-0f40-468f-a1c8-bdea6f68d424",
+        "temp_id": null,
+        "name": "ece-df16d19c9e7b-oei009-comparison-restricted.md",
+        "project_id": null,
+        "user_id": "c7483a82-9008-41f0-88f7-b8b9dba6d78e",
+        "file_id": "1d3c880a-91fd-4069-9133-4bc0b9d2292a",
+        "created_at": "2026-09-25T11:17:40.594497Z",
+        "status": "PROCESSING",
+        "last_accessed_at": "2026-09-25T11:17:40.593874Z",
+        "file_type": "text/markdown",
+        "chat_file_type": "plain_text",
+        "token_count": 331,
+        "chunk_count": null
+      }
+    ],
+    "rejected_files": []
+  },
+  "user_file_id": "6138305b-0f40-468f-a1c8-bdea6f68d424",
+  "poll_history": [
+    {
+      "t": 1790335060.69,
+      "status": 200,
+      "body": [
+        {
+          "id": "6138305b-0f40-468f-a1c8-bdea6f68d424",
+          "temp_id": null,
+          "name": "ece-df16d19c9e7b-oei009-comparison-restricted.md",
+          "project_id": null,
+          "user_id": "c7483a82-9008-41f0-88f7-b8b9dba6d78e",
+          "file_id": "1d3c880a-91fd-4069-9133-4bc0b9d2292a",
+          "created_at": "2026-09-25T11:17:40.594497",
+          "status": "PROCESSING",
+          "last_accessed_at": "2026-09-25T11:17:40.593874Z",
+          "file_type": "text/markdown",
+          "chat_file_type": "plain_text",
+          "token_count": 331,
+          "chunk_count": null
+        }
+      ]
+    },
+    {
+      "t": 1790335062.79,
+      "status": 200,
+      "body": [
+        {
+          "id": "6138305b-0f40-468f-a1c8-bdea6f68d424",
+          "temp_id": null,
+          "name": "ece-df16d19c9e7b-oei009-comparison-restricted.md",
+          "project_id": null,
+          "user_id": "c7483a82-9008-41f0-88f7-b8b9dba6d78e",
+          "file_id": "1d3c880a-91fd-4069-9133-4bc0b9d2292a",
+          "created_at": "2026-09-25T11:17:40.594497",
+          "status": "COMPLETED",
+          "last_accessed_at": "2026-09-25T11:17:40.593874Z",
+          "file_type": "text/markdown",
+          "chat_file_type": "plain_text",
+          "token_count": 324,
+          "chunk_count": 1
+        }
+      ]
+    }
+  ],
+  "indexed": true,
+  "registry_id": 7,
+  "acl": {
+    "subject_ref": "alice",
+    "object_ref": "engine_document:7",
+    "valid_from": "2026-09-25",
+    "valid_to": "2026-10-02",
+    "valid_days": 7
+  },
+  "raw_recall": {
+    "demo_query": {
+      "status": 200,
+      "count": 4,
+      "distinct_titles": [
+        "case-management-consulting.md",
+        "ece-df16d19c9e7b-oei009-comparison-restricted.md",
+        "methodology-framework.md",
+        "play-sales-delivery.md"
+      ],
+      "distinct_count": 4,
+      "titles": [
+        "case-management-consulting.md",
+        "ece-df16d19c9e7b-oei009-comparison-restricted.md",
+        "methodology-framework.md",
+        "play-sales-delivery.md"
+      ],
+      "source_types": [
+        "user_file"
+      ]
+    },
+    "isolation_query": {
+      "status": 200,
+      "count": 1,
+      "distinct_titles": [
+        "ece-df16d19c9e7b-oei009-comparison-restricted.md"
+      ],
+      "distinct_count": 1,
+      "titles": [
+        "ece-df16d19c9e7b-oei009-comparison-restricted.md"
+      ],
+      "source_types": [
+        "user_file"
+      ]
+    }
+  },
+  "demo__anonymous": {
+    "query": "oei009step26comparisonmarker",
+    "status": 200,
+    "engine_status": "ok",
+    "engine_items_count": 3,
+    "engine_items_titles": [
+      "case-management-consulting.md",
+      "methodology-framework.md",
+      "play-sales-delivery.md"
+    ],
+    "restricted_visible": false
+  },
+  "demo__demo_user": {
+    "query": "oei009step26comparisonmarker",
+    "status": 200,
+    "engine_status": "ok",
+    "engine_items_count": 4,
+    "engine_items_titles": [
+      "case-management-consulting.md",
+      "ece-df16d19c9e7b-oei009-comparison-restricted.md",
+      "methodology-framework.md",
+      "play-sales-delivery.md"
+    ],
+    "restricted_visible": true
+  },
+  "demo__other_user": {
+    "query": "oei009step26comparisonmarker",
+    "status": 200,
+    "engine_status": "ok",
+    "engine_items_count": 3,
+    "engine_items_titles": [
+      "case-management-consulting.md",
+      "methodology-framework.md",
+      "play-sales-delivery.md"
+    ],
+    "restricted_visible": false
+  },
+  "isolation__anonymous": {
+    "query": "员工报销政策与发票审核流程",
+    "status": 200,
+    "engine_status": "ok",
+    "engine_items_count": 0,
+    "engine_items_titles": [],
+    "restricted_visible": false
+  },
+  "isolation__demo_user": {
+    "query": "员工报销政策与发票审核流程",
+    "status": 200,
+    "engine_status": "ok",
+    "engine_items_count": 1,
+    "engine_items_titles": [
+      "ece-df16d19c9e7b-oei009-comparison-restricted.md"
+    ],
+    "restricted_visible": true
+  },
+  "isolation__other_user": {
+    "query": "员工报销政策与发票审核流程",
+    "status": 200,
+    "engine_status": "ok",
+    "engine_items_count": 0,
+    "engine_items_titles": [],
+    "restricted_visible": false
+  }
+}
+
+demo      anonymous : 3 items (engine_status=ok, restricted=False)
+demo      demo_user : 4 items (engine_status=ok, restricted=True)
+demo      other_user: 3 items (engine_status=ok, restricted=False)
+isolation anonymous : 0 items (engine_status=ok, restricted=False)
+isolation demo_user : 1 items (engine_status=ok, restricted=True)
+isolation other_user: 0 items (engine_status=ok, restricted=False)
+
+PASS — Step 2.6 (R1): demo_query → anon/other 3, demo_user 4 (restricted hidden from non-holders); isolation_query → anon/other 0 (engine_status=ok, genuine zero-authorized-result), demo_user 1.
+
+==> (cwd=/mnt/d/Projects/domainAgentECE/onyx-lab/OEI-009/workspace) uv run --project /mnt/d/Projects/domainAgentECE/ece python step33_timebox_e2e.py
+{
+  "acl_id": 1,
+  "object_ref": "engine_document:7",
+  "stages": [
+    {
+      "label": "A: valid_to=today+7 (active)",
+      "acl_valid_to": "2026-10-02",
+      "library_alice": {
+        "status": 200,
+        "engine_status": "ok",
+        "engine_items_titles": [
+          "case-management-consulting.md",
+          "ece-df16d19c9e7b-oei009-comparison-restricted.md",
+          "methodology-framework.md",
+          "play-sales-delivery.md"
+        ]
+      }
+    },
+    {
+      "label": "B: valid_to=yesterday (expired)",
+      "acl_valid_to": "2026-09-24",
+      "library_alice": {
+        "status": 200,
+        "engine_status": "ok",
+        "engine_items_titles": [
+          "case-management-consulting.md",
+          "methodology-framework.md",
+          "play-sales-delivery.md"
+        ]
+      }
+    },
+    {
+      "label": "C: valid_to=today+7 (restored)",
+      "acl_valid_to": "2026-10-02",
+      "library_alice": {
+        "status": 200,
+        "engine_status": "ok",
+        "engine_items_titles": [
+          "case-management-consulting.md",
+          "ece-df16d19c9e7b-oei009-comparison-restricted.md",
+          "methodology-framework.md",
+          "play-sales-delivery.md"
+        ]
+      }
+    }
+  ]
+}
+PASS — Step 3.3 timebox e2e: A=4, B=3 (expired), C=4 (restored).
+
+== demo state rebuilt. Release the temp PG when done:
+   docker stop ece-pg-oei009r1 && docker rm ece-pg-oei009r1
+exit=0

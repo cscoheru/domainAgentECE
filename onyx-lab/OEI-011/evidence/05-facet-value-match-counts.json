@@ -1,0 +1,46 @@
+{
+  "endpoint": "GET /api/v1/consulting/facets",
+  "facet_total": 45,
+  "library_total": 45,
+  "client_industries": [
+    "banking",
+    "consumer_goods",
+    "cross_industry",
+    "energy",
+    "healthcare",
+    "insurance",
+    "logistics",
+    "manufacturing",
+    "public_sector",
+    "retail",
+    "technology"
+  ],
+  "value_to_match_count": {
+    "banking": 2,
+    "consumer_goods": 2,
+    "cross_industry": 26,
+    "energy": 2,
+    "healthcare": 2,
+    "insurance": 2,
+    "logistics": 2,
+    "manufacturing": 2,
+    "public_sector": 2,
+    "retail": 2,
+    "technology": 2
+  },
+  "no_zero_match_value": true,
+  "every_value_matches_at_least_2": true,
+  "concrete_industries_present": [
+    "banking",
+    "consumer_goods",
+    "energy",
+    "healthcare",
+    "insurance",
+    "logistics",
+    "manufacturing",
+    "public_sector",
+    "retail",
+    "technology"
+  ],
+  "cross_industry_present": true
+}

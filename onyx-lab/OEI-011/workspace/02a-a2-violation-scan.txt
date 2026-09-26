@@ -1,0 +1,24 @@
+== OEI-011 A2 — client_industry coverage + vocabulary scan (REAL seed file) ==
+seed: /mnt/d/Projects/domainAgentECE/ece/src/ece/consulting/seed/consulting_objects.json
+vocabulary: ALLOWED_INDUSTRIES (11) = ['banking', 'consumer_goods', 'cross_industry', 'energy', 'healthcare', 'insurance', 'logistics', 'manufacturing', 'public_sector', 'retail', 'technology']
+            plus the only added value: 'cross_industry'
+objects scanned: 45   (baseline a463658: 36)
+
+--- check 1: every object's client_industry is non-empty ---
+  objects with an EMPTY client_industry: 0   (expected 0)
+
+--- check 2: every value lands in the vocabulary ---
+  values outside the vocabulary: 0   (expected 0)
+
+--- check 3: case / industry_note never carry cross_industry (§3.1.3) ---
+  violations: 0   (expected 0)
+
+--- check 4: the scan has teeth (it is shown detecting injected faults) ---
+  inject 3 faults -> checks report (empty, out-of-vocab, banned-cross) = (1, 1, 1)
+  -> all three non-zero, so the three zeroes above are 'nothing found', not 'nothing looked for'.
+
+--- per-type / per-industry tallies ---
+  type_counts: {'case': 13, 'deliverable_template': 4, 'industry_note': 6, 'methodology': 10, 'proposal_play': 6, 'risk_check': 6}
+  industry_counts: {'banking': 2, 'consumer_goods': 2, 'cross_industry': 26, 'energy': 2, 'healthcare': 2, 'insurance': 2, 'logistics': 2, 'manufacturing': 2, 'public_sector': 2, 'retail': 2, 'technology': 2}
+
+---- done ----

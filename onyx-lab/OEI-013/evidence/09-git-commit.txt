@@ -1,0 +1,137 @@
+=== OEI-013 步骤 — git commit（A10，**不 push**）===
+date: 2026-09-26T13:37:34+08:00
+repo: /mnt/d/Projects/domainAgentECE/ece
+
+############ 1. 提交前的分支状态 ############
+$ git branch --show-current
+main     # 与前面 5 刀一致：每刀直接提交到 main，codex 以 HEAD 为准
+$ git log --oneline -1   (提交前)
+4a67c28 feat(OEI-012): expose skip_query_expansion + a reproducible retrieval eval set
+
+  §8 授权「可 git commit（不 push）」。本仓既有协议是每刀提交到 main，
+  前 5 刀（a3d61cd / c30e50e / …）都是这么做的，故沿用，不另开分支。
+
+############ 2. 只暂存本刀的文件（显式列出，不用 git add -A）############
+  为什么不用 add -A：工作区里有**不属于本刀**的既有改动（见第 5 节），
+  add -A 会把它们一并提交，造成错误归属。
+
+  暂存动作是逐个路径显式指定的：
+    git add -- Makefile TASKS.md docs/API.md \
+      demos/spa/app.js demos/spa/index.html demos/spa/styles.css \
+      src/ece/connectors/onyx/{mock_adapter,onyx_adapter,port}.py \
+      src/ece/consulting/engine_merge.py \
+      tests/unit/test_consulting_demo_rewrite.py tests/unit/test_library_recall_mode.py
+
+  提交内容（= 实际进入 commit 的文件，用 git show 读回，不是凭记忆）：
+$ git show --name-status --format= HEAD
+  M	Makefile
+  M	TASKS.md
+  M	demos/spa/app.js
+  M	demos/spa/index.html
+  M	demos/spa/styles.css
+  M	docs/API.md
+  M	src/ece/connectors/onyx/mock_adapter.py
+  M	src/ece/connectors/onyx/onyx_adapter.py
+  M	src/ece/connectors/onyx/port.py
+  M	src/ece/consulting/engine_merge.py
+  A	tests/unit/test_consulting_demo_rewrite.py
+  A	tests/unit/test_library_recall_mode.py
+
+  计数: 10 个 M（改） + 2 个 A（新增） = 12 个文件。
+  其中 docs/demo-platform/ 与 reports/ **不在**里面 —— 它们属于第 5 节的既有脏状态。
+
+############ 3. 提交 ############
+$ git commit -F <msg>
+ Makefile                                   |  20 ++-
+ TASKS.md                                   | 172 +++++++++++++++++++++++
+ demos/spa/app.js                           | 215 +++++++++++++++++++++++++++--
+ demos/spa/index.html                       | 107 ++++++++++----
+ demos/spa/styles.css                       |  90 ++++++++++++
+ docs/API.md                                |  29 ++++
+ src/ece/connectors/onyx/mock_adapter.py    |   3 +
+ src/ece/connectors/onyx/onyx_adapter.py    |   2 +
+ src/ece/connectors/onyx/port.py            |  16 +++
+ src/ece/consulting/engine_merge.py         |  55 +++++++-
+ tests/unit/test_consulting_demo_rewrite.py | 199 ++++++++++++++++++++++++++
+ tests/unit/test_library_recall_mode.py     | 196 ++++++++++++++++++++++++++
+ 12 files changed, 1062 insertions(+), 42 deletions(-)
+
+############ 4. 提交结果 ############
+$ git log --oneline -1
+16b4684 feat(OEI-013): consulting demo platform v1 + honest product-layer re-measure
+
+短 hash: 16b4684
+完整 hash: 16b4684b38c5878193be08f710dc727a0d77bb9f
+
+$ git show --format="%H%n%an <%ae>%n%ad%n%s" --no-patch HEAD
+16b4684b38c5878193be08f710dc727a0d77bb9f
+cscoheru <klyliae@gmail.com>
+Sat Sep 26 13:37:24 2026 +0800
+feat(OEI-013): consulting demo platform v1 + honest product-layer re-measure
+
+############ 5. 未提交的内容：**不是本刀的**，如实列出 ############
+$ git status --porcelain | grep -v "^[AM] "
+ T docs/demo-platform/DEMO_PLATFORM_PRD.md
+ T docs/demo-platform/DEPLOY_USER_PROXY.md
+ M reports/cut-042R3/mutation-evidence/M1_re_read_through_assembly_skipped.md
+ M reports/cut-042R3/mutation-evidence/M2_apply_context_update_skip_sql.md
+ M reports/cut-042R3/mutation-evidence/M3_permission_acl_check_bypassed.md
+ M reports/cut-042R3/mutation-evidence/M4_evaluated_conditions_inject_nondeterministic_amount.md
+ M reports/cut-042R3/mutation-evidence/M5_jwt_decode_skips_signature_verification.md
+ M reports/cut-042R3/mutation-evidence/M6_materialize_fn_disabled_in_loop.md
+ M reports/cut-043/mutation-evidence/M1_km_validity_invert.md
+ M reports/cut-043/mutation-evidence/M2_km_permission_invert.md
+ M reports/cut-043/mutation-evidence/M3_km_decision_and_to_or.md
+ M reports/cut-044/mutation-evidence/M1_comp_count_condition_invert.md
+ M reports/cut-044/mutation-evidence/M2_comp_coverage_issubset_to_isdisjoint.md
+ M reports/cut-044/mutation-evidence/M3_comp_decision_force_gap_list.md
+
+  这两组都**先于本刀**存在，且本刀一个字节都没写过它们（本刀从未执行过任何
+  写入 reports/ 或 docs/demo-platform/ 的命令）：
+
+  (a) docs/demo-platform/*.md  typechange：
+      /mnt/d (WSL2 DrvFs) 把 tree 里的符号链接落成 "XSym" 重解析点，
+      git 看到 1067 字节常规文件 vs tree 里 51 字节链接 → T。
+      mtime 2026-09-22 13:47，该目录末次提交 03662da (cut-042R)。
+      §8 未授权 docs/demo-platform/，本刀不改它。
+
+  (b) reports/cut-042R3|043|044/mutation-evidence/*.md  12 个文件：
+      diff 是 208 增 / 208 删，**逐行只是 ANSI 颜色转义被剥掉**
+      （`^[[1m` / `^[[0m` 之类），内容一字未变 —— 见下面抽样。
+      mtime 全是 2026-09-23 11:25，即 cut-043/044 当时产生的既有脏状态，
+      比本刀（2026-09-26）早三天。本刀不动它。
+
+$ git diff --stat -- reports/ | tail -2
+ .../M3_comp_decision_force_gap_list.md             | 36 ++++++++++----------
+ 12 files changed, 208 insertions(+), 208 deletions(-)
+
+$ git diff -- reports/cut-043/mutation-evidence/M1_km_validity_invert.md | head -12
+diff --git a/reports/cut-043/mutation-evidence/M1_km_validity_invert.md b/reports/cut-043/mutation-evidence/M1_km_validity_invert.md
+index 4f41520..b636f2d 100644
+--- a/reports/cut-043/mutation-evidence/M1_km_validity_invert.md
++++ b/reports/cut-043/mutation-evidence/M1_km_validity_invert.md
+@@ -11,29 +11,29 @@ Flipping in_window inverts the validity condition. The answerable case (KM-POL-0
+ ## RED (mutation applied)
+ 
+ ```
+-[1m============================= test session starts ==============================[0m
++============================= test session starts ==============================
+ collected 1 item
+ 
+
+  ↑ 每对 -/+ 只差颜色转义。不提交它们是对的：
+    提交会把「剥掉颜色的报告」伪装成本刀的产物，也会污染 codex 的 diff 归属。
+
+############ 6. 未 push（A10 明令）############
+$ git status -sb | head -1
+## main...origin/main [ahead 6]
+$ git log --oneline @{u}..HEAD
+16b4684 feat(OEI-013): consulting demo platform v1 + honest product-layer re-measure
+4a67c28 feat(OEI-012): expose skip_query_expansion + a reproducible retrieval eval set
+a3d61cd feat(OEI-014): deepen the consulting library - every industry >=4, industry notes filled
+c30e50e feat(OEI-011): fill the consulting industry axis, bounded increment, usable facets
+a463658 feat(OEI-010): persistent context memory, permission-gated on both write and read
+a884d41 feat(OEI-009): engine-document registry + per-result permission filter + ACL time-box
+  本地领先上游 commit 数: 6
+  -> 全部是本地 commit；远端未被触碰。
+---- done ----

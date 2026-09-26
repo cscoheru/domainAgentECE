@@ -1,0 +1,210 @@
+==============================================================================
+ OEI-013 / A7 — demo-up.sh idempotency: two consecutive invocations
+ 2026-09-26T12:56:20+08:00
+==============================================================================
+
+Requirement (TASK §3.4.2 / A7): one command, idempotent — a second run must
+not start a second copy of anything — built-in no_proxy, prints browser URL.
+
+State before run 1: the API process had been stopped deliberately (its port
+was free) so that run 1 would have something real to start; the demo PG and
+the same-origin server were already up. That way BOTH branches are exercised:
+run 1 shows the start path, run 2 shows the reuse path.
+
+##############################################################################
+## RUN 1 — bash onyx-lab/OEI-013/workspace/demo-up.sh
+##############################################################################
+
+== OEI-013 demo-up — /tmp/oei013-demo
+   PG=ece-pg-demo:55433  API=:8765  ORIGIN=:8181
+   no_proxy=127.0.0.1,localhost,::1
+
+== 1/7 Postgres (ece-pg-demo :55433)
+   • container ece-pg-demo already running — reusing
+   waiting for Postgres — ready
+   ✓ Postgres reachable on 127.0.0.1:55433 (db 'ece' accepts queries)
+
+== 2/7 alembic upgrade head
+INFO  [alembic.runtime.migration] Context impl PostgresqlImpl.
+INFO  [alembic.runtime.migration] Will assume transactional DDL.
+   ✓ schema at head
+
+== 3/7 seed (idempotent)
+Total skipped: 0
+Relationships: {'BELONGS_TO': 200, 'SUBMITTED_BY': 400, 'SELECTS': 200, 'CONTAINS': 200, 'SUBJECT_TO': 200} (replaced 1200 prior rows, 4 departments)
+Total relationships in DB: 1200
+   ✓ seed done
+
+== 4/7 backfill registry (3 whitelisted demo docs, no comparison doc)
+   onyx reports 4 files in project id=1
+   will register 3 rows (classification=public)
+   skipped (not in DEMO_TITLES whitelist): ['ece-df16d19c9e7b-oei009-comparison-restricted.md']
+   engine_documents now has 3 rows
+   second run: engine_documents still 3 rows (idempotent: True)
+   PASS — backfill idempotent, rows printed above.
+   ✓ registry backfilled (idempotency self-check passed above)
+
+== 5/7 uvicorn :8765
+   ✓ started (pid 320103), log /tmp/oei013-demo/uvicorn.log
+
+== 6/7 same-origin server :8181
+   • port 8181 already answers — not starting a second origin
+
+== 7/7 warm-up + self-check (via the same origin the browser will use)
+   ✓ GET /index.html  → 200
+   ✓ GET /healthz     → 200
+   ✓ warm-up recall (1790398510s - 1790398478s = 32s): total=0 engine_status=ok engine_items=3
+
+────────────────────────────────────────────────────────────────────────
+ 演示已就绪 / DEMO IS UP — 打开浏览器:
+
+     http://127.0.0.1:8181/index.html     ← 咨询演示 (视图 D)
+
+ 本机 API :  http://127.0.0.1:8765
+ 起点日志 :  /tmp/oei013-demo/
+ 停止     :  bash /mnt/d/Projects/domainAgentECE/onyx-lab/OEI-013/workspace/demo-down.sh
+ 连带清库 :  bash /mnt/d/Projects/domainAgentECE/onyx-lab/OEI-013/workspace/demo-down.sh --all
+────────────────────────────────────────────────────────────────────────
+
+##############################################################################
+## RUN 2 — bash onyx-lab/OEI-013/workspace/demo-up.sh
+##############################################################################
+
+== OEI-013 demo-up — /tmp/oei013-demo
+   PG=ece-pg-demo:55433  API=:8765  ORIGIN=:8181
+   no_proxy=127.0.0.1,localhost,::1
+
+== 1/7 Postgres (ece-pg-demo :55433)
+   • container ece-pg-demo already running — reusing
+   waiting for Postgres — ready
+   ✓ Postgres reachable on 127.0.0.1:55433 (db 'ece' accepts queries)
+
+== 2/7 alembic upgrade head
+INFO  [alembic.runtime.migration] Context impl PostgresqlImpl.
+INFO  [alembic.runtime.migration] Will assume transactional DDL.
+   ✓ schema at head
+
+== 3/7 seed (idempotent)
+Total skipped: 0
+Relationships: {'BELONGS_TO': 200, 'SUBMITTED_BY': 400, 'SELECTS': 200, 'CONTAINS': 200, 'SUBJECT_TO': 200} (replaced 1200 prior rows, 4 departments)
+Total relationships in DB: 1200
+   ✓ seed done
+
+== 4/7 backfill registry (3 whitelisted demo docs, no comparison doc)
+   onyx reports 4 files in project id=1
+   will register 3 rows (classification=public)
+   skipped (not in DEMO_TITLES whitelist): ['ece-df16d19c9e7b-oei009-comparison-restricted.md']
+   engine_documents now has 3 rows
+   second run: engine_documents still 3 rows (idempotent: True)
+   PASS — backfill idempotent, rows printed above.
+   ✓ registry backfilled (idempotency self-check passed above)
+
+== 5/7 uvicorn :8765
+   • port 8765 already answers — not starting a second API
+
+== 6/7 same-origin server :8181
+   • port 8181 already answers — not starting a second origin
+
+== 7/7 warm-up + self-check (via the same origin the browser will use)
+   ✓ GET /index.html  → 200
+   ✓ GET /healthz     → 200
+   ✓ warm-up recall (1790398565s - 1790398529s = 36s): total=0 engine_status=ok engine_items=3
+
+────────────────────────────────────────────────────────────────────────
+ 演示已就绪 / DEMO IS UP — 打开浏览器:
+
+     http://127.0.0.1:8181/index.html     ← 咨询演示 (视图 D)
+
+ 本机 API :  http://127.0.0.1:8765
+ 起点日志 :  /tmp/oei013-demo/
+ 停止     :  bash /mnt/d/Projects/domainAgentECE/onyx-lab/OEI-013/workspace/demo-down.sh
+ 连带清库 :  bash /mnt/d/Projects/domainAgentECE/onyx-lab/OEI-013/workspace/demo-down.sh --all
+────────────────────────────────────────────────────────────────────────
+
+##############################################################################
+## VERDICT
+##############################################################################
+run 1 : API started (pid recorded in /tmp/oei013-demo/uvicorn.pid);
+        PG reused; origin reused.
+run 2 : 'port 8765 already answers — not starting a second API'
+        'port 8181 already answers — not starting a second origin'
+        PG reused; migrate/seed/backfill no-ops (each reports its own
+        idempotency: alembic 'at head', seed created=0, backfill self-check PASS).
+
+=> nothing was started twice. Idempotency holds.
+
+Liveness guards are TCP connects, not pidfile reads, so a stale pidfile
+cannot make the script claim the chain is up when it is not.
+
+Both runs printed the browser URL on success:
+http://127.0.0.1:8181/index.html
+
+no_proxy is set inside the script before any network step (OEI-006 lesson):
+   no_proxy=127.0.0.1,localhost,::1
+==============================================================================
+
+================================================================================
+收尾追加 — 在**链子已起**的最终状态下再跑一次 demo-up.sh（A7 第三次复核）
+date: 2026-09-26T13:40:28+08:00
+目的：确认提交后、评测库来过又走了之后，幂等性依然成立（前面两次是 12:56 跑的，
+      之后 app.js 改过、评测 PG 建过又删过）。
+================================================================================
+
+
+[1m== OEI-013 demo-up — /tmp/oei013-demo[0m
+   PG=ece-pg-demo:55433  API=:8765  ORIGIN=:8181
+   no_proxy=127.0.0.1,localhost,::1
+
+[1m== 1/7 Postgres (ece-pg-demo :55433)[0m
+   [33m•[0m container ece-pg-demo already running — reusing
+   waiting for Postgres — ready
+   [32m✓[0m Postgres reachable on 127.0.0.1:55433 (db 'ece' accepts queries)
+
+[1m== 2/7 alembic upgrade head[0m
+INFO  [alembic.runtime.migration] Context impl PostgresqlImpl.
+INFO  [alembic.runtime.migration] Will assume transactional DDL.
+   [32m✓[0m schema at head
+
+[1m== 3/7 seed (idempotent)[0m
+Total skipped: 0
+Relationships: {'BELONGS_TO': 200, 'SUBMITTED_BY': 400, 'SELECTS': 200, 'CONTAINS': 200, 'SUBJECT_TO': 200} (replaced 1200 prior rows, 4 departments)
+Total relationships in DB: 1200
+   [32m✓[0m seed done
+
+[1m== 4/7 backfill registry (3 whitelisted demo docs, no comparison doc)[0m
+   onyx reports 4 files in project id=1
+   will register 3 rows (classification=public)
+   skipped (not in DEMO_TITLES whitelist): ['ece-df16d19c9e7b-oei009-comparison-restricted.md']
+   engine_documents now has 3 rows
+   second run: engine_documents still 3 rows (idempotent: True)
+   PASS — backfill idempotent, rows printed above.
+   [32m✓[0m registry backfilled (idempotency self-check passed above)
+
+[1m== 5/7 uvicorn :8765[0m
+   [33m•[0m port 8765 already answers — not starting a second API
+
+[1m== 6/7 same-origin server :8181[0m
+   [33m•[0m port 8181 already answers — not starting a second origin
+
+[1m== 7/7 warm-up + self-check (via the same origin the browser will use)[0m
+   [32m✓[0m GET /index.html  → 200
+   [32m✓[0m GET /healthz     → 200
+   [32m✓[0m warm-up recall (1790401277s - 1790401246s = 31s): total=0 engine_status=ok engine_items=3
+
+────────────────────────────────────────────────────────────────────────
+ 演示已就绪 / DEMO IS UP — 打开浏览器:
+
+     http://127.0.0.1:8181/index.html     ← 咨询演示 (视图 D)
+
+ 本机 API :  http://127.0.0.1:8765
+ 起点日志 :  /tmp/oei013-demo/
+ 停止     :  bash /mnt/d/Projects/domainAgentECE/onyx-lab/OEI-013/workspace/demo-down.sh
+ 连带清库 :  bash /mnt/d/Projects/domainAgentECE/onyx-lab/OEI-013/workspace/demo-down.sh --all
+────────────────────────────────────────────────────────────────────────
+
+---- 追加验证：链子仍然是一个进程、且还在答 ----
+$ ss -ltn | grep -E ":(8765|8181)"
+  LISTEN 0      5           127.0.0.1:8181       0.0.0.0:*          
+  LISTEN 0      2048        127.0.0.1:8765       0.0.0.0:*          
+$ curl -s -o /dev/null -w "%{http_code}" http://127.0.0.1:8181/index.html
+  200

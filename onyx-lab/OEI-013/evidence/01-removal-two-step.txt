@@ -1,0 +1,59 @@
+==============================================================================
+ OEI-013 / step 0 — controlled comparison document: REMOVAL NOT PERFORMED
+ observed_at: 2026-09-26T12:41:22+08:00
+==============================================================================
+
+DECISION
+  decided_by          : user
+  decided_on          : 2026-09-26
+  instruction_verbatim: 先不删，只做只读取证
+  task_reference      : TASK.md §3.1 / §5 step 0 / A1 / A2
+  effect              : no DELETE was issued against Onyx in this cut.
+                        Project 1 still holds 4 files (3 real + 1 comparison).
+
+WHY THE DELETION WAS PROPOSED AT ALL
+  OEI-012 measured this document dominating engine recall on project 1:
+    61/72 runs in top-3, and 54/72 runs it was the ONLY result
+    (onyx-lab/OEI-012/evidence/04-retrieval-matrix.json)
+  It is unrelated to the consulting domain, so any 'engine recall' demo that
+  shows it is showing the wrong thing.
+
+------------------------------------------------------------------------------
+READ-ONLY VERIFICATION (GET only — nothing below writes)
+------------------------------------------------------------------------------
+  GET /api/me                              -> 200
+  GET /api/user/projects/files/1          -> 200
+  files in project 1                       -> 4
+    - case-management-consulting.md  id=7bb48d46-f7e4-4e20-b178-9791fea73334  status=COMPLETED
+    - ece-df16d19c9e7b-oei009-comparison-restricted.md  id=6138305b-0f40-468f-a1c8-bdea6f68d424  status=COMPLETED  <-- WOULD-BE-DELETED
+    - methodology-framework.md  id=1457df88-02cc-473a-aacc-16dbaba0e332  status=COMPLETED
+    - play-sales-delivery.md  id=3b14b918-cea2-4df7-9edb-4375a9b171ab  status=COMPLETED
+
+  comparison document still present        -> True
+  two-step delete issued in this cut       -> False
+
+------------------------------------------------------------------------------
+NOT RUN — the two-step delete a future cut would execute
+------------------------------------------------------------------------------
+  Semantics (onyx-lab/重启必读/DEMO-DATA-CLEANUP-2026-09-25.md §2): deleting a
+  file that still has a project association returns HTTP 200 with
+  {"has_associations": true, ...} and does NOT delete it. Unlink first.
+
+  # 1) unlink from project        (expect 204)
+  curl -s -b "$CK" -X DELETE "http://127.0.0.1:8080/api/user/projects/1/files/6138305b-0f40-468f-a1c8-bdea6f68d424" -w 'unlink=%{http_code}\n'
+
+  # 2) delete the user file       (expect 200, triggers async vector cleanup)
+  curl -s -b "$CK" -X DELETE "http://127.0.0.1:8080/api/user/projects/file/6138305b-0f40-468f-a1c8-bdea6f68d424" -w 'delete=%{http_code}\n'
+
+  # 3) verify                      (expect 3)
+  curl -s -b "$CK" "http://127.0.0.1:8080/api/user/projects/files/1" | python3 -c 'import json,sys; print(len(json.load(sys.stdin)))'
+
+  These lines are echoed, never executed, by this script.
+
+HOW IT COULD BE RESTORED IF EVER REMOVED
+  onyx-lab/OEI-009/workspace/step26_demo_falsifiable.py recreates it (with its
+  ACL row). Note that script is OEI-009's historical evidence tool and is NOT in
+  OEI-013's authorised change set, so it can still recreate the document today.
+  OEI-013's own demo chain deliberately does not call it (see demo-up.sh), so
+  starting the demo never brings the document back.
+==============================================================================

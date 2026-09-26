@@ -1,0 +1,72 @@
+== OEI-011 步骤 0 — 清 OEI-010 的两笔转出 (A0) ==
+date: 2026-09-25T21:23:22+08:00
+repo: /mnt/d/Projects/domainAgentECE/ece   HEAD(before): a463658
+
+############ 0.1  tests/integration/test_s32_assembly.py ============
+转出原文（OEI-010/VERDICT.md §6 第 1 项）：该断言枚举了 item_kind 的封闭集合，
+而 OEI-010 按设计往 context_items 加了 item_kind='memory' → 一旦调用者能看见记忆就会假红。
+OEI-010 明令冻结（'断言不得改动'），本刀解冻（TASK §5 步骤 0.1）。
+
+本例采用 TASK 给的第二条改法：改断言它真正的不变量，而不是把 'memory' 加进集合。
+理由：加进集合只是把封闭集合延长一格，下一个 item_kind 又会踩同一个坑；
+而这条测试关心的是'每行审计记录都带 kind / decision / reason'。
+
+$ git diff -- tests/integration/test_s32_assembly.py
+diff --git a/tests/integration/test_s32_assembly.py b/tests/integration/test_s32_assembly.py
+index b6b2754..0acc08f 100644
+--- a/tests/integration/test_s32_assembly.py
++++ b/tests/integration/test_s32_assembly.py
+@@ -87,9 +87,17 @@ def test_assemble_writes_context_items_with_valid_decisions(engine) -> None:
+             {"r": pkg.request_id},
+         ).fetchall()
+     assert len(rows) >= 1
+-    # Each item has a decision ∈ {allowed, denied}
++    # `item_kind` is an OPEN set, not a closed one: this assertion used to read
++    # `r[0] in ("entity", "relationship")`, which was correct until OEI-010 added
++    # `item_kind='memory'` to the same table. At that point the assertion became
++    # too narrow — it would fail on correct behaviour as soon as any memory was
++    # visible to this caller (reproduced in
++    # onyx-lab/OEI-010/evidence/12c-s32-item-kind-fragility.txt). Enumerating the
++    # kinds was never what this test is about, so assert the invariant it actually
++    # cares about: every audit row carries a kind, a decision from the closed
++    # decision vocabulary, and a non-empty reason.
+     for r in rows:
+-        assert r[0] in ("entity", "relationship")
++        assert r[0] and isinstance(r[0], str)
+         assert r[1] in ("allowed", "denied")
+         assert r[2] != ""  # reason should be non-empty
+ 
+
+############ 0.2  docs/DATA_MODEL.md —— 索引列序笔误 ============
+文档写 (owner_ref, scope)，迁移 0010_memories 实际是 (scope, owner_ref)。纯文档笔误。
+
+$ git diff -- docs/DATA_MODEL.md
+diff --git a/docs/DATA_MODEL.md b/docs/DATA_MODEL.md
+index 798b286..f852e26 100644
+--- a/docs/DATA_MODEL.md
++++ b/docs/DATA_MODEL.md
+@@ -247,7 +247,9 @@ CREATE TABLE memories (
+     CONSTRAINT uq_memories_scope_owner_ref_statement
+         UNIQUE (scope, owner_ref, statement)
+ );
+-CREATE INDEX idx_memories_scope_owner ON memories (owner_ref, scope);
++-- 列序与迁移 0010_memories 一致：(scope, owner_ref)。此前这里误写成
++-- (owner_ref, scope)（OEI-010 的文档笔误，OEI-011 步骤 0 订正）。
++CREATE INDEX idx_memories_scope_owner ON memories (scope, owner_ref);
+ CREATE INDEX idx_memories_deleted_at  ON memories (deleted_at);
+ CREATE INDEX idx_memories_expires_at  ON memories (expires_at);
+ ```
+
+--- 与迁移的真实定义对照（证明订正后的文档 = 迁移）---
+$ grep -n 'idx_memories_scope_owner' docs/DATA_MODEL.md src/ece/migrations/versions/0010_memories.py
+docs/DATA_MODEL.md:252:CREATE INDEX idx_memories_scope_owner ON memories (scope, owner_ref);
+src/ece/migrations/versions/0010_memories.py:86:        "CREATE INDEX idx_memories_scope_owner ON memories (scope, owner_ref)"
+
+############ 0.3  两处改动都不动业务语义 ============
+$ git diff --stat -- tests/ docs/
+ docs/DATA_MODEL.md                      |   4 +++-
+ docs/demo-platform/DEMO_PLATFORM_PRD.md | Bin 51 -> 1067 bytes
+ docs/demo-platform/DEPLOY_USER_PROXY.md | Bin 51 -> 1067 bytes
+ tests/integration/test_s32_assembly.py  |  12 ++++++++++--
+ 4 files changed, 13 insertions(+), 3 deletions(-)
+---- done ----
